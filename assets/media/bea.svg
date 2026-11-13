@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 172">
+  <defs><clipPath id="recorte-trevo-vermelho"><circle cx="86" cy="86" r="86"/></clipPath></defs>
+  <circle cx="86" cy="86" r="86" fill="#080808"/>
+  <path d="M95 173C91 150 80 135 57 139C29 145 10 130 11 106C12 86 25 75 48 71C41 52 40 38 50 24C64 4 95 10 107 28C111 34 114 43 115 51C137 42 159 53 167 73C176 96 163 113 142 121C119 130 116 143 126 173Z" fill="#fa543d" clip-path="url(#recorte-trevo-vermelho)"/>
+  <g fill="#080808">
+    <path d="M65 88q7 7 14-2M97 82q6 6 13-2" fill="none" stroke="#080808" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M82 102Q95 105 106 96Q106 112 96 114Q87 115 82 102Z"/>
+  </g>
+</svg>

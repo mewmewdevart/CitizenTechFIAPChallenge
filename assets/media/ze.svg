@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 172 172">
+  <defs><clipPath id="recorte-trapezio-rosa"><circle cx="86" cy="86" r="86"/></clipPath></defs>
+  <circle cx="86" cy="86" r="86" fill="#080808"/>
+  <path d="M12 142 47 32H125L163 142V178H12Z" fill="#FEBD17" clip-path="url(#recorte-trapezio-rosa)"/>
+  <g fill="#080808">
+    <path d="M65 87q6-9 12 0M96 87q6-9 12 0M75 103q11 14 23 0Z" fill="none" stroke="#080808" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
+    
+  </g>
+</svg>
