@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+
+:root {
+  /* Cores da marca e neutras */
+  --cor-primaria: #4B5DA9;
+  --cor-secundaria-clara: #E8EBFB;
+  --cor-neutra-escura-01: #302B3D;
+  --cor-neutra-escura-02: #313131;
+  --cor-neutra-media: #50596E;
+  --cor-neutra-clara-01: #F5F6F5;
+  --cor-neutra-clara-02: #FFFFFF;
+  --cor-neutra-clara-03: #DFE3EE;
+  --cor-neutra-clara-04: #E6E6ED;
+
+  /* Cores semânticas */
+  --cor-aviso-sucesso: #235A38;
+  --cor-aviso-atencao-claro: #FFF6DA;
+  --cor-aviso-atencao-escuro: #694806;
+  --cor-aviso-alerta-claro: #FFD7DB;
+  --cor-aviso-alerta-escuro: #8C2337;
+  --cor-backdrop: #302b3d55;
+
+  /* Tipografia */
+  --fonte-interface: "Inter", system-ui, sans-serif;
+  --peso-regular: 400;
+  --peso-semibold: 600;
+  --peso-negrito: 700;
+  --texto-titulo-pagina: 2.125rem;
+  --texto-titulo-secao: 1.375rem;
+  --texto-titulo-cartao: 1.125rem;
+  --texto-interface: 0.875rem;
+  --texto-legenda: 0.75rem;
+
+  /* Dimensões de layout */
+  --largura-menu-lateral: 250px;
+  --altura-barra-superior: 88px;
+  --altura-barra-inferior-mobile: 68px;
+  --tamanho-alvo-toque: 44px;
+
+  /* Espaçamentos, bordas e sombras */
+  --espaco-xs: 4px;
+  --espaco-sm: 8px;
+  --espaco-md: 12px;
+  --espaco-lg: 16px;
+  --espaco-xl: 24px;
+  --raio-sm: 6px;
+  --raio-md: 7px;
+  --raio-lg: 8px;
+  --raio-xl: 12px;
+  --raio-pill: 999px;
+  --borda-padrao: 1px solid var(--cor-neutra-clara-03);
+  --sombra-popover: 0 4px 14px #302b3d16;
+  --sombra-elevada: 0 8px 24px #302b3d22;
+  --transicao-padrao: 0.15s ease;
+
+  font-family: var(--fonte-interface);
+  color: var(--cor-neutra-escura-01);
+}
+
+@media (width < 1024px) {
+  :root {
+    --altura-barra-superior: calc(76px + env(safe-area-inset-top));
+  }
+}
+
+/* Estilos globais base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--cor-neutra-clara-01);
+  color: var(--cor-neutra-escura-01);
+  font-family: var(--fonte-interface);
+  font-size: var(--texto-interface);
+  line-height: 1.5;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+summary {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
