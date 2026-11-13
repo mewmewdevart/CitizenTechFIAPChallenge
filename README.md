@@ -76,4 +76,3 @@ CitizenTechFIAPChallenge/
 - [Figma — GS Citizen Tech · Idosos](https://www.figma.com/design/ETGakMsnSiQnkVIekTOnKi/GS-Citizen-Tech---Idosos?node-id=160-384)
 - [Shields.io](https://shields.io/) — badges do README.
 <!-- Inclua fontes da pesquisa, materiais da FIAP e créditos de imagens ou ícones utilizados. -->
-
