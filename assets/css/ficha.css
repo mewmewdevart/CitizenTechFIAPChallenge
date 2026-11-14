@@ -226,8 +226,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   list-style-type: decimal;
 }
 
-.ficha__cartao--saude dd li + li,
-.editar-ficha__editor-area li + li {
+.ficha__cartao--saude dd li+li,
+.editar-ficha__editor-area li+li {
   margin-top: 2px;
 }
 
@@ -243,8 +243,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   text-underline-offset: 2px;
 }
 
-.ficha__cartao--saude dd :is(p, div) + :is(p, div),
-.editar-ficha__editor-area :is(p, div) + :is(p, div) {
+.ficha__cartao--saude dd :is(p, div)+ :is(p, div),
+.editar-ficha__editor-area :is(p, div)+ :is(p, div) {
   margin-top: 4px;
 }
 
@@ -483,13 +483,14 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 }
 
 @media (max-width: 900px) {
-  .ficha > .ficha__grade,
+
+  .ficha>.ficha__grade,
   .ficha__diario {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto;
   }
 
-  .ficha > .ficha__grade > :nth-child(n) {
+  .ficha>.ficha__grade> :nth-child(n) {
     grid-column: auto;
     grid-row: auto;
   }
@@ -879,6 +880,7 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
 }
 
 @media (max-width: 600px) {
+
   .ficha__acoes,
   .editar-ficha__foto-acoes {
     width: 100%;
@@ -886,7 +888,7 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
 
   .ficha__acoes .botao,
   .editar-ficha__foto-acoes .botao,
-  .dialogo-mvp > .botao {
+  .dialogo-mvp>.botao {
     width: 100%;
   }
 
