@@ -1,140 +1,149 @@
-const toggle = document.querySelector('#toggle');
-const mobile = window.matchMedia('(width < 1024px)');
-const more = document.querySelector('#more');
-const links = [...document.querySelectorAll('#sidebar nav a')];
-const shortcuts = [...document.querySelectorAll('.bottom-nav a')];
-const moreProfile = document.querySelector('.more-profile');
-const MENU_STORAGE_KEY = 'mutirao-menu-open';
-let menuTrigger = toggle;
+const alternarMenu = document.querySelector('#alternar-menu');
+const telaMobile = window.matchMedia('(width < 1024px)');
+const botaoMais = document.querySelector('#botao-mais');
+const linksMenu = [...document.querySelectorAll('#barra-lateral nav a')];
+const atalhosInferiores = [...document.querySelectorAll('.barra-inferior a')];
+const perfilMobile = document.querySelector('.barra-lateral__perfil-mobile');
+const CHAVE_MENU_STORAGE = 'mutirao-menu-aberto';
+let gatilhoMenu = alternarMenu;
 
-function getPageName(href) {
+function obterNomePagina(href) {
   return new URL(href, location.href).pathname.split('/').pop() || 'index.html';
 }
 
-function getInitialDesktopMenuState() {
+function obterEstadoInicialMenuDesktop() {
   try {
-    const saved = sessionStorage.getItem(MENU_STORAGE_KEY);
-    return saved === null ? true : saved === 'true';
+    const salvo = sessionStorage.getItem(CHAVE_MENU_STORAGE);
+    return salvo === null ? true : salvo === 'true';
   } catch {
     return true;
   }
 }
 
-function setMenu(open, persist = false) {
-  document.body.classList.toggle('menu-closed', !open);
-  toggle?.setAttribute('aria-expanded', String(open));
-  more?.setAttribute('aria-expanded', String(open && mobile.matches));
+function definirMenu(aberto, persistir = false) {
+  document.body.classList.toggle('menu-fechado', !aberto);
+  alternarMenu?.setAttribute('aria-expanded', String(aberto));
+  botaoMais?.setAttribute('aria-expanded', String(aberto && telaMobile.matches));
 
-  if (persist && !mobile.matches) {
+  if (persistir && !telaMobile.matches) {
     try {
-      sessionStorage.setItem(MENU_STORAGE_KEY, String(open));
+      sessionStorage.setItem(CHAVE_MENU_STORAGE, String(aberto));
     } catch {
       // Ignora erro caso o navegador bloqueie storage local
     }
   }
 }
 
-function updateCurrent() {
-  const currentPage = location.pathname.split('/').pop() || 'index.html';
-  for (const link of [...links, ...shortcuts]) {
-    if (getPageName(link.href) === currentPage) link.setAttribute('aria-current', 'page');
+function atualizarPaginaAtual() {
+  const paginaAtual = location.pathname.split('/').pop() || 'index.html';
+  for (const link of [...linksMenu, ...atalhosInferiores]) {
+    if (obterNomePagina(link.href) === paginaAtual) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
-  const inSidebar = currentPage === 'meu-perfil.html' || links.some(link => getPageName(link.href) === currentPage);
-  const inShortcuts = shortcuts.some(link => getPageName(link.href) === currentPage);
-  more?.classList.toggle('active', inSidebar && !inShortcuts);
+  const naBarraLateral = paginaAtual === 'meu-perfil.html' || linksMenu.some(link => obterNomePagina(link.href) === paginaAtual);
+  const nosAtalhos = atalhosInferiores.some(link => obterNomePagina(link.href) === paginaAtual);
+  botaoMais?.classList.toggle('barra-inferior__item--ativo', naBarraLateral && !nosAtalhos);
 }
 
-for (const button of [toggle, more].filter(Boolean)) {
-  button.addEventListener('click', () => {
-    menuTrigger = button;
-    const open = toggle?.getAttribute('aria-expanded') !== 'true';
-    setMenu(open, true);
-    if (open && mobile.matches) moreProfile?.focus();
+for (const botao of [alternarMenu, botaoMais].filter(Boolean)) {
+  botao.addEventListener('click', () => {
+    gatilhoMenu = botao;
+    const aberto = alternarMenu?.getAttribute('aria-expanded') !== 'true';
+    definirMenu(aberto, true);
+    if (aberto && telaMobile.matches) perfilMobile?.focus();
   });
 }
 
-mobile.addEventListener('change', () => {
-  setMenu(mobile.matches ? false : getInitialDesktopMenuState());
+telaMobile.addEventListener('change', () => {
+  definirMenu(telaMobile.matches ? false : obterEstadoInicialMenuDesktop());
 });
 
-for (const link of [...links, ...shortcuts, moreProfile].filter(Boolean)) {
+for (const link of [...linksMenu, ...atalhosInferiores, perfilMobile].filter(Boolean)) {
   link.addEventListener('click', () => {
-    if (mobile.matches) {
-      setMenu(false);
-      (shortcuts.includes(link) ? link : menuTrigger)?.focus();
+    if (telaMobile.matches) {
+      definirMenu(false);
+      (atalhosInferiores.includes(link) ? link : gatilhoMenu)?.focus();
     }
   });
 }
 
-for (const dropdown of document.querySelectorAll('.topbar details')) {
-  dropdown.addEventListener('toggle', () => {
-    if (!dropdown.open) return;
-    for (const other of document.querySelectorAll('.topbar details[open]')) {
-      if (other !== dropdown) other.open = false;
+for (const menuSuspenso of document.querySelectorAll('.barra-topo details')) {
+  menuSuspenso.addEventListener('toggle', () => {
+    if (!menuSuspenso.open) return;
+    for (const outro of document.querySelectorAll('.barra-topo details[open]')) {
+      if (outro !== menuSuspenso) outro.open = false;
     }
   });
 }
 
-document.addEventListener('click', event => {
-  for (const dropdown of document.querySelectorAll('.topbar details[open]')) {
-    if (!dropdown.contains(event.target) || event.target.closest('a')) dropdown.open = false;
+document.addEventListener('click', evento => {
+  for (const menuSuspenso of document.querySelectorAll('.barra-topo details[open]')) {
+    if (!menuSuspenso.contains(evento.target) || evento.target.closest('a')) menuSuspenso.open = false;
   }
 });
 
-document.addEventListener('keydown', event => {
-  if (event.key !== 'Escape' || document.querySelector('dialog[open]')) return;
-  const dropdown = document.querySelector('.topbar details[open]');
-  if (dropdown) {
-    dropdown.open = false;
-    dropdown.querySelector('summary')?.focus();
-  } else if (mobile.matches && toggle?.getAttribute('aria-expanded') === 'true') {
-    setMenu(false);
-    menuTrigger?.focus();
+document.addEventListener('keydown', evento => {
+  if (evento.key !== 'Escape' || document.querySelector('dialog[open]')) return;
+  const menuSuspenso = document.querySelector('.barra-topo details[open]');
+  if (menuSuspenso) {
+    menuSuspenso.open = false;
+    menuSuspenso.querySelector('summary')?.focus();
+  } else if (telaMobile.matches && alternarMenu?.getAttribute('aria-expanded') === 'true') {
+    definirMenu(false);
+    gatilhoMenu?.focus();
   }
 });
 
-for (const button of document.querySelectorAll('[data-dialog]')) {
-  button.addEventListener('click', () => {
-    document.getElementById(button.dataset.dialog)?.showModal();
+for (const botao of document.querySelectorAll('[data-dialogo]')) {
+  botao.addEventListener('click', () => {
+    document.getElementById(botao.dataset.dialogo)?.showModal();
   });
 }
 
-for (const dialog of document.querySelectorAll('dialog')) {
-  dialog.addEventListener('click', event => {
-    if (event.target === dialog) dialog.close();
+for (const dialogo of document.querySelectorAll('dialog')) {
+  dialogo.addEventListener('click', evento => {
+    if (evento.target === dialogo) dialogo.close();
   });
 }
 
-const query = document.querySelector('#search-query');
-const results = document.querySelector('#results');
-const searchStatus = document.querySelector('#search-status');
-const searchableItems = [
-  ...links.map(link => ({ href: link.getAttribute('href'), label: link.textContent.trim() })),
-  { href: 'meu-perfil.html', label: 'Meu perfil' }
-].filter((item, index, list) => item.href && list.findIndex(entry => entry.href === item.href) === index);
+const campoBusca = document.querySelector('#campo-busca');
+const listaResultados = document.querySelector('#resultados-busca');
+const statusBusca = document.querySelector('#status-busca');
+const itensPesquisaveis = [
+  ...linksMenu.map(link => ({ href: link.getAttribute('href'), rotulo: link.textContent.trim() })),
+  { href: 'meu-perfil.html', rotulo: 'Meu perfil' }
+].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
-function renderResults() {
-  if (!query || !results || !searchStatus) return;
-  const term = query.value.trim().toLocaleLowerCase('pt-BR');
-  const matches = searchableItems.filter(item => item.label.toLocaleLowerCase('pt-BR').includes(term));
+function renderizarResultados() {
+  if (!campoBusca || !listaResultados || !statusBusca) return;
+  const termo = campoBusca.value.trim().toLocaleLowerCase('pt-BR');
+  const correspondencias = itensPesquisaveis.filter(item => item.rotulo.toLocaleLowerCase('pt-BR').includes(termo));
 
-  results.replaceChildren(...matches.map(item => {
-    const listItem = document.createElement('li');
-    const result = document.createElement('a');
-    result.href = item.href;
-    result.textContent = item.label;
-    result.addEventListener('click', () => query.closest('dialog')?.close());
-    listItem.append(result);
-    return listItem;
+  listaResultados.replaceChildren(...correspondencias.map(item => {
+    const itemLista = document.createElement('li');
+    const resultado = document.createElement('a');
+    resultado.href = item.href;
+    resultado.textContent = item.rotulo;
+    resultado.addEventListener('click', () => campoBusca.closest('dialog')?.close());
+    itemLista.append(resultado);
+    return itemLista;
   }));
 
-  searchStatus.textContent = matches.length
-    ? `${matches.length} ${matches.length === 1 ? 'item encontrado' : 'itens encontrados'}.`
+  statusBusca.textContent = correspondencias.length
+    ? `${correspondencias.length} ${correspondencias.length === 1 ? 'item encontrado' : 'itens encontrados'}.`
     : 'Nenhum item encontrado.';
 }
 
-query?.addEventListener('input', renderResults);
-renderResults();
-setMenu(mobile.matches ? false : getInitialDesktopMenuState());
-updateCurrent();
+campoBusca?.addEventListener('input', renderizarResultados);
+renderizarResultados();
+definirMenu(telaMobile.matches ? false : obterEstadoInicialMenuDesktop());
+atualizarPaginaAtual();
+
+const barraTopo = document.querySelector('.barra-topo');
+if (barraTopo && 'ResizeObserver' in window) {
+  const sincronizarAlturaBarraTopo = () => {
+    document.documentElement.style.setProperty('--topbar-altura-atual', `${barraTopo.offsetHeight}px`);
+  };
+  new ResizeObserver(sincronizarAlturaBarraTopo).observe(barraTopo);
+  sincronizarAlturaBarraTopo();
+}

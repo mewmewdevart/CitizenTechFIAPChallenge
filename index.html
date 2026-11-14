@@ -31,8 +31,10 @@
 
   <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/" />
   <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/" />
-  <meta property="og:image" content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
-  <meta name="twitter:image" content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+  <meta property="og:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+  <meta name="twitter:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
 
   <!-- Favicons e Web App Manifest -->
   <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
@@ -43,176 +45,127 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-    media="print"
-    onload="this.media='all'"
-  />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    media="print" onload="this.media='all'" />
   <noscript>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
   </noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/acessibilidade.js" defer></script>
 </head>
 
 <body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <symbol id="home" viewBox="0 0 24 24">
-      <path d="m3 11 9-8 9 8v9H3z M9 20v-6h6v6" />
-    </symbol>
-    <symbol id="calendar" viewBox="0 0 24 24">
-      <rect x="3" y="5" width="18" height="16" rx="2" />
-      <path d="M7 3v4m10-4v4M3 10h18" />
-    </symbol>
-    <symbol id="pill" viewBox="0 0 24 24">
-      <rect x="3" y="8" width="18" height="8" rx="4" transform="rotate(-45 12 12)" />
-      <path d="m9 9 6 6" />
-    </symbol>
-    <symbol id="folder" viewBox="0 0 24 24">
-      <path d="M3 6h7l2 3h9v11H3z" />
-    </symbol>
-    <symbol id="people" viewBox="0 0 24 24">
-      <circle cx="9" cy="7" r="3" />
-      <path d="M3 20v-2a6 6 0 0 1 12 0v2z M16 4a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 5v1" />
-    </symbol>
-    <symbol id="info" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 11v6m0-10v1" />
-    </symbol>
-    <symbol id="menu" viewBox="0 0 24 24">
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </symbol>
-    <symbol id="search" viewBox="0 0 24 24">
-      <circle cx="10" cy="10" r="6" />
-      <path d="m15 15 5 5" />
-    </symbol>
-    <symbol id="bell" viewBox="0 0 24 24">
-      <path d="M4 17h16l-2-3V9A6 6 0 0 0 6 9v5z M10 21h4" />
-    </symbol>
-  </svg>
-  <header class="topbar">
-    <button id="toggle" class="icon-button" aria-label="Alternar menu lateral" aria-controls="sidebar"
-      aria-expanded="true"><svg aria-hidden="true">
-        <use href="#menu" />
-      </svg></button>
-    <span class="person-label">Pessoa acompanhada</span>
-    <details class="selector">
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+  <header class="barra-topo">
+    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+      aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="popover">Maria das Dores (Mari)</div>
+      <div class="painel-flutuante">Maria das Dores (Mari)</div>
     </details>
-    <div class="actions">
-      <button class="icon-button" data-dialog="search-dialog" aria-label="Pesquisar"><svg aria-hidden="true">
-          <use href="#search" />
-        </svg></button>
-      <details class="notifications-menu">
-        <summary class="icon-button notification" aria-label="Notificações (3 pendentes)">
-          <svg aria-hidden="true"><use href="#bell" /></svg>
+    <div class="barra-topo__acoes">
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <details class="menu-notificacoes">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
+          <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="popover notifications-popover" aria-labelledby="alerts-title" aria-describedby="alerts-subtitle">
-          <header class="notifications-header">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
+          aria-describedby="alerts-subtitle">
+          <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="alerts-title">Notificações</h2>
-              <p id="alerts-subtitle">Cuidados de Maria das Dores (Mari)</p>
+              <h2 id="titulo-alertas">Notificações</h2>
+
             </div>
           </header>
-          <ul class="notificacoes-lista">
-            <li class="notificacao notificacao-atencao">
-              <div><h3>Horário sem cobertura</h3><p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p></div>
+          <ul class="menu-notificacoes__lista">
+            <li class="notificacao notificacao--atencao">
+              <div>
+                <h3>Horário sem cobertura</h3>
+                <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
+              </div>
               <a class="botao-contornado" href="agenda.html">Ver escala</a>
             </li>
             <li class="notificacao">
-              <div><h3>Pedido para agendar consulta</h3><p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p></div>
+              <div>
+                <h3>Pedido para agendar consulta</h3>
+                <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+              </div>
               <a class="botao-contornado" href="agenda.html">Ver passagem</a>
             </li>
             <li class="notificacao">
-              <div><h3>Próxima medicação</h3><p>Maria das Dores (Mari) · Metformina prevista para 20h.</p></div>
+              <div>
+                <h3>Próxima medicação</h3>
+                <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+              </div>
               <a class="botao-contornado" href="medicamentos.html">Ver medicamentos</a>
             </li>
           </ul>
         </section>
       </details>
-      <details class="profile">
-        <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/ze.svg" alt=""><span><strong>Zé da
+      <details class="menu-perfil">
+        <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/avatar-ze.svg"
+            alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="popover"><a href="meu-perfil.html">Meu perfil</a></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a></div>
       </details>
     </div>
   </header>
-  <aside id="sidebar" class="sidebar">
-    <a class="sidebar-brand" href="index.html">
-      <img src="assets/media/Logo.svg" alt="Mutirão" width="44" height="44" />
+  <aside id="barra-lateral" class="barra-lateral">
+    <a class="barra-lateral__marca" href="index.html">
+      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
-    <a class="more-profile" href="meu-perfil.html">
-      <img src="assets/media/ze.svg" alt="">
+    <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
+      <img src="assets/media/avatar-ze.svg" alt="">
       <span><strong>Zé da Manga</strong><small>Administrador · Meu perfil</small></span>
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html" aria-current="page"><svg aria-hidden="true">
-          <use href="#home" />
-        </svg>Início</a>
-      <a href="agenda.html"><svg aria-hidden="true">
-          <use href="#calendar" />
-        </svg>Agenda</a>
-      <a href="medicamentos.html"><svg aria-hidden="true">
-          <use href="#pill" />
-        </svg>Medicamentos</a>
+      <a href="index.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
-      <a href="documentos.html"><svg aria-hidden="true">
-          <use href="#folder" />
-        </svg>Documentos</a>
-      <a href="pessoas.html"><svg aria-hidden="true">
-          <use href="#people" />
-        </svg>Pessoas da rede</a>
-      <a href="direitos.html"><svg aria-hidden="true">
-          <use href="#info" />
-        </svg>Direitos e serviços</a>
+      <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
+      <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
+      <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
-    <section class="status" aria-labelledby="status-title">
-      <h2 id="status-title">Status do cuidado</h2>
+    <section class="cartao-status" aria-labelledby="titulo-status">
+      <h2 id="titulo-status">Status do cuidado</h2>
       <h3>Turno atual</h3>
-      <div class="status-row"><img src="assets/media/bea.svg" alt=""><span><strong>Beatriz
+      <div class="cartao-status__linha"><img src="assets/media/avatar-beatriz.svg" alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="status-row warning"><svg aria-hidden="true">
-          <use href="#pill" />
-        </svg><span><strong>08h · Metformina</strong><small>Não administrada</small></span></div>
+      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não administrada</small></span></div>
     </section>
-    <nav class="help" aria-label="Suporte"><a href="ajuda.html"><svg aria-hidden="true">
-          <use href="#info" />
-        </svg>Ajuda</a></nav>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a></nav>
   </aside>
-  <main class="page-content" id="conteudo">
+  <main class="conteudo-pagina" id="conteudo">
     <h1>Início</h1>
   </main>
-  <nav class="bottom-nav" aria-label="Atalhos principais">
-    <a href="index.html" aria-current="page"><svg aria-hidden="true">
-        <use href="#home" />
-      </svg>Início</a>
-    <a href="agenda.html"><svg aria-hidden="true">
-        <use href="#calendar" />
-      </svg>Agenda</a>
-    <a href="medicamentos.html"><svg aria-hidden="true">
-        <use href="#pill" />
-      </svg>Medicamentos</a>
-    <button type="button" id="more" aria-controls="sidebar" aria-expanded="false"><svg aria-hidden="true">
-        <use href="#menu" />
-      </svg>Mais</button>
+  <nav class="barra-inferior" aria-label="Atalhos principais">
+    <a href="index.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
+        aria-hidden="true"></i>Mais</button>
   </nav>
-  <dialog id="search-dialog" aria-labelledby="search-title">
+  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
-      <h2 id="search-title">Pesquisar</h2><label for="search-query">Encontrar no menu</label><input id="search-query"
+      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
         type="search">
-      <p id="search-status" role="status"></p>
-      <ul id="results"></ul><button>Fechar</button>
+      <p id="status-busca" role="status"></p>
+      <ul id="resultados-busca"></ul><button>Fechar</button>
     </form>
   </dialog>
 </body>
