@@ -353,44 +353,29 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   align-items: start;
 }
 
-.ficha__diario .calendario-mensal {
-  border: var(--borda-padrao);
-  border-radius: var(--raio-lg);
-  padding: 20px;
-}
-
-.ficha__diario .calendario-mensal__cabecalho .botao-icone {
-  display: none;
-}
-
-.ficha__diario .calendario-mensal__grade {
-  margin-top: var(--espaco-xl);
-  font-size: var(--texto-legenda);
-}
-
-.ficha__diario .calendario-mensal__dias button {
-  border: 0;
-  min-height: 32px;
-  font-size: var(--texto-legenda);
-}
-
-.ficha__diario .calendario-mensal__dias [aria-pressed="true"] {
-  border: 1px solid var(--cor-primaria);
-}
-
-.ficha__calendario-instrucao {
-  font-size: var(--texto-legenda);
-  margin-bottom: var(--espaco-md);
+#diario {
+  scroll-margin-top: 104px;
 }
 
 .ficha__legenda-calendario {
-  padding: var(--espaco-md);
-  border: var(--borda-padrao);
-  border-radius: var(--raio-sm);
   margin-top: var(--espaco-md);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-lg);
+  padding: var(--espaco-md);
+  display: grid;
+  gap: var(--espaco-xs);
+}
+
+.ficha__legenda-calendario p {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
   font-size: var(--texto-legenda);
-  line-height: 1.8;
   font-weight: var(--peso-semibold);
+}
+
+.ficha__legenda-selecionado {
+  color: var(--cor-primaria);
 }
 
 .ficha__legenda-sucesso {
@@ -701,8 +686,14 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 
 .ficha .botao--secundario,
 .editar-ficha .botao--secundario {
+  background: transparent;
   border-color: var(--cor-primaria);
   color: var(--cor-primaria);
+}
+
+.ficha .botao--secundario:hover,
+.editar-ficha .botao--secundario:hover {
+  background: var(--cor-superficie-suave);
 }
 
 .editar-ficha__campo-icone {

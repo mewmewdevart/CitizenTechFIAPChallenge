@@ -100,7 +100,7 @@
                 <h3>Pedido para agendar consulta</h3>
                 <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologista.</p>
               </div>
-              <a class="botao-contornado" href="agenda.html">Ver passagem</a>
+              <a class="botao-contornado" href="ficha.html#diario">Ver passagem</a>
             </li>
             <li class="notificacao">
               <div>
@@ -172,10 +172,10 @@
       <div class="ficha__acoes"><button type="button" class="botao botao--secundario"
           data-dialogo="dialogo-compartilhar-resumo"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
           Compartilhar
-          resumo</button><button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao">Prévia
+          resumo</button><button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao"><i class="fa-solid fa-print" aria-hidden="true"></i> Prévia
           de
           impressão</button><button type="button" class="botao botao--primario"
-          data-dialogo="dialogo-editar-ficha">Editar ficha</button>
+          data-dialogo="dialogo-editar-ficha"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar ficha</button>
       </div>
     </header>
     <section class="cartao ficha__identidade">
@@ -319,7 +319,7 @@
         </dl>
       </section>
     </div>
-    <section class="cartao ficha__cartao">
+    <section class="cartao ficha__cartao" id="diario">
       <div class="ficha__diario-cabecalho">
         <h2>Diário de turno</h2>
         <p>Leia o que aconteceu durante o cuidado: relatos do turno, observações e recados para quem assume depois.</p>
@@ -333,7 +333,6 @@
                 aria-label="Mês anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><strong
                 data-titulo-mes></strong><button type="button" class="botao-icone" data-passo-mes="1"
                 aria-label="Próximo mês"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
-            <p class="ficha__texto-suave ficha__calendario-instrucao">Selecione um dia com relatos.</p>
             <div class="calendario-mensal__grade" role="group" aria-label="Calendário"><span
                 aria-hidden="true">Dom</span><span aria-hidden="true">Seg</span><span aria-hidden="true">Ter</span><span
                 aria-hidden="true">Qua</span><span aria-hidden="true">Qui</span><span aria-hidden="true">Sex</span><span
@@ -341,8 +340,11 @@
               <div class="calendario-mensal__dias"></div>
             </div>
           </div>
-          <p class="ficha__legenda-calendario"><span class="ficha__legenda-sucesso">✓ Todos os turnos com
-              relato</span><br><span class="ficha__legenda-atencao">• Parte dos turnos com relato</span></p>
+          <div class="ficha__legenda-calendario">
+            <p><span class="ficha__legenda-selecionado" aria-hidden="true">□</span> Dia selecionado</p>
+            <p><span class="ficha__legenda-sucesso" aria-hidden="true">✓</span> Todos os turnos com relato</p>
+            <p><span class="ficha__legenda-atencao" aria-hidden="true">•</span> Parte dos turnos com relato</p>
+          </div>
         </div>
         <div class="ficha__relatos" data-relatos></div>
       </div>
