@@ -106,6 +106,19 @@ for (const dialogo of document.querySelectorAll('dialog')) {
   });
 }
 
+for (const botaoSair of document.querySelectorAll('[data-acao="sair"]')) {
+  botaoSair.addEventListener('click', () => {
+    if (confirm('Deseja realmente sair da sua conta?')) {
+      try {
+        sessionStorage.removeItem(CHAVE_MENU_STORAGE);
+      } catch {
+        // Ignora erro caso o navegador bloqueie storage local
+      }
+      location.href = 'index.html';
+    }
+  });
+}
+
 const campoBusca = document.querySelector('#campo-busca');
 const listaResultados = document.querySelector('#resultados-busca');
 const statusBusca = document.querySelector('#status-busca');

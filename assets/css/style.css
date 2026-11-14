@@ -159,7 +159,12 @@ summary::after {
   padding: 6px;
 }
 
-.painel-flutuante a {
+.painel-flutuante :is(a, button) {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -169,8 +174,20 @@ summary::after {
   transition: background-color var(--transicao-padrao);
 }
 
-.painel-flutuante a:hover {
+.painel-flutuante :is(a, button):hover {
   background: var(--cor-superficie-suave);
+}
+
+.painel-flutuante__acao--sair {
+  color: var(--cor-aviso-alerta-escuro);
+  margin-top: var(--espaco-xs);
+  border-top: var(--borda-padrao);
+  border-radius: 0 0 var(--raio-md) var(--raio-md);
+  padding-top: 10px;
+}
+
+.painel-flutuante__acao--sair:hover {
+  background: var(--cor-aviso-alerta-claro);
 }
 
 .menu-notificacoes summary {
@@ -536,7 +553,7 @@ dialog button {
 }
 
 .barra-lateral__perfil-mobile,
-#barra-lateral nav a.barra-lateral__link--apenas-mobile {
+#barra-lateral nav :is(a, button).barra-lateral__link--apenas-mobile {
   display: none;
 }
 
@@ -660,8 +677,26 @@ dialog button {
     display: none;
   }
 
-  #barra-lateral nav a.barra-lateral__link--apenas-mobile {
+  #barra-lateral nav :is(a, button).barra-lateral__link--apenas-mobile {
     display: flex;
+  }
+
+  #barra-lateral nav button.barra-lateral__link--sair {
+    width: 100%;
+    border: 0;
+    border-bottom: var(--borda-padrao);
+    background: transparent;
+    color: var(--cor-aviso-alerta-escuro);
+    text-align: left;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: var(--espaco-sm) 10px;
+    font-weight: var(--peso-semibold);
+  }
+
+  #barra-lateral nav button.barra-lateral__link--sair:hover {
+    background: var(--cor-aviso-alerta-claro);
   }
 
   #barra-lateral .barra-lateral__suporte {
