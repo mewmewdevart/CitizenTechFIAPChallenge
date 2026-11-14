@@ -124,7 +124,8 @@ const listaResultados = document.querySelector('#resultados-busca');
 const statusBusca = document.querySelector('#status-busca');
 const itensPesquisaveis = [
   ...linksMenu.map(link => ({ href: link.getAttribute('href'), rotulo: link.textContent.trim() })),
-  { href: 'meu-perfil.html', rotulo: 'Meu perfil' }
+  { href: 'meu-perfil.html', rotulo: 'Meu perfil' },
+  { href: 'ficha.html', rotulo: 'Ficha da pessoa acompanhada · Maria das Dores (Mari)' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
 function renderizarResultados() {

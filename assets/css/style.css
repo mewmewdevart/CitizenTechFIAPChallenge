@@ -73,13 +73,15 @@
 
 .botao-icone {
   border: 0;
+  padding: 0;
   background: transparent;
   color: inherit;
   width: 40px;
   height: 40px;
   min-height: var(--tamanho-alvo-toque);
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--raio-md);
 }
 
@@ -527,7 +529,7 @@ dialog::backdrop {
   background: var(--cor-backdrop);
 }
 
-dialog input {
+dialog input:not([hidden]) {
   display: block;
   width: 100%;
   padding: 10px;
@@ -536,7 +538,7 @@ dialog input {
   border: 1px solid var(--cor-neutra-media);
 }
 
-dialog button {
+#dialogo-busca button {
   background: var(--cor-primaria);
   color: var(--cor-neutra-clara-02);
   border: 0;
@@ -777,6 +779,7 @@ dialog button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -786,6 +789,7 @@ dialog button {
 }
 
 @media (forced-colors: active) {
+
   [aria-current="page"],
   #botao-mais[aria-expanded="true"] {
     outline: 2px solid Highlight;
