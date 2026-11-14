@@ -3,6 +3,7 @@
 :root {
   /* Cores da marca e neutras */
   --cor-primaria: #4B5DA9;
+  --cor-primaria-hover: #3E4E96;
   --cor-secundaria-clara: #E8EBFB;
   --cor-neutra-escura-01: #302B3D;
   --cor-neutra-escura-02: #313131;
@@ -12,12 +13,23 @@
   --cor-neutra-clara-03: #DFE3EE;
   --cor-neutra-clara-04: #E6E6ED;
 
-  /* Cores semânticas */
+  /* Cores semânticas de superfície e texto */
+  --cor-fundo-pagina: var(--cor-neutra-clara-01);
+  --cor-superficie: var(--cor-neutra-clara-02);
+  --cor-superficie-suave: var(--cor-secundaria-clara);
+  --cor-texto-principal: var(--cor-neutra-escura-01);
+  --cor-texto-secundario: var(--cor-neutra-media);
+  --cor-borda-sutil: var(--cor-neutra-clara-03);
+
+  /* Cores semânticas de estado */
   --cor-aviso-sucesso: #235A38;
+  --cor-aviso-sucesso-claro: #E4F5EA;
   --cor-aviso-atencao-claro: #FFF6DA;
   --cor-aviso-atencao-escuro: #694806;
   --cor-aviso-alerta-claro: #FFD7DB;
   --cor-aviso-alerta-escuro: #8C2337;
+  --cor-aviso-info-claro: var(--cor-secundaria-clara);
+  --cor-aviso-info-escuro: var(--cor-primaria);
   --cor-backdrop: #302b3d55;
 
   /* Tipografia */
@@ -25,19 +37,22 @@
   --peso-regular: 400;
   --peso-semibold: 600;
   --peso-negrito: 700;
-  --texto-titulo-pagina: 2.125rem;
-  --texto-titulo-secao: 1.375rem;
-  --texto-titulo-cartao: 1.125rem;
+  --texto-titulo-pagina: 1.625rem;
+  --texto-titulo-secao: 1.25rem;
+  --texto-titulo-cartao: 1rem;
   --texto-interface: 0.875rem;
   --texto-legenda: 0.75rem;
+  --texto-micro: 0.6875rem;
 
-  /* Dimensões de layout */
+  /* Dimensões de layout e grid */
   --largura-menu-lateral: 250px;
+  --largura-conteudo-max: 1280px;
   --altura-barra-superior: 88px;
   --altura-barra-inferior-mobile: 68px;
   --tamanho-alvo-toque: 44px;
+  --gap-dashboard: 20px;
 
-  /* Espaçamentos, bordas e sombras */
+  /* Espaçamentos, bordas, sombras e camadas */
   --espaco-xs: 4px;
   --espaco-sm: 8px;
   --espaco-md: 12px;
@@ -48,18 +63,27 @@
   --raio-lg: 8px;
   --raio-xl: 12px;
   --raio-pill: 999px;
-  --borda-padrao: 1px solid var(--cor-neutra-clara-03);
+  --borda-padrao: 1px solid var(--cor-borda-sutil);
+  --sombra-cartao: 0 1px 3px #302b3d0a;
   --sombra-popover: 0 4px 14px #302b3d16;
   --sombra-elevada: 0 8px 24px #302b3d22;
   --transicao-padrao: 0.15s ease;
+  --anel-foco: 2px solid var(--cor-primaria);
+  --z-sidebar-mobile: 10;
+  --z-topbar: 20;
+  --z-popover: 30;
+  --z-skip-link: 50;
 
   font-family: var(--fonte-interface);
-  color: var(--cor-neutra-escura-01);
+  color: var(--cor-texto-principal);
 }
 
 @media (width < 1024px) {
   :root {
     --altura-barra-superior: calc(76px + env(safe-area-inset-top));
+    --texto-titulo-pagina: 1.375rem;
+    --texto-titulo-secao: 1.125rem;
+    --gap-dashboard: 14px;
   }
 }
 
@@ -73,15 +97,39 @@
 body {
   margin: 0;
   min-height: 100dvh;
-  background: var(--cor-neutra-clara-01);
-  color: var(--cor-neutra-escura-01);
+  background: var(--cor-fundo-pagina);
+  color: var(--cor-texto-principal);
   font-family: var(--fonte-interface);
   font-size: var(--texto-interface);
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: var(--peso-negrito);
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: var(--texto-titulo-pagina);
+}
+
+h2 {
+  font-size: var(--texto-titulo-secao);
+}
+
+h3 {
+  font-size: var(--texto-titulo-cartao);
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -96,7 +144,6 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--cor-primaria);
+  outline: var(--anel-foco);
   outline-offset: 2px;
 }
-
