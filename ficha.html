@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Principal -->
+  <title>Mutirão | Ficha da pessoa acompanhada</title>
+  <meta name="description"
+    content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
+  <meta name="robots" content="index, follow" />
+  <meta name="application-name" content="Mutirão" />
+  <meta name="author"
+    content="Grupo Ctrl + People — Ingrid Silva de Lima, Larissa Cristina Benedito e Mayla Mayumi Motobe" />
+  <meta name="theme-color" content="#8495E1" />
+
+  <!-- Open Graph / Compartilhamento Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Mutirão" />
+  <meta property="og:title" content="Mutirão | Ficha da pessoa acompanhada" />
+  <meta property="og:description"
+    content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mutirão | Ficha da pessoa acompanhada" />
+  <meta name="twitter:description"
+    content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
+
+  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/ficha.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/ficha.html" />
+  <meta property="og:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+  <meta name="twitter:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+
+  <!-- Favicons e Web App Manifest -->
+  <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/media/favicon_io/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/media/favicon_io/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicon_io/apple-touch-icon.png" />
+  <link rel="manifest" href="assets/media/favicon_io/site.webmanifest" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  </noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="assets/css/variaveis.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/ficha.css" />
+  <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/mvp-telas.js" defer></script>
+</head>
+
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+  <header class="barra-topo">
+    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+      aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <details class="seletor-pessoa">
+      <summary>Maria das Dores (Mari)</summary>
+      <div class="painel-flutuante"><a href="ficha.html" aria-current="page">Maria das Dores (Mari) · Ver ficha</a>
+      </div>
+    </details>
+    <div class="barra-topo__acoes">
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <details class="menu-notificacoes">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
+          <i class="fa-regular fa-bell" aria-hidden="true"></i>
+        </summary>
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
+          <header class="menu-notificacoes__cabecalho">
+            <div>
+              <h2 id="titulo-alertas">Notificações</h2>
+            </div>
+          </header>
+          <ul class="menu-notificacoes__lista">
+            <li class="notificacao notificacao--atencao">
+              <div>
+                <h3>Horário sem cobertura</h3>
+                <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
+              </div>
+              <a class="botao-contornado" href="agenda.html">Ver escala</a>
+            </li>
+            <li class="notificacao">
+              <div>
+                <h3>Pedido para agendar consulta</h3>
+                <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologista.</p>
+              </div>
+              <a class="botao-contornado" href="agenda.html">Ver passagem</a>
+            </li>
+            <li class="notificacao">
+              <div>
+                <h3>Próxima medicação</h3>
+                <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+              </div>
+              <a class="botao-contornado" href="medicamentos.html">Ver medicamentos</a>
+            </li>
+          </ul>
+        </section>
+      </details>
+      <details class="menu-perfil">
+        <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
+            alt=""><span><strong>Zé da
+              Manga · Neto</strong><small>Administrador</small></span></summary>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+      </details>
+    </div>
+  </header>
+  <aside id="barra-lateral" class="barra-lateral">
+    <a class="barra-lateral__marca" href="index.html">
+      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <span>Mutirão</span>
+    </a>
+    <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
+      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
+      <span><strong>Zé da Manga</strong><small>Administrador · Meu perfil</small></span>
+      <span aria-hidden="true">›</span>
+    </a>
+    <nav aria-label="Menu principal">
+      <p>Rotina de cuidado</p>
+      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+      <p>Recursos de apoio</p>
+      <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
+      <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
+      <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
+    </nav>
+    <section class="cartao-status" aria-labelledby="titulo-status">
+      <h2 id="titulo-status">Status do cuidado</h2>
+      <h3>Turno atual</h3>
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+            (Bea)</strong><small>07h–12h</small></span></div>
+      <h3>Medicamentos</h3>
+      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não administrada</small></span></div>
+    </section>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+  </aside>
+  <main class="conteudo-pagina ficha" id="conteudo" data-pagina-mvp="ficha">
+    <nav class="ficha__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
+        aria-hidden="true">›</span>
+      Maria das Dores (Mari)</nav>
+    <header class="ficha__cabecalho">
+      <div>
+        <h1>Ficha da pessoa acompanhada</h1>
+        <p>Consulte os dados de cuidado da Mari e prepare o resumo para a equipe de saúde.</p>
+      </div>
+      <div class="ficha__acoes"><button type="button" class="botao botao--secundario"
+          data-dialogo="dialogo-compartilhar-resumo"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          Compartilhar
+          resumo</button><button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao">Prévia
+          de
+          impressão</button><button type="button" class="botao botao--primario"
+          data-dialogo="dialogo-editar-ficha">Editar ficha</button>
+      </div>
+    </header>
+    <section class="cartao ficha__identidade">
+      <div class="ficha__retrato"><img src="assets/media/foto-perfil-maria.png" alt="Maria das Dores"><img
+          src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="ficha__mascote"></div>
+      <div class="ficha__pessoa"><span>Pessoa acompanhada</span>
+        <h2 data-pessoa-nome>Maria das Dores (Mari)</h2>
+        <p data-pessoa-nascimento>79 anos · 18 de maio de 1947</p><small>Dados fictícios</small>
+      </div>
+      <div class="ficha__aviso-alergia"><img class="ficha__alerta-mascote"
+          src="assets/media/mascotes/icone-mascote-minhoca.svg" alt=""><strong><i
+            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à dipirona</strong>
+        <p>Não administrar. Em caso de dor, consultar o responsável antes.</p>
+      </div>
+    </section>
+    <div class="ficha__grade">
+      <section class="cartao ficha__cartao ficha__cartao--saude">
+        <h2>Informações de saúde</h2>
+        <dl>
+          <div>
+            <dt>Alergias registradas</dt>
+            <dd data-pessoa-campo="alergias"><span class="ficha__etiqueta ficha__etiqueta--alerta">Dipirona</span></dd>
+          </div>
+          <div>
+            <dt>Condições de saúde registradas</dt>
+            <dd data-pessoa-campo="condicoes"><span class="ficha__etiqueta ficha__etiqueta--alerta">Epilepsia</span>
+              <span class="ficha__etiqueta ficha__etiqueta--alerta">Diabetes tipo 2</span> <span
+                class="ficha__etiqueta ficha__etiqueta--alerta">Asma</span> <span
+                class="ficha__etiqueta ficha__etiqueta--alerta">Hipertensão arterial</span></dd>
+          </div>
+          <div>
+            <dt>Medicamentos de uso diário</dt>
+            <dd><span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
+                08h</span> <span
+                class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Metformina · 08h e
+                20h</span></dd>
+          </div>
+          <div>
+            <dt>Cirurgias e histórico de saúde</dt>
+            <dd data-pessoa-campo="historicoSaude">Cirurgia na perna esquerda (2021) · Placa e parafusos após
+              fratura.<br>Histórico de trombose venosa
+              profunda (2022).</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="cartao ficha__cartao ficha__cartao--consultas">
+        <div class="ficha__secao-cabecalho">
+          <h2>Consultas e exames</h2><button type="button" class="botao botao--secundario"
+            data-dialogo="dialogo-exames">Ver todos</button>
+        </div>
+        <dl>
+          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
+            <dt>Hoje · Consulta na UBS às 14h</dt>
+            <dd>Ana da Silva (Aninha) acompanha · 1 anexo</dd>
+          </div>
+          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
+            <dt>Consulta agendada · 18 nov.</dt>
+            <dd>Geriatria · 14h · Ana da Silva (Aninha) acompanha</dd>
+          </div>
+          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-exame.svg">
+            <dt>Exame agendado</dt>
+            <dd>Hemoglobina glicada · 21 nov 2026, 08h · Coleta · UBS do bairro </dd>
+          </div>
+          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
+            <dt>Exame cadastrado</dt>
+            <dd><a href="documentos.html">Hemograma · 4 nov. 2026 · 1 anexo</a></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="cartao ficha__cartao">
+        <h2>Dados pessoais e convênio</h2>
+        <dl>
+          <div>
+            <dt>Nome completo</dt>
+            <dd><span data-pessoa-nome-completo>Maria das Dores</span></dd>
+          </div>
+          <div>
+            <dt>Data de nascimento e idade</dt>
+            <dd><span data-pessoa-campo="nascimento">18 de maio de 1947 · 79 anos</span></dd>
+          </div>
+          <div>
+            <dt>E-mail</dt>
+            <dd><span data-pessoa-campo="email">maria.dores@example.com</span></dd>
+          </div>
+          <div>
+            <dt>Telefone fixo e celular</dt>
+            <dd><span data-pessoa-campo="telefones">Fixo (11) XXXX-0140 · Celular (11) 9XXXX-0142</span></dd>
+          </div>
+          <div>
+            <dt>Endereço</dt>
+            <dd><span data-pessoa-campo="endereco">Rua das Acácias, 120 · Vila Aurora · São Paulo/SP</span></dd>
+          </div>
+          <div>
+            <dt>Plano de saúde</dt>
+            <dd><span data-pessoa-campo="convenio">Convênio Vida Plena · Plano Familiar (fictício)</span></dd>
+          </div>
+          <div>
+            <dt>Número da carteira do convênio</dt>
+            <dd><span data-pessoa-campo="carteira">•••• •••• •••• 2048</span></dd><button
+              class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="carteira"
+              aria-pressed="false" aria-label="Mostrar carteirinha"><img alt=""
+                src="assets/media/icones/icone-dado-oculto.svg"></button>
+          </div>
+          <div>
+            <dt>CPF</dt>
+            <dd><span data-pessoa-campo="cpf">***.***.***-**</span></dd><button
+              class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="cpf"
+              aria-pressed="false" aria-label="Mostrar CPF"><img alt=""
+                src="assets/media/icones/icone-dado-oculto.svg"></button>
+          </div>
+          <div>
+            <dt>RG</dt>
+            <dd><span data-pessoa-campo="rg">**.***.***-*</span></dd><button
+              class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="rg"
+              aria-pressed="false" aria-label="Mostrar RG"><img alt=""
+                src="assets/media/icones/icone-dado-oculto.svg"></button>
+          </div>
+        </dl>
+      </section>
+      <section class="cartao ficha__cartao ficha__cartao--rede">
+        <h2>Rede de apoio</h2>
+        <dl>
+          <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-espeto.svg">
+            <dt>Contato de referência</dt>
+            <dd data-pessoa-campo="referencia">Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186</dd>
+          </div>
+          <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-pingo.svg">
+            <dt>Contato alternativo</dt>
+            <dd data-pessoa-campo="alternativo">Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193</dd>
+          </div>
+          <div>
+            <dt>Cobertura de cuidado necessária</dt>
+            <dd><span class="ficha__etiqueta ficha__etiqueta--alerta" data-pessoa-campo="cobertura">24 horas por
+                dia</span></dd>
+          </div>
+          <div>
+            <dt>Preferências</dt>
+            <dd data-pessoa-campo="preferencias">Prefere consultas à tarde e gosta de conferir a agenda com a família.
+            </dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+    <section class="cartao ficha__cartao">
+      <div class="ficha__diario-cabecalho">
+        <h2>Diário de turno</h2>
+        <p>Leia o que aconteceu durante o cuidado: relatos do turno, observações e recados para quem assume depois.</p>
+        <button type="button" class="botao botao--primario" data-dialogo="dialogo-relato"><i class="fa-solid fa-plus"
+            aria-hidden="true"></i> Registrar relato</button>
+      </div>
+      <div class="ficha__grade ficha__diario">
+        <div>
+          <div class="calendario-mensal" data-mes="diario">
+            <div class="calendario-mensal__cabecalho"><button type="button" class="botao-icone" data-passo-mes="-1"
+                aria-label="Mês anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><strong
+                data-titulo-mes></strong><button type="button" class="botao-icone" data-passo-mes="1"
+                aria-label="Próximo mês"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
+            <p class="ficha__texto-suave ficha__calendario-instrucao">Selecione um dia com relatos.</p>
+            <div class="calendario-mensal__grade" role="group" aria-label="Calendário"><span
+                aria-hidden="true">Dom</span><span aria-hidden="true">Seg</span><span aria-hidden="true">Ter</span><span
+                aria-hidden="true">Qua</span><span aria-hidden="true">Qui</span><span aria-hidden="true">Sex</span><span
+                aria-hidden="true">Sáb</span>
+              <div class="calendario-mensal__dias"></div>
+            </div>
+          </div>
+          <p class="ficha__legenda-calendario"><span class="ficha__legenda-sucesso">✓ Todos os turnos com
+              relato</span><br><span class="ficha__legenda-atencao">• Parte dos turnos com relato</span></p>
+        </div>
+        <div class="ficha__relatos" data-relatos></div>
+      </div>
+    </section>
+    <dialog class="dialogo-mvp" id="dialogo-compartilhar-resumo" aria-labelledby="titulo-compartilhar-resumo">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-compartilhar-resumo">Compartilhar resumo</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p>Selecione o que deseja incluir.</p>
+      <fieldset class="dialogo-mvp__opcoes">
+        <legend>Campos da mensagem</legend><label><input type="checkbox" value="Consultas e exames" checked> Consultas e
+          exames</label><label><input type="checkbox" value="Informações de saúde"> Informações de
+          saúde</label><label><input type="checkbox" value="Medicamentos de uso diário"> Medicamentos de uso
+          diário</label>
+      </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Prévia da mensagem<textarea data-previa-compartilhar
+          readonly rows="5"></textarea></label>
+      <div class="ficha__acoes"><button class="botao botao--secundario" type="button"
+          data-compartilhar="copy">Copiar</button><button class="botao botao--primario" type="button"
+          data-compartilhar="native">Compartilhar</button><button class="botao botao--secundario" type="button"
+          data-compartilhar="whatsapp">WhatsApp</button><button class="botao botao--secundario" type="button"
+          data-compartilhar="email">E-mail</button></div>
+      <p role="status" data-status-compartilhar></p>
+    </dialog>
+    <dialog class="dialogo-mvp" id="dialogo-impressao" aria-labelledby="titulo-impressao">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-impressao">Prévia de impressão</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <div class="dialogo-mvp__impressao">
+        <h3 data-pessoa-nome>Pessoa acompanhada</h3>
+        <dl>
+          <div>
+            <dt>Informações de saúde</dt>
+            <dd>Alergias registradas</dd>
+          </div>
+          <div>
+            <dt>Hipertensão arterial</dt>
+            <dd>Medicamentos de uso diário · Losartana · 08h</dd>
+          </div>
+          <div>
+            <dt>Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.
+              Histórico de trombose venosa profunda (2022).</dt>
+            <dd>Ver todos · Hoje · Consulta na UBS às 14h</dd>
+          </div>
+        </dl>
+      </div><button class="botao botao--primario" type="button" data-mvp-imprimir>Imprimir resumo</button>
+    </dialog>
+    <dialog class="dialogo-mvp dialogo-mvp--largo" id="dialogo-editar-ficha" aria-labelledby="titulo-editar-ficha"
+      aria-describedby="subtitulo-editar-ficha">
+      <div class="dialogo-mvp__cabecalho">
+        <div>
+          <h2 id="titulo-editar-ficha">Editar ficha</h2>
+          <p id="subtitulo-editar-ficha" class="dialogo-mvp__subtitulo">Revise os dados de Maria das Dores (Mari).</p>
+        </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+
+      <form class="formulario-mvp editar-ficha" data-formulario-mvp="ficha">
+        <section class="editar-ficha__secao" aria-labelledby="secao-foto-perfil">
+          <h3 id="secao-foto-perfil" class="editar-ficha__subtitulo">Foto de Perfil</h3>
+          <div class="editar-ficha__foto-linha">
+            <img src="assets/media/foto-perfil-maria.png" alt="Foto de perfil de Maria das Dores"
+              class="editar-ficha__foto-previa" data-foto-previa />
+            <div class="editar-ficha__foto-info">
+              <strong>Foto de perfil</strong>
+              <small>Opcional · JPG ou PNG</small>
+            </div>
+            <input type="file" accept="image/jpeg,image/png" hidden data-input-foto />
+            <div class="editar-ficha__foto-acoes">
+              <button type="button" class="botao botao--secundario" data-remover-foto>Remover foto</button>
+              <button type="button" class="botao botao--secundario" data-botao-foto>Trocar foto</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="editar-ficha__secao" aria-labelledby="secao-mascote">
+          <h3 id="secao-mascote" class="editar-ficha__rotulo-secao">Escolha um mascote</h3>
+          <input type="hidden" name="mascote" value="assets/media/mascotes/icone-mascote-minhoca.svg"
+            data-input-mascote />
+          <div class="editar-ficha__mascotes" role="group" aria-labelledby="secao-mascote">
+            <button type="button" class="editar-ficha__mascote-cartao"
+              data-mascote="assets/media/mascotes/icone-mascote-espeto.svg" aria-pressed="false">
+              <img src="assets/media/mascotes/icone-mascote-espeto.svg" alt="" width="44" height="44" />
+              <strong>Espeto</strong>
+              <span>Selecionar</span>
+            </button>
+            <button type="button" class="editar-ficha__mascote-cartao"
+              data-mascote="assets/media/mascotes/icone-mascote-minhoca.svg" aria-pressed="true">
+              <img src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" width="44" height="44" />
+              <strong>Minhoca</strong>
+              <span>Selecionado</span>
+            </button>
+            <button type="button" class="editar-ficha__mascote-cartao"
+              data-mascote="assets/media/mascotes/icone-mascote-pingo.svg" aria-pressed="false">
+              <img src="assets/media/mascotes/icone-mascote-pingo.svg" alt="" width="44" height="44" />
+              <strong>Pingo</strong>
+              <span>Selecionar</span>
+            </button>
+            <button type="button" class="editar-ficha__mascote-cartao"
+              data-mascote="assets/media/mascotes/icone-mascote-cubado.svg" aria-pressed="false">
+              <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" width="44" height="44" />
+              <strong>Cubado</strong>
+              <span>Selecionar</span>
+            </button>
+            <button type="button" class="editar-ficha__mascote-cartao"
+              data-mascote="assets/media/mascotes/icone-mascote-trevo.svg" aria-pressed="false">
+              <img src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" width="44" height="44" />
+              <strong>Trevo</strong>
+              <span>Selecionar</span>
+            </button>
+            <button type="button" class="editar-ficha__mascote-cartao"
+              data-mascote="assets/media/mascotes/icone-mascote-forma.svg" aria-pressed="false">
+              <img src="assets/media/mascotes/icone-mascote-forma.svg" alt="" width="44" height="44" />
+              <strong>Forma</strong>
+              <span>Selecionar</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="editar-ficha__secao" aria-labelledby="secao-dados-pessoais">
+          <h3 id="secao-dados-pessoais" class="editar-ficha__subtitulo">Dados pessoais</h3>
+          <div class="editar-ficha__grade">
+            <label>Nome completo<input type="text" name="nome" value="Maria das Dores" required /></label>
+            <label>Apelido ou parentesco<input type="text" name="apelido" value="Mari" required /></label>
+            <label>Data de nascimento<input type="date" name="nascimento" value="1947-05-18" /></label>
+            <label>CPF
+              <span class="editar-ficha__campo-icone">
+                <input type="text" name="cpf" value="***.***.***-**" />
+                <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="cpf" aria-pressed="false"
+                  aria-label="Mostrar CPF">
+                  <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
+                </button>
+              </span>
+            </label>
+            <label>RG
+              <span class="editar-ficha__campo-icone">
+                <input type="text" name="rg" value="**.***.***-*" />
+                <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="rg" aria-pressed="false"
+                  aria-label="Mostrar RG">
+                  <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
+                </button>
+              </span>
+            </label>
+            <label>E-mail<input type="email" name="email" value="maria.dores@example.com" /></label>
+            <label>Telefone fixo<input type="text" name="telefoneFixo" value="(11) XXXX-0140" /></label>
+            <label>Celular<input type="text" name="celular" value="(11) 9XXXX-0142" /></label>
+            <label class="editar-ficha__campo--largo">Endereço<input type="text" name="endereco"
+                value="Rua das Acácias, 120 · Vila Aurora · São Paulo/SP" /></label>
+          </div>
+        </section>
+
+        <section class="editar-ficha__secao" aria-labelledby="secao-saude">
+          <h3 id="secao-saude" class="editar-ficha__subtitulo">Informações de saúde</h3>
+          <div class="editar-ficha__grade">
+            <div>
+              <span class="editar-ficha__rotulo-campo">Alergias registradas</span>
+              <input type="hidden" name="alergias" value="Dipirona" data-input-etiquetas="alergias" />
+              <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="alergias">
+                <span class="ficha__etiqueta ficha__etiqueta--alerta">Dipirona <button type="button"
+                    class="editar-ficha__remover-etiqueta" aria-label="Remover Dipirona"><i class="fa-solid fa-xmark"
+                      aria-hidden="true"></i></button></span>
+                <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar alergia" />
+              </div>
+            </div>
+            <div>
+              <span class="editar-ficha__rotulo-campo">Condições de saúde registradas</span>
+              <input type="hidden" name="condicoes" value="Epilepsia, Diabetes tipo 2, Asma, Hipertensão arterial"
+                data-input-etiquetas="condicoes" />
+              <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="condicoes">
+                <span class="ficha__etiqueta ficha__etiqueta--alerta">Epilepsia <button type="button"
+                    class="editar-ficha__remover-etiqueta" aria-label="Remover Epilepsia"><i class="fa-solid fa-xmark"
+                      aria-hidden="true"></i></button></span>
+                <span class="ficha__etiqueta ficha__etiqueta--alerta">Diabetes tipo 2 <button type="button"
+                    class="editar-ficha__remover-etiqueta" aria-label="Remover Diabetes tipo 2"><i
+                      class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
+                <span class="ficha__etiqueta ficha__etiqueta--alerta">Asma <button type="button"
+                    class="editar-ficha__remover-etiqueta" aria-label="Remover Asma"><i class="fa-solid fa-xmark"
+                      aria-hidden="true"></i></button></span>
+                <span class="ficha__etiqueta ficha__etiqueta--alerta">Hipertensão arterial <button type="button"
+                    class="editar-ficha__remover-etiqueta" aria-label="Remover Hipertensão arterial"><i
+                      class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
+                <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar condição de saúde" />
+              </div>
+            </div>
+            <div class="editar-ficha__campo--largo">
+              <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e histórico de saúde</span>
+              <input type="hidden" name="historicoSaude"
+                value="Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.&lt;br&gt;Histórico de trombose venosa profunda (2022)."
+                data-input-editor="historicoSaude" />
+              <div class="editar-ficha__editor-rico" data-editor-rico="historicoSaude">
+                <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
+                  <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold"
+                    aria-pressed="false" aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold"
+                      aria-hidden="true"></i></button>
+                  <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
+                    aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
+                      aria-hidden="true"></i></button>
+                  <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
+                    aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
+                      class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+                  <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
+                    aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i
+                      class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
+                </div>
+                <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
+                  aria-labelledby="rotulo-historico-saude" data-editor-alvo="historicoSaude">Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Histórico de trombose venosa profunda (2022).</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="editar-ficha__secao" aria-labelledby="secao-convenio-rede">
+          <h3 id="secao-convenio-rede" class="editar-ficha__subtitulo">Convênio e rede de apoio</h3>
+          <div class="editar-ficha__grade">
+            <label>Plano de saúde<input type="text" name="convenio"
+                value="Convênio Vida Plena · Plano Familiar" /></label>
+            <label>Número da carteirinha
+              <span class="editar-ficha__campo-icone">
+                <input type="text" name="carteira" value="•••• •••• •••• 2048" />
+                <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="carteira"
+                  aria-pressed="false" aria-label="Mostrar carteirinha">
+                  <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
+                </button>
+              </span>
+            </label>
+            <label>Contato de referência<input type="text" name="referencia"
+                value="Ana da Silva (Aninha) · Filha · (11) 9XXXX-0186" /></label>
+            <label>Contato alternativo<input type="text" name="alternativo"
+                value="Paulo da Silva (Paul) · Neto · (11) 9XXXX-0193" /></label>
+            <label>Cobertura de cuidado<input type="text" name="cobertura" value="24 horas por dia" /></label>
+            <label>Preferências de cuidado<input type="text" name="preferencias"
+                value="Prefere consultas à tarde" /></label>
+          </div>
+        </section>
+
+        <div class="editar-ficha__rodape">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Salvar alterações</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="dialogo-mvp" id="dialogo-relato" aria-labelledby="titulo-relato">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-relato">Registrar relato</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <form class="formulario-mvp" data-formulario-mvp="relato"><label>Data<input type="date" name="dia"
+            value="2026-11-10" required></label><label>Relato do turno<textarea required name="relato"
+            rows="4"></textarea></label><label>Recado para o próximo turno<textarea name="recado"
+            rows="3"></textarea></label>
+        <div class="ficha__acoes"><button class="botao botao--primario">Salvar relato</button></div>
+      </form>
+    </dialog>
+    <dialog class="dialogo-mvp" id="dialogo-exames" aria-labelledby="titulo-exames">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-exames">Consultas e exames da Mari</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p>10 nov. · 14h · Consulta na UBS</p>
+      <p>18 nov. · 14h · Geriatria</p>
+      <p>21 nov. · 08h · Hemoglobina glicada</p>
+      <p>4 nov. · Hemograma</p><a href="agenda.html">Abrir Agenda</a>
+    </dialog>
+    <p role="status" class="ficha__status-geral" data-mvp-status></p>
+  </main>
+  <nav class="barra-inferior" aria-label="Atalhos principais">
+    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
+  </nav>
+  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
+    <form method="dialog">
+      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+        type="search">
+      <p id="status-busca" role="status"></p>
+      <ul id="resultados-busca"></ul><button>Fechar</button>
+    </form>
+  </dialog>
+</body>
+
+</html>
