@@ -40,7 +40,7 @@ svg:not(.symbols) {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 0 28px;
+  padding: 0 20px;
   background: var(--cor-superficie);
   border-bottom: var(--borda-padrao);
   z-index: var(--z-topbar);
@@ -130,10 +130,29 @@ summary::after {
   min-width: 100%;
   width: max-content;
   padding: var(--espaco-md);
-  background: var(--cor-neutra-clara-02);
+  background: var(--cor-superficie);
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
   box-shadow: var(--sombra-popover);
+  z-index: var(--z-popover);
+}
+
+.profile .popover {
+  min-width: 180px;
+  padding: 6px;
+}
+
+.popover a {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-md);
+  transition: background-color var(--transicao-padrao);
+}
+
+.popover a:hover {
+  background: var(--cor-superficie-suave);
 }
 
 .notifications-menu summary {
@@ -177,6 +196,7 @@ summary::after {
 .topbar small,
 .sidebar small {
   display: block;
+  font-size: var(--texto-legenda);
   color: var(--cor-neutra-media);
 }
 
@@ -352,10 +372,21 @@ body.menu-closed .page-content {
   gap: var(--gap-dashboard);
 }
 
-.col-12 { grid-column: span 12; }
-.col-8 { grid-column: span 8; }
-.col-6 { grid-column: span 6; }
-.col-4 { grid-column: span 4; }
+.col-12 {
+  grid-column: span 12;
+}
+
+.col-8 {
+  grid-column: span 8;
+}
+
+.col-6 {
+  grid-column: span 6;
+}
+
+.col-4 {
+  grid-column: span 4;
+}
 
 .card {
   background: var(--cor-superficie);
@@ -531,36 +562,36 @@ dialog button {
   }
 
   .selector .notifications-menu summary {
-  padding: 0;
-}
+    padding: 0;
+  }
 
-.notifications-menu summary::after {
-  display: none;
-}
+  .notifications-menu summary::after {
+    display: none;
+  }
 
-.notifications-menu[open] summary {
-  background: var(--cor-secundaria-clara);
-  color: var(--cor-primaria);
-}
+  .notifications-menu[open] summary {
+    background: var(--cor-secundaria-clara);
+    color: var(--cor-primaria);
+  }
 
-.notifications-popover {
-  top: calc(100% + 10px);
-  right: 0;
-  width: min(380px, calc(100vw - 24px));
-  max-height: min(75dvh, 520px);
-  overflow-y: auto;
-  padding: var(--espaco-lg);
-  border-radius: var(--raio-xl);
-  box-shadow: var(--sombra-elevada);
-  z-index: var(--z-popover);
-}
+  .notifications-popover {
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(380px, calc(100vw - 24px));
+    max-height: min(75dvh, 520px);
+    overflow-y: auto;
+    padding: var(--espaco-lg);
+    border-radius: var(--raio-xl);
+    box-shadow: var(--sombra-elevada);
+    z-index: var(--z-popover);
+  }
 
-.notifications-header {
-  padding-bottom: var(--espaco-md);
-  border-bottom: var(--borda-padrao);
-}
+  .notifications-header {
+    padding-bottom: var(--espaco-md);
+    border-bottom: var(--borda-padrao);
+  }
 
-.popover {
+  .popover {
     left: 0;
     right: auto;
     min-width: 0;
@@ -731,6 +762,7 @@ dialog button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -740,6 +772,7 @@ dialog button {
 }
 
 @media (forced-colors: active) {
+
   [aria-current="page"],
   #more[aria-expanded="true"] {
     outline: 2px solid Highlight;
