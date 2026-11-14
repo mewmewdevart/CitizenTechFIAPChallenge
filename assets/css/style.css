@@ -144,6 +144,7 @@ summary::after {
   right: 0;
   min-width: 100%;
   width: max-content;
+  max-width: calc(100vw - 32px);
   padding: var(--espaco-md);
   background: var(--cor-superficie);
   border: var(--borda-padrao);
@@ -154,6 +155,12 @@ summary::after {
 
 .menu-perfil summary {
   min-height: var(--tamanho-alvo-toque);
+}
+
+.menu-perfil summary img {
+  width: 34px;
+  height: 34px;
+  flex: none;
 }
 
 .menu-perfil .painel-flutuante {

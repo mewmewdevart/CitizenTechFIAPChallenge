@@ -210,9 +210,42 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   color: var(--cor-texto-principal);
 }
 
-.ficha__cartao--saude dd :is(ul, ol) {
-  margin: 4px 0 0 18px;
-  padding: 0;
+.ficha__cartao--saude dd :is(ul, ol),
+.editar-ficha__editor-area :is(ul, ol) {
+  margin: 6px 0;
+  padding-left: 20px;
+}
+
+.ficha__cartao--saude dd ul,
+.editar-ficha__editor-area ul {
+  list-style-type: disc;
+}
+
+.ficha__cartao--saude dd ol,
+.editar-ficha__editor-area ol {
+  list-style-type: decimal;
+}
+
+.ficha__cartao--saude dd li + li,
+.editar-ficha__editor-area li + li {
+  margin-top: 2px;
+}
+
+.ficha__cartao--saude dd :is(b, strong),
+.editar-ficha__editor-area :is(b, strong) {
+  font-weight: var(--peso-negrito);
+  color: var(--cor-texto-principal);
+}
+
+.ficha__cartao--saude dd u,
+.editar-ficha__editor-area u {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ficha__cartao--saude dd :is(p, div) + :is(p, div),
+.editar-ficha__editor-area :is(p, div) + :is(p, div) {
+  margin-top: 4px;
 }
 
 .ficha__cartao--saude .ficha__etiqueta--medicamento {
@@ -272,6 +305,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 .ficha__cartao--rede .ficha__linha-icone img {
   left: 0;
   top: 0;
+  width: 40px;
+  height: 40px;
 }
 
 .ficha__campo-oculto {
@@ -427,8 +462,12 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 }
 
 @media (max-width: 1250px) {
+  .ficha__identidade {
+    flex-wrap: wrap;
+  }
+
   .ficha__aviso-alergia {
-    width: 38%;
+    width: min(406px, calc(100% - 48px));
     margin-right: 42px;
   }
 
@@ -443,22 +482,24 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   }
 }
 
-@media (max-width: 760px) {
-
-  .ficha__grade,
+@media (max-width: 900px) {
+  .ficha > .ficha__grade,
   .ficha__diario {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
   }
 
-  .ficha__grade>.ficha__cartao {
+  .ficha > .ficha__grade > :nth-child(n) {
     grid-column: auto;
     grid-row: auto;
   }
 
-  .ficha__identidade {
-    flex-wrap: wrap;
+  .ficha__relatos {
+    min-height: 0;
   }
+}
 
+@media (max-width: 760px) {
   .ficha__retrato {
     flex: 0 0 100px;
     width: 100px;
@@ -482,8 +523,14 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   }
 
   .ficha__aviso-alergia {
-    width: calc(100% - 48px);
-    margin-right: 48px;
+    width: calc(100% - 36px);
+    margin-right: 36px;
+  }
+
+  .ficha__alerta-mascote {
+    right: -40px;
+    width: 42px;
+    height: 42px;
   }
 
   .ficha__diario-cabecalho {
@@ -492,11 +539,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 
   .ficha__diario-cabecalho>button {
     position: static;
+    width: 100%;
     margin-top: var(--espaco-md);
-  }
-
-  .ficha__relatos {
-    min-height: 0;
   }
 
   .ficha__relato-autor {
@@ -806,18 +850,14 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
 }
 
 .editar-ficha__editor-area {
-  min-height: 88px;
+  min-height: 100px;
   padding: 10px var(--espaco-md);
   font: inherit;
   font-size: var(--texto-interface);
   line-height: 1.5;
   color: var(--cor-texto-secundario);
   outline: none;
-}
-
-.editar-ficha__editor-area :is(ul, ol) {
-  margin: 4px 0 4px 18px;
-  padding: 0;
+  overflow-wrap: anywhere;
 }
 
 .editar-ficha__rodape {
@@ -838,7 +878,42 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
   }
 }
 
+@media (max-width: 600px) {
+  .ficha__acoes,
+  .editar-ficha__foto-acoes {
+    width: 100%;
+  }
+
+  .ficha__acoes .botao,
+  .editar-ficha__foto-acoes .botao,
+  .dialogo-mvp > .botao {
+    width: 100%;
+  }
+
+  .editar-ficha__rodape {
+    flex-direction: column-reverse;
+  }
+
+  .editar-ficha__rodape .botao {
+    width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
+  .ficha__secao-cabecalho {
+    flex-wrap: wrap;
+  }
+
+  .ficha__secao-cabecalho .botao {
+    width: 100%;
+  }
+
+  .ficha__relatos,
+  .ficha__relato,
+  .calendario-mensal {
+    padding: var(--espaco-md);
+  }
+
   .editar-ficha__mascotes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

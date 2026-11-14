@@ -88,6 +88,9 @@
       });
     };
     limparNo(template.content);
+    if (!(template.content.textContent || '').trim() && !template.content.querySelector('li')) {
+      return '';
+    }
     return template.innerHTML.trim();
   };
 
@@ -521,6 +524,19 @@
       if (botaoFoto) botaoFoto.textContent = 'Trocar foto';
     };
     leitor.readAsDataURL(arquivo);
+  });
+
+  pagina.addEventListener('mousedown', evento => {
+    if (evento.target.closest('[data-comando-editor]')) {
+      evento.preventDefault();
+    }
+  });
+
+  document.addEventListener('selectionchange', () => {
+    const areaEditor = document.activeElement?.closest?.('[data-editor-alvo]');
+    if (areaEditor && pagina.contains(areaEditor)) {
+      sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
+    }
   });
 
   pagina.addEventListener('input', evento => {
