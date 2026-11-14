@@ -157,7 +157,36 @@
         'Levar a pasta para a consulta das 14h.'
       ]
     ],
-    '2026-11-09': []
+    '2026-11-09': [
+      [
+        'Zé da Manga',
+        'Administrador · Turno 19h–24h',
+        'Tarefa relacionada · Conferir medicações da noite',
+        'Maria jantou sopa de legumes e tomou a metformina das 20h sem intercorrências. Foi dormir por volta das 22h30.',
+        'Deixei o RG e a carteirinha do convênio separados em cima da cômoda para a consulta de amanhã.'
+      ],
+      [
+        'Paulo da Silva (Paul)',
+        'Neto · Contato alternativo · Turno 13h–19h',
+        'Tarefa relacionada · Combinar retorno da consulta de terça',
+        'Fizemos uma caminhada leve no quintal à tarde e mantivemos boa hidratação. Sem queixas de dor.',
+        'Confirmado que busco a Maria e a Ana na UBS amanhã após a consulta das 14h.'
+      ],
+      [
+        'Beatriz da Silva (Bea)',
+        'Cuidadora · Turno 07h–13h',
+        'Tarefa relacionada · Administrar medicamentos da manhã',
+        'Café da manhã completo. Losartana e metformina das 08h administradas corretamente; pressão arterial estável (12x8).',
+        'Lembrar de oferecer água ao longo da tarde.'
+      ],
+      [
+        'Ana da Silva (Aninha)',
+        'Filha · Contato de referência · Turno 00h–07h',
+        'Tarefa relacionada · Acompanhar repouso noturno',
+        'Noite tranquila, dormiu sem despertares e acordou bem-disposta às 06h40.',
+        'Receita da medicação de uso contínuo ficou na pasta azul.'
+      ]
+    ]
   };
 
   const obterRelatosDia = dia => [...(relatosIniciais[dia] || []), ...(dadosSalvos.reports?.[dia] || [])];
@@ -179,13 +208,16 @@
 
     for (let dia = 1; dia <= new Date(anoAtual, mesAtual + 1, 0).getDate(); dia++) {
       const chave = gerarChaveData(anoAtual, mesAtual, dia);
-      const simbolos = chave === '2026-11-09' ? '✓' : obterRelatosDia(chave).length ? '•' : '';
+      const completo = chave === '2026-11-09';
+      const parcial = !completo && obterRelatosDia(chave).length > 0;
+      const simbolos = completo ? '✓' : parcial ? '•' : '';
+      const classeIndicador = completo ? 'calendario-mensal__indicador--sucesso' : 'calendario-mensal__indicador--atencao';
       const descricoes = {
         '✓': ', relatos completos',
         '•': ', com relatos'
       };
       const rotulo = formatarDataCurta(chave) + (simbolos ? descricoes[simbolos] : '');
-      conteudo += `<button type="button" data-selecionar-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="${rotulo}">${dia}${simbolos ? `<small aria-hidden="true"> ${simbolos}</small>` : ''}</button>`;
+      conteudo += `<button type="button" data-selecionar-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="${rotulo}">${dia}${simbolos ? `<small class="calendario-mensal__indicadores" aria-hidden="true"><span class="${classeIndicador}">${simbolos}</span></small>` : ''}</button>`;
     }
 
     gradeDias.innerHTML = conteudo;
@@ -197,17 +229,17 @@
 
     const itens = obterRelatosDia(diaSelecionado);
     const resumo = itens.length
-      ? `<p class="ficha__relatos-resumo">${diaSelecionado === hoje ? 'Relatos parciais · ' : ''}${itens.length} ${itens.length === 1 ? 'turno registrado' : 'turnos registrados'}</p>`
-      : (diaSelecionado === '2026-11-09'
-        ? '<p class="ficha__relatos-resumo">Todos os turnos com relato. Os textos deste dia não estão disponíveis na demonstração.</p>'
-        : '<p class="ficha__relatos-resumo">Nenhum relato nesta data.</p>');
+      ? `<p class="ficha__relatos-resumo">${diaSelecionado === hoje ? 'Relatos parciais · ' : diaSelecionado === '2026-11-09' ? 'Todos os turnos com relato · ' : ''}${itens.length} ${itens.length === 1 ? 'turno registrado' : 'turnos registrados'}</p>`
+      : '<p class="ficha__relatos-resumo">Nenhum relato nesta data.</p>';
 
     containerRelatos.innerHTML = `${resumo}<h3>${formatarDataCurta(diaSelecionado)}</h3>${itens.map(([nome, papel, contexto, relato, proximo]) => {
       const avatar = nome.startsWith('Ana')
         ? 'icone-mascote-espeto.svg'
         : nome.startsWith('Beatriz')
           ? 'icone-mascote-trevo.svg'
-          : 'icone-mascote-cubado.svg';
+          : nome.startsWith('Paulo')
+            ? 'icone-mascote-pingo.svg'
+            : 'icone-mascote-cubado.svg';
       const partes = papel.split(' · ');
       const turno = partes.find(parte => parte.startsWith('Turno'));
       const papelRestante = partes.filter(parte => parte !== turno).join(' · ');
