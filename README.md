@@ -4,7 +4,7 @@
   <h1>Mutirão</h1>
   <p><b>Global Solution 2026 · Citizen Tech · Web Design FIAP</b></p>
   <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir responsabilidades e acompanhar informações de saúde no cuidado compartilhado de pessoas de qualquer idade.</p>
-  <p><a href="">Acessar o Projeto</a></p>
+  <p><a href="https://mutirao-citizen-tech.vercel.app/">Acessar o Projeto</a></p>
   <p>
     <img src="https://img.shields.io/badge/Desafio-Citizen%20Tech-8495E1?style=for-the-badge" alt="Desafio Citizen Tech" />
     <img src="https://img.shields.io/badge/Projeto-Acad%C3%AAmico-8495E1?style=for-the-badge" alt="Projeto acadêmico" />
