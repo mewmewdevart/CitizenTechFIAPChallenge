@@ -56,8 +56,12 @@
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/documentos.js" defer></script>
 </head>
 
 <body>
@@ -151,8 +155,67 @@
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina" id="conteudo">
-    <h1>Documentos</h1>
+  <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="documentos">
+    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Documentos</nav>
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Documentos</h1>
+        <p>Encontre receitas, exames e outros arquivos vinculados ao cuidado da Mari.</p>
+      </div>
+      <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-documento"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar documento</button>
+    </header>
+
+    <section class="apoio__painel" aria-labelledby="titulo-arquivos">
+      <h2 id="titulo-arquivos">Arquivos da Maria</h2>
+      <div class="documentos__busca">
+        <label for="pesquisa-documentos">Pesquisar documentos</label>
+        <div class="documentos__campo-busca">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input id="pesquisa-documentos" type="search" placeholder="Nome do arquivo ou assunto" data-documentos-busca>
+        </div>
+      </div>
+      <div class="documentos__lista" data-documentos-lista></div>
+    </section>
+
+    <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-adicionar-documento">Adicionar documento</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <form class="formulario-mvp" data-formulario-mvp="documento">
+        <label>Título<input type="text" name="titulo" placeholder="Ex.: Receita de losartana" required></label>
+        <label>Categoria
+          <select name="categoria">
+            <option value="Receita">Receita</option>
+            <option value="Exame">Exame</option>
+            <option value="Documento">Documento</option>
+          </select>
+        </label>
+        <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
+        <label>Adicionado por<input type="text" name="autor" value="Zé da Manga" required></label>
+        <label>Vínculo ou assunto<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
+        <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
+        <label>Arquivo (opcional)<input type="file" name="arquivo"></label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Salvar documento</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-detalhes-documento" aria-labelledby="titulo-detalhes-documento">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-detalhes-documento">Detalhes do documento</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <dl data-detalhes-documento></dl>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--perigo" data-excluir-documento>Excluir</button>
+        <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
+      </div>
+    </dialog>
+
+    <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>

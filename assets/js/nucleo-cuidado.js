@@ -194,7 +194,36 @@
             'Receita da medicação de uso contínuo ficou na pasta azul.'
           ]
         ]
-      }
+      },
+      documents: [
+        {
+          id: 'doc-receita-ubs',
+          titulo: 'Receita para retirada na UBS',
+          categoria: 'Receita',
+          dia: '2026-11-10',
+          autor: 'Ana da Silva (Aninha)',
+          vinculo: 'Consulta na UBS de 10 nov.',
+          observacoes: 'Receita para retirada de medicamento após a consulta das 14h na UBS do bairro.'
+        },
+        {
+          id: 'doc-hemograma',
+          titulo: 'Hemograma',
+          categoria: 'Exame',
+          dia: '2026-11-04',
+          autor: 'Paulo da Silva (Paul)',
+          vinculo: 'Exame cadastrado em 4 nov.',
+          observacoes: 'Resultado completo do hemograma realizado em 4 de novembro de 2026.'
+        },
+        {
+          id: 'doc-ficha-atendimento',
+          titulo: 'Ficha de atendimento',
+          categoria: 'Documento',
+          dia: '2026-11-06',
+          autor: 'Beatriz da Silva (Bea)',
+          vinculo: 'Documento geral',
+          observacoes: 'Registro de atendimento ambulatorial e orientações da equipe.'
+        }
+      ]
     };
   }
 
@@ -212,7 +241,8 @@
         covered: dados?.covered && typeof dados.covered === 'object' ? dados.covered : {},
         shiftEdits: dados?.shiftEdits && typeof dados.shiftEdits === 'object' ? dados.shiftEdits : {},
         tasks: Array.isArray(dados?.tasks) ? dados.tasks : base.tasks,
-        reports: dados?.reports && typeof dados.reports === 'object' ? dados.reports : base.reports
+        reports: dados?.reports && typeof dados.reports === 'object' ? dados.reports : base.reports,
+        documents: Array.isArray(dados?.documents) ? dados.documents : base.documents
       };
     } catch {
       return base;
