@@ -56,8 +56,13 @@
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <link rel="stylesheet" href="assets/css/ajuda.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/ajuda.js" defer></script>
 </head>
 
 <body>
@@ -77,35 +82,40 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
 
             </div>
           </header>
-          <ul class="menu-notificacoes__lista">
+                    <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--atencao">
-              <div>
-                <h3>Horário sem cobertura</h3>
-                <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
-              </div>
-              <a class="botao-contornado" href="agenda.html">Ver escala</a>
+              <a class="notificacao__link" href="agenda.html">
+                <div>
+                  <h3>Horário sem cobertura</h3>
+                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
             </li>
             <li class="notificacao">
-              <div>
-                <h3>Pedido para agendar consulta</h3>
-                <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
-              </div>
-              <a class="botao-contornado" href="ficha.html#diario">Ver passagem</a>
+              <a class="notificacao__link" href="ficha.html#diario">
+                <div>
+                  <h3>Pedido para agendar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
             </li>
             <li class="notificacao">
-              <div>
-                <h3>Próxima medicação</h3>
-                <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
-              </div>
-              <a class="botao-contornado" href="medicamentos.html">Ver medicamentos</a>
+              <a class="notificacao__link" href="medicamentos.html">
+                <div>
+                  <h3>Próxima medicação</h3>
+                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
             </li>
           </ul>
         </section>
@@ -114,7 +124,10 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
       </details>
     </div>
   </header>
@@ -141,24 +154,170 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Status do cuidado</h2>
       <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html" aria-current="page"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html" aria-current="page"><i
+          class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina" id="conteudo">
-    <h1>Ajuda</h1>
+  <main class="conteudo-pagina apoio ajuda" id="conteudo">
+    <nav class="apoio__trilha" aria-label="Caminho da página"><a href="index.html">Início</a> <span
+        aria-hidden="true">›</span> <span aria-current="page">Ajuda</span></nav>
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Ajuda</h1>
+        <p>Encontre orientações para organizar o cuidado no Mutirão.</p>
+      </div>
+    </header>
+    <section class="ajuda__duvidas" aria-labelledby="titulo-duvidas">
+      <h2 id="titulo-duvidas">Dúvidas frequentes</h2>
+
+      <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-agenda">
+        <h3 id="titulo-ajuda-agenda">Agenda e turnos</h3>
+        <details class="ajuda__pergunta">
+          <summary>Como assumir um turno sem cobertura?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          </summary>
+          <div class="ajuda__resposta">
+            <p>Quando algum horário ficar descoberto, o alerta aparece no topo da tela e na barra lateral. Para assumir:
+            </p>
+            <ol>
+              <li>Acesse a <strong>Agenda</strong> e localize o horário indicado como sem cobertura.</li>
+              <li>Confira o período e as orientações previstas para aquele turno.</li>
+              <li>Confirme a responsabilidade para que toda a rede visualize quem estará cuidando.</li>
+            </ol>
+            <div class="ajuda__resposta-acoes">
+              <a class="botao botao--secundario botao--pequeno" href="agenda.html">Abrir agenda <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </details>
+        <details class="ajuda__pergunta">
+          <summary>Como combinar trocas ou avisar imprevistos na escala?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="ajuda__resposta">
+            <p>Sempre que precisar trocar um horário, consulte os contatos disponíveis em <strong>Pessoas da
+                rede</strong> para alinhar diretamente com outro familiar ou cuidador e registre o combinado no
+              <strong>Diário de cuidado</strong> para que o turno seguinte saiba da mudança.</p>
+            <div class="ajuda__resposta-acoes">
+              <a class="botao botao--secundario botao--pequeno" href="pessoas.html">Ver pessoas da rede <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-registros">
+        <h3 id="titulo-ajuda-registros">Medicamentos e registros</h3>
+        <details class="ajuda__pergunta">
+          <summary>Como acompanhar os horários e evitar doses duplicadas?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="ajuda__resposta">
+            <p>Na tela de <strong>Medicamentos</strong> você visualiza os horários previstos, as doses do dia e os
+              alertas de pendência (como uma medicação ainda não administrada no turno atual). Antes de aplicar qualquer
+              dose, confira o registro mais recente e alinhe com quem esteve no turno anterior.</p>
+            <div class="ajuda__resposta-acoes">
+              <a class="botao botao--secundario botao--pequeno" href="medicamentos.html">Abrir medicamentos <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </details>
+        <details class="ajuda__pergunta">
+          <summary>Como deixar um relato para o próximo turno?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="ajuda__resposta">
+            <p>Abra a <strong>Ficha</strong> da pessoa acompanhada e acesse o <strong>Diário de cuidado</strong>. Anote
+              como foi a alimentação, o sono, o humor, medicações aplicadas e qualquer observação clínica ou recado de
+              consulta. Assim, quem chega depois encontra tudo em um único lugar, sem depender de mensagens soltas.</p>
+            <div class="ajuda__resposta-acoes">
+              <a class="botao botao--secundario botao--pequeno" href="ficha.html#diario">Abrir diário de cuidado <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-rede">
+        <h3 id="titulo-ajuda-rede">Documentos, ficha e direitos</h3>
+        <details class="ajuda__pergunta">
+          <summary>Como preparar um resumo e separar documentos para consulta?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="ajuda__resposta">
+            <p>Antes de ir à UBS, hospital ou especialista, revise os dados clínicos e anotações recentes na
+              <strong>Ficha</strong> e utilize a busca da página de <strong>Documentos</strong> para localizar receitas,
+              laudos, exames e o Cartão do SUS em segundos.</p>
+            <div class="ajuda__resposta-acoes">
+              <a class="botao botao--secundario botao--pequeno" href="ficha.html">Abrir ficha <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              <a class="botao botao--secundario botao--pequeno" href="documentos.html">Abrir documentos <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </details>
+        <details class="ajuda__pergunta">
+          <summary>Como verificar benefícios e encontrar UBS ou CRAS na minha cidade?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="ajuda__resposta">
+            <p>Na seção <strong>Direitos e serviços</strong>, responda às 5 perguntas rápidas para descobrir benefícios
+              como Farmácia Popular, BPC/LOAS, Tarifa Social e Melhor em Casa, com resumo pronto para copiar no grupo da
+              família. Logo ao lado, você também pode informar seu CEP ou município para localizar UBS, CRAS e Farmácia
+              Popular na região.</p>
+            <div class="ajuda__resposta-acoes">
+              <a class="botao botao--secundario botao--pequeno" href="direitos.html">Ver direitos e serviços <i
+                  class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-acessibilidade">
+        <h3 id="titulo-ajuda-acessibilidade">Acessibilidade e uso da plataforma</h3>
+        <details class="ajuda__pergunta">
+          <summary>Como ajustar fonte, contraste ou espaçamento de leitura?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="ajuda__resposta">
+            <p>O Mutirão conta com um painel dedicado de <strong>Acessibilidade</strong> no canto da tela. Por lá você
+              pode aumentar o tamanho do texto, ampliar o espaçamento entre linhas e ativar recursos de leitura conforme
+              a preferência de cada familiar ou cuidador.</p>
+          </div>
+        </details>
+      </section>
+    </section>
+    <section class="ajuda__contato" aria-labelledby="titulo-contato">
+      <div class="ajuda__contato-cabecalho">
+        <h2 id="titulo-contato">Não encontrou o que procurava?</h2>
+        <p>Conte em que podemos ajudar.</p>
+      </div>
+      <form class="formulario-mvp ajuda__formulario" id="formulario-ajuda">
+        <label for="ajuda-email">E-mail para resposta<input id="ajuda-email" name="email" type="email"
+            autocomplete="email" maxlength="254" placeholder="Ex.: nome@email.com" required></label>
+        <label for="ajuda-assunto">Assunto<input id="ajuda-assunto" name="assunto" type="text" maxlength="120"
+            placeholder="Ex.: Dúvida sobre a escala" required></label>
+        <label for="ajuda-mensagem">Mensagem<textarea id="ajuda-mensagem" name="mensagem" rows="5" maxlength="2000"
+            placeholder="Descreva sua dúvida sem incluir dados de saúde." required></textarea></label>
+        <div class="ajuda__acoes">
+          <button type="submit" class="botao botao--primario">Enviar mensagem</button>
+        </div>
+        <p class="ajuda__retorno" id="ajuda-retorno" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+    <div class="ajuda__ilustracao" aria-hidden="true"><img src="assets/media/mascotes/mascotes-juntos.svg" alt=""
+        width="551" height="119" loading="lazy"></div>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
-        aria-hidden="true"></i>Mais</button>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
