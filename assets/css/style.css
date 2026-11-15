@@ -94,14 +94,15 @@ summary:hover {
   position: relative;
 }
 
-.botao-icone--notificacao::after {
+.botao-icone--notificacao[data-nova-notificacao="true"]::after {
   content: "";
   position: absolute;
-  top: 8px;
-  right: 9px;
-  width: 7px;
-  height: 7px;
+  top: 6px;
+  right: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
+  border: 1.5px solid var(--cor-superficie);
   background: var(--cor-aviso-alerta-escuro);
 }
 
@@ -837,6 +838,11 @@ dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
 .notificacao--atencao {
   background: var(--cor-aviso-atencao-claro);
   color: var(--cor-aviso-atencao-escuro);
+}
+
+.notificacao--alerta {
+  background: var(--cor-aviso-alerta-claro);
+  color: var(--cor-aviso-alerta-escuro);
 }
 
 .notificacao__link {

@@ -70,6 +70,9 @@ for (const link of [...linksMenu, ...atalhosInferiores, perfilMobile].filter(Boo
 for (const menuSuspenso of document.querySelectorAll('.barra-topo details')) {
   menuSuspenso.addEventListener('toggle', () => {
     if (!menuSuspenso.open) return;
+    if (menuSuspenso.classList.contains('menu-notificacoes')) {
+      menuSuspenso.querySelector('.botao-icone--notificacao')?.removeAttribute('data-nova-notificacao');
+    }
     for (const outro of document.querySelectorAll('.barra-topo details[open]')) {
       if (outro !== menuSuspenso) outro.open = false;
     }
