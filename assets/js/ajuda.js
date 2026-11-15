@@ -1,16 +1,22 @@
 (() => {
   'use strict';
 
+  const ASSUNTO_MIN = 5;
+  const ASSUNTO_MAX = 100;
+  const MENSAGEM_MIN = 20;
+  const MENSAGEM_MAX = 2000;
+  const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
   const formulario = document.querySelector('#formulario-ajuda');
   if (!formulario) return;
 
   const retorno = document.querySelector('#ajuda-retorno');
   const campoEmail = formulario.querySelector('#ajuda-email');
   const campoAssunto = formulario.querySelector('#ajuda-assunto');
-  const campos = [campoEmail, campoAssunto].filter(Boolean);
   const editor = formulario.querySelector('[data-editor-rico]');
   const areaEditor = editor?.querySelector('[data-editor-alvo]');
   const inputEditor = formulario.querySelector('[data-input-editor]');
+  const contadorMensagem = formulario.querySelector('#ajuda-mensagem-contador');
   const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
   const botaoNotificacoes = document.querySelector('.botao-icone--notificacao');
 
@@ -71,6 +77,15 @@
     }
   };
 
+  const obterTextoMensagem = () => (areaEditor?.textContent || '').replace(/\s+/g, ' ').trim();
+
+  const atualizarContadorMensagem = () => {
+    if (!contadorMensagem || !areaEditor) return;
+    const tamanho = obterTextoMensagem().length;
+    contadorMensagem.textContent = `${tamanho} / ${MENSAGEM_MAX} caracteres (mínimo ${MENSAGEM_MIN})`;
+    contadorMensagem.classList.toggle('ajuda__contador--erro', tamanho > MENSAGEM_MAX);
+  };
+
   const sanitizarHtmlEditor = html => {
     const template = document.createElement('template');
     template.innerHTML = String(html ?? '');
@@ -107,9 +122,38 @@
         botao.setAttribute('aria-pressed', 'false');
       }
     });
+    atualizarContadorMensagem();
   };
 
-  campos.forEach(campo => {
+  const validarEmail = () => {
+    if (!campoEmail) return '';
+    const valor = campoEmail.value.trim();
+    if (!valor) return 'Informe seu e-mail para resposta.';
+    if (!REGEX_EMAIL.test(valor) || !campoEmail.checkValidity()) {
+      return 'Informe um e-mail válido (ex.: nome@email.com).';
+    }
+    return '';
+  };
+
+  const validarAssunto = () => {
+    if (!campoAssunto) return '';
+    const valor = campoAssunto.value.trim();
+    if (!valor) return 'Informe o assunto da mensagem.';
+    if (valor.length < ASSUNTO_MIN) return `O assunto deve ter pelo menos ${ASSUNTO_MIN} caracteres.`;
+    if (valor.length > ASSUNTO_MAX) return `O assunto deve ter no máximo ${ASSUNTO_MAX} caracteres.`;
+    return '';
+  };
+
+  const validarMensagem = () => {
+    if (!areaEditor) return '';
+    const tamanho = obterTextoMensagem().length;
+    if (!tamanho) return 'Escreva a mensagem antes de enviar.';
+    if (tamanho < MENSAGEM_MIN) return `A mensagem deve ter pelo menos ${MENSAGEM_MIN} caracteres.`;
+    if (tamanho > MENSAGEM_MAX) return `A mensagem deve ter no máximo ${MENSAGEM_MAX} caracteres.`;
+    return '';
+  };
+
+  [campoEmail, campoAssunto].filter(Boolean).forEach(campo => {
     campo.addEventListener('input', () => {
       campo.setCustomValidity('');
       campo.removeAttribute('aria-invalid');
@@ -143,42 +187,32 @@
         sincronizarEditorRico();
       });
     });
+
+    atualizarContadorMensagem();
   }
 
   formulario.addEventListener('submit', evento => {
     evento.preventDefault();
     sincronizarEditorRico();
 
-    let primeiroInvalido = null;
+    const erroEmail = validarEmail();
+    const erroAssunto = validarAssunto();
+    const erroMensagem = validarMensagem();
 
-    campos.forEach(campo => {
-      const preenchido = Boolean(campo.value.trim());
-      campo.setCustomValidity(preenchido ? '' : 'Preencha este campo.');
-      if (!preenchido || !campo.checkValidity()) {
-        campo.setAttribute('aria-invalid', 'true');
-        if (!primeiroInvalido) primeiroInvalido = campo;
-      } else {
-        campo.removeAttribute('aria-invalid');
-      }
-    });
+    if (campoEmail) campoEmail.toggleAttribute('aria-invalid', Boolean(erroEmail));
+    if (campoAssunto) campoAssunto.toggleAttribute('aria-invalid', Boolean(erroAssunto));
+    if (areaEditor) areaEditor.toggleAttribute('aria-invalid', Boolean(erroMensagem));
 
-    const mensagemPreenchida = Boolean((areaEditor?.textContent || '').trim() || areaEditor?.querySelector('li'));
-    if (areaEditor) {
-      if (!mensagemPreenchida) {
-        areaEditor.setAttribute('aria-invalid', 'true');
-        if (!primeiroInvalido) primeiroInvalido = areaEditor;
-      } else {
-        areaEditor.removeAttribute('aria-invalid');
-      }
-    }
+    const primeiroErro = [
+      [campoEmail, erroEmail],
+      [campoAssunto, erroAssunto],
+      [areaEditor, erroMensagem]
+    ].find(([, msg]) => Boolean(msg));
 
-    if (primeiroInvalido) {
-      primeiroInvalido.focus();
-      const emailInvalido = campoEmail && !campoEmail.checkValidity() && campoEmail.value.trim();
-      const textoErro = emailInvalido
-        ? 'Não foi possível enviar: informe um e-mail válido.'
-        : 'Não foi possível enviar: preencha todos os campos obrigatórios.';
-      mostrarStatus(textoErro, 'erro');
+    if (primeiroErro) {
+      const [elemento, mensagemErro] = primeiroErro;
+      elemento?.focus();
+      mostrarStatus(mensagemErro, 'erro');
       return;
     }
 
@@ -193,8 +227,8 @@
     }
 
     adicionarNotificacao(
-      'Mensagem enviada ao suporte',
-      `${assunto} · Retorno para ${email}.`,
+      'E-mail enviado com sucesso',
+      `Assunto: "${assunto}" · Em breve entraremos em contato pelo e-mail ${email}.`,
       'ajuda.html#formulario-ajuda'
     );
     mostrarStatus('E-mail enviado com sucesso! Em breve entraremos em contato.', 'sucesso');

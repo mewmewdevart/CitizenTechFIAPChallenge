@@ -228,6 +228,17 @@
   text-underline-offset: 2px;
 }
 
+.ajuda__contador {
+  font-size: var(--texto-legenda);
+  color: var(--cor-texto-secundario);
+  text-align: right;
+}
+
+.ajuda__contador--erro {
+  color: var(--cor-aviso-alerta-escuro);
+  font-weight: var(--peso-semibold);
+}
+
 .ajuda__formulario input,
 .ajuda__formulario textarea {
   font-size: var(--texto-interface);

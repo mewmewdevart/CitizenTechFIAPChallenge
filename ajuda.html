@@ -299,7 +299,7 @@
       <form class="formulario-mvp ajuda__formulario" id="formulario-ajuda" novalidate>
         <label for="ajuda-email">E-mail para resposta<input id="ajuda-email" name="email" type="email"
             autocomplete="email" maxlength="254" placeholder="Ex.: nome@email.com" required></label>
-        <label for="ajuda-assunto">Assunto<input id="ajuda-assunto" name="assunto" type="text" maxlength="120"
+        <label for="ajuda-assunto">Assunto<input id="ajuda-assunto" name="assunto" type="text" minlength="5" maxlength="100"
             placeholder="Ex.: Dúvida sobre a escala" required></label>
         <div class="ajuda__campo-editor">
           <span id="rotulo-ajuda-mensagem" class="ajuda__rotulo-campo">Mensagem</span>
@@ -320,8 +320,9 @@
             </div>
             <div class="ajuda__editor-area" id="ajuda-mensagem" contenteditable="true" role="textbox"
               aria-multiline="true" aria-required="true" aria-labelledby="rotulo-ajuda-mensagem"
-              data-editor-alvo="ajudaMensagem" data-placeholder="Descreva sua dúvida sem incluir dados de saúde."></div>
+              data-editor-alvo="ajudaMensagem" data-placeholder="Descreva sua dúvida sem incluir dados de saúde (mínimo 20 caracteres)."></div>
           </div>
+          <p class="ajuda__contador" id="ajuda-mensagem-contador" aria-live="polite">0 / 2000 caracteres (mínimo 20)</p>
         </div>
         <div class="ajuda__acoes">
           <button type="submit" class="botao botao--primario">Enviar mensagem</button>
