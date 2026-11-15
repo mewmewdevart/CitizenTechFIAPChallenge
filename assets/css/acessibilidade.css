@@ -316,7 +316,7 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
   flex: none;
   width: 46px;
   height: 26px;
-  border-radius: var(--raio-pill);
+  border-radius: var(--raio-sm);
   background: var(--cor-neutra-media);
   transition: background-color var(--transicao-padrao);
 }
@@ -327,7 +327,7 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
   left: 3px;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: 4px;
   background: var(--cor-switch-thumb);
   transition: transform var(--transicao-padrao);
 }

@@ -456,7 +456,7 @@ body.menu-fechado .conteudo-pagina {
   align-items: center;
   gap: 6px;
   padding: var(--espaco-xs) 10px;
-  border-radius: var(--raio-pill);
+  border-radius: var(--raio-sm);
   font-size: var(--texto-legenda);
   font-weight: var(--peso-semibold);
   font-variant-numeric: tabular-nums;
