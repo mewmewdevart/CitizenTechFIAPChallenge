@@ -1,3 +1,9 @@
+body .conteudo-pagina.agenda,
+body.menu-fechado .conteudo-pagina.agenda {
+  max-width: none;
+  min-width: 0;
+}
+
 .agenda {
   display: grid;
   gap: var(--espaco-lg);
