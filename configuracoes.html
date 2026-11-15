@@ -56,8 +56,13 @@
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <link rel="stylesheet" href="assets/css/configuracoes.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/configuracoes.js" defer></script>
 </head>
 
 <body>
@@ -156,9 +161,265 @@
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html" aria-current="page"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina" id="conteudo">
-    <h1>Configurações</h1>
+  <main class="conteudo-pagina apoio configuracoes" id="conteudo">
+    <nav class="apoio__trilha" aria-label="Localização">
+      <a href="index.html">Início</a> <span aria-hidden="true">›</span> <span aria-current="page">Configurações</span>
+    </nav>
+
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Configurações</h1>
+        <p>Gerencie alertas do cuidado, permissões da rede da Mari, acessibilidade e preferências da conta.</p>
+      </div>
+      <a class="botao botao--secundario" href="meu-perfil.html">
+        <i class="fa-regular fa-user" aria-hidden="true"></i> Meu perfil
+      </a>
+    </header>
+
+    <form id="formulario-configuracoes" class="configuracoes__layout">
+      <div class="configuracoes__menu" role="tablist" aria-label="Categorias de configuração" aria-orientation="vertical">
+        <button type="button" class="configuracoes__aba" role="tab" id="aba-notificacoes" aria-selected="true"
+          aria-controls="painel-notificacoes" tabindex="0"><i class="fa-regular fa-bell" aria-hidden="true"></i>Notificações</button>
+        <button type="button" class="configuracoes__aba" role="tab" id="aba-rede" aria-selected="false"
+          aria-controls="painel-rede" tabindex="-1"><i class="fa-solid fa-users" aria-hidden="true"></i>Rede de cuidado</button>
+        <button type="button" class="configuracoes__aba" role="tab" id="aba-acessibilidade" aria-selected="false"
+          aria-controls="painel-acessibilidade" tabindex="-1"><i class="fa-solid fa-universal-access" aria-hidden="true"></i>Acessibilidade</button>
+        <button type="button" class="configuracoes__aba" role="tab" id="aba-privacidade" aria-selected="false"
+          aria-controls="painel-privacidade" tabindex="-1"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>Privacidade</button>
+        <button type="button" class="configuracoes__aba configuracoes__aba--perigo" role="tab" id="aba-sair-rede"
+          aria-selected="false" aria-controls="painel-sair-rede" tabindex="-1"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair da rede</button>
+      </div>
+
+      <div class="configuracoes__conteudo">
+        <section class="configuracoes__painel-aba" id="painel-notificacoes" role="tabpanel"
+          aria-labelledby="aba-notificacoes">
+          <div class="configuracoes__painel-topo">
+            <div>
+              <h2>Notificações e alertas</h2>
+              <p>Defina quais avisos aparecem no topo da tela e como deseja recebê-los.</p>
+            </div>
+            <span class="selo selo--info">Em tempo real</span>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Alertas da rotina</h3>
+            </div>
+            <div class="configuracoes__lista">
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-lacuna">Turno sem cobertura na escala</strong>
+                  <span>Destaca horários descobertos em alerta vermelho para ação rápida da rede.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-lacuna">
+                  <input type="checkbox" id="config-notificacoes-lacuna" name="notificacoesLacuna" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-medicacao">Lembretes de medicação</strong>
+                  <span>Avisa antes do horário previsto e sinaliza doses ainda não administradas.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-medicacao">
+                  <input type="checkbox" id="config-notificacoes-medicacao" name="notificacoesMedicacao" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-relatos">Passagens de turno e relatos</strong>
+                  <span>Notifica quando outro cuidador registrar observações ou pedidos de consulta.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-relatos">
+                  <input type="checkbox" id="config-notificacoes-relatos" name="notificacoesRelatos" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Frequência e canal</h3>
+            </div>
+            <div class="configuracoes__campos">
+              <label for="config-antecedencia-medicacao">
+                Antecedência do lembrete
+                <select id="config-antecedencia-medicacao" name="antecedenciaMedicacao">
+                  <option value="15">15 minutos antes</option>
+                  <option value="30" selected>30 minutos antes</option>
+                  <option value="60">1 hora antes</option>
+                </select>
+              </label>
+              <label for="config-canal-notificacao">
+                Canal preferido
+                <select id="config-canal-notificacao" name="canalNotificacao">
+                  <option value="app-email" selected>Aplicativo e e-mail</option>
+                  <option value="app">Somente no aplicativo</option>
+                  <option value="email">Somente por e-mail</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="configuracoes__painel-aba" id="painel-rede" role="tabpanel" aria-labelledby="aba-rede" hidden>
+          <div class="configuracoes__painel-topo">
+            <div>
+              <h2>Rede de cuidado da Mari</h2>
+              <p>Regras de colaboração para familiares e cuidadores vinculados à ficha.</p>
+            </div>
+            <span class="selo selo--info">Administrador</span>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Permissões da equipe</h3>
+            </div>
+            <div class="configuracoes__lista">
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-assumir">Assumir turnos sem confirmação</strong>
+                  <span>Permite que pessoas da rede assumam horários livres diretamente na agenda.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-assumir">
+                  <input type="checkbox" id="config-assumir-turno" name="assumirTurnoDireto" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-dupla-checagem">Confirmar horário ao registrar dose</strong>
+                  <span>Exige registro de horário e responsável ao marcar medicamentos como administrados.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-dupla-checagem">
+                  <input type="checkbox" id="config-confirmar-dose" name="confirmarDose" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-sigilo">Ocultar dados sensíveis para convidados</strong>
+                  <span>Restringe CPF, cartão SUS e contato de emergência apenas aos administradores.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-sigilo">
+                  <input type="checkbox" id="config-sigilo-dados" name="sigiloDados" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Atalhos da rede</h3>
+            </div>
+            <div class="configuracoes__acoes-linha">
+              <a class="botao botao--secundario botao--pequeno" href="pessoas.html">
+                <i class="fa-solid fa-user-group" aria-hidden="true"></i> Gerenciar pessoas da rede
+              </a>
+              <a class="botao botao--secundario botao--pequeno" href="ficha.html">
+                <i class="fa-regular fa-id-card" aria-hidden="true"></i> Abrir ficha da Mari
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="configuracoes__painel-aba" id="painel-acessibilidade" role="tabpanel"
+          aria-labelledby="aba-acessibilidade" hidden>
+          <div class="configuracoes__painel-topo">
+            <div>
+              <h2>Acessibilidade e leitura</h2>
+              <p>Ajustes assistivos de fonte, contraste, destaque de links e redução de movimento.</p>
+            </div>
+            <span class="selo selo--sucesso">Salvo no navegador</span>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Central de Acessibilidade</h3>
+            </div>
+            <p class="configuracoes__texto-apoio">As preferências assistivas são mantidas automaticamente neste dispositivo para garantir conforto contínuo de leitura em todas as telas.</p>
+            <div class="configuracoes__acoes-linha">
+              <button type="button" class="botao botao--secundario" data-abrir-acessibilidade>
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i> Abrir Central de Acessibilidade
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="configuracoes__painel-aba" id="painel-privacidade" role="tabpanel"
+          aria-labelledby="aba-privacidade" hidden>
+          <div class="configuracoes__painel-topo">
+            <div>
+              <h2>Privacidade e dados</h2>
+              <p>Exporte um resumo das suas preferências atuais sem expor dados de saúde.</p>
+            </div>
+            <span class="selo selo--neutro">Zé da Manga · Neto</span>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Resumo da conta</h3>
+            </div>
+            <p class="configuracoes__texto-apoio">Copie rapidamente suas preferências de alertas e canal de contato para compartilhar com outros familiares administradores.</p>
+            <div class="configuracoes__acoes-linha">
+              <button type="button" class="botao botao--secundario" data-exportar-resumo>
+                <i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar resumo das configurações
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="configuracoes__painel-aba" id="painel-sair-rede" role="tabpanel"
+          aria-labelledby="aba-sair-rede" hidden>
+          <div class="configuracoes__painel-topo">
+            <div>
+              <h2>Sair da rede de cuidado</h2>
+              <p>Encerre seu vínculo como cuidador ou administrador da rede da Mari.</p>
+            </div>
+            <span class="selo selo--alerta">Ação sensível</span>
+          </div>
+
+          <div class="configuracoes__bloco configuracoes__bloco--perigo">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Desvincular conta</h3>
+            </div>
+            <p class="configuracoes__texto-apoio">Como administrador atual, você precisa garantir que outro familiar assumiu a gestão em Pessoas da rede antes de concluir sua saída.</p>
+            <div class="configuracoes__acoes-linha">
+              <button type="button" class="botao botao--perigo" data-abrir-sair-rede>
+                <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair da rede da Mari
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="configuracoes__rodape">
+          <p>As alterações desta página são aplicadas imediatamente à sua sessão atual.</p>
+          <div class="configuracoes__rodape-botoes">
+            <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar padrões</button>
+            <button type="submit" class="botao botao--primario">Salvar alterações</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <p id="configuracoes-status" data-mvp-status role="status" aria-live="polite"></p>
   </main>
+
+  <dialog id="dialogo-sair-rede" class="dialogo-mvp" aria-labelledby="titulo-sair-rede">
+    <h2 id="titulo-sair-rede">Sair da rede de cuidado?</h2>
+    <p>Você está conectado como administrador da rede de Maria das Dores (Mari). Antes de sair, certifique-se de que outro familiar assumiu a administração em Pessoas da rede.</p>
+    <div class="dialogo-mvp__acoes">
+      <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede>Confirmar saída</button>
+    </div>
+  </dialog>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
