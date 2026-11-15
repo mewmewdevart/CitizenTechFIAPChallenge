@@ -168,7 +168,7 @@ summary::after {
   padding: 6px;
 }
 
-.painel-flutuante :is(a, button) {
+.painel-flutuante :is(a, button):not(.botao, .notificacao__link) {
   width: 100%;
   border: 0;
   background: transparent;
@@ -183,7 +183,7 @@ summary::after {
   transition: background-color var(--transicao-padrao);
 }
 
-.painel-flutuante :is(a, button):hover {
+.painel-flutuante :is(a, button):not(.botao, .notificacao__link):hover {
   background: var(--cor-superficie-suave);
 }
 
@@ -515,6 +515,12 @@ body.menu-fechado .conteudo-pagina {
   background: var(--cor-superficie-suave);
 }
 
+.botao--pequeno {
+  min-height: 36px;
+  padding: 6px var(--espaco-md);
+  font-size: var(--texto-legenda);
+}
+
 .notificacao p {
   font-variant-numeric: tabular-nums;
 }
@@ -824,11 +830,6 @@ dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
 }
 
 .notificacao {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  padding: var(--espaco-md);
   border-radius: var(--raio-lg);
   background: var(--cor-secundaria-clara);
 }
@@ -838,8 +839,36 @@ dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
   color: var(--cor-aviso-atencao-escuro);
 }
 
+.notificacao__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-md);
+  width: 100%;
+  padding: var(--espaco-md);
+  border-radius: var(--raio-lg);
+  color: inherit;
+  text-decoration: none;
+  transition: filter var(--transicao-padrao);
+}
+
+.notificacao__link:hover {
+  filter: brightness(0.96);
+}
+
+.notificacao__link:focus-visible {
+  outline: var(--anel-foco);
+  outline-offset: -2px;
+}
+
+.notificacao__seta {
+  flex: none;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
 .notificacao div {
-  flex: 1 1 200px;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
