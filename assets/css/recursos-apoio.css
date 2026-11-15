@@ -916,3 +916,10 @@ body.menu-fechado .conteudo-pagina.apoio {
     margin-left: auto;
   }
 }
+
+@media (max-width: 600px) {
+  .apoio__cabecalho > *,
+  .apoio__cabecalho .botao {
+    width: 100%;
+  }
+}
