@@ -56,6 +56,8 @@
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
 </head>
@@ -151,8 +153,99 @@
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina" id="conteudo">
-    <h1>Direitos e serviços</h1>
+  <main class="conteudo-pagina apoio" id="conteudo">
+    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Direitos e serviços</nav>
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Direitos e serviços</h1>
+        <p>Encontre serviços do SUS, benefícios e canais de orientação.</p>
+      </div>
+    </header>
+
+    <div class="apoio__aviso" role="status">
+      <strong>Seção em manutenção</strong>
+      <p>Este guia inicial já está disponível. Em breve, vamos incluir mais direitos, serviços locais e orientações de acesso.</p>
+    </div>
+
+    <section class="apoio__secao" aria-labelledby="titulo-acesso-sus">
+      <h2 id="titulo-acesso-sus">Acesso ao SUS</h2>
+      <div class="apoio__grade">
+        <article class="apoio__cartao">
+          <h3>Atendimento na UBS</h3>
+          <p>Procure a UBS de referência para acompanhamento, vacinação e orientação sobre encaminhamentos.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/a/atencao-primaria-a-saude" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Atendimento na UBS (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Farmácia Popular</h3>
+          <p>Retire gratuitamente itens da lista do programa em farmácias credenciadas, conforme os critérios. Confira medicamentos, fraldas geriátricas e documentos.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Farmácia Popular (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Medicamentos especializados</h3>
+          <p>O CEAF atende condições previstas nos protocolos do SUS. Confirme os documentos e o fluxo com a Secretaria de Saúde do seu estado.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/composicao/sectics/daf/ceaf" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Medicamentos especializados (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Direito a acompanhante</h3>
+          <p>A pessoa idosa tem direito a acompanhante em caso de internação ou observação hospitalar.</p>
+          <a class="botao botao--secundario" href="https://www.planalto.gov.br/ccivil_03/leis/2003/l10.741.htm" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Direito a acompanhante (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="apoio__secao" aria-labelledby="titulo-beneficios">
+      <h2 id="titulo-beneficios">Benefícios e apoio financeiro</h2>
+      <div class="apoio__grade">
+        <article class="apoio__cartao">
+          <h3>Benefício de Prestação Continuada (BPC)</h3>
+          <p>Um salário mínimo mensal para pessoas com 65 anos ou mais ou pessoas com deficiência que atendam aos critérios de renda e cadastro. Procure o CRAS para orientação.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-a-pessoa-idosa" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Benefício de Prestação Continuada (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Auxílio-inclusão</h3>
+          <p>Pode apoiar pessoas com deficiência que passam a exercer trabalho remunerado e atendem às regras do benefício. Consulte os critérios no INSS.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-auxilio-inclusao" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Auxílio-inclusão (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Auxílio por incapacidade temporária</h3>
+          <p>Benefício para segurados do INSS que atendam aos critérios e comprovem incapacidade temporária para o trabalho.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-auxilio-por-incapacidade-temporaria" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Auxílio por incapacidade temporária (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Acréscimo de 25% na aposentadoria</h3>
+          <p>Pode ser solicitado por quem recebe aposentadoria por incapacidade permanente e precisa de assistência permanente de outra pessoa.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-acrescimo-de-25-na-aposentadoria-por-incapacidade-permanente" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Acréscimo de 25% na aposentadoria (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="apoio__secao" aria-labelledby="titulo-cuidado-continuo">
+      <h2 id="titulo-cuidado-continuo">Cuidado contínuo e orientação</h2>
+      <div class="apoio__grade">
+        <article class="apoio__cartao">
+          <h3>Melhor em Casa</h3>
+          <p>Atenção domiciliar do SUS, conforme indicação e critérios. Pergunte à UBS ou à equipe do hospital sobre o encaminhamento.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/acesso-a-informacao/acoes-e-programas/melhor-em-casa" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Melhor em Casa (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Reabilitação no SUS</h3>
+          <p>A rede oferece reabilitação e pode orientar sobre órteses, próteses e meios auxiliares, conforme avaliação.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-com-deficiencia" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Reabilitação no SUS (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Tratamento Fora de Domicílio (TFD)</h3>
+          <p>Pode apoiar o deslocamento para tratamento do SUS em outra localidade, conforme autorização. Consulte a Secretaria Municipal de Saúde.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/acesso-a-informacao/acoes-e-programas/tfd" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Tratamento Fora de Domicílio (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+        <article class="apoio__cartao">
+          <h3>Ouvidoria do SUS · 136</h3>
+          <p>Canal para pedir orientação e registrar solicitações, reclamações ou denúncias sobre o SUS.</p>
+          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvidoria-do-sus" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Ouvidoria do SUS (abre em nova aba)">Consultar fonte oficial</a>
+        </article>
+      </div>
+    </section>
+
+    <p class="apoio__rodape">Fontes oficiais consultadas em novembro de 2026. A oferta e o encaminhamento de serviços podem variar por município. Consulte a prefeitura da sua região!</p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
