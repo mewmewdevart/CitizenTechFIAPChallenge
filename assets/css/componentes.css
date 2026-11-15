@@ -1,0 +1,99 @@
+/* Componentes globais padronizados do Mutirão
+   Complementa style.css e mvp-telas.css utilizando exclusivamente os tokens de variaveis.css */
+
+.botao--terciario {
+  background: transparent;
+  color: var(--cor-primaria);
+}
+
+.botao--terciario:hover {
+  background: var(--cor-superficie-suave);
+}
+
+.botao--perigo {
+  background: var(--cor-aviso-alerta-claro);
+  border-color: var(--cor-aviso-alerta-escuro);
+  color: var(--cor-aviso-alerta-escuro);
+}
+
+.botao--perigo:hover {
+  filter: brightness(0.96);
+}
+
+.botao--pequeno {
+  min-height: 36px;
+  padding: 6px var(--espaco-md);
+  font-size: var(--texto-legenda);
+}
+
+.botao:disabled,
+.botao[aria-disabled="true"],
+.botao-icone:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.botao[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.85;
+}
+
+.botao[aria-busy="true"]::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: mutirao-girar 0.7s linear infinite;
+}
+
+@keyframes mutirao-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao[aria-busy="true"]::before {
+    animation-duration: 0.01ms;
+  }
+}
+
+.selo--neutro {
+  background: var(--cor-neutra-clara-04);
+  color: var(--cor-texto-principal);
+}
+
+.formulario-mvp__ajuda {
+  font-size: var(--texto-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.formulario-mvp__erro {
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  color: var(--cor-aviso-alerta-escuro);
+}
+
+.formulario-mvp :is(input, select, textarea)[aria-invalid="true"] {
+  border-color: var(--cor-aviso-alerta-escuro);
+}
+
+.estado-vazio {
+  display: grid;
+  gap: var(--espaco-xs);
+  justify-items: center;
+  text-align: center;
+  padding: var(--espaco-xl) var(--espaco-lg);
+  border: 1px dashed var(--cor-borda-controle);
+  border-radius: var(--raio-lg);
+  color: var(--cor-texto-secundario);
+  background: var(--cor-superficie);
+}
+
+.estado-vazio strong {
+  color: var(--cor-texto-principal);
+  font-weight: var(--peso-semibold);
+}

@@ -378,16 +378,6 @@
   color: var(--cor-primaria);
 }
 
-.botao--perigo {
-  background: var(--cor-aviso-alerta-claro);
-  border-color: var(--cor-aviso-alerta-escuro);
-  color: var(--cor-aviso-alerta-escuro);
-}
-
-.botao--perigo:hover {
-  filter: brightness(0.96);
-}
-
 [data-turnos] {
   margin-top: var(--espaco-md);
   background: #F9F9F9;
