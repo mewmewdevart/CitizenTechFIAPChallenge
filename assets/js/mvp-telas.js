@@ -246,25 +246,125 @@
     }
   };
 
+  const opcaoImpressaoAtiva = chave => {
+    const input = pagina.querySelector(`[data-impressao-opcao="${chave}"]`);
+    return input ? input.checked : true;
+  };
+
   const renderizarImpressao = () => {
     const lista = pagina.querySelector('[data-impressao-lista]');
     if (!lista) return;
     const estado = obterEstado();
     const person = estado.person;
-    const eventosTexto = estado.events
-      .map(item => `${formatarData(item.dia, { day: 'numeric', month: 'short' })} · ${item.hora.replace(':00', 'h')} · ${item.titulo}`)
-      .join(' | ');
+
+    const elIdade = pagina.querySelector('[data-impressao-idade]');
+    const elNasc = pagina.querySelector('[data-impressao-nascimento]');
+    if (person.nascimento) {
+      const nascimento = formatarData(person.nascimento, { day: 'numeric', month: 'long', year: 'numeric' });
+      let anos = Number(HOJE.slice(0, 4)) - Number(person.nascimento.slice(0, 4));
+      if (HOJE.slice(5) < person.nascimento.slice(5)) anos--;
+      if (elIdade) elIdade.textContent = `${anos} anos`;
+      if (elNasc) elNasc.textContent = nascimento;
+    } else {
+      if (elIdade) elIdade.textContent = 'Não informada';
+      if (elNasc) elNasc.textContent = 'Não informada';
+    }
+
+    const elMascote = pagina.querySelector('[data-impressao-mascote]');
+    if (elMascote) {
+      elMascote.src = person.mascote || 'assets/media/mascotes/icone-mascote-minhoca.svg';
+    }
+
+    const alergias = String(person.alergias || '').trim();
+    const blocoAlergia = alergias
+      ? `<div class="folha-impressao__alerta">
+          <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à ${escaparHtml(alergias.toLowerCase())}</strong>
+          <p>Não administrar. Em caso de dor, consultar o responsável antes.</p>
+        </div>`
+      : `<div class="folha-impressao__cartao">
+          <h4>Alergias registradas</h4>
+          <p>Nenhuma alergia registrada até o momento.</p>
+        </div>`;
+
+    const medicamentosLista = String(person.medicamentos || '')
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+    const medicamentosHtml = medicamentosLista.length
+      ? `<ul class="folha-impressao__lista">${medicamentosLista.map(item => `<li>${escaparHtml(item)}</li>`).join('')}</ul>`
+      : '<p>Nenhum medicamento registrado</p>';
+
+    const incluirCondicoes = opcaoImpressaoAtiva('condicoes');
+    const incluirHistorico = opcaoImpressaoAtiva('historico');
+    const incluirEventos = opcaoImpressaoAtiva('eventos');
+    const incluirConvenio = opcaoImpressaoAtiva('convenio');
+    const incluirAlternativo = opcaoImpressaoAtiva('alternativo');
+    const incluirPreferencias = opcaoImpressaoAtiva('preferencias');
+
+    const cartaoCondicoes = incluirCondicoes
+      ? `<section class="folha-impressao__cartao">
+          <h4>Condições de saúde registradas</h4>
+          <p>${escaparHtml(person.condicoes || 'Nenhuma registrada')}</p>
+        </section>`
+      : '';
+
+    const cartaoMedicamentos = `<section class="folha-impressao__cartao">
+      <h4>Medicamentos de uso diário</h4>
+      ${medicamentosHtml}
+    </section>`;
+
+    const secaoHistorico = incluirHistorico
+      ? `<section class="folha-impressao__secao">
+          <h4>Cirurgias e histórico</h4>
+          <div class="folha-impressao__texto-rico">${sanitizarHtmlEditor(person.historicoSaude) || '<p>Não informado</p>'}</div>
+        </section>`
+      : '';
+
+    const eventosHtml = (estado.events || []).length
+      ? `<ul class="folha-impressao__lista">${estado.events.map(item => {
+          const dataItem = formatarData(item.dia, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '') + '.';
+          const horaItem = item.hora ? item.hora.replace(':00', 'h') : '';
+          const localTexto = item.local ? ` · ${item.local}` : '';
+          const respTexto = item.responsavel ? ` · ${item.responsavel} acompanha.` : '';
+          return `<li>${escaparHtml(`${dataItem}${horaItem ? `, ${horaItem}` : ''} · ${item.titulo}${localTexto}${respTexto}`)}</li>`;
+        }).join('')}</ul>`
+      : '<p>Nenhum compromisso agendado</p>';
+
+    const secaoEventos = incluirEventos
+      ? `<section class="folha-impressao__secao">
+          <h4>Consultas e exames</h4>
+          ${eventosHtml}
+        </section>`
+      : '';
+
+    const secaoPreferencias = incluirPreferencias && person.preferencias
+      ? `<section class="folha-impressao__secao">
+          <h4>Preferências de cuidado</h4>
+          <p>${escaparHtml(person.preferencias)}</p>
+        </section>`
+      : '';
 
     lista.innerHTML = `
-      <div><dt>Alergias registradas</dt><dd>${escaparHtml(person.alergias || 'Nenhuma registrada')}</dd></div>
-      <div><dt>Condições de saúde</dt><dd>${escaparHtml(person.condicoes || 'Nenhuma registrada')}</dd></div>
-      <div><dt>Medicamentos de uso diário</dt><dd>${escaparHtml(person.medicamentos || 'Nenhum registrado')}</dd></div>
-      <div><dt>Cirurgias e histórico</dt><dd>${sanitizarHtmlEditor(person.historicoSaude) || 'Não informado'}</dd></div>
-      <div><dt>Convênio</dt><dd>${escaparHtml(person.convenio || 'Não informado')}</dd></div>
-      <div><dt>Contato de referência</dt><dd>${escaparHtml(person.referencia || 'Não informado')}</dd></div>
-      <div><dt>Próximas consultas e exames</dt><dd>${escaparHtml(eventosTexto || 'Nenhum compromisso agendado')}</dd></div>
+      ${blocoAlergia}
+      <div class="folha-impressao__grade">
+        ${cartaoCondicoes}
+        ${cartaoMedicamentos}
+      </div>
+      ${secaoHistorico}
+      ${secaoEventos}
+      ${secaoPreferencias}
+      <section class="folha-impressao__cartao">
+        <h4>Contato de referência</h4>
+        <p>${escaparHtml(person.referencia || 'Não informado')}</p>
+        ${incluirAlternativo && person.alternativo ? `<p>Contato alternativo: ${escaparHtml(person.alternativo)}</p>` : ''}
+        ${incluirConvenio && person.convenio ? `<p class="folha-impressao__convenio">Convênio: ${escaparHtml(person.convenio)}</p>` : ''}
+      </section>
     `;
   };
+
+  pagina.querySelectorAll('[data-impressao-opcao]').forEach(checkbox => {
+    checkbox.addEventListener('change', renderizarImpressao);
+  });
 
   const renderizarPessoa = () => {
     const person = obterEstado().person;

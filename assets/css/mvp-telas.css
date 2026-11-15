@@ -505,13 +505,26 @@
 
   #dialogo-impressao[open] {
     position: static;
-    width: auto;
+    width: 100%;
+    max-width: none;
     max-height: none;
+    padding: 0;
+    margin: 0;
     border: 0;
+    box-shadow: none;
+    background: transparent;
+    overflow: visible;
   }
 
   #dialogo-impressao[open]::backdrop,
   #dialogo-impressao[open]> :not(.dialogo-mvp__impressao) {
     display: none;
+  }
+
+  #dialogo-impressao[open] .folha-impressao {
+    border: 0;
+    border-top: 4px solid var(--cor-primaria);
+    border-radius: 0;
+    padding: 12mm 10mm;
   }
 }
