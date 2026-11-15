@@ -247,4 +247,186 @@
   });
 
   mostrarEtapa('inicial');
+
+  // --- Serviços na sua cidade (IBGE + ViaCEP) ---
+  const painelLocalidade = pagina.querySelector('[data-localidade-painel]');
+  if (painelLocalidade) {
+    const formLocalidade = painelLocalidade.querySelector('[data-localidade-form]');
+    const campoCep = painelLocalidade.querySelector('[data-localidade-cep]');
+    const botaoCep = painelLocalidade.querySelector('[data-localidade-buscar-cep]');
+    const selectUf = painelLocalidade.querySelector('[data-localidade-uf]');
+    const selectMunicipio = painelLocalidade.querySelector('[data-localidade-municipio]');
+    const erroLocalidade = painelLocalidade.querySelector('[data-localidade-erro]');
+    const blocoResultado = painelLocalidade.querySelector('[data-localidade-resultado]');
+    const textoIbge = painelLocalidade.querySelector('[data-localidade-ibge]');
+    const textoNomeCidade = painelLocalidade.querySelector('[data-localidade-nome]');
+    const descUbs = painelLocalidade.querySelector('[data-localidade-ubs-desc]');
+    const linkUbs = painelLocalidade.querySelector('[data-localidade-link-ubs]');
+    const descCras = painelLocalidade.querySelector('[data-localidade-cras-desc]');
+    const linkCras = painelLocalidade.querySelector('[data-localidade-link-cras]');
+    const CHAVE_LOCALIDADE = 'mutirao_localidade_direitos';
+
+    const limparErroLocalidade = () => {
+      if (erroLocalidade) {
+        erroLocalidade.textContent = '';
+        erroLocalidade.hidden = true;
+      }
+      campoCep?.removeAttribute('aria-invalid');
+    };
+
+    const mostrarErroLocalidade = mensagem => {
+      if (erroLocalidade) {
+        erroLocalidade.textContent = mensagem;
+        erroLocalidade.hidden = false;
+      }
+      campoCep?.setAttribute('aria-invalid', 'true');
+    };
+
+    const exibirLocalidade = ({ cidade, uf, bairro = '', ibge = '' }) => {
+      if (!cidade || !uf || !blocoResultado) return;
+      limparErroLocalidade();
+      const tituloLocal = bairro ? `${bairro} · ${cidade} (${uf})` : `${cidade} (${uf})`;
+      if (textoNomeCidade) textoNomeCidade.textContent = tituloLocal;
+      if (textoIbge) textoIbge.textContent = ibge ? `Código IBGE: ${ibge}` : `UF: ${uf}`;
+
+      const termoBase = bairro ? `${bairro} ${cidade} ${uf}` : `${cidade} ${uf}`;
+      if (descUbs) {
+        descUbs.textContent = `Encontre Unidades Básicas de Saúde próximas de ${tituloLocal} para acompanhamento e encaminhamentos.`;
+      }
+      if (linkUbs) {
+        linkUbs.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`UBS ${termoBase}`)}`;
+        linkUbs.setAttribute('aria-label', `Ver UBS próximas de ${tituloLocal} no mapa (abre em nova aba)`);
+      }
+      if (descCras) {
+        descCras.textContent = `Localize o CRAS de ${cidade} (${uf}) para fazer ou atualizar o Cadastro Único e solicitar o BPC.`;
+      }
+      if (linkCras) {
+        linkCras.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`CRAS ${termoBase}`)}`;
+        linkCras.setAttribute('aria-label', `Ver CRAS em ${tituloLocal} no mapa (abre em nova aba)`);
+      }
+
+      blocoResultado.hidden = false;
+      try {
+        localStorage.setItem(CHAVE_LOCALIDADE, JSON.stringify({ cidade, uf, bairro, ibge }));
+      } catch {
+        // Ignora falha de armazenamento em modo privado
+      }
+      anunciarStatus(elementoStatus, `Serviços públicos atualizados para ${tituloLocal}.`);
+    };
+
+    const carregarMunicipios = async (uf, ibgeSelecionado = '') => {
+      if (!selectMunicipio) return;
+      if (!uf) {
+        selectMunicipio.innerHTML = '<option value="">Selecione o estado primeiro</option>';
+        selectMunicipio.disabled = true;
+        return;
+      }
+
+      selectMunicipio.disabled = true;
+      selectMunicipio.innerHTML = '<option value="">Carregando municípios...</option>';
+
+      try {
+        const resposta = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${encodeURIComponent(uf)}/municipios?orderBy=nome`);
+        if (!resposta.ok) throw new Error('Falha ao carregar municípios');
+        const municipios = await resposta.json();
+        selectMunicipio.innerHTML = '<option value="">Selecione o município...</option>' +
+          municipios.map(m => `<option value="${escaparHtml(String(m.id))}" data-nome="${escaparHtml(m.nome)}">${escaparHtml(m.nome)}</option>`).join('');
+        selectMunicipio.disabled = false;
+
+        if (ibgeSelecionado) {
+          selectMunicipio.value = String(ibgeSelecionado);
+        }
+      } catch {
+        selectMunicipio.innerHTML = '<option value="">Não foi possível carregar</option>';
+        mostrarErroLocalidade('Não foi possível consultar a lista de municípios do IBGE no momento.');
+      }
+    };
+
+    const carregarEstados = async () => {
+      if (!selectUf) return;
+      try {
+        const resposta = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome');
+        if (!resposta.ok) throw new Error('Falha ao carregar estados');
+        const estados = await resposta.json();
+        selectUf.innerHTML = '<option value="">Selecione o estado...</option>' +
+          estados.map(e => `<option value="${escaparHtml(e.sigla)}">${escaparHtml(e.nome)} (${escaparHtml(e.sigla)})</option>`).join('');
+
+        try {
+          const salvo = JSON.parse(localStorage.getItem(CHAVE_LOCALIDADE) || 'null');
+          if (salvo?.uf && salvo?.cidade) {
+            selectUf.value = salvo.uf;
+            await carregarMunicipios(salvo.uf, salvo.ibge);
+            exibirLocalidade(salvo);
+          }
+        } catch {
+          // Ignora estado salvo inválido
+        }
+      } catch {
+        selectUf.innerHTML = '<option value="">Indisponível no momento</option>';
+      }
+    };
+
+    campoCep?.addEventListener('input', () => {
+      const digitos = campoCep.value.replace(/\D/g, '').slice(0, 8);
+      campoCep.value = digitos.length > 5 ? `${digitos.slice(0, 5)}-${digitos.slice(5)}` : digitos;
+      limparErroLocalidade();
+    });
+
+    selectUf?.addEventListener('change', () => {
+      limparErroLocalidade();
+      carregarMunicipios(selectUf.value);
+    });
+
+    selectMunicipio?.addEventListener('change', () => {
+      const opcao = selectMunicipio.selectedOptions[0];
+      const cidade = opcao?.dataset.nome;
+      const uf = selectUf?.value;
+      if (cidade && uf) {
+        exibirLocalidade({ cidade, uf, ibge: selectMunicipio.value });
+      }
+    });
+
+    formLocalidade?.addEventListener('submit', async evento => {
+      evento.preventDefault();
+      const cepLimpo = (campoCep?.value || '').replace(/\D/g, '');
+      if (cepLimpo.length !== 8) {
+        mostrarErroLocalidade('Informe um CEP válido com 8 dígitos para buscar.');
+        campoCep?.focus();
+        return;
+      }
+
+      limparErroLocalidade();
+      botaoCep?.setAttribute('aria-busy', 'true');
+      if (botaoCep) botaoCep.disabled = true;
+
+      try {
+        const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+        if (!resposta.ok) throw new Error('Erro na consulta do CEP');
+        const dados = await resposta.json();
+        if (dados.erro) {
+          mostrarErroLocalidade('CEP não encontrado. Confira os números ou selecione o estado e o município.');
+          campoCep?.focus();
+          return;
+        }
+
+        if (selectUf) {
+          selectUf.value = dados.uf;
+          await carregarMunicipios(dados.uf, dados.ibge);
+        }
+        exibirLocalidade({
+          cidade: dados.localidade,
+          uf: dados.uf,
+          bairro: dados.bairro || '',
+          ibge: dados.ibge || ''
+        });
+      } catch {
+        mostrarErroLocalidade('Não foi possível consultar o CEP agora. Tente selecionar o estado e o município ao lado.');
+      } finally {
+        botaoCep?.removeAttribute('aria-busy');
+        if (botaoCep) botaoCep.disabled = false;
+      }
+    });
+
+    carregarEstados();
+  }
 })();

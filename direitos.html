@@ -180,8 +180,8 @@
       <i class="fa-solid fa-triangle-exclamation apoio__aviso-icone" aria-hidden="true"></i>
       <div>
         <strong>Guia em expansão</strong>
-        <p>Você já pode verificar os direitos da Mari e consultar os serviços abaixo. Em breve, incluiremos também
-          serviços da sua cidade.</p>
+        <p>Você já pode verificar os direitos da Mari, localizar serviços públicos na sua cidade e consultar as fontes
+          oficiais abaixo.</p>
       </div>
     </div>
 
@@ -308,6 +308,87 @@
         </div>
         <p class="direitos-simulador__nota">Esta prévia não substitui a análise oficial feita pelo CRAS, INSS ou UBS.
         </p>
+      </div>
+    </section>
+
+    <section class="apoio__painel" aria-labelledby="titulo-localidade" data-localidade-painel>
+      <div class="direitos-resumo__cabecalho">
+        <span class="selo selo--info">Dados públicos · IBGE e ViaCEP</span>
+        <h2 id="titulo-localidade">Serviços na sua cidade</h2>
+        <p class="direitos-simulador__nota">Informe o CEP ou selecione estado e município para localizar UBS, CRAS e
+          Farmácia Popular próximos da família.</p>
+      </div>
+
+      <form class="direitos-localidade__form formulario-mvp" data-localidade-form novalidate>
+        <div class="direitos-localidade__campo">
+          <label for="campo-cep">CEP</label>
+          <div class="direitos-localidade__cep-grupo">
+            <input id="campo-cep" type="text" inputmode="numeric" maxlength="9" placeholder="00000-000"
+              autocomplete="postal-code" data-localidade-cep />
+            <button type="submit" class="botao botao--secundario" data-localidade-buscar-cep>Buscar CEP</button>
+          </div>
+        </div>
+
+        <div class="direitos-localidade__campo">
+          <label for="campo-uf">Estado (UF)</label>
+          <select id="campo-uf" data-localidade-uf>
+            <option value="">Carregando estados...</option>
+          </select>
+        </div>
+
+        <div class="direitos-localidade__campo">
+          <label for="campo-municipio">Município</label>
+          <select id="campo-municipio" data-localidade-municipio disabled>
+            <option value="">Selecione o estado primeiro</option>
+          </select>
+        </div>
+      </form>
+
+      <p class="formulario-mvp__erro" data-localidade-erro role="alert" hidden></p>
+
+      <div class="direitos-localidade__resultado" data-localidade-resultado hidden aria-live="polite">
+        <div class="direitos-localidade__cabecalho">
+          <div class="direitos-localidade__etiquetas">
+            <span class="selo selo--sucesso">Localidade identificada</span>
+            <span class="selo selo--neutro" data-localidade-ibge></span>
+          </div>
+          <strong data-localidade-nome></strong>
+        </div>
+
+        <div class="apoio__grade">
+          <article class="apoio__cartao">
+            <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-hospital"></i></span>
+            <div class="apoio__cartao-conteudo">
+              <h3>UBS na região</h3>
+              <p data-localidade-ubs-desc>Encontre Unidades Básicas de Saúde para acompanhamento e encaminhamentos.</p>
+              <a class="botao botao--secundario" href="#" target="_blank" rel="noopener noreferrer"
+                data-localidade-link-ubs>Ver UBS no mapa</a>
+            </div>
+          </article>
+
+          <article class="apoio__cartao">
+            <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-people-roof"></i></span>
+            <div class="apoio__cartao-conteudo">
+              <h3>CRAS e CadÚnico</h3>
+              <p data-localidade-cras-desc>Localize o CRAS do município para fazer ou atualizar o Cadastro Único e BPC.</p>
+              <a class="botao botao--secundario" href="#" target="_blank" rel="noopener noreferrer"
+                data-localidade-link-cras>Ver CRAS no mapa</a>
+            </div>
+          </article>
+
+          <article class="apoio__cartao">
+            <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
+            <div class="apoio__cartao-conteudo">
+              <h3>Farmácia Popular</h3>
+              <p>Consulte as farmácias credenciadas no município pelo painel oficial do Ministério da Saúde.</p>
+              <a class="botao botao--secundario"
+                href="https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular/painel-endereco-das-farmacias"
+                target="_blank" rel="noopener noreferrer"
+                aria-label="Consultar painel oficial de endereços da Farmácia Popular (abre em nova aba)">Consultar
+                painel oficial</a>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
