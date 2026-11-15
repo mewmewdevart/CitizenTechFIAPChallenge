@@ -57,8 +57,12 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/direitos.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
 </head>
 
@@ -116,7 +120,10 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
       </details>
     </div>
   </header>
@@ -144,17 +151,24 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Status do cuidado</h2>
       <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina apoio" id="conteudo">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Direitos e serviços</nav>
+  <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="direitos">
+    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
+        aria-hidden="true">›</span> Direitos e serviços</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Direitos e serviços</h1>
@@ -163,32 +177,194 @@
     </header>
 
     <div class="apoio__aviso" role="status">
-      <strong>Seção em manutenção</strong>
-      <p>Este guia inicial já está disponível. Em breve, vamos incluir mais direitos, serviços locais e orientações de acesso.</p>
+      <i class="fa-solid fa-triangle-exclamation apoio__aviso-icone" aria-hidden="true"></i>
+      <div>
+        <strong>Guia em expansão</strong>
+        <p>Você já pode verificar os direitos da Mari e consultar os serviços abaixo. Em breve, incluiremos também
+          serviços da sua cidade.</p>
+      </div>
+    </div>
+
+    <section class="apoio__painel" aria-labelledby="titulo-simulador-mari" data-simulador-painel>
+      <div class="direitos-simulador__etapa direitos-simulador__inicial" data-etapa="inicial">
+        <div class="direitos-simulador__inicial-conteudo">
+          <div class="direitos-simulador__inicial-etiquetas">
+            <span class="selo selo--atencao">Verificação pendente</span>
+            <span class="selo selo--info">Maria das Dores</span>
+            <span class="selo selo--info" data-simulador-idade-selo>79 anos</span>
+          </div>
+          <div class="direitos-simulador__inicial-info">
+            <span class="apoio__icone apoio__icone--destaque" aria-hidden="true"><i
+                class="fa-solid fa-shield-heart"></i></span>
+            <div class="direitos-simulador__inicial-texto">
+              <h2 id="titulo-simulador-mari">Você ainda não verificou os direitos da Mari</h2>
+              <p class="direitos-simulador__nota">Responda a 5 perguntas rápidas sobre a rotina, renda e cadastro dela
+                para descobrir quais benefícios podem se encaixar melhor.</p>
+            </div>
+          </div>
+        </div>
+        <div class="direitos-simulador__acoes">
+          <button type="button" class="botao botao--primario" data-simulador-iniciar>Verificar direitos <i
+              class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+
+      <form class="direitos-simulador__etapa" data-etapa="perguntas" hidden>
+        <div class="direitos-simulador__progresso-cabecalho">
+          <div class="direitos-simulador__progresso-meta">
+            <span class="selo selo--info" data-simulador-progresso>Pergunta 1 de 5</span>
+            <span class="selo selo--neutro" data-simulador-idade-selo>Maria das Dores</span>
+          </div>
+          <div class="direitos-simulador__barra" aria-hidden="true">
+            <span class="direitos-simulador__barra-preenchida" data-simulador-barra style="width: 20%"></span>
+          </div>
+        </div>
+
+        <div class="direitos-simulador__palco">
+          <article class="direitos-simulador__pergunta" data-passo="0">
+            <h3 id="pergunta-moradia" tabindex="-1">Com quem a Mari mora hoje?</h3>
+            <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-moradia"
+              data-simulador-grupo="moradia">
+              <button type="button" data-simulador-valor="sozinha" aria-pressed="false">Sozinha</button>
+              <button type="button" data-simulador-valor="familia" aria-pressed="false">Com a família</button>
+              <button type="button" data-simulador-valor="instituicao" aria-pressed="false">Casa de repouso</button>
+            </div>
+            <p class="direitos-simulador__nota">A renda per capita considera quem vive sob o mesmo teto.</p>
+          </article>
+
+          <article class="direitos-simulador__pergunta" data-passo="1" hidden>
+            <h3 id="pergunta-renda" tabindex="-1">Qual é a renda por pessoa da casa?</h3>
+            <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-renda"
+              data-simulador-grupo="renda">
+              <button type="button" data-simulador-valor="ate-um-quarto" aria-pressed="false">Até R$ 405 (1/4 do
+                mínimo)</button>
+              <button type="button" data-simulador-valor="ate-meio" aria-pressed="false">Até R$ 810 (1/2
+                mínimo)</button>
+              <button type="button" data-simulador-valor="acima-meio" aria-pressed="false">Acima de R$ 810</button>
+              <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
+            </div>
+            <p class="direitos-simulador__nota">Referência de 2026: BPC exige até R$ 405,25 por pessoa; Tarifa Social,
+              até R$ 810,50.</p>
+          </article>
+
+          <article class="direitos-simulador__pergunta" data-passo="2" hidden>
+            <h3 id="pergunta-aposentadoria" tabindex="-1">Recebe aposentadoria por incapacidade (invalidez)?</h3>
+            <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-aposentadoria"
+              data-simulador-grupo="aposentadoriaIncapacidade">
+              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim</button>
+              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não</button>
+              <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
+            </div>
+            <p class="direitos-simulador__nota">O acréscimo de 25% no INSS é exclusivo dessa modalidade.</p>
+          </article>
+
+          <article class="direitos-simulador__pergunta" data-passo="3" hidden>
+            <h3 id="pergunta-assistencia" tabindex="-1">Precisa de ajuda permanente no dia a dia?</h3>
+            <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-assistencia"
+              data-simulador-grupo="assistencia">
+              <button type="button" data-simulador-valor="integral" aria-pressed="false">Sim, tempo integral</button>
+              <button type="button" data-simulador-valor="parcial" aria-pressed="false">Parcialmente</button>
+              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não</button>
+            </div>
+            <p class="direitos-simulador__nota">Ajuda para banho, alimentação, medicação ou locomoção.</p>
+          </article>
+
+          <article class="direitos-simulador__pergunta" data-passo="4" hidden>
+            <h3 id="pergunta-cadunico" tabindex="-1">Já tem Cadastro Único (CadÚnico)?</h3>
+            <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-cadunico"
+              data-simulador-grupo="cadunico">
+              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não tem</button>
+              <button type="button" data-simulador-valor="antigo" aria-pressed="false">Mais de 2 anos</button>
+              <button type="button" data-simulador-valor="em-dia" aria-pressed="false">Em dia</button>
+              <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
+            </div>
+            <p class="direitos-simulador__nota">Obrigatório para BPC e para a Tarifa Social de energia elétrica.</p>
+          </article>
+        </div>
+
+        <div class="direitos-simulador__acoes direitos-simulador__acoes--passo">
+          <button type="button" class="botao botao--secundario" data-simulador-anterior><i
+              class="fa-solid fa-arrow-left" aria-hidden="true"></i> <span>Voltar ao início</span></button>
+          <button type="button" class="botao botao--primario" data-simulador-proximo disabled>Próxima pergunta <i
+              class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          <button type="submit" class="botao botao--primario" data-simulador-concluir hidden disabled>Ver o que a Mari
+            tem direito <i class="fa-solid fa-check" aria-hidden="true"></i></button>
+        </div>
+      </form>
+
+      <div class="direitos-simulador__etapa" data-etapa="resultado" aria-live="polite" hidden>
+        <div class="direitos-resumo__cabecalho">
+          <span class="selo selo--info">Resultado estimado · Maria das Dores (Mari)</span>
+          <h2 data-simulador-titulo></h2>
+        </div>
+        <ul class="direitos-simulador__resultados" data-simulador-resultados></ul>
+        <div class="direitos-simulador__acoes">
+          <button type="button" class="botao botao--terciario" data-simulador-refazer>Refazer perguntas</button>
+          <button type="button" class="botao botao--secundario" data-simulador-copiar><i class="fa-regular fa-copy"
+              aria-hidden="true"></i> Mandar resultado no grupo</button>
+          <a class="botao botao--primario"
+            href="https://www.gov.br/pt-br/servicos/inscrever-se-no-cadastro-unico-para-programas-sociais-do-governo-federal"
+            target="_blank" rel="noopener noreferrer">Como fazer o Cadastro Único</a>
+        </div>
+        <p class="direitos-simulador__nota">Esta prévia não substitui a análise oficial feita pelo CRAS, INSS ou UBS.
+        </p>
+      </div>
+    </section>
+
+    <div class="apoio__secao-cabecalho">
+      <h2>Guia geral de serviços e benefícios</h2>
+      <p class="direitos-simulador__nota">Consulte detalhes e fontes oficiais de todos os programas disponíveis no SUS,
+        INSS e assistência social.</p>
     </div>
 
     <section class="apoio__secao" aria-labelledby="titulo-acesso-sus">
       <h2 id="titulo-acesso-sus">Acesso ao SUS</h2>
       <div class="apoio__grade">
         <article class="apoio__cartao">
-          <h3>Atendimento na UBS</h3>
-          <p>Procure a UBS de referência para acompanhamento, vacinação e orientação sobre encaminhamentos.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/a/atencao-primaria-a-saude" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Atendimento na UBS (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-hospital"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Atendimento na UBS</h3>
+            <p>Procure a UBS de referência para acompanhamento, vacinação e orientação sobre encaminhamentos.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/saude/pt-br/composicao/saps" target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Atendimento na UBS (abre em nova aba)">Consultar fonte
+              oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Farmácia Popular</h3>
-          <p>Retire gratuitamente itens da lista do programa em farmácias credenciadas, conforme os critérios. Confira medicamentos, fraldas geriátricas e documentos.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Farmácia Popular (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Farmácia Popular</h3>
+            <p>Retire gratuitamente itens da lista do programa em farmácias credenciadas, conforme os critérios. Confira
+              medicamentos, fraldas geriátricas e documentos.</p>
+            <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular"
+              target="_blank" rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Farmácia Popular (abre em nova aba)">Consultar fonte oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Medicamentos especializados</h3>
-          <p>O CEAF atende condições previstas nos protocolos do SUS. Confirme os documentos e o fluxo com a Secretaria de Saúde do seu estado.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/composicao/sectics/daf/ceaf" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Medicamentos especializados (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-prescription-bottle-medical"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Medicamentos especializados</h3>
+            <p>O CEAF atende condições previstas nos protocolos do SUS. Confirme os documentos e o fluxo com a
+              Secretaria de Saúde do seu estado.</p>
+            <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/composicao/sectics/daf/ceaf"
+              target="_blank" rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Medicamentos especializados (abre em nova aba)">Consultar fonte
+              oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Direito a acompanhante</h3>
-          <p>A pessoa idosa tem direito a acompanhante em caso de internação ou observação hospitalar.</p>
-          <a class="botao botao--secundario" href="https://www.planalto.gov.br/ccivil_03/leis/2003/l10.741.htm" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Direito a acompanhante (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-user-group"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Direito a acompanhante</h3>
+            <p>A pessoa idosa tem direito a acompanhante em caso de internação ou observação hospitalar.</p>
+            <a class="botao botao--secundario" href="https://www.planalto.gov.br/ccivil_03/leis/2003/l10.741.htm"
+              target="_blank" rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Direito a acompanhante (abre em nova aba)">Consultar fonte
+              oficial</a>
+          </div>
         </article>
       </div>
     </section>
@@ -197,24 +373,54 @@
       <h2 id="titulo-beneficios">Benefícios e apoio financeiro</h2>
       <div class="apoio__grade">
         <article class="apoio__cartao">
-          <h3>Benefício de Prestação Continuada (BPC)</h3>
-          <p>Um salário mínimo mensal para pessoas com 65 anos ou mais ou pessoas com deficiência que atendam aos critérios de renda e cadastro. Procure o CRAS para orientação.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-a-pessoa-idosa" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Benefício de Prestação Continuada (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-hand-holding-heart"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Benefício de Prestação Continuada (BPC)</h3>
+            <p>Um salário mínimo mensal para pessoas com 65 anos ou mais ou pessoas com deficiência que atendam aos
+              critérios de renda e cadastro. Procure o CRAS para orientação.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-ao-idoso" target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Benefício de Prestação Continuada (abre em nova aba)">Consultar
+              fonte oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Auxílio-inclusão</h3>
-          <p>Pode apoiar pessoas com deficiência que passam a exercer trabalho remunerado e atendem às regras do benefício. Consulte os critérios no INSS.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-auxilio-inclusao" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Auxílio-inclusão (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-hands-holding-circle"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Auxílio-inclusão</h3>
+            <p>Pode apoiar pessoas com deficiência que passam a exercer trabalho remunerado e atendem às regras do
+              benefício. Consulte os critérios no INSS.</p>
+            <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-auxilio-inclusao-a-pessoa-com-deficiencia"
+              target="_blank" rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Auxílio-inclusão (abre em nova aba)">Consultar fonte oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Auxílio por incapacidade temporária</h3>
-          <p>Benefício para segurados do INSS que atendam aos critérios e comprovem incapacidade temporária para o trabalho.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-auxilio-por-incapacidade-temporaria" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Auxílio por incapacidade temporária (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-file-medical"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Auxílio por incapacidade temporária</h3>
+            <p>Benefício para segurados do INSS que atendam aos critérios e comprovem incapacidade temporária para o
+              trabalho.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/pt-br/servicos/solicitar-beneficio-por-incapacidade-temporaria-auxilio-doenca" target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Auxílio por incapacidade temporária (abre em nova aba)">Consultar
+              fonte oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Acréscimo de 25% na aposentadoria</h3>
-          <p>Pode ser solicitado por quem recebe aposentadoria por incapacidade permanente e precisa de assistência permanente de outra pessoa.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/pt-br/servicos/solicitar-acrescimo-de-25-na-aposentadoria-por-incapacidade-permanente" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Acréscimo de 25% na aposentadoria (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-percent"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Acréscimo de 25% na aposentadoria</h3>
+            <p>Pode ser solicitado por quem recebe aposentadoria por incapacidade permanente e precisa de assistência
+              permanente de outra pessoa.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/pt-br/servicos/solicitar-acrescimo-de-25-por-cento-na-aposentadoria-por-incapacidade-permanente-aposentadoria-por-invalidez"
+              target="_blank" rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Acréscimo de 25% na aposentadoria (abre em nova aba)">Consultar
+              fonte oficial</a>
+          </div>
         </article>
       </div>
     </section>
@@ -223,36 +429,67 @@
       <h2 id="titulo-cuidado-continuo">Cuidado contínuo e orientação</h2>
       <div class="apoio__grade">
         <article class="apoio__cartao">
-          <h3>Melhor em Casa</h3>
-          <p>Atenção domiciliar do SUS, conforme indicação e critérios. Pergunte à UBS ou à equipe do hospital sobre o encaminhamento.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/acesso-a-informacao/acoes-e-programas/melhor-em-casa" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Melhor em Casa (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-house-medical"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Melhor em Casa</h3>
+            <p>Atenção domiciliar do SUS, conforme indicação e critérios. Pergunte à UBS ou à equipe do hospital sobre o
+              encaminhamento.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/saude/pt-br/composicao/saes/melhor-em-casa" target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Melhor em Casa (abre em nova aba)">Consultar fonte oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Reabilitação no SUS</h3>
-          <p>A rede oferece reabilitação e pode orientar sobre órteses, próteses e meios auxiliares, conforme avaliação.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-com-deficiencia" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Reabilitação no SUS (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-wheelchair"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Reabilitação no SUS</h3>
+            <p>A rede oferece reabilitação e pode orientar sobre órteses, próteses e meios auxiliares, conforme
+              avaliação.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-com-deficiencia"
+              target="_blank" rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Reabilitação no SUS (abre em nova aba)">Consultar fonte
+              oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Tratamento Fora de Domicílio (TFD)</h3>
-          <p>Pode apoiar o deslocamento para tratamento do SUS em outra localidade, conforme autorização. Consulte a Secretaria Municipal de Saúde.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/acesso-a-informacao/acoes-e-programas/tfd" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Tratamento Fora de Domicílio (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-van-shuttle"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Tratamento Fora de Domicílio (TFD)</h3>
+            <p>Pode apoiar o deslocamento para tratamento do SUS em outra localidade, conforme autorização. Consulte a
+              Secretaria Municipal de Saúde.</p>
+            <a class="botao botao--secundario"
+              href="https://wiki.saude.gov.br/regulacao/index.php/Tratamento_Fora_do_Domic%C3%ADlio_(TFD)" target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Tratamento Fora de Domicílio (abre em nova aba)">Consultar fonte
+              oficial</a>
+          </div>
         </article>
         <article class="apoio__cartao">
-          <h3>Ouvidoria do SUS · 136</h3>
-          <p>Canal para pedir orientação e registrar solicitações, reclamações ou denúncias sobre o SUS.</p>
-          <a class="botao botao--secundario" href="https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvidoria-do-sus" target="_blank" rel="noopener noreferrer" aria-label="Consultar fonte oficial sobre Ouvidoria do SUS (abre em nova aba)">Consultar fonte oficial</a>
+          <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-phone-volume"></i></span>
+          <div class="apoio__cartao-conteudo">
+            <h3>Ouvidoria do SUS · 136</h3>
+            <p>Canal para pedir orientação e registrar solicitações, reclamações ou denúncias sobre o SUS.</p>
+            <a class="botao botao--secundario"
+              href="https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvsus" target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Consultar fonte oficial sobre Ouvidoria do SUS (abre em nova aba)">Consultar fonte oficial</a>
+          </div>
         </article>
       </div>
     </section>
 
-    <p class="apoio__rodape">Fontes oficiais consultadas em novembro de 2026. A oferta e o encaminhamento de serviços podem variar por município. Consulte a prefeitura da sua região!</p>
+    <p class="apoio__rodape">Fontes oficiais consultadas em novembro de 2026. A oferta e o encaminhamento de serviços
+      podem variar por município. Consulte a prefeitura da sua região.</p>
+    <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
-        aria-hidden="true"></i>Mais</button>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
