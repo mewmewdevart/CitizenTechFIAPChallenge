@@ -109,16 +109,41 @@ for (const dialogo of document.querySelectorAll('dialog')) {
   });
 }
 
+const criarDialogoSair = () => {
+  let dialogo = document.querySelector('#dialogo-sair-conta');
+  if (dialogo) return dialogo;
+
+  dialogo = document.createElement('dialog');
+  dialogo.id = 'dialogo-sair-conta';
+  dialogo.className = 'dialogo-mvp';
+  dialogo.setAttribute('aria-labelledby', 'titulo-sair-conta');
+  dialogo.innerHTML = `
+    <h2 id="titulo-sair-conta">Sair da sua conta?</h2>
+    <p>Você será redirecionado para a tela inicial do Mutirão nesta sessão.</p>
+    <div class="dialogo-mvp__acoes">
+      <button type="button" class="botao botao--secundario" data-cancelar-saida>Cancelar</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-saida>Sair da conta</button>
+    </div>
+  `;
+  dialogo.addEventListener('click', evento => {
+    if (evento.target === dialogo) dialogo.close();
+  });
+  dialogo.querySelector('[data-cancelar-saida]')?.addEventListener('click', () => dialogo.close());
+  dialogo.querySelector('[data-confirmar-saida]')?.addEventListener('click', () => {
+    try {
+      sessionStorage.removeItem(CHAVE_MENU_STORAGE);
+    } catch {
+      // Ignora erro caso o navegador bloqueie storage local
+    }
+    location.href = 'index.html';
+  });
+  document.body.append(dialogo);
+  return dialogo;
+};
+
 for (const botaoSair of document.querySelectorAll('[data-acao="sair"]')) {
   botaoSair.addEventListener('click', () => {
-    if (confirm('Deseja realmente sair da sua conta?')) {
-      try {
-        sessionStorage.removeItem(CHAVE_MENU_STORAGE);
-      } catch {
-        // Ignora erro caso o navegador bloqueie storage local
-      }
-      location.href = 'index.html';
-    }
+    criarDialogoSair().showModal();
   });
 }
 
@@ -128,6 +153,7 @@ const statusBusca = document.querySelector('#status-busca');
 const itensPesquisaveis = [
   ...linksMenu.map(link => ({ href: link.getAttribute('href'), rotulo: link.textContent.trim() })),
   { href: 'meu-perfil.html', rotulo: 'Meu perfil' },
+  { href: 'configuracoes.html', rotulo: 'Configurações' },
   { href: 'ficha.html', rotulo: 'Ficha da pessoa acompanhada · Maria das Dores (Mari)' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
