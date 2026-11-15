@@ -114,7 +114,7 @@ body.menu-fechado .conteudo-pagina.ficha {
   position: relative;
   flex: none;
   width: 406px;
-  min-height: 112px;
+  min-height: 96px;
   margin-right: 48px;
   padding: 18px 32px 18px 22px;
   background: transparent url('../media/alerta-fundo-ficha.svg') center / 100% 100% no-repeat;
@@ -537,7 +537,7 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 }
 
 .dialogo-mvp--largo {
-  width: min(760px, calc(100vw - 32px));
+  --largura-dialogo: 960px;
 }
 
 .dialogo-mvp__subtitulo {
@@ -555,6 +555,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 .editar-ficha__secao {
   display: grid;
   gap: var(--espaco-md);
+  padding-top: var(--espaco-lg);
+  border-top: var(--borda-padrao);
 }
 
 .editar-ficha__subtitulo,
@@ -856,7 +858,8 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--espaco-sm);
-  padding-top: var(--espaco-sm);
+  padding-top: var(--espaco-lg);
+  border-top: var(--borda-padrao);
 }
 
 @media (max-width: 760px) {
@@ -908,5 +911,18 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
 
   .editar-ficha__mascotes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media screen {
+  .dialogo-mvp__impressao {
+    padding: var(--espaco-lg);
+    border: var(--borda-padrao);
+    border-top: 3px solid var(--cor-primaria);
+    background: var(--cor-fundo-pagina);
+  }
+
+  .dialogo-mvp__impressao h3 {
+    font-size: var(--texto-titulo-secao);
+    margin-bottom: var(--espaco-sm);
   }
 }

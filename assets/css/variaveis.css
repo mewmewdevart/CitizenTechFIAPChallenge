@@ -30,6 +30,7 @@
   --cor-aviso-info-claro: var(--cor-secundaria-clara);
   --cor-aviso-info-escuro: var(--cor-primaria);
   --cor-backdrop: #302b3d55;
+  --cor-backdrop-dialogo: rgb(0 0 0 / 48%);
 
   /* Tipografia */
   --fonte-interface: "Inter", system-ui, sans-serif;
@@ -110,6 +111,7 @@ html.acessibilidade--alto-contraste {
   --cor-aviso-info-claro: #172554;
   --cor-aviso-info-escuro: #93C5FD;
   --cor-backdrop: rgba(0, 0, 0, 0.82);
+  --cor-backdrop-dialogo: var(--cor-backdrop);
   --cor-switch-thumb: #0D0D0D;
   --cor-logo-fundo: #FFFFFF;
   --anel-foco: 3px solid #FFE600;
