@@ -12,9 +12,12 @@
 
   const retorno = document.querySelector('#ajuda-retorno');
   const campoEmail = formulario.querySelector('#ajuda-email');
+  const erroEmailEl = formulario.querySelector('#ajuda-email-erro');
   const campoAssunto = formulario.querySelector('#ajuda-assunto');
+  const erroAssuntoEl = formulario.querySelector('#ajuda-assunto-erro');
   const editor = formulario.querySelector('[data-editor-rico]');
   const areaEditor = editor?.querySelector('[data-editor-alvo]');
+  const erroMensagemEl = formulario.querySelector('#ajuda-mensagem-erro');
   const inputEditor = formulario.querySelector('[data-input-editor]');
   const contadorMensagem = formulario.querySelector('#ajuda-mensagem-contador');
   const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
@@ -72,7 +75,7 @@
 
     if (botaoNotificacoes) {
       const total = listaNotificacoes.querySelectorAll('.notificacao').length;
-      botaoNotificacoes.setAttribute('aria-label', `Notificações (${total} pendentes)`);
+      botaoNotificacoes.setAttribute('aria-label', `Notificações (${total} itens)`);
       botaoNotificacoes.setAttribute('data-nova-notificacao', 'true');
     }
   };
@@ -153,11 +156,27 @@
     return '';
   };
 
-  [campoEmail, campoAssunto].filter(Boolean).forEach(campo => {
-    campo.addEventListener('input', () => {
-      campo.setCustomValidity('');
-      campo.removeAttribute('aria-invalid');
-    });
+  const aplicarErroCampo = (elemento, erroEl, mensagem) => {
+    if (elemento) elemento.toggleAttribute('aria-invalid', Boolean(mensagem));
+    if (erroEl) erroEl.textContent = mensagem;
+  };
+
+  campoEmail?.addEventListener('input', () => {
+    campoEmail.setCustomValidity('');
+    aplicarErroCampo(campoEmail, erroEmailEl, validarEmail());
+  });
+
+  campoEmail?.addEventListener('blur', () => {
+    aplicarErroCampo(campoEmail, erroEmailEl, validarEmail());
+  });
+
+  campoAssunto?.addEventListener('input', () => {
+    campoAssunto.setCustomValidity('');
+    aplicarErroCampo(campoAssunto, erroAssuntoEl, validarAssunto());
+  });
+
+  campoAssunto?.addEventListener('blur', () => {
+    aplicarErroCampo(campoAssunto, erroAssuntoEl, validarAssunto());
   });
 
   if (editor && areaEditor) {
@@ -173,6 +192,7 @@
       areaEditor.focus();
       document.execCommand(botao.dataset.comandoEditor, false, null);
       sincronizarEditorRico();
+      aplicarErroCampo(areaEditor, erroMensagemEl, validarMensagem());
     });
 
     document.addEventListener('selectionchange', () => {
@@ -183,9 +203,15 @@
 
     ['input', 'keyup', 'mouseup'].forEach(tipoEvento => {
       areaEditor.addEventListener(tipoEvento, () => {
-        areaEditor.removeAttribute('aria-invalid');
         sincronizarEditorRico();
+        if (tipoEvento === 'input') {
+          aplicarErroCampo(areaEditor, erroMensagemEl, validarMensagem());
+        }
       });
+    });
+
+    areaEditor.addEventListener('blur', () => {
+      aplicarErroCampo(areaEditor, erroMensagemEl, validarMensagem());
     });
 
     atualizarContadorMensagem();
@@ -199,9 +225,9 @@
     const erroAssunto = validarAssunto();
     const erroMensagem = validarMensagem();
 
-    if (campoEmail) campoEmail.toggleAttribute('aria-invalid', Boolean(erroEmail));
-    if (campoAssunto) campoAssunto.toggleAttribute('aria-invalid', Boolean(erroAssunto));
-    if (areaEditor) areaEditor.toggleAttribute('aria-invalid', Boolean(erroMensagem));
+    aplicarErroCampo(campoEmail, erroEmailEl, erroEmail);
+    aplicarErroCampo(campoAssunto, erroAssuntoEl, erroAssunto);
+    aplicarErroCampo(areaEditor, erroMensagemEl, erroMensagem);
 
     const primeiroErro = [
       [campoEmail, erroEmail],
@@ -220,9 +246,11 @@
     const assunto = campoAssunto?.value.trim() || '';
 
     formulario.reset();
+    aplicarErroCampo(campoEmail, erroEmailEl, '');
+    aplicarErroCampo(campoAssunto, erroAssuntoEl, '');
     if (areaEditor) {
       areaEditor.innerHTML = '';
-      areaEditor.removeAttribute('aria-invalid');
+      aplicarErroCampo(areaEditor, erroMensagemEl, '');
       sincronizarEditorRico();
     }
 

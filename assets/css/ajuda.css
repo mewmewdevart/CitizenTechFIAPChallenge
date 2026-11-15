@@ -127,9 +127,33 @@
   color: var(--cor-texto-principal);
 }
 
+.ajuda__campo,
 .ajuda__campo-editor {
   display: grid;
   gap: 6px;
+}
+
+.ajuda__formulario input[aria-invalid="true"] {
+  border-color: var(--cor-aviso-alerta-escuro);
+}
+
+.ajuda__erro {
+  margin: 0;
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  color: var(--cor-aviso-alerta-escuro);
+}
+
+.ajuda__erro:empty {
+  display: none;
+}
+
+.ajuda__rodape-campo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-xs) var(--espaco-md);
 }
 
 .ajuda__editor-rico {
@@ -229,6 +253,7 @@
 }
 
 .ajuda__contador {
+  margin-left: auto;
   font-size: var(--texto-legenda);
   color: var(--cor-texto-secundario);
   text-align: right;
