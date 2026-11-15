@@ -15,10 +15,12 @@
 
   const lista = pagina.querySelector('[data-documentos-lista]');
   const campoBusca = pagina.querySelector('[data-documentos-busca]');
+  const filtrosCategoria = pagina.querySelectorAll('[data-documentos-filtro]');
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const dialogoDetalhes = document.getElementById('dialogo-detalhes-documento');
   const dialogoAdicionar = document.getElementById('dialogo-adicionar-documento');
   let documentoEmFocoId = null;
+  let categoriaAtiva = 'Todos';
 
   const ICONES_CATEGORIA = {
     Receita: 'icone-receita.svg',
@@ -36,13 +38,17 @@
     const docs = [...(obterEstado().documents || [])]
       .sort((a, b) => (b.dia || '').localeCompare(a.dia || ''))
       .filter(doc => {
+        if (categoriaAtiva !== 'Todos' && doc.categoria !== categoriaAtiva) return false;
         if (!termo) return true;
         const texto = `${doc.titulo} ${doc.categoria} ${doc.autor} ${doc.vinculo} ${doc.observacoes}`.toLowerCase();
         return texto.includes(termo);
       });
 
     if (!docs.length) {
-      lista.innerHTML = `<p class="documentos__vazio">${termo ? 'Nenhum documento encontrado para essa pesquisa.' : 'Nenhum documento cadastrado ainda.'}</p>`;
+      const textoVazio = termo || categoriaAtiva !== 'Todos'
+        ? 'Nenhum documento encontrado para os filtros aplicados.'
+        : 'Nenhum documento cadastrado ainda.';
+      lista.innerHTML = `<div class="estado-vazio"><strong>Sem resultados</strong><p>${textoVazio}</p></div>`;
       return;
     }
 
@@ -70,8 +76,8 @@
     if (!doc || !dialogoDetalhes || !dl) return;
 
     documentoEmFocoId = doc.id;
+    dialogoDetalhes.querySelector('#titulo-detalhes-documento').textContent = doc.titulo;
     dl.innerHTML = `
-      <div><dt>Documento</dt><dd>${escaparHtml(doc.titulo)}</dd></div>
       <div><dt>Categoria</dt><dd>${escaparHtml(doc.categoria)}</dd></div>
       <div><dt>Data</dt><dd>${escaparHtml(doc.dia ? formatarDataCurta(doc.dia, true) : 'Não informada')}</dd></div>
       <div><dt>Adicionado por</dt><dd>${escaparHtml(doc.autor || 'Não informado')}</dd></div>
@@ -83,6 +89,16 @@
   };
 
   campoBusca?.addEventListener('input', renderizar);
+
+  filtrosCategoria.forEach(botao => {
+    botao.addEventListener('click', () => {
+      categoriaAtiva = botao.dataset.documentosFiltro || 'Todos';
+      filtrosCategoria.forEach(item => {
+        item.setAttribute('aria-pressed', String(item === botao));
+      });
+      renderizar();
+    });
+  });
 
   pagina.addEventListener('click', evento => {
     const botao = evento.target.closest('button');

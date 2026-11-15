@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
 
 <head>
@@ -181,14 +181,21 @@
           <input id="pesquisa-documentos" type="search" placeholder="Nome do arquivo ou assunto" data-documentos-busca>
         </div>
       </div>
+      <div class="documentos__filtros" role="group" aria-label="Filtrar por categoria">
+        <button type="button" class="documentos__filtro" data-documentos-filtro="Todos" aria-pressed="true">Todos</button>
+        <button type="button" class="documentos__filtro" data-documentos-filtro="Receita" aria-pressed="false">Receitas</button>
+        <button type="button" class="documentos__filtro" data-documentos-filtro="Exame" aria-pressed="false">Exames</button>
+        <button type="button" class="documentos__filtro" data-documentos-filtro="Documento" aria-pressed="false">Documentos</button>
+      </div>
       <div class="documentos__lista" data-documentos-lista></div>
     </section>
 
     <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-adicionar-documento">Adicionar documento</h2>
+        <h2 id="titulo-adicionar-documento">Adicionar documento da Mari</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
+      <p>Relacione o documento ao atendimento para manter o histórico organizado.</p>
       <form class="formulario-mvp" data-formulario-mvp="documento">
         <label>Título<input type="text" name="titulo" placeholder="Ex.: Receita de losartana" required></label>
         <label>Categoria
@@ -198,11 +205,17 @@
             <option value="Documento">Documento</option>
           </select>
         </label>
-        <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
-        <label>Adicionado por<input type="text" name="autor" value="Zé da Manga" required></label>
+        <div class="formulario-mvp__grade">
+          <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
+          <label>Adicionado por<input type="text" name="autor" value="Zé da Manga" required></label>
+        </div>
         <label>Vínculo ou assunto<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
         <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
-        <label>Arquivo (opcional)<input type="file" name="arquivo"></label>
+        <label class="documentos__arquivo">
+          Arquivo (opcional)
+          <input type="file" name="arquivo" aria-describedby="ajuda-arquivo-documento">
+          <small id="ajuda-arquivo-documento">O cadastro guarda o nome do arquivo.</small>
+        </label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario">Salvar documento</button>
@@ -210,12 +223,12 @@
       </form>
     </dialog>
 
-    <dialog class="dialogo-mvp" id="dialogo-detalhes-documento" aria-labelledby="titulo-detalhes-documento">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhes-documento" aria-labelledby="titulo-detalhes-documento">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-detalhes-documento">Detalhes do documento</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <dl data-detalhes-documento></dl>
+      <dl class="dialogo-mvp__dados" data-detalhes-documento></dl>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-documento>Excluir</button>
         <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
