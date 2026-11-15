@@ -536,7 +536,7 @@ dialog::backdrop {
   background: var(--cor-backdrop);
 }
 
-dialog input:not([hidden]) {
+dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
   display: block;
   width: 100%;
   padding: 10px;

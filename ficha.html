@@ -60,6 +60,7 @@
   <link rel="stylesheet" href="assets/css/ficha.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
   <script src="assets/js/mvp-telas.js" defer></script>
 </head>
 
@@ -167,7 +168,7 @@
     <header class="ficha__cabecalho">
       <div>
         <h1>Ficha da pessoa acompanhada</h1>
-        <p>Consulte os dados de cuidado da Mari e prepare o resumo para a equipe de saúde.</p>
+        <p>Consulte e atualize os dados da Mari para compartilhar com a família, cuidadores e equipe de saúde.</p>
       </div>
       <div class="ficha__acoes"><button type="button" class="botao botao--secundario"
           data-dialogo="dialogo-compartilhar-resumo"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
@@ -185,10 +186,10 @@
         <h2 data-pessoa-nome>Maria das Dores (Mari)</h2>
         <p data-pessoa-nascimento>79 anos · 18 de maio de 1947</p><small>Dados fictícios</small>
       </div>
-      <div class="ficha__aviso-alergia"><img class="ficha__alerta-mascote"
+      <div class="ficha__aviso-alergia" data-aviso-alergia><img class="ficha__alerta-mascote"
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt=""><strong><i
-            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à dipirona</strong>
-        <p>Não administrar. Em caso de dor, consultar o responsável antes.</p>
+            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo>Alergia à dipirona</span></strong>
+        <p data-aviso-alergia-texto>Não administrar. Em caso de dor, consultar o responsável antes.</p>
       </div>
     </section>
     <div class="ficha__grade">
@@ -208,7 +209,7 @@
           </div>
           <div>
             <dt>Medicamentos de uso diário</dt>
-            <dd><span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
+            <dd data-pessoa-campo="medicamentos"><span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
                 08h</span> <span
                 class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Metformina · 08h e
                 20h</span></dd>
@@ -226,22 +227,22 @@
           <h2>Consultas e exames</h2><button type="button" class="botao botao--secundario"
             data-dialogo="dialogo-exames">Ver todos</button>
         </div>
-        <dl>
+        <dl data-consultas-resumo>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
             <dt>Hoje · Consulta na UBS às 14h</dt>
             <dd>Ana da Silva (Aninha) acompanha · 1 anexo</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
-            <dt>Consulta agendada · 18 nov.</dt>
+            <dt>Consulta agendada · 18 de nov. de 2026</dt>
             <dd>Geriatria · 14h · Ana da Silva (Aninha) acompanha</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-exame.svg">
-            <dt>Exame agendado</dt>
-            <dd>Hemoglobina glicada · 21 nov 2026, 08h · Coleta · UBS do bairro </dd>
+            <dt>Exame agendado · 21 de nov. de 2026</dt>
+            <dd>Hemoglobina glicada · 08h · Coleta na UBS do bairro</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
-            <dt>Exame cadastrado</dt>
-            <dd><a href="documentos.html">Hemograma · 4 nov. 2026 · 1 anexo</a></dd>
+            <dt>Exame cadastrado · 4 de nov. de 2026</dt>
+            <dd><a href="documentos.html">Hemograma · 1 anexo</a></dd>
           </div>
         </dl>
       </section>
@@ -273,7 +274,7 @@
             <dd><span data-pessoa-campo="convenio">Convênio Vida Plena · Plano Familiar (fictício)</span></dd>
           </div>
           <div>
-            <dt>Número da carteira do convênio</dt>
+            <dt>Carteirinha do convênio</dt>
             <dd><span data-pessoa-campo="carteira">•••• •••• •••• 2048</span></dd><button
               class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="carteira"
               aria-pressed="false" aria-label="Mostrar carteirinha"><img alt=""
@@ -299,15 +300,15 @@
         <h2>Rede de apoio</h2>
         <dl>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-espeto.svg">
-            <dt>Contato de referência</dt>
+            <dt>Contato principal</dt>
             <dd data-pessoa-campo="referencia">Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-pingo.svg">
-            <dt>Contato alternativo</dt>
+            <dt>Contato secundário</dt>
             <dd data-pessoa-campo="alternativo">Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193</dd>
           </div>
           <div>
-            <dt>Cobertura de cuidado necessária</dt>
+            <dt>Necessidade de acompanhamento</dt>
             <dd><span class="ficha__etiqueta ficha__etiqueta--alerta" data-pessoa-campo="cobertura">24 horas por
                 dia</span></dd>
           </div>
@@ -322,7 +323,7 @@
     <section class="cartao ficha__cartao" id="diario">
       <div class="ficha__diario-cabecalho">
         <h2>Diário de turno</h2>
-        <p>Leia o que aconteceu durante o cuidado: relatos do turno, observações e recados para quem assume depois.</p>
+        <p>Acompanhe os registros de cada turno: como a Mari passou, observações e recados para quem assume o próximo horário.</p>
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-relato"><i class="fa-solid fa-plus"
             aria-hidden="true"></i> Registrar relato</button>
       </div>
@@ -355,19 +356,20 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Selecione o que deseja incluir.</p>
+      <p>Escolha quais informações da ficha deseja enviar para a equipe de saúde ou familiares.</p>
       <fieldset class="dialogo-mvp__opcoes">
-        <legend>Campos da mensagem</legend><label><input type="checkbox" value="Consultas e exames" checked> Consultas e
+        <legend>Incluir no resumo</legend><label><input type="checkbox" value="Consultas e exames" checked> Consultas e
           exames</label><label><input type="checkbox" value="Informações de saúde"> Informações de
           saúde</label><label><input type="checkbox" value="Medicamentos de uso diário"> Medicamentos de uso
           diário</label>
       </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Prévia da mensagem<textarea data-previa-compartilhar
-          readonly rows="5"></textarea></label>
-      <div class="ficha__acoes"><button class="botao botao--secundario" type="button"
-          data-compartilhar="copy">Copiar</button><button class="botao botao--primario" type="button"
-          data-compartilhar="native">Compartilhar</button><button class="botao botao--secundario" type="button"
-          data-compartilhar="whatsapp">WhatsApp</button><button class="botao botao--secundario" type="button"
-          data-compartilhar="email">E-mail</button></div>
+          readonly rows="6"></textarea></label>
+      <p class="dialogo-mvp__retorno" data-retorno-compartilhar role="status" aria-live="polite"></p>
+      <div class="dialogo-mvp__acoes"><button class="botao botao--secundario" type="button"
+          data-compartilhar="copy"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button><button class="botao botao--secundario" type="button"
+          data-compartilhar="whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</button><button class="botao botao--secundario" type="button"
+          data-compartilhar="email"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button><button class="botao botao--primario" type="button"
+          data-compartilhar="native"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar</button></div>
       <p role="status" data-status-compartilhar></p>
     </dialog>
     <dialog class="dialogo-mvp" id="dialogo-impressao" aria-labelledby="titulo-impressao">
@@ -377,23 +379,13 @@
               aria-hidden="true"></i></button></form>
       </div>
       <div class="dialogo-mvp__impressao">
-        <h3 data-pessoa-nome>Pessoa acompanhada</h3>
-        <dl>
-          <div>
-            <dt>Informações de saúde</dt>
-            <dd>Alergias registradas</dd>
-          </div>
-          <div>
-            <dt>Hipertensão arterial</dt>
-            <dd>Medicamentos de uso diário · Losartana · 08h</dd>
-          </div>
-          <div>
-            <dt>Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.
-              Histórico de trombose venosa profunda (2022).</dt>
-            <dd>Ver todos · Hoje · Consulta na UBS às 14h</dd>
-          </div>
-        </dl>
-      </div><button class="botao botao--primario" type="button" data-mvp-imprimir>Imprimir resumo</button>
+        <h3 data-pessoa-nome>Maria das Dores (Mari)</h3>
+        <dl data-impressao-lista></dl>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button class="botao botao--secundario" type="button" data-fechar-dialogo>Fechar</button>
+        <button class="botao botao--primario" type="button" data-mvp-imprimir>Imprimir resumo</button>
+      </div>
     </dialog>
     <dialog class="dialogo-mvp dialogo-mvp--largo" id="dialogo-editar-ficha" aria-labelledby="titulo-editar-ficha"
       aria-describedby="subtitulo-editar-ficha">
@@ -533,6 +525,8 @@
                 <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar condição de saúde" />
               </div>
             </div>
+            <label class="editar-ficha__campo--largo">Medicamentos de uso diário<input type="text" name="medicamentos"
+                value="Losartana · 08h, Metformina · 08h e 20h" /></label>
             <div class="editar-ficha__campo--largo">
               <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e histórico de saúde</span>
               <input type="hidden" name="historicoSaude"
@@ -575,12 +569,12 @@
               </span>
             </label>
             <label>Contato de referência<input type="text" name="referencia"
-                value="Ana da Silva (Aninha) · Filha · (11) 9XXXX-0186" /></label>
+                value="Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186" /></label>
             <label>Contato alternativo<input type="text" name="alternativo"
-                value="Paulo da Silva (Paul) · Neto · (11) 9XXXX-0193" /></label>
+                value="Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193" /></label>
             <label>Cobertura de cuidado<input type="text" name="cobertura" value="24 horas por dia" /></label>
             <label>Preferências de cuidado<input type="text" name="preferencias"
-                value="Prefere consultas à tarde" /></label>
+                value="Prefere consultas à tarde e gosta de conferir a agenda com a família." /></label>
           </div>
         </section>
 
@@ -596,11 +590,22 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <form class="formulario-mvp" data-formulario-mvp="relato"><label>Data<input type="date" name="dia"
-            value="2026-11-10" required></label><label>Relato do turno<textarea required name="relato"
-            rows="4"></textarea></label><label>Recado para o próximo turno<textarea name="recado"
-            rows="3"></textarea></label>
-        <div class="ficha__acoes"><button class="botao botao--primario">Salvar relato</button></div>
+      <form class="formulario-mvp" data-formulario-mvp="relato">
+        <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
+        <label>Turno
+          <select name="turno">
+            <option value="Turno 00h–07h">00h–07h</option>
+            <option value="Turno 07h–12h">07h–12h</option>
+            <option value="Turno 13h–19h">13h–19h</option>
+            <option value="Turno 19h–24h" selected>19h–24h</option>
+          </select>
+        </label>
+        <label>Relato do turno<textarea required name="relato" rows="4"></textarea></label>
+        <label>Recado para o próximo turno<textarea name="recado" rows="3"></textarea></label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Salvar relato</button>
+        </div>
       </form>
     </dialog>
     <dialog class="dialogo-mvp" id="dialogo-exames" aria-labelledby="titulo-exames">
@@ -609,10 +614,11 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>10 nov. · 14h · Consulta na UBS</p>
-      <p>18 nov. · 14h · Geriatria</p>
-      <p>21 nov. · 08h · Hemoglobina glicada</p>
-      <p>4 nov. · Hemograma</p><a href="agenda.html">Abrir Agenda</a>
+      <div data-lista-exames></div>
+      <div class="dialogo-mvp__acoes">
+        <button class="botao botao--secundario" type="button" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="agenda.html">Abrir Agenda</a>
+      </div>
     </dialog>
     <p role="status" class="ficha__status-geral" data-mvp-status></p>
   </main>

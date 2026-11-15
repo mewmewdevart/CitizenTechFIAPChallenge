@@ -277,7 +277,7 @@
   text-align: left;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: var(--borda-padrao);
+  border: 1px solid var(--cor-borda-controle);
   border-radius: var(--raio-md);
   cursor: pointer;
 }
@@ -324,6 +324,70 @@
   color: var(--cor-aviso-atencao-escuro);
 }
 
+.agenda__etiqueta--troca {
+  background: var(--cor-aviso-info-claro);
+  color: var(--cor-aviso-info-escuro);
+}
+
+.agenda__tarefa--concluida .agenda__etiqueta {
+  margin-top: var(--espaco-xs);
+}
+
+.agenda__turno-acoes {
+  flex: none;
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espaco-sm);
+}
+
+.agenda__detalhes-lista > div {
+  padding: var(--espaco-sm) 0;
+  border-bottom: var(--borda-padrao);
+}
+
+.agenda__detalhes-lista dt {
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  color: var(--cor-texto-secundario);
+}
+
+.agenda__detalhes-lista dd {
+  margin: 2px 0 0;
+  color: var(--cor-texto-principal);
+}
+
+.agenda__grade-horarios {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-md);
+}
+
+.agenda__grade-horarios[hidden] {
+  display: none;
+}
+
+.agenda__previa-turno {
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie-suave);
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  color: var(--cor-primaria);
+}
+
+.botao--perigo {
+  background: var(--cor-aviso-alerta-claro);
+  border-color: var(--cor-aviso-alerta-escuro);
+  color: var(--cor-aviso-alerta-escuro);
+}
+
+.botao--perigo:hover {
+  filter: brightness(0.96);
+}
+
 [data-turnos] {
   margin-top: var(--espaco-md);
   background: #F9F9F9;
@@ -349,9 +413,14 @@ html.acessibilidade--alto-contraste [data-turnos] {
   border-bottom: 0;
 }
 
-.agenda__turno > div {
+.agenda__turno > div:not(.agenda__turno-acoes) {
   flex: 1;
   min-width: 0;
+}
+
+.agenda__descobertos .agenda__etiqueta {
+  min-width: 104px;
+  flex: none;
 }
 
 .agenda__descobertos > h2 {
@@ -439,12 +508,6 @@ html.acessibilidade--alto-contraste [data-turnos] {
   }
 }
 
-@media (max-width: 1023px) {
-  .agenda {
-    padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-lg)) var(--espaco-lg) var(--espaco-xl);
-  }
-}
-
 @media (max-width: 900px) {
   .agenda__visao-geral,
   .agenda__inferior {
@@ -480,14 +543,16 @@ html.acessibilidade--alto-contraste [data-turnos] {
     flex-wrap: wrap;
   }
 
-  .agenda__turno .botao {
+  .agenda__turno .agenda__turno-acoes {
     margin-left: 52px;
   }
 }
 
 @media (max-width: 600px) {
-  .agenda__acoes {
+  .agenda__acoes,
+  .agenda__turno .agenda__turno-acoes {
     width: 100%;
+    margin-left: 0;
   }
 
   .agenda__acoes .botao,
@@ -507,6 +572,10 @@ html.acessibilidade--alto-contraste [data-turnos] {
 @media (max-width: 480px) {
   .agenda__semana {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agenda__grade-horarios {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
