@@ -114,12 +114,30 @@ body.menu-fechado .conteudo-pagina.agenda {
 }
 
 .agenda__legenda-selecionado,
+.agenda__legenda-evento,
+.agenda__legenda-alerta {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--raio-pill);
+  font-size: 0.75rem;
+  flex: none;
+}
+
+.agenda__legenda-selecionado,
 .agenda__legenda-evento {
   color: var(--cor-primaria);
+  background: var(--cor-superficie-suave);
+}
+
+.agenda__legenda-evento {
+  font-size: 0.5625rem;
 }
 
 .agenda__legenda-alerta {
   color: var(--cor-aviso-alerta-escuro);
+  background: var(--cor-aviso-alerta-claro);
 }
 
 .agenda__tarefas {

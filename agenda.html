@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR">
 
 <head>
@@ -191,9 +191,9 @@
             </div>
           </div>
           <div class="agenda__legenda">
-            <p><span class="agenda__legenda-selecionado" aria-hidden="true">□</span> Dia selecionado</p>
-            <p><span class="agenda__legenda-evento" aria-hidden="true">●</span> Dia com consulta ou exame</p>
-            <p><span class="agenda__legenda-alerta" aria-hidden="true">▲</span> Dia com horário sem cobertura</p>
+            <p><span class="agenda__legenda-selecionado" aria-hidden="true"><i class="fa-regular fa-square"></i></span> Dia selecionado</p>
+            <p><span class="agenda__legenda-evento" aria-hidden="true"><i class="fa-solid fa-circle"></i></span> Dia com consulta ou exame</p>
+            <p><span class="agenda__legenda-alerta" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span> Dia com horário sem cobertura</p>
           </div>
         </div>
 
@@ -246,7 +246,7 @@
       </section>
     </div>
 
-    <dialog class="dialogo-mvp" id="dialogo-compartilhar-agenda" aria-labelledby="titulo-compartilhar-agenda">
+    <dialog class="dialogo-mvp dialogo-mvp--compartilhar" id="dialogo-compartilhar-agenda" aria-labelledby="titulo-compartilhar-agenda">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-compartilhar-agenda">Compartilhar agenda</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
@@ -275,7 +275,7 @@
       <p role="status" data-status-compartilhar></p>
     </dialog>
 
-    <dialog class="dialogo-mvp" id="dialogo-exportar-agenda" aria-labelledby="titulo-exportar-agenda">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-exportar-agenda" aria-labelledby="titulo-exportar-agenda">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-exportar-agenda">Exportar agenda</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
@@ -311,7 +311,7 @@
         <h2 id="titulo-cobrir-horario">Cobrir horário</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <p data-contexto-turno></p>
+      <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="cobertura">
         <div class="dialogo-mvp__opcoes">
           <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Cobrir todo o horário disponível</label>
@@ -333,7 +333,7 @@
         <h2 id="titulo-editar-cobertura">Editar cobertura de turno</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <p data-contexto-turno></p>
+      <p class="dialogo-mvp__contexto" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="editar-cobertura">
         <div class="agenda__grade-horarios">
           <label>Horário de entrada<select name="inicio" required></select></label>
@@ -353,7 +353,7 @@
         <h2 id="titulo-detalhes-compromisso">Detalhes do compromisso</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <dl class="agenda__detalhes-lista" data-detalhes-compromisso></dl>
+      <dl class="agenda__detalhes-lista dialogo-mvp__dados" data-detalhes-compromisso></dl>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-compromisso>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-compromisso>Editar</button>
@@ -361,12 +361,12 @@
       </div>
     </dialog>
 
-    <dialog class="dialogo-mvp" id="dialogo-tarefa-ubs" aria-labelledby="titulo-tarefa-ubs">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-tarefa-ubs" aria-labelledby="titulo-tarefa-ubs">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-tarefa-ubs">Retirar medicamento na UBS</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <p>Retirar o medicamento prescrito na UBS após a consulta das 14h. Responsável: Ana da Silva (Aninha).</p>
+      <p class="dialogo-mvp__contexto">Retirar o medicamento prescrito na UBS após a consulta das 14h. Responsável: Ana da Silva (Aninha).</p>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
         <a class="botao botao--primario" href="documentos.html">Ver receita em Documentos</a>
