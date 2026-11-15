@@ -154,6 +154,7 @@ const itensPesquisaveis = [
   ...linksMenu.map(link => ({ href: link.getAttribute('href'), rotulo: link.textContent.trim() })),
   { href: 'meu-perfil.html', rotulo: 'Meu perfil' },
   { href: 'configuracoes.html', rotulo: 'Configurações' },
+  { href: 'privacidade.html', rotulo: 'Política de Privacidade e Termos' },
   { href: 'ficha.html', rotulo: 'Ficha da pessoa acompanhada · Maria das Dores (Mari)' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 

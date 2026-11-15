@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Principal -->
+  <title>Mutirão | Política de Privacidade e Termos de Uso</title>
+  <meta name="description"
+    content="Saiba como o Mutirão protege a privacidade dos dados, utiliza armazenamento local para acessibilidade e trata informações de cuidado." />
+  <meta name="robots" content="index, follow" />
+  <meta name="application-name" content="Mutirão" />
+  <meta name="author"
+    content="Grupo Ctrl + People — Ingrid Silva de Lima, Larissa Cristina Benedito e Mayla Mayumi Motobe" />
+  <meta name="theme-color" content="#8495E1" />
+
+  <!-- Open Graph / Compartilhamento Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Mutirão" />
+  <meta property="og:title" content="Mutirão | Política de Privacidade e Termos de Uso" />
+  <meta property="og:description"
+    content="Saiba como o Mutirão protege a privacidade dos dados, utiliza armazenamento local para acessibilidade e trata informações de cuidado." />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mutirão | Política de Privacidade e Termos de Uso" />
+  <meta name="twitter:description"
+    content="Saiba como o Mutirão protege a privacidade dos dados, utiliza armazenamento local para acessibilidade e trata informações de cuidado." />
+
+  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/privacidade.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/privacidade.html" />
+  <meta property="og:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+  <meta name="twitter:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+
+  <!-- Favicons e Web App Manifest -->
+  <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/media/favicon_io/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/media/favicon_io/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicon_io/apple-touch-icon.png" />
+  <link rel="manifest" href="assets/media/favicon_io/site.webmanifest" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  </noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/variaveis.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/acessibilidade.js" defer></script>
+</head>
+
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+  <header class="barra-topo">
+    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+      aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <details class="seletor-pessoa">
+      <summary>Maria das Dores (Mari)</summary>
+      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
+    </details>
+    <div class="barra-topo__acoes">
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <details class="menu-notificacoes">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
+          <i class="fa-regular fa-bell" aria-hidden="true"></i>
+        </summary>
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
+          <header class="menu-notificacoes__cabecalho">
+            <div>
+              <h2 id="titulo-alertas">Notificações</h2>
+            </div>
+          </header>
+          <ul class="menu-notificacoes__lista">
+            <li class="notificacao notificacao--alerta">
+              <a class="notificacao__link" href="agenda.html">
+                <div>
+                  <h3>Horário sem cobertura</h3>
+                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li class="notificacao">
+              <a class="notificacao__link" href="ficha.html#diario">
+                <div>
+                  <h3>Pedido para agendar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li class="notificacao">
+              <a class="notificacao__link" href="medicamentos.html">
+                <div>
+                  <h3>Próxima medicação</h3>
+                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </details>
+      <details class="menu-perfil">
+        <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
+            alt=""><span><strong>Zé da
+              Manga · Neto</strong><small>Administrador</small></span></summary>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+      </details>
+    </div>
+  </header>
+  <aside id="barra-lateral" class="barra-lateral">
+    <a class="barra-lateral__marca" href="index.html">
+      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <span>Mutirão</span>
+    </a>
+    <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
+      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
+      <span><strong>Zé da Manga</strong><small>Administrador · Meu perfil</small></span>
+      <span aria-hidden="true">›</span>
+    </a>
+    <nav aria-label="Menu principal">
+      <p>Rotina de cuidado</p>
+      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+      <a href="medicamentos.html"><i class="fa-solid fa-capsules" aria-hidden="true"></i>Medicamentos</a>
+      <p>Recursos de apoio</p>
+      <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
+      <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
+      <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
+    </nav>
+    <section class="cartao-status" aria-labelledby="titulo-status">
+      <h2 id="titulo-status">Status do cuidado</h2>
+      <h3>Turno atual</h3>
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+            (Bea)</strong><small>07h–12h</small></span></div>
+      <h3>Medicamentos</h3>
+      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="fa-solid fa-capsules" aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não administrada</small></span></div>
+    </section>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+  </aside>
+
+  <main class="conteudo-pagina apoio" id="conteudo">
+    <nav class="apoio__trilha" aria-label="Localização">
+      <a href="index.html">Início</a> <span aria-hidden="true">›</span> <a href="configuracoes.html">Configurações</a> <span aria-hidden="true">›</span> <span aria-current="page">Privacidade e Termos</span>
+    </nav>
+
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Política de Privacidade e Termos de Uso</h1>
+        <p>Transparência sobre proteção de dados, armazenamento local e uso responsável do Mutirão.</p>
+      </div>
+      <a class="botao botao--secundario" href="configuracoes.html">
+        <i class="fa-solid fa-gear" aria-hidden="true"></i> Voltar às configurações
+      </a>
+    </header>
+
+    <div class="apoio__aviso" role="status">
+      <i class="fa-solid fa-shield-halved apoio__aviso-icone" aria-hidden="true"></i>
+      <div>
+        <strong>Compromisso com a LGPD (Lei nº 13.709/2018)</strong>
+        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People. Não coletamos, vendemos ou compartilhamos dados pessoais ou de saúde com terceiros para fins comerciais.</p>
+      </div>
+    </div>
+
+    <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-dados">
+      <div class="privacidade__cabecalho-card">
+        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos e tratados</h2>
+        <span class="selo selo--info">Minimização de dados</span>
+      </div>
+      <p>As informações exibidas na rotina de cuidado (turnos, medicações, documentos e ficha da pessoa acompanhada) destinam-se exclusivamente à organização familiar e apoio ao cuidador.</p>
+      <ul class="privacidade__lista">
+        <li><strong>Dados de saúde e documentos:</strong> informações como CPF, Cartão SUS e histórico clínico devem ser acessadas apenas por integrantes autorizados da rede de cuidado.</li>
+        <li><strong>Formulário de Ajuda:</strong> orientamos que nenhuma dúvida enviada pelo suporte inclua diagnósticos, exames ou números de documentos pessoais.</li>
+      </ul>
+    </section>
+
+    <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-storage">
+      <div class="privacidade__cabecalho-card">
+        <h2 id="titulo-privacidade-storage"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> 2. Armazenamento local no navegador</h2>
+        <span class="selo selo--sucesso">Sem rastreadores</span>
+      </div>
+      <p>O Mutirão não utiliza cookies de publicidade ou rastreamento comportamental. O armazenamento no seu dispositivo ocorre apenas para melhorar a experiência de uso:</p>
+      <ul class="privacidade__lista">
+        <li><strong>Acessibilidade (<code>localStorage</code>):</strong> salva exclusivamente suas preferências assistivas (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave <code>mutirao-acessibilidade-preferencias</code>.</li>
+        <li><strong>Estado da interface (<code>sessionStorage</code>):</strong> guarda apenas se o menu lateral está aberto ou recolhido durante a navegação atual.</li>
+        <li><strong>Dados de sessão:</strong> respostas do verificador de direitos, alterações de configurações e envios do formulário permanecem apenas em memória nesta sessão e não são gravados em banco externo.</li>
+      </ul>
+    </section>
+
+    <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-apis">
+      <div class="privacidade__cabecalho-card">
+        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas externas opcionais</h2>
+        <span class="selo selo--neutro">Sob demanda</span>
+      </div>
+      <p>Na página <a href="direitos.html">Direitos e serviços</a>, caso você opte por buscar unidades públicas por CEP ou cidade/UF, o navegador realiza requisições diretas às APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong> apenas para identificar o município informado e exibir links oficiais do SUS, CRAS e Farmácia Popular.</p>
+    </section>
+
+    <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-termos-uso">
+      <div class="privacidade__cabecalho-card">
+        <h2 id="titulo-termos-uso"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> 4. Termos de uso e caráter informativo</h2>
+        <span class="selo selo--atencao">Uso orientativo</span>
+      </div>
+      <ul class="privacidade__lista">
+        <li><strong>Orientação sobre benefícios e saúde:</strong> os resultados do verificador de direitos e lembretes de medicação têm caráter exclusivamente informativo e de apoio à rotina, não substituindo avaliação médica nem atendimento oficial do SUS, INSS ou CRAS.</li>
+        <li><strong>Responsabilidade da rede:</strong> administradores da rede de cuidado devem zelar pela atualização de contatos, alergias e permissões de acesso antes de convidar novos integrantes.</li>
+      </ul>
+    </section>
+
+    <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-contato">
+      <div class="privacidade__cabecalho-card">
+        <h2 id="titulo-privacidade-contato"><i class="fa-regular fa-envelope" aria-hidden="true"></i> 5. Dúvidas ou solicitações</h2>
+      </div>
+      <p>Caso tenha dúvidas sobre esta Política de Privacidade ou precise de apoio para ajustar suas preferências, fale com nossa equipe pela Central de Ajuda ou revise suas permissões em Configurações.</p>
+      <div class="privacidade__acoes">
+        <a class="botao botao--primario" href="ajuda.html#formulario-ajuda">
+          <i class="fa-regular fa-comment-dots" aria-hidden="true"></i> Enviar mensagem na Ajuda
+        </a>
+        <a class="botao botao--secundario" href="configuracoes.html">
+          <i class="fa-solid fa-sliders" aria-hidden="true"></i> Gerenciar configurações
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <nav class="barra-inferior" aria-label="Atalhos principais">
+    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+    <a href="medicamentos.html"><i class="fa-solid fa-capsules" aria-hidden="true"></i>Medicamentos</a>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
+        aria-hidden="true"></i>Mais</button>
+  </nav>
+  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
+    <form method="dialog">
+      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+        type="search">
+      <p id="status-busca" role="status"></p>
+      <ul id="resultados-busca"></ul><button>Fechar</button>
+    </form>
+  </dialog>
+</body>
+
+</html>
