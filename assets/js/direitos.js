@@ -39,7 +39,9 @@
     renda: null,
     aposentadoriaIncapacidade: null,
     assistencia: null,
-    cadunico: null
+    cadunico: null,
+    saudeEspecializada: null,
+    tratamentoFora: null
   };
 
   const passoTemResposta = indice => {
@@ -66,6 +68,7 @@
     etapas.forEach(etapa => {
       etapa.hidden = etapa.dataset.etapa !== nome;
     });
+    pagina.querySelector('[data-simulador-painel]')?.classList.toggle('direitos-banner', nome === 'inicial');
   };
 
   const atualizarPasso = (indice, moverFoco = false) => {
@@ -103,6 +106,9 @@
     const bpcElegivel = idosa65 && rendaAteUmQuarto && respostas.aposentadoriaIncapacidade !== 'sim';
     const acrescimoElegivel = respostas.aposentadoriaIncapacidade === 'sim' && respostas.assistencia === 'integral';
     const tarifaElegivel = rendaAteMeio || bpcElegivel;
+    const ceafElegivel = respostas.saudeEspecializada === 'sim' || respostas.saudeEspecializada === 'nao-sei';
+    const reabilitacaoElegivel = respostas.saudeEspecializada === 'sim';
+    const tfdElegivel = respostas.tratamentoFora === 'sim' || respostas.tratamentoFora === 'nao-sei';
 
     return [
       {
@@ -113,7 +119,21 @@
           : 'Medicamentos gratuitos para hipertensão, diabetes e asma com receita médica.',
         selo: 'Tem direito',
         classeSelo: 'selo--sucesso',
-        elegivel: true
+        elegivel: true,
+        link: 'https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular',
+        rotuloLink: 'Ver lista no gov.br'
+      },
+      {
+        titulo: 'Direito a acompanhante no SUS',
+        icone: 'fa-solid fa-user-group',
+        detalhe: idosa60
+          ? 'Garantido pelo Estatuto da Pessoa Idosa (60+) em internações ou observação hospitalar.'
+          : 'Previsto em lei para pessoas com 60 anos ou mais durante internação hospitalar.',
+        selo: idosa60 ? 'Tem direito' : 'A partir de 60+',
+        classeSelo: idosa60 ? 'selo--sucesso' : 'selo--neutro',
+        elegivel: idosa60,
+        link: 'https://www.planalto.gov.br/ccivil_03/leis/2003/l10.741.htm',
+        rotuloLink: 'Ler Lei nº 10.741'
       },
       {
         titulo: 'BPC / LOAS (1 salário mínimo/mês)',
@@ -127,7 +147,9 @@
             : 'Exige 65+ e renda familiar por pessoa de até R$ 405,25 (1/4 do salário mínimo).'),
         selo: bpcElegivel ? 'Pode ter direito' : 'Não se aplica',
         classeSelo: bpcElegivel ? 'selo--atencao' : 'selo--neutro',
-        elegivel: bpcElegivel
+        elegivel: bpcElegivel,
+        link: 'https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-ao-idoso',
+        rotuloLink: 'Solicitar no gov.br'
       },
       {
         titulo: 'Acréscimo de 25% na aposentadoria',
@@ -137,7 +159,9 @@
           : 'Exclusivo para quem recebe aposentadoria por incapacidade permanente e precisa de assistência contínua.',
         selo: acrescimoElegivel ? 'Pode ter direito' : 'Não se aplica',
         classeSelo: acrescimoElegivel ? 'selo--atencao' : 'selo--neutro',
-        elegivel: acrescimoElegivel
+        elegivel: acrescimoElegivel,
+        link: 'https://www.gov.br/pt-br/servicos/solicitar-acrescimo-de-25-por-cento-na-aposentadoria-por-incapacidade-permanente-aposentadoria-por-invalidez',
+        rotuloLink: 'Ver regras no gov.br'
       },
       {
         titulo: 'Tarifa Social de Energia Elétrica',
@@ -149,7 +173,9 @@
           : 'Voltada a famílias inscritas no CadÚnico com renda por pessoa de até R$ 810,50 (1/2 mínimo) ou BPC.',
         selo: tarifaElegivel ? (respostas.cadunico === 'em-dia' ? 'Tem direito' : 'Precisa CadÚnico') : 'Não se aplica',
         classeSelo: tarifaElegivel ? (respostas.cadunico === 'em-dia' ? 'selo--sucesso' : 'selo--info') : 'selo--neutro',
-        elegivel: tarifaElegivel
+        elegivel: tarifaElegivel,
+        link: 'https://www.gov.br/pt-br/servicos/inscrever-se-no-cadastro-unico-para-programas-sociais-do-governo-federal',
+        rotuloLink: 'Ver CadÚnico no gov.br'
       },
       {
         titulo: 'Melhor em Casa (Atenção domiciliar do SUS)',
@@ -159,16 +185,54 @@
           : 'Indicado quando há restrição ao leito ou necessidade de cuidados contínuos em casa.',
         selo: precisaAjuda ? 'Pode ter direito' : 'Não se aplica',
         classeSelo: precisaAjuda ? 'selo--atencao' : 'selo--neutro',
-        elegivel: precisaAjuda
+        elegivel: precisaAjuda,
+        link: 'https://www.gov.br/saude/pt-br/composicao/saes/melhor-em-casa',
+        rotuloLink: 'Conhecer programa'
+      },
+      {
+        titulo: 'Medicamentos especializados (CEAF)',
+        icone: 'fa-solid fa-prescription-bottle-medical',
+        detalhe: ceafElegivel
+          ? 'Atende condições previstas nos protocolos do SUS; confirme documentos e laudo na Secretaria de Saúde do estado.'
+          : 'Voltado a tratamentos contínuos de alto custo previstos nos protocolos clínicos do SUS.',
+        selo: ceafElegivel ? 'Pode ter direito' : 'Não se aplica',
+        classeSelo: ceafElegivel ? 'selo--atencao' : 'selo--neutro',
+        elegivel: ceafElegivel,
+        link: 'https://www.gov.br/saude/pt-br/composicao/sectics/daf/ceaf',
+        rotuloLink: 'Consultar regras CEAF'
+      },
+      {
+        titulo: 'Reabilitação e órteses/próteses no SUS',
+        icone: 'fa-solid fa-wheelchair',
+        detalhe: reabilitacaoElegivel
+          ? 'A rede do SUS oferece reabilitação e pode fornecer órteses, próteses e meios auxiliares após avaliação na UBS.'
+          : 'Disponível pelo SUS mediante avaliação clínica quando há necessidade de reabilitação ou apoio à mobilidade.',
+        selo: reabilitacaoElegivel ? 'Pode ter direito' : 'Não se aplica',
+        classeSelo: reabilitacaoElegivel ? 'selo--atencao' : 'selo--neutro',
+        elegivel: reabilitacaoElegivel,
+        link: 'https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-com-deficiencia',
+        rotuloLink: 'Ver rede no gov.br'
+      },
+      {
+        titulo: 'Tratamento Fora de Domicílio (TFD)',
+        icone: 'fa-solid fa-van-shuttle',
+        detalhe: tfdElegivel
+          ? 'Pode apoiar transporte e diárias para tratamento pelo SUS em outra cidade; consulte a Secretaria Municipal de Saúde.'
+          : 'Aplicável apenas quando o tratamento especializado pelo SUS não está disponível no município.',
+        selo: tfdElegivel ? 'Pode ter direito' : 'Não se aplica',
+        classeSelo: tfdElegivel ? 'selo--atencao' : 'selo--neutro',
+        elegivel: tfdElegivel,
+        link: 'https://wiki.saude.gov.br/regulacao/index.php/Tratamento_Fora_do_Domic%C3%ADlio_(TFD)',
+        rotuloLink: 'Consultar regras TFD'
       }
-    ];
+    ].sort((a, b) => Number(b.elegivel) - Number(a.elegivel));
   };
 
   const renderizarResultado = () => {
     const itens = calcularDireitos();
     const qtdElegiveis = itens.filter(i => i.elegivel).length;
     if (tituloResultado) {
-      tituloResultado.textContent = `A Mari pode ter acesso a ${qtdElegiveis} de ${itens.length} benefícios avaliados`;
+      tituloResultado.textContent = `A Mari pode ter acesso a ${qtdElegiveis} de ${itens.length} direitos e serviços avaliados`;
     }
     if (listaResultados) {
       listaResultados.innerHTML = itens.map(item => `
@@ -180,6 +244,7 @@
               <span class="selo ${item.classeSelo}">${escaparHtml(item.selo)}</span>
             </div>
             <p>${escaparHtml(item.detalhe)}</p>
+            <a class="botao botao--secundario botao--pequeno" href="${escaparHtml(item.link)}" target="_blank" rel="noopener noreferrer">${escaparHtml(item.rotuloLink)} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
           </div>
         </li>
       `).join('');
@@ -264,7 +329,6 @@
     const linkUbs = painelLocalidade.querySelector('[data-localidade-link-ubs]');
     const descCras = painelLocalidade.querySelector('[data-localidade-cras-desc]');
     const linkCras = painelLocalidade.querySelector('[data-localidade-link-cras]');
-    const CHAVE_LOCALIDADE = 'mutirao_localidade_direitos';
 
     const limparErroLocalidade = () => {
       if (erroLocalidade) {
@@ -306,11 +370,6 @@
       }
 
       blocoResultado.hidden = false;
-      try {
-        localStorage.setItem(CHAVE_LOCALIDADE, JSON.stringify({ cidade, uf, bairro, ibge }));
-      } catch {
-        // Ignora falha de armazenamento em modo privado
-      }
       anunciarStatus(elementoStatus, `Serviços públicos atualizados para ${tituloLocal}.`);
     };
 
@@ -350,17 +409,6 @@
         const estados = await resposta.json();
         selectUf.innerHTML = '<option value="">Selecione o estado...</option>' +
           estados.map(e => `<option value="${escaparHtml(e.sigla)}">${escaparHtml(e.nome)} (${escaparHtml(e.sigla)})</option>`).join('');
-
-        try {
-          const salvo = JSON.parse(localStorage.getItem(CHAVE_LOCALIDADE) || 'null');
-          if (salvo?.uf && salvo?.cidade) {
-            selectUf.value = salvo.uf;
-            await carregarMunicipios(salvo.uf, salvo.ibge);
-            exibirLocalidade(salvo);
-          }
-        } catch {
-          // Ignora estado salvo inválido
-        }
       } catch {
         selectUf.innerHTML = '<option value="">Indisponível no momento</option>';
       }

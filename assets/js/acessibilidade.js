@@ -1,5 +1,4 @@
 (() => {
-  const CHAVE_PREFERENCIAS = 'mutirao-acessibilidade-preferencias';
   const FONTE_MINIMA = 90;
   const FONTE_MAXIMA = 110;
   const PASSO_FONTE = 5;
@@ -20,29 +19,10 @@
   }
 
   function carregarPreferencias() {
-    try {
-      const salvo = localStorage.getItem(CHAVE_PREFERENCIAS);
-      if (!salvo) return { ...PADROES };
-      const dados = JSON.parse(salvo);
-      return {
-        escalaFonte: limitarEscalaFonte(dados?.escalaFonte),
-        altoContraste: Boolean(dados?.altoContraste),
-        destacarLinks: Boolean(dados?.destacarLinks),
-        reduzirAnimacoes: Boolean(dados?.reduzirAnimacoes),
-        espacamentoTexto: Boolean(dados?.espacamentoTexto)
-      };
-    } catch {
-      return { ...PADROES };
-    }
+    return { ...PADROES };
   }
 
-  function salvarPreferencias(preferencias) {
-    try {
-      localStorage.setItem(CHAVE_PREFERENCIAS, JSON.stringify(preferencias));
-    } catch {
-      // Ignora erro caso o navegador bloqueie storage local
-    }
-  }
+  function salvarPreferencias() {}
 
   let estado = carregarPreferencias();
 
