@@ -120,9 +120,112 @@
   font-size: var(--texto-interface);
 }
 
-.ajuda__formulario label {
+.ajuda__formulario label,
+.ajuda__rotulo-campo {
   font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
   color: var(--cor-texto-principal);
+}
+
+.ajuda__campo-editor {
+  display: grid;
+  gap: 6px;
+}
+
+.ajuda__editor-rico {
+  border: 1px solid var(--cor-borda-controle);
+  border-radius: var(--raio-lg);
+  background: var(--cor-superficie);
+  overflow: hidden;
+  transition: border-color var(--transicao-padrao);
+}
+
+.ajuda__editor-rico:focus-within {
+  border-color: var(--cor-primaria);
+}
+
+.ajuda__editor-rico:has([aria-invalid="true"]) {
+  border-color: var(--cor-aviso-alerta-escuro);
+}
+
+.ajuda__editor-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: var(--borda-padrao);
+  background: var(--cor-fundo-pagina);
+}
+
+.ajuda__editor-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--raio-sm);
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+}
+
+.ajuda__editor-botao:hover {
+  background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
+}
+
+.ajuda__editor-botao[aria-pressed="true"] {
+  background: var(--cor-superficie-suave);
+  border-color: var(--cor-borda-sutil);
+  color: var(--cor-primaria);
+}
+
+.ajuda__editor-area {
+  min-height: 120px;
+  padding: 10px var(--espaco-md);
+  font: inherit;
+  font-size: var(--texto-interface);
+  font-weight: var(--peso-regular);
+  line-height: 1.5;
+  color: var(--cor-texto-principal);
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+.ajuda__editor-area:empty::before {
+  content: attr(data-placeholder);
+  color: var(--cor-texto-secundario);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.ajuda__editor-area :is(ul, ol) {
+  margin: var(--espaco-xs) 0;
+  padding-left: 1.25rem;
+}
+
+.ajuda__editor-area ul {
+  list-style: disc;
+}
+
+.ajuda__editor-area ol {
+  list-style: decimal;
+}
+
+.ajuda__editor-area li + li {
+  margin-top: 2px;
+}
+
+.ajuda__editor-area :is(b, strong) {
+  font-weight: var(--peso-negrito);
+}
+
+.ajuda__editor-area u {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .ajuda__formulario input,

@@ -318,6 +318,25 @@
   display: none;
 }
 
+[data-mvp-status="erro"],
+[data-mvp-status="sucesso"] {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+}
+
+[data-mvp-status="erro"] {
+  border-color: var(--cor-aviso-alerta-escuro);
+  background: var(--cor-aviso-alerta-claro);
+  color: var(--cor-aviso-alerta-escuro);
+}
+
+[data-mvp-status="sucesso"] {
+  border-color: var(--cor-aviso-sucesso);
+  background: var(--cor-aviso-sucesso-claro);
+  color: var(--cor-aviso-sucesso);
+}
+
 @media (width < 1024px) {
   [data-mvp-status] {
     bottom: calc(var(--altura-barra-inferior-mobile) + env(safe-area-inset-bottom) + var(--espaco-md));
