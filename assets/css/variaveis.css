@@ -74,6 +74,7 @@
   --z-sidebar-mobile: 10;
   --z-topbar: 20;
   --z-popover: 30;
+  --z-chatbot: 40;
   --z-skip-link: 50;
   --z-acessibilidade-botao: 60;
   --z-acessibilidade-fundo: 65;
@@ -228,6 +229,7 @@ html.acessibilidade--alto-contraste {
     --texto-titulo-pagina: 1.375rem;
     --texto-titulo-secao: 1.125rem;
     --gap-dashboard: 14px;
+    --chatbot-bottom: calc(var(--altura-barra-inferior-mobile) + var(--espaco-md) + env(safe-area-inset-bottom));
   }
 }
 
