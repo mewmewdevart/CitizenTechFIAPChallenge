@@ -1,7 +1,7 @@
 <div align="center">
   <img width="160" height="160" alt="Logotipo do Mutirão — Plataforma de organização do cuidado compartilhado" src="https://github.com/user-attachments/assets/d8184c61-a040-4771-9bc1-860f6ddcb88a" />
-
   <h1>Mutirão</h1>
+  <h3>O cuidar fica mais simples quando fazemos um mutirão!</h3>
   <p><b>Global Solution 2026 · Citizen Tech · Web Design FIAP</b></p>
   <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir responsabilidades e acompanhar informações de saúde no cuidado compartilhado de pessoas de qualquer idade.</p>
   <p><a href="https://mutirao-citizen-tech.vercel.app/">Acessar o Projeto</a></p>
