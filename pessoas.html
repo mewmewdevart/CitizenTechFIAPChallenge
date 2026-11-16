@@ -56,8 +56,14 @@
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/pessoas.js" defer></script>
 </head>
 
 <body>
@@ -156,8 +162,81 @@
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina" id="conteudo">
-    <h1>Pessoas da rede</h1>
+  <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="pessoas">
+    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Pessoas da rede</nav>
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Pessoas da rede</h1>
+        <p>Gerencie quem recebe cuidado e quem participa da rede.</p>
+      </div>
+      <div class="painel__acoes">
+        <button type="button" class="botao botao--secundario" aria-disabled="true" title="Disponível em uma próxima versão">Adicionar acompanhada</button>
+        <button type="button" class="botao botao--primario" data-dialogo="dialogo-convidar"><i class="fa-solid fa-plus" aria-hidden="true"></i> Convidar participante</button>
+      </div>
+    </header>
+
+    <section class="apoio__painel" aria-labelledby="titulo-acompanhadas">
+      <h2 id="titulo-acompanhadas" class="painel__subtitulo">Pessoas acompanhadas</h2>
+      <ul class="painel__lista">
+        <li class="painel__item">
+          <img class="avatar" src="assets/media/foto-perfil-maria.png" alt="">
+          <span class="painel__texto"><strong>Maria das Dores (Mari)</strong><span>Pessoa acompanhada · Cobertura de 24h</span><span>Rede em exibição</span></span>
+          <a class="botao botao--secundario" href="ficha.html">Abrir ficha</a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="apoio__painel" aria-labelledby="titulo-participantes">
+      <h2 id="titulo-participantes" class="painel__subtitulo">Participantes da rede</h2>
+      <ul class="painel__lista" data-participantes></ul>
+    </section>
+
+    <dialog class="dialogo-mvp" id="dialogo-convidar" aria-labelledby="titulo-convidar">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-convidar">Convidar participante</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p>Rede de Maria das Dores (Mari)</p>
+      <form class="formulario-mvp" data-formulario-mvp="convite">
+        <label>E-mail da pessoa<input type="email" name="email" placeholder="Ex.: nome@exemplo.com" autocomplete="email" required></label>
+        <label>Vínculo<input type="text" name="vinculo" list="opcoes-vinculo" placeholder="Selecione ou informe o vínculo" required></label>
+        <datalist id="opcoes-vinculo">
+          <option value="Filha"></option>
+          <option value="Filho"></option>
+          <option value="Neta"></option>
+          <option value="Neto"></option>
+          <option value="Cuidadora"></option>
+          <option value="Vizinha"></option>
+        </datalist>
+        <label>Papel na rede
+          <select name="papel">
+            <option value="Participante">Participante</option>
+            <option value="Administrador">Administrador</option>
+          </select>
+        </label>
+        <p class="formulario-mvp__erro" data-erro-convite role="alert"></p>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Enviar convite</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-convite-enviado" aria-labelledby="titulo-convite-enviado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-convite-enviado">Convite enviado</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p>Rede de Maria das Dores (Mari)</p>
+      <dl class="dialogo-mvp__dados">
+        <div><dt><span class="selo selo--atencao">Aguardando aceite</span></dt><dd data-convite-resumo>A pessoa terá acesso à rede após aceitar o convite.</dd></div>
+      </dl>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--primario" data-fechar-dialogo>Voltar à rede</button>
+      </div>
+    </dialog>
+
+    <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>

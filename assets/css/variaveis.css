@@ -34,6 +34,8 @@
 
   /* Tipografia */
   --fonte-interface: "Inter", system-ui, sans-serif;
+  --fonte-titulo: var(--fonte-interface);
+  --fonte-manuscrita: var(--fonte-interface);
   --peso-regular: 400;
   --peso-semibold: 600;
   --peso-negrito: 700;
@@ -78,9 +80,92 @@
   --z-acessibilidade-painel: 70;
   --cor-switch-thumb: var(--cor-neutra-clara-02);
   --cor-logo-fundo: var(--cor-neutra-clara-02);
+  --cor-sombra: #302b3d0a;
+  --cor-porta-remedios-fundo: var(--cor-superficie-suave);
+  --pote-borda: #50596E;
+  --pote-espessura: 1.5px;
+  --pote-tampa: #C5CDF0;
+  --pote-tampa-escura: #8495E1;
+  --pote-aba: #8495E1;
+  --pote-vidro: #FFFFFF;
+  --pote-fundo: #F5F6F5;
+  --pote-fundo-borda: #DFE3EE;
+  --pote-brilho: transparent;
+  --pote-comprimido: #FFFFFF;
+  --pote-comprimido-borda: transparent;
+  --pote-check-fundo: var(--cor-primaria);
+  --pote-check-cor: #FFFFFF;
+  --pote-texto: var(--cor-texto-principal);
+  --cor-mural: #E6E6ED;
+  --cor-postit-manteiga: #FFF6C8;
+  --cor-postit-branco: #FFFFFF;
+  --postit-borda: 1px solid #DFE3EE;
+  --postit-sombra: 0 6px 16px #302b3d1f;
+  --pote-duracao: 0.6s;
+  --pote-curva: cubic-bezier(0.34, 1.25, 0.64, 1);
+  --espessura-borda: 1px;
 
   font-family: var(--fonte-interface);
   color: var(--cor-texto-principal);
+}
+
+html.tema--acolhedor {
+  --cor-primaria: #146A3A;
+  --cor-primaria-hover: #0F5A30;
+  --cor-secundaria-clara: #CDE7DD;
+  --cor-neutra-escura-01: #12332E;
+  --cor-neutra-escura-02: #12332E;
+  --cor-neutra-media: #3E5A54;
+  --cor-neutra-clara-01: #FCFBF7;
+  --cor-neutra-clara-03: #12332E;
+  --cor-neutra-clara-04: #EEF3F1;
+  --cor-fundo-pagina: #FCFBF7;
+  --cor-superficie-suave: #CDE7DD;
+  --cor-texto-principal: #12332E;
+  --cor-texto-secundario: #3E5A54;
+  --cor-borda-sutil: #12332E;
+  --cor-borda-controle: #12332E;
+  --cor-aviso-sucesso: #146A3A;
+  --cor-aviso-sucesso-claro: #CDE7DD;
+  --cor-aviso-atencao-claro: #FFE59A;
+  --cor-aviso-atencao-escuro: #5A3D00;
+  --cor-aviso-alerta-claro: #FFD3C9;
+  --cor-aviso-alerta-escuro: #A8201A;
+  --cor-aviso-info-claro: #F3ECFC;
+  --cor-aviso-info-escuro: #3F3A8F;
+  --cor-backdrop: #12332e66;
+  --fonte-interface: "Onest", system-ui, sans-serif;
+  --fonte-titulo: "Gloock", Georgia, serif;
+  --fonte-manuscrita: "Gochi Hand", "Onest", cursive;
+  --raio-lg: 12px;
+  --raio-xl: 16px;
+  --espessura-borda: 2px;
+  --borda-padrao: 2px solid var(--cor-borda-sutil);
+  --cor-sombra: #12332E;
+  --sombra-cartao: 3px 3px 0 var(--cor-sombra);
+  --sombra-popover: 5px 5px 0 var(--cor-sombra);
+  --sombra-elevada: 8px 8px 0 var(--cor-sombra);
+  --anel-foco: 3px solid #1B5FA8;
+  --cor-porta-remedios-fundo: #CDE7DD;
+  --pote-borda: #12332E;
+  --pote-espessura: 2px;
+  --pote-tampa: linear-gradient(100deg, #F9D986F2 0%, #F6C445F2 50%, #C59D37F2 100%);
+  --pote-tampa-escura: #C59D37;
+  --pote-aba: #F6C445;
+  --pote-vidro: #EEF3F1;
+  --pote-fundo: linear-gradient(180deg, #CFD9D6 0%, #E8EDED 35%, #F7FAFA 100%);
+  --pote-fundo-borda: #12332E59;
+  --pote-brilho: #FFFFFF1F;
+  --pote-comprimido: #FFFFFF6B;
+  --pote-comprimido-borda: #12332E2E;
+  --pote-check-fundo: #C9A7F0;
+  --pote-check-cor: #12332E;
+  --pote-texto: #12332E;
+  --cor-mural: #D9D9D9;
+  --cor-postit-manteiga: #FFF6C8;
+  --cor-postit-branco: #FFFFFF;
+  --postit-borda: 1.5px solid #12332E;
+  --postit-sombra: 5px 5px 0 #12332E;
 }
 
 /* Tema de alto contraste (Recursos Assistivos) */
@@ -115,6 +200,26 @@ html.acessibilidade--alto-contraste {
   --cor-switch-thumb: #0D0D0D;
   --cor-logo-fundo: #FFFFFF;
   --anel-foco: 3px solid #FFE600;
+  --cor-sombra: transparent;
+  --sombra-cartao: none;
+  --cor-porta-remedios-fundo: #0D0D0D;
+  --pote-borda: #FFFFFF;
+  --pote-tampa: #FFE600;
+  --pote-tampa-escura: #FFE600;
+  --pote-aba: #FFE600;
+  --pote-vidro: #0D0D0D;
+  --pote-fundo: #000000;
+  --pote-fundo-borda: #FFFFFF;
+  --pote-brilho: transparent;
+  --pote-comprimido: #000000;
+  --pote-comprimido-borda: #000000;
+  --pote-check-fundo: #FFE600;
+  --pote-check-cor: #000000;
+  --cor-mural: #000000;
+  --cor-postit-manteiga: #0D0D0D;
+  --cor-postit-branco: #0D0D0D;
+  --postit-borda: 2px solid #FFFFFF;
+  --postit-sombra: none;
 }
 
 @media (width < 1024px) {
@@ -149,6 +254,7 @@ h2,
 h3,
 h4 {
   margin: 0;
+  font-family: var(--fonte-titulo);
   font-weight: var(--peso-negrito);
   line-height: 1.25;
 }

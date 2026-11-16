@@ -640,6 +640,95 @@
     }, 5000);
   }
 
+  const PORTA_REMEDIOS = [
+    {
+      hora: '6h',
+      momento: 'passado',
+      responsavel: 'Ana da Silva (Aninha)',
+      itens: [
+        ['Levotiroxina', { estado: 'administrado', quem: 'Aninha', horario: '06:10' }],
+        ['Carbamazepina', { estado: 'administrado', quem: 'Aninha', horario: '06:10' }],
+        ['Bombinha', { estado: 'administrado', quem: 'Aninha', horario: '06:12' }]
+      ]
+    },
+    {
+      hora: '8h',
+      momento: 'passado',
+      responsavel: 'Beatriz da Silva (Bea)',
+      itens: [
+        ['Losartana', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
+        ['Metformina', { estado: 'nao-administrado', quem: 'Bea', motivo: 'Motivo não informado' }],
+        ['Hidroclorotiazida', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
+        ['Cálcio + vit. D', { estado: 'administrado', quem: 'Bea', horario: '08:16' }],
+        ['Ácido fólico', { estado: 'administrado', quem: 'Bea', horario: '08:16' }]
+      ]
+    },
+    { hora: '12h', momento: 'agora', responsavel: 'Zé da Manga (Zé)', itens: [['Omeprazol'], ['Metformina'], ['AAS'], ['Vitamina B12']] },
+    { hora: '14h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Carbamazepina'], ['Colírio']] },
+    { hora: '18h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Metformina'], ['Losartana'], ['Bombinha']] },
+    { hora: '22h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Sinvastatina'], ['Carbamazepina'], ['Pomada']] }
+  ];
+
+  const ESTOQUE_INICIAL = { Metformina: 4, Fraldas: 23 };
+
+  const chaveDose = (hora, nome) => `${hora}|${nome}`;
+
+  const obterDoses = (estado = estadoAtual) => {
+    const registros = estado.registrosDose || {};
+    return PORTA_REMEDIOS.flatMap(grupo => grupo.itens.map(([nome, base]) => {
+      const chave = chaveDose(grupo.hora, nome);
+      const meu = registros[chave];
+      const registro = meu || base || { estado: 'prevista' };
+      return {
+        chave,
+        nome,
+        hora: grupo.hora,
+        momento: grupo.momento,
+        responsavel: grupo.responsavel,
+        estado: registro.estado,
+        quem: registro.quem || '',
+        horario: registro.horario || '',
+        motivo: registro.motivo || '',
+        meu: Boolean(meu)
+      };
+    }));
+  };
+
+  const obterCompartimentos = (estado = estadoAtual) => {
+    const doses = obterDoses(estado);
+    return PORTA_REMEDIOS.map(grupo => {
+      const itens = doses.filter(dose => dose.hora === grupo.hora);
+      const faltam = itens.filter(dose => dose.estado !== 'administrado').length;
+      const naoDados = itens.filter(dose => dose.estado === 'nao-administrado').length;
+      const situacao = faltam === 0 ? 'dado' : naoDados || grupo.momento === 'passado' ? 'falta' : grupo.momento;
+      return { hora: grupo.hora, responsavel: grupo.responsavel, momento: grupo.momento, itens, faltam, completo: faltam === 0, situacao };
+    });
+  };
+
+  const registrarDose = (chave, registro) => atualizarEstado(estado => ({
+    ...estado,
+    registrosDose: { ...(estado.registrosDose || {}), [chave]: registro }
+  }));
+
+  const desfazerDose = chave => atualizarEstado(estado => {
+    const registros = { ...(estado.registrosDose || {}) };
+    delete registros[chave];
+    return { ...estado, registrosDose: registros };
+  });
+
+  const obterEstoque = (nome, estado = estadoAtual) => {
+    const base = estado.estoqueBase?.[nome] ?? ESTOQUE_INICIAL[nome];
+    if (base === undefined) return null;
+    const usados = Object.entries(estado.registrosDose || {})
+      .filter(([chave, registro]) => chave.split('|')[1] === nome && registro.estado === 'administrado').length;
+    return Math.max(0, base - usados);
+  };
+
+  const reporEstoque = (nome, quantidade) => atualizarEstado(estado => {
+    const base = estado.estoqueBase?.[nome] ?? ESTOQUE_INICIAL[nome] ?? 0;
+    return { ...estado, estoqueBase: { ...(estado.estoqueBase || {}), [nome]: base + quantidade } };
+  });
+
   window.MutiraoCuidado = {
     HOJE,
     EQUIPE_CUIDADO,
@@ -662,6 +751,13 @@
     obterEscalaDia,
     renderizarCalendarioMensal,
     inicializarCompartilhamento,
-    anunciarStatus
+    anunciarStatus,
+    chaveDose,
+    obterDoses,
+    obterCompartimentos,
+    registrarDose,
+    desfazerDose,
+    obterEstoque,
+    reporEstoque
   };
 })();
