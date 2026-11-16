@@ -251,6 +251,36 @@
     return input ? input.checked : true;
   };
 
+  const formularioFicha = pagina.querySelector('[data-formulario-mvp="ficha"]');
+  const botaoSalvarFicha = formularioFicha?.querySelector('button[type="submit"]');
+  let snapshotFicha = '';
+
+  const serializarFormularioFicha = () => {
+    if (!formularioFicha) return '';
+    formularioFicha.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditorRico);
+    const dados = [...new FormData(formularioFicha).entries()].map(([k, v]) => [k, String(v)]);
+    const previaFoto = formularioFicha.querySelector('[data-foto-previa]');
+    dados.push(['__fotoRemovida', previaFoto?.dataset.fotoRemovida || '']);
+    dados.push(['__fotoAtualizada', previaFoto?.dataset.fotoAtualizada || '']);
+    return JSON.stringify(dados);
+  };
+
+  const atualizarBotaoSalvarFicha = () => {
+    if (!botaoSalvarFicha || !formularioFicha) return;
+    const semAlteracoes = serializarFormularioFicha() === snapshotFicha;
+    botaoSalvarFicha.disabled = semAlteracoes;
+    botaoSalvarFicha.setAttribute('aria-disabled', String(semAlteracoes));
+  };
+
+  if (formularioFicha) {
+    ['input', 'change'].forEach(tipoEvento => {
+      formularioFicha.addEventListener(tipoEvento, atualizarBotaoSalvarFicha);
+    });
+    formularioFicha.addEventListener('click', () => {
+      requestAnimationFrame(atualizarBotaoSalvarFicha);
+    });
+  }
+
   const renderizarImpressao = () => {
     const lista = pagina.querySelector('[data-impressao-lista]');
     if (!lista) return;
@@ -483,6 +513,10 @@
     });
 
     renderizarImpressao();
+    if (formulario) {
+      snapshotFicha = serializarFormularioFicha();
+      atualizarBotaoSalvarFicha();
+    }
   };
 
   const renderizar = () => {
@@ -733,6 +767,7 @@
         adicionarEtiqueta(inputEtiqueta.closest('[data-lista-etiquetas]'), inputEtiqueta.value);
         inputEtiqueta.value = '';
       });
+      if (serializarFormularioFicha() === snapshotFicha) return;
     }
 
     const campos = Object.fromEntries(new FormData(formulario));

@@ -19,8 +19,28 @@
 
   const selectAntecedencia = formulario.querySelector('#config-antecedencia-medicacao');
   const toggleMedicacao = formulario.querySelector('#config-notificacoes-medicacao');
+  const botaoSalvar = formulario.querySelector('button[type="submit"]');
 
   let timerStatus = null;
+  let snapshotSalvo = '';
+
+  const serializarEstadoFormulario = () => {
+    const campos = [...formulario.querySelectorAll('input, select, textarea')];
+    return JSON.stringify(
+      campos.map(campo => ({
+        chave: campo.id || campo.name || '',
+        tipo: campo.type,
+        valor: campo.type === 'checkbox' || campo.type === 'radio' ? campo.checked : campo.value
+      }))
+    );
+  };
+
+  const atualizarEstadoBotaoSalvar = () => {
+    if (!botaoSalvar) return;
+    const semAlteracoes = serializarEstadoFormulario() === snapshotSalvo;
+    botaoSalvar.disabled = semAlteracoes;
+    botaoSalvar.setAttribute('aria-disabled', String(semAlteracoes));
+  };
 
   const ativarAba = abaAlvo => {
     const idPainel = abaAlvo.getAttribute('aria-controls');
@@ -114,8 +134,19 @@
   toggleMedicacao?.addEventListener('change', atualizarEstadoAntecedencia);
   atualizarEstadoAntecedencia();
 
+  snapshotSalvo = serializarEstadoFormulario();
+  atualizarEstadoBotaoSalvar();
+
+  ['input', 'change'].forEach(tipoEvento => {
+    formulario.addEventListener(tipoEvento, atualizarEstadoBotaoSalvar);
+  });
+
   formulario.addEventListener('submit', evento => {
     evento.preventDefault();
+    if (serializarEstadoFormulario() === snapshotSalvo) return;
+
+    snapshotSalvo = serializarEstadoFormulario();
+    atualizarEstadoBotaoSalvar();
     adicionarNotificacao(
       'Configurações atualizadas',
       'Preferências de alertas e permissões da rede de cuidado salvas para esta sessão.'
@@ -126,6 +157,8 @@
   botaoRestaurar?.addEventListener('click', () => {
     formulario.reset();
     atualizarEstadoAntecedencia();
+    snapshotSalvo = serializarEstadoFormulario();
+    atualizarEstadoBotaoSalvar();
     mostrarStatus('Padrões recomendados restaurados.', 'sucesso');
   });
 

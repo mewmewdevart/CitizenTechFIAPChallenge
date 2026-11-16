@@ -229,6 +229,27 @@
     renderizarAgenda();
   };
 
+  const snapshotsEdicao = new WeakMap();
+
+  const serializarFormularioAgenda = formulario => JSON.stringify(
+    [...new FormData(formulario).entries()].map(([k, v]) => [k, String(v)])
+  );
+
+  const atualizarBotaoSalvarAgenda = formulario => {
+    const botaoSalvar = formulario?.querySelector('button[type="submit"]');
+    if (!botaoSalvar) return;
+    const snapshot = snapshotsEdicao.get(formulario);
+    const semAlteracoes = typeof snapshot === 'string' && serializarFormularioAgenda(formulario) === snapshot;
+    botaoSalvar.disabled = semAlteracoes;
+    botaoSalvar.setAttribute('aria-disabled', String(semAlteracoes));
+  };
+
+  pagina.querySelectorAll('[data-formulario-mvp="evento"], [data-formulario-mvp="editar-cobertura"]').forEach(form => {
+    ['input', 'change'].forEach(tipoEvento => {
+      form.addEventListener(tipoEvento, () => atualizarBotaoSalvarAgenda(form));
+    });
+  });
+
   const abrirFormularioEvento = (eventoExistente = null) => {
     const dialogo = document.getElementById('dialogo-novo-compromisso');
     const formulario = dialogo?.querySelector('[data-formulario-mvp="evento"]');
@@ -245,6 +266,12 @@
     if (tituloDialogo) {
       tituloDialogo.textContent = eventoExistente ? 'Editar compromisso' : 'Novo compromisso';
     }
+    if (eventoExistente) {
+      snapshotsEdicao.set(formulario, serializarFormularioAgenda(formulario));
+    } else {
+      snapshotsEdicao.delete(formulario);
+    }
+    atualizarBotaoSalvarAgenda(formulario);
     dialogo.showModal();
   };
 
@@ -400,6 +427,8 @@
         popularOpcoesHorario(form.elements.inicio, limiteMinTurno, limiteMaxTurno - 1, atualInicio);
         popularOpcoesHorario(form.elements.fim, atualInicio + 1, limiteMaxTurno, atualFim);
         atualizarPreviaCobertura();
+        snapshotsEdicao.set(form, serializarFormularioAgenda(form));
+        atualizarBotaoSalvarAgenda(form);
         dialogoEditarCobertura.showModal();
       }
       return;
@@ -513,6 +542,10 @@
     if (!tipoFormulario) return;
 
     evento.preventDefault();
+    const snapshot = snapshotsEdicao.get(formulario);
+    if (typeof snapshot === 'string' && serializarFormularioAgenda(formulario) === snapshot) {
+      return;
+    }
     const campos = Object.fromEntries(new FormData(formulario));
     let mensagem = '';
 
