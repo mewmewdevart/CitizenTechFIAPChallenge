@@ -1,3 +1,50 @@
+const CHAVE_TEMA = 'mutirao-tema';
+const TEMAS = ['neutro', 'acolhedor'];
+const FONTES_TEMA_ACOLHEDOR = 'https://fonts.googleapis.com/css2?family=Gloock&family=Gochi+Hand&family=Onest:wght@400;600;700&display=swap';
+
+function obterTemaSalvo() {
+  try {
+    const salvo = localStorage.getItem(CHAVE_TEMA);
+    return TEMAS.includes(salvo) ? salvo : 'neutro';
+  } catch {
+    return 'neutro';
+  }
+}
+
+function aplicarTema(tema) {
+  const acolhedor = tema === 'acolhedor';
+  document.documentElement.classList.toggle('tema--acolhedor', acolhedor);
+  if (acolhedor && !document.querySelector(`link[href="${FONTES_TEMA_ACOLHEDOR}"]`)) {
+    const fontes = document.createElement('link');
+    fontes.rel = 'stylesheet';
+    fontes.href = FONTES_TEMA_ACOLHEDOR;
+    document.head.append(fontes);
+  }
+  for (const botao of document.querySelectorAll('[data-tema]')) {
+    botao.setAttribute('aria-pressed', String(botao.dataset.tema === tema));
+  }
+}
+
+function definirTema(tema) {
+  const valido = TEMAS.includes(tema) ? tema : 'neutro';
+  try {
+    localStorage.setItem(CHAVE_TEMA, valido);
+  } catch {
+    return aplicarTema(valido);
+  }
+  aplicarTema(valido);
+}
+
+aplicarTema(obterTemaSalvo());
+
+for (const botao of document.querySelectorAll('[data-tema]')) {
+  botao.addEventListener('click', () => definirTema(botao.dataset.tema));
+}
+
+window.addEventListener('storage', evento => {
+  if (evento.key === CHAVE_TEMA) aplicarTema(obterTemaSalvo());
+});
+
 const alternarMenu = document.querySelector('#alternar-menu');
 const telaMobile = window.matchMedia('(width < 1024px)');
 const botaoMais = document.querySelector('#botao-mais');

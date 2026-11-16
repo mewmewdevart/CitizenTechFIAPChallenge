@@ -97,3 +97,56 @@
   color: var(--cor-texto-principal);
   font-weight: var(--peso-semibold);
 }
+
+html.tema--acolhedor :is(h1, h2) {
+  font-weight: var(--peso-regular);
+  letter-spacing: -0.01em;
+}
+
+html.tema--acolhedor :is(h3, h4) {
+  font-family: var(--fonte-interface);
+}
+
+html.tema--acolhedor .botao {
+  border-width: 2px;
+  border-color: var(--cor-borda-controle);
+}
+
+html.tema--acolhedor .botao--primario {
+  border-color: var(--cor-borda-controle);
+  box-shadow: 3px 3px 0 var(--cor-sombra);
+}
+
+html.tema--acolhedor .botao--primario:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
+}
+
+html.tema--acolhedor .selo {
+  border: 1.5px solid currentColor;
+  border-radius: var(--raio-pill);
+}
+
+html.tema--acolhedor :is(.barra-lateral, .barra-topo, .barra-inferior) {
+  border-width: var(--espessura-borda);
+}
+
+html.tema--acolhedor .barra-lateral {
+  background: var(--cor-superficie-suave);
+}
+
+html.tema--acolhedor .dialogo-mvp {
+  border: var(--borda-padrao);
+  box-shadow: var(--sombra-elevada);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor .botao--primario {
+  box-shadow: none;
+}
+
+.botao[data-tema][aria-pressed="true"] {
+  background: var(--cor-superficie-suave);
+  border-color: var(--cor-primaria);
+  color: var(--cor-primaria);
+  box-shadow: inset 0 0 0 1px var(--cor-primaria);
+}

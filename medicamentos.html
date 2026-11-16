@@ -56,8 +56,14 @@
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/medicamentos.js" defer></script>
 </head>
 
 <body>
@@ -156,8 +162,187 @@
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
-  <main class="conteudo-pagina" id="conteudo">
-    <h1>Medicamentos</h1>
+  <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="medicamentos">
+    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Medicamentos e insumos</nav>
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Medicamentos e insumos</h1>
+        <p>Confira a rotina da Mari, registre administrações e acompanhe o estoque</p>
+      </div>
+      <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-item"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar item</button>
+    </header>
+
+    <section class="alergia-faixa" aria-labelledby="titulo-alergia">
+      <strong id="titulo-alergia"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à dipirona</strong>
+      <p>Não administrar. Em caso de dor, consultar o responsável antes.</p>
+      <img src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="">
+    </section>
+
+    <div class="painel__grade">
+      <section class="apoio__painel" aria-labelledby="titulo-rotina">
+        <div class="painel__cartao-cabecalho">
+          <h2 id="titulo-rotina">Rotina de hoje · Terça-feira, 10 de novembro</h2>
+          <a class="botao botao--terciario botao--pequeno" href="index.html#titulo-porta-remedios">Ver porta-remédios</a>
+        </div>
+        <div class="rotina__painel">
+          <div class="rotina__pote" aria-hidden="true" data-rotina-pote></div>
+          <p class="rotina__contagem"><strong data-rotina-contagem></strong><small>Doses de hoje</small></p>
+          <ul class="rotina__doses" data-rotina-doses></ul>
+        </div>
+
+        <h3 class="painel__subtitulo">Próxima administração</h3>
+        <div class="painel__bloco" data-proxima-administracao></div>
+
+        <h3 class="painel__subtitulo">Registros de hoje</h3>
+        <ul class="painel__lista painel__bloco" data-registros-dia></ul>
+      </section>
+
+      <aside class="apoio__painel" aria-labelledby="titulo-estoque">
+        <h2 id="titulo-estoque" class="painel__subtitulo">Estoque</h2>
+        <p class="estoque__texto">Estimativa com base no consumo cadastrado.</p>
+        <div data-estoque-avisos></div>
+      </aside>
+    </div>
+
+    <section class="apoio__painel" aria-labelledby="titulo-itens">
+      <div class="painel__cartao-cabecalho">
+        <h2 id="titulo-itens">Itens cadastrados</h2>
+        <button type="button" class="botao botao--secundario" data-abrir-estoque>Atualizar estoque</button>
+      </div>
+      <ul class="painel__lista" data-itens-cadastrados></ul>
+    </section>
+
+    <dialog class="dialogo-mvp" id="dialogo-registrar-administracao" aria-labelledby="titulo-registrar-administracao">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-registrar-administracao" data-dose-titulo>Registrar administração</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p data-dose-contexto></p>
+      <dl class="dialogo-mvp__dados">
+        <div><dt>Quem registra</dt><dd>Zé da Manga (Zé) · Administrador</dd></div>
+      </dl>
+      <div class="dialogo-mvp__escolhas">
+        <div class="dialogo-mvp__escolha">
+          <span><strong>Administrada</strong><small>Informe o horário em que foi administrada.</small></span>
+          <button type="button" class="botao botao--secundario" data-etapa-administracao="dialogo-confirmar-administracao">Selecionar</button>
+        </div>
+        <div class="dialogo-mvp__escolha">
+          <span><strong>Não Administrada</strong><small>Registre o ocorrido e informe o motivo se souber.</small></span>
+          <button type="button" class="botao botao--secundario" data-etapa-administracao="dialogo-nao-administrada">Selecionar</button>
+        </div>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-confirmar-administracao" aria-labelledby="titulo-confirmar-administracao">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-confirmar-administracao">Confirmar administração</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p data-dose-previsto></p>
+      <form class="formulario-mvp" data-formulario-mvp="administrada">
+        <label>Horário da administração<input type="time" name="horario" value="12:05" required></label>
+        <dl class="dialogo-mvp__dados">
+          <div><dt>Registrado por</dt><dd>Zé da Manga (Zé) · Administrador</dd></div>
+        </dl>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-voltar-administracao>Voltar</button>
+          <button type="submit" class="botao botao--primario">Salvar registro</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-nao-administrada" aria-labelledby="titulo-nao-administrada">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-nao-administrada">Registrar como não administrada</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p data-dose-previsto></p>
+      <form class="formulario-mvp" data-formulario-mvp="nao-administrada">
+        <label>Motivo · opcional<textarea name="motivo" rows="3" placeholder="Descreva o ocorrido, se souber."></textarea></label>
+        <dl class="dialogo-mvp__dados">
+          <div><dt>Registrado por</dt><dd>Zé da Manga (Zé) · Administrador</dd></div>
+        </dl>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-voltar-administracao>Voltar</button>
+          <button type="submit" class="botao botao--primario">Salvar registro</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-administracao-registrada" aria-labelledby="titulo-administracao-registrada">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-administracao-registrada" data-registro-titulo>Administração registrada - Metformina</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p data-registro-contexto></p>
+      <dl class="dialogo-mvp__dados">
+        <div><dt>Agenda</dt><dd data-registro-agenda></dd></div>
+        <div><dt>Diário de turno</dt><dd data-registro-diario></dd></div>
+      </dl>
+      <div class="dialogo-mvp__acoes">
+        <a class="botao botao--secundario" href="ficha.html#diario">Ver diário</a>
+        <a class="botao botao--primario" href="agenda.html">Ver na Agenda</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-adicionar-item" aria-labelledby="titulo-adicionar-item">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-adicionar-item">Adicionar item</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p>Cadastre a rotina conforme a prescrição da Mari. Os dados abaixo são exemplos do protótipo.</p>
+      <form class="formulario-mvp" data-formulario-mvp="item">
+        <label>Tipo
+          <select name="tipo">
+            <option value="Medicamento">Medicamento</option>
+            <option value="Insumo">Insumo</option>
+          </select>
+        </label>
+        <label>Nome do item<input type="text" name="nome" placeholder="Metformina" required></label>
+        <label>Apresentação e dose prescrita<input type="text" name="dose" placeholder="Copiar da receita"></label>
+        <div class="formulario-mvp__grade">
+          <label>Horários previstos<input type="text" name="horarios" placeholder="08h e 20h"></label>
+          <label>Estoque inicial<input type="number" name="estoque" min="0" placeholder="4 unidades"></label>
+        </div>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Salvar item</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-atualizar-estoque" aria-labelledby="titulo-atualizar-estoque">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-atualizar-estoque" data-estoque-titulo>Atualizar estoque de metformina</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p data-estoque-contexto>Maria das Dores (Mari) · Estoque atual: 4 unidades. O registro guarda a autoria e a data.</p>
+      <form class="formulario-mvp" data-formulario-mvp="estoque">
+        <input type="hidden" name="item">
+        <label>Quantidade adicionada<input type="number" name="quantidade" min="1" value="10" required></label>
+        <label>Observação<input type="text" name="observacao" value="Reposição para a rotina da Mari"></label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Salvar estoque</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhe-item" aria-labelledby="titulo-detalhe-item">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-detalhe-item" data-detalhe-titulo>Item</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p data-detalhe-texto></p>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
+      </div>
+    </dialog>
+
+    <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
