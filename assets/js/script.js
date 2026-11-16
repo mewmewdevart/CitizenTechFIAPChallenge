@@ -191,3 +191,20 @@ if (barraTopo && 'ResizeObserver' in window) {
   new ResizeObserver(sincronizarAlturaBarraTopo).observe(barraTopo);
   sincronizarAlturaBarraTopo();
 }
+
+function inicializarPontoBot() {
+  const pontoBotSrc = 'https://mutirao-pontobot-frontend.vercel.app/pontobot.js';
+  if (!document.querySelector(`script[src="${pontoBotSrc}"]`)) {
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = pontoBotSrc;
+    document.head.append(script);
+  }
+  if (!document.querySelector('ponto-bot') && document.body) {
+    const bot = document.createElement('ponto-bot');
+    bot.dataset.app = 'https://mutirao-citizen-tech.vercel.app/';
+    document.body.append(bot);
+  }
+}
+
+inicializarPontoBot();
