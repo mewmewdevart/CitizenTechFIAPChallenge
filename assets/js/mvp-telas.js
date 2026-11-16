@@ -221,6 +221,9 @@
     }
   };
 
+  const AVISO_TITULO_PADRAO = 'Alergia à dipirona';
+  const AVISO_TEXTO_PADRAO = 'Não administrar. Em caso de dúvida, consultar o responsável antes.';
+
   const atualizarAvisoAlergia = person => {
     const aviso = pagina.querySelector('[data-aviso-alergia]');
     if (!aviso) return;
@@ -230,19 +233,23 @@
       .split(',')
       .map(i => i.trim())
       .filter(Boolean);
+    const tituloCustom = (person.avisoTitulo || '').trim();
+    const textoCustom = (person.avisoTexto || '').trim();
 
-    if (!alergias.length) {
+    if (!alergias.length && !tituloCustom && !textoCustom) {
       aviso.hidden = true;
       return;
     }
     aviso.hidden = false;
     if (titulo) {
-      titulo.textContent = alergias.length === 1 && alergias[0].toLowerCase() === 'dipirona'
-        ? 'Alergia à dipirona'
-        : `Alergias: ${alergias.join(', ')}`;
+      titulo.textContent = tituloCustom || (
+        alergias.length === 1 && alergias[0].toLowerCase() === 'dipirona'
+          ? AVISO_TITULO_PADRAO
+          : `Alergias: ${alergias.join(', ')}`
+      );
     }
     if (texto) {
-      texto.textContent = 'Não administrar. Em caso de dúvida, consultar o responsável antes.';
+      texto.textContent = textoCustom || AVISO_TEXTO_PADRAO;
     }
   };
 
@@ -272,9 +279,21 @@
     botaoSalvarFicha.setAttribute('aria-disabled', String(semAlteracoes));
   };
 
+  const atualizarContadoresAviso = () => {
+    if (!formularioFicha) return;
+    for (const [campo, limite] of [['avisoTitulo', 24], ['avisoTexto', 70]]) {
+      const input = formularioFicha.elements[campo];
+      const contador = formularioFicha.querySelector(`[data-contador-aviso="${campo}"]`);
+      if (input && contador) contador.textContent = `${input.value.length}/${limite} caracteres`;
+    }
+  };
+
   if (formularioFicha) {
     ['input', 'change'].forEach(tipoEvento => {
-      formularioFicha.addEventListener(tipoEvento, atualizarBotaoSalvarFicha);
+      formularioFicha.addEventListener(tipoEvento, () => {
+        atualizarContadoresAviso();
+        atualizarBotaoSalvarFicha();
+      });
     });
     formularioFicha.addEventListener('click', () => {
       requestAnimationFrame(atualizarBotaoSalvarFicha);
@@ -416,6 +435,9 @@
       campos.apelido.value = apelido;
       if (campos.telefoneFixo) campos.telefoneFixo.value = person.telefoneFixo || '';
       if (campos.celular) campos.celular.value = person.celular || '';
+      if (campos.avisoTitulo) campos.avisoTitulo.value = (person.avisoTitulo || AVISO_TITULO_PADRAO).slice(0, 24);
+      if (campos.avisoTexto) campos.avisoTexto.value = (person.avisoTexto || AVISO_TEXTO_PADRAO).slice(0, 70);
+      atualizarContadoresAviso();
     }
 
     const mascoteAtual = person.mascote || 'assets/media/mascotes/icone-mascote-minhoca.svg';
@@ -792,6 +814,9 @@
       } else {
         campos.foto = estadoAnterior.foto || '';
       }
+
+      campos.avisoTitulo = (campos.avisoTitulo || '').trim().slice(0, 24);
+      campos.avisoTexto = (campos.avisoTexto || '').trim().slice(0, 70);
 
       atualizarEstado(estado => ({
         ...estado,

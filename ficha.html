@@ -89,7 +89,7 @@
               <h2 id="titulo-alertas">Notificações</h2>
             </div>
           </header>
-                    <ul class="menu-notificacoes__lista">
+          <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
@@ -154,10 +154,12 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Status do cuidado</h2>
       <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
@@ -179,10 +181,11 @@
       <div class="ficha__acoes"><button type="button" class="botao botao--secundario"
           data-dialogo="dialogo-compartilhar-resumo"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
           Compartilhar
-          resumo</button><button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao"><i class="fa-solid fa-print" aria-hidden="true"></i> Prévia
+          resumo</button><button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao"><i
+            class="fa-solid fa-print" aria-hidden="true"></i> Prévia
           de
-          impressão</button><button type="button" class="botao botao--primario"
-          data-dialogo="dialogo-editar-ficha"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar ficha</button>
+          impressão</button><button type="button" class="botao botao--primario" data-dialogo="dialogo-editar-ficha"><i
+            class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar ficha</button>
       </div>
     </header>
     <section class="cartao ficha__identidade">
@@ -194,7 +197,8 @@
       </div>
       <div class="ficha__aviso-alergia" data-aviso-alergia><img class="ficha__alerta-mascote"
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt=""><strong><i
-            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo>Alergia à dipirona</span></strong>
+            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo>Alergia à
+            dipirona</span></strong>
         <p data-aviso-alergia-texto>Não administrar. Em caso de dor, consultar o responsável antes.</p>
       </div>
     </section>
@@ -211,11 +215,13 @@
             <dd data-pessoa-campo="condicoes"><span class="ficha__etiqueta ficha__etiqueta--alerta">Epilepsia</span>
               <span class="ficha__etiqueta ficha__etiqueta--alerta">Diabetes tipo 2</span> <span
                 class="ficha__etiqueta ficha__etiqueta--alerta">Asma</span> <span
-                class="ficha__etiqueta ficha__etiqueta--alerta">Hipertensão arterial</span></dd>
+                class="ficha__etiqueta ficha__etiqueta--alerta">Hipertensão arterial</span>
+            </dd>
           </div>
           <div>
             <dt>Medicamentos de uso diário</dt>
-            <dd data-pessoa-campo="medicamentos"><span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
+            <dd data-pessoa-campo="medicamentos"><span
+                class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
                 08h</span> <span
                 class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Metformina · 08h e
                 20h</span></dd>
@@ -253,7 +259,7 @@
         </dl>
       </section>
       <section class="cartao ficha__cartao">
-        <h2>Dados pessoais e convênio</h2>
+        <h2>Identificação e contato</h2>
         <dl>
           <div>
             <dt>Nome completo</dt>
@@ -329,7 +335,8 @@
     <section class="cartao ficha__cartao" id="diario">
       <div class="ficha__diario-cabecalho">
         <h2>Diário de turno</h2>
-        <p>Acompanhe os registros de cada turno: como a Mari passou, observações e recados para quem assume o próximo horário.</p>
+        <p>Acompanhe os registros de cada turno: como a Mari passou, observações e recados para quem assume o próximo
+          horário.</p>
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-relato"><i class="fa-solid fa-plus"
             aria-hidden="true"></i> Registrar relato</button>
       </div>
@@ -356,10 +363,12 @@
         <div class="ficha__relatos" data-relatos></div>
       </div>
     </section>
-    <dialog class="dialogo-mvp dialogo-mvp--compartilhar" id="dialogo-compartilhar-resumo" aria-labelledby="titulo-compartilhar-resumo">
+    <dialog class="dialogo-mvp dialogo-mvp--compartilhar" id="dialogo-compartilhar-resumo"
+      aria-labelledby="titulo-compartilhar-resumo">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-compartilhar-resumo" class="dialogo-mvp__titulo-com-icone">
-          <span class="dialogo-mvp__icone" aria-hidden="true"><img src="assets/media/icones/icone-documento.svg" alt="" width="20" height="20"></span>
+          <span class="dialogo-mvp__icone" aria-hidden="true"><img src="assets/media/icones/icone-documento.svg" alt=""
+              width="20" height="20"></span>
           Compartilhar resumo
         </h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
@@ -374,11 +383,13 @@
       </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Prévia da mensagem<textarea data-previa-compartilhar
           readonly rows="6"></textarea></label>
       <p class="dialogo-mvp__retorno" data-retorno-compartilhar role="status" aria-live="polite"></p>
-      <div class="dialogo-mvp__acoes"><button class="botao botao--secundario" type="button"
-          data-compartilhar="copy"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button><button class="botao botao--secundario" type="button"
-          data-compartilhar="whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</button><button class="botao botao--secundario" type="button"
-          data-compartilhar="email"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button><button class="botao botao--primario" type="button"
-          data-compartilhar="native"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar</button></div>
+      <div class="dialogo-mvp__acoes"><button class="botao botao--secundario" type="button" data-compartilhar="copy"><i
+            class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button><button class="botao botao--secundario"
+          type="button" data-compartilhar="whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+          WhatsApp</button><button class="botao botao--secundario" type="button" data-compartilhar="email"><i
+            class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button><button class="botao botao--primario"
+          type="button" data-compartilhar="native"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          Compartilhar</button></div>
       <p role="status" data-status-compartilhar></p>
     </dialog>
     <dialog class="dialogo-mvp dialogo-mvp--impressao" id="dialogo-impressao" aria-labelledby="titulo-impressao">
@@ -390,15 +401,24 @@
       <fieldset class="impressao__opcoes">
         <legend>Dados incluídos na impressão</legend>
         <div class="impressao__opcoes-grade">
-          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Identidade e alergias <span class="impressao__badge-fixo">Fixo</span></label>
-          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Medicamentos diários <span class="impressao__badge-fixo">Fixo</span></label>
-          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Contato de referência <span class="impressao__badge-fixo">Fixo</span></label>
-          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="condicoes" /> Condições de saúde</label>
-          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="historico" /> Cirurgias e histórico</label>
-          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="eventos" /> Consultas e exames</label>
-          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="convenio" /> Convênio</label>
-          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="alternativo" /> Contato alternativo</label>
-          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Preferências de cuidado</label>
+          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Identidade e
+            alergias <span class="impressao__badge-fixo">Fixo</span></label>
+          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Medicamentos
+            diários <span class="impressao__badge-fixo">Fixo</span></label>
+          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Contato de
+            referência <span class="impressao__badge-fixo">Fixo</span></label>
+          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="condicoes" /> Condições
+            de saúde</label>
+          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="historico" /> Cirurgias e
+            histórico</label>
+          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="eventos" /> Consultas e
+            exames</label>
+          <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="convenio" />
+            Convênio</label>
+          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="alternativo" /> Contato
+            alternativo</label>
+          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Preferências de
+            cuidado</label>
         </div>
       </fieldset>
       <article class="dialogo-mvp__impressao folha-impressao">
@@ -422,12 +442,14 @@
         <div class="folha-impressao__corpo" data-impressao-lista></div>
         <footer class="folha-impressao__rodape">
           <span>Mutirão · Resumo para consulta • 1 / 1</span>
-          <img src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="folha-impressao__mascote" width="20" height="20" data-impressao-mascote />
+          <img src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="folha-impressao__mascote" width="20"
+            height="20" data-impressao-mascote />
         </footer>
       </article>
       <div class="dialogo-mvp__acoes">
         <button class="botao botao--secundario" type="button" data-fechar-dialogo>Fechar</button>
-        <button class="botao botao--primario" type="button" data-mvp-imprimir><i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir resumo</button>
+        <button class="botao botao--primario" type="button" data-mvp-imprimir><i class="fa-solid fa-print"
+            aria-hidden="true"></i> Imprimir resumo</button>
       </div>
     </dialog>
     <dialog class="dialogo-mvp dialogo-mvp--largo" id="dialogo-editar-ficha" aria-labelledby="titulo-editar-ficha"
@@ -591,7 +613,8 @@
                       class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
                 </div>
                 <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
-                  aria-labelledby="rotulo-historico-saude" data-editor-alvo="historicoSaude">Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Histórico de trombose venosa profunda (2022).</div>
+                  aria-labelledby="rotulo-historico-saude" data-editor-alvo="historicoSaude">Cirurgia na perna esquerda
+                  (2021) · Placa e parafusos após fratura.<br>Histórico de trombose venosa profunda (2022).</div>
               </div>
             </div>
           </div>
@@ -618,6 +641,20 @@
             <label>Cobertura de cuidado<input type="text" name="cobertura" value="24 horas por dia" /></label>
             <label>Preferências de cuidado<input type="text" name="preferencias"
                 value="Prefere consultas à tarde e gosta de conferir a agenda com a família." /></label>
+          </div>
+        </section>
+
+        <section class="editar-ficha__secao" aria-labelledby="secao-aviso-destaque">
+          <h3 id="secao-aviso-destaque" class="editar-ficha__subtitulo">Aviso em destaque</h3>
+          <div class="editar-ficha__grade">
+            <label class="editar-ficha__campo--largo">Título do aviso
+              <input type="text" name="avisoTitulo" maxlength="24" value="Alergia à dipirona" />
+              <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTitulo">18/24 caracteres</small>
+            </label>
+            <label class="editar-ficha__campo--largo">Texto do aviso
+              <textarea name="avisoTexto" rows="2" maxlength="70">Não administrar. Em caso de dúvida, consultar o responsável antes.</textarea>
+              <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTexto">67/70 caracteres</small>
+            </label>
           </div>
         </section>
 
