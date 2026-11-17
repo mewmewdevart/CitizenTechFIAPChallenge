@@ -309,8 +309,22 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 [data-tarefas-diarias] > .agenda__tarefa + .agenda__tarefa,
+.agenda__tarefas-concluidas > .agenda__tarefa + .agenda__tarefa,
 .agenda__evento + .agenda__evento {
   margin-top: var(--espaco-md);
+}
+
+.agenda__tarefas-concluidas {
+  margin-top: var(--espaco-lg);
+  padding-top: var(--espaco-md);
+  border-top: var(--borda-padrao);
+}
+
+.agenda__tarefas-subtitulo {
+  margin: 0 0 var(--espaco-md);
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  color: var(--cor-texto-secundario);
 }
 
 [data-eventos] + [data-tarefas-diarias]:not([hidden]) {
@@ -331,16 +345,19 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 .agenda__semana {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--espaco-sm);
 }
 
 .agenda__semana button {
+  flex: 1 1 96px;
+  min-width: 0;
   display: grid;
+  align-content: space-between;
   gap: var(--espaco-xs);
   padding: var(--espaco-sm);
-  min-height: 66px;
+  min-height: 68px;
   font: inherit;
   font-size: var(--texto-legenda);
   text-align: left;
@@ -370,6 +387,10 @@ html.tema--acolhedor .agenda__avatar {
 
 .agenda__semana .agenda__etiqueta {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: var(--espaco-xs) 6px;
+  box-sizing: border-box;
 }
 
 .agenda__etiqueta img {
@@ -548,10 +569,6 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 @media (max-width: 1280px) {
-  .agenda__semana {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
   .agenda__tarefa,
   .agenda__lacuna {
     flex-wrap: wrap;
@@ -588,10 +605,6 @@ html.tema--acolhedor .agenda__avatar {
   .agenda__tarefas > .agenda__lacuna {
     margin: 0 calc(var(--espaco-md) * -1) var(--espaco-md);
     padding: var(--espaco-md);
-  }
-
-  .agenda__semana {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .agenda__turno {
@@ -639,10 +652,6 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 @media (max-width: 480px) {
-  .agenda__semana {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .agenda__grade-horarios {
     grid-template-columns: minmax(0, 1fr);
   }
