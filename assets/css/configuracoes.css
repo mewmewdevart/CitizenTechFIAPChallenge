@@ -542,3 +542,16 @@ html.acessibilidade--alto-contraste .configuracoes__bloco {
     transition: none;
   }
 }
+
+html.tema--acolhedor :is(.configuracoes__menu, .configuracoes__conteudo, .configuracoes__card-link, .configuracoes__card-opcao) {
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor :is(.configuracoes__card-link, .configuracoes__card-opcao):active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor :is(.configuracoes__menu, .configuracoes__conteudo, .configuracoes__card-link, .configuracoes__card-opcao) {
+  box-shadow: none;
+}

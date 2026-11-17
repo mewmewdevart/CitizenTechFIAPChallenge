@@ -143,6 +143,7 @@ html.tema--acolhedor {
   --raio-xl: 16px;
   --espessura-borda: 2px;
   --borda-padrao: 2px solid var(--cor-borda-sutil);
+  --borda-controle: 2px solid var(--cor-borda-controle);
   --cor-sombra: #12332E;
   --sombra-cartao: 3px 3px 0 var(--cor-sombra);
   --sombra-popover: 5px 5px 0 var(--cor-sombra);

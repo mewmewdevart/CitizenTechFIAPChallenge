@@ -118,6 +118,10 @@
   color: var(--cor-aviso-sucesso);
 }
 
+html.tema--acolhedor .ficha__etiqueta {
+  border: 1.5px solid var(--cor-borda-sutil);
+}
+
 .calendario-mensal {
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);

@@ -223,6 +223,10 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   border-radius: var(--raio-lg);
 }
 
+html.tema--acolhedor .documentos__campo-busca input {
+  box-shadow: var(--sombra-cartao);
+}
+
 .documentos__lista {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -375,8 +379,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   bottom: calc(var(--espaco-xl) * -1);
   display: block;
   width: 100%;
-  max-width: min(100%, 23rem);
-  max-height: 100%;
+  max-width: clamp(280px, 34vw, 420px);
   height: auto;
   object-fit: contain;
 }
@@ -886,7 +889,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
 
   .direitos-banner__arte img {
     position: static;
-    max-width: min(12rem, 100%);
+    max-width: min(260px, 100%);
     max-height: none;
   }
 }

@@ -303,7 +303,11 @@
   background: var(--cor-superficie);
 }
 
-html.tema--acolhedor .busca-topo,
+html.tema--acolhedor .busca-topo {
+  border: var(--borda-padrao);
+  box-shadow: var(--sombra-cartao);
+}
+
 html.acessibilidade--alto-contraste .busca-topo {
   border: var(--borda-padrao);
 }
@@ -325,6 +329,21 @@ html.acessibilidade--alto-contraste .busca-topo {
 .botao-icone:hover,
 summary:hover {
   background: var(--cor-secundaria-clara);
+}
+
+html.tema--acolhedor .barra-topo .botao-icone:not(.busca-topo__gatilho) {
+  border: var(--espessura-borda) solid var(--cor-borda-controle);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor .barra-topo .botao-icone:not(.busca-topo__gatilho):active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor .barra-topo .botao-icone:not(.busca-topo__gatilho) {
+  box-shadow: none;
 }
 
 .botao-icone--notificacao {
@@ -400,6 +419,26 @@ summary::after {
   width: 34px;
   height: 34px;
   flex: none;
+}
+
+html.tema--acolhedor :is(.seletor-pessoa, .menu-perfil) summary {
+  border: var(--borda-padrao);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor :is(.seletor-pessoa, .menu-perfil) summary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
+}
+
+html.tema--acolhedor .menu-perfil summary img {
+  border: 1.5px solid var(--cor-borda-sutil);
+  border-radius: 50%;
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor :is(.seletor-pessoa, .menu-perfil) summary {
+  box-shadow: none;
 }
 
 .menu-perfil .painel-flutuante {

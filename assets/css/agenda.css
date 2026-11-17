@@ -383,6 +383,19 @@ html.tema--acolhedor .agenda__avatar {
   background: var(--cor-superficie-suave);
 }
 
+html.tema--acolhedor .agenda__semana button {
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor .agenda__semana button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor .agenda__semana button {
+  box-shadow: none;
+}
+
 .agenda__etiqueta {
   display: inline-flex;
   align-items: center;
@@ -393,6 +406,10 @@ html.tema--acolhedor .agenda__avatar {
   font-size: var(--texto-micro);
   font-weight: var(--peso-semibold);
   white-space: nowrap;
+}
+
+html.tema--acolhedor .agenda__etiqueta {
+  border: 1.5px solid currentColor;
 }
 
 .agenda__semana .agenda__etiqueta {
@@ -487,6 +504,20 @@ html.tema--acolhedor .agenda__avatar {
   overflow: hidden;
 }
 
+html.tema--acolhedor [data-turnos] {
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor [data-turnos]:has(> .agenda__lacuna:only-child) {
+  border: 0;
+  box-shadow: none;
+  border-radius: var(--raio-lg);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor [data-turnos] {
+  box-shadow: none;
+}
+
 .agenda__turno {
   display: flex;
   align-items: center;
@@ -558,8 +589,7 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 .agenda__link-lacuna:hover {
-  background: var(--cor-superficie-suave);
-  border-radius: var(--raio-lg);
+  cursor: auto;
 }
 
 .agenda__outro-dia {

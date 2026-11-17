@@ -388,6 +388,14 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
   min-height: var(--tamanho-alvo-toque);
 }
 
+html.tema--acolhedor :is(.acessibilidade__cartao-controle, .acessibilidade__interruptor, .acessibilidade__botao-tema, .acessibilidade__botao-passo) {
+  box-shadow: var(--sombra-cartao);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor :is(.acessibilidade__cartao-controle, .acessibilidade__interruptor, .acessibilidade__botao-tema, .acessibilidade__botao-passo) {
+  box-shadow: none;
+}
+
 @media (width < 640px) {
   .acessibilidade__painel {
     top: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-sm));

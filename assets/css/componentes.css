@@ -210,12 +210,12 @@ html.tema--acolhedor .botao {
   border-color: var(--cor-borda-controle);
 }
 
-html.tema--acolhedor :is(.botao--primario, .botao--secundario) {
+html.tema--acolhedor :is(.botao--primario, .botao--secundario, .botao--perigo) {
   border-color: var(--cor-borda-controle);
   box-shadow: 3px 3px 0 var(--cor-sombra);
 }
 
-html.tema--acolhedor :is(.botao--primario, .botao--secundario):active {
+html.tema--acolhedor :is(.botao--primario, .botao--secundario, .botao--perigo):active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--cor-sombra);
 }
@@ -238,7 +238,65 @@ html.tema--acolhedor .dialogo-mvp {
   box-shadow: var(--sombra-elevada);
 }
 
-html.acessibilidade--alto-contraste.tema--acolhedor :is(.botao--primario, .botao--secundario) {
+html.acessibilidade--alto-contraste.tema--acolhedor :is(.botao--primario, .botao--secundario, .botao--perigo, .filtros__opcao) {
+  box-shadow: none;
+}
+
+html.tema--acolhedor :is(
+  img[src*="icone-receita.svg"],
+  img[src*="icone-consulta.svg"],
+  img[src*="icone-exame.svg"],
+  img[src*="icone-documento.svg"],
+  img[src*="icone-medicamento.svg"],
+  img[src*="icone-dado-oculto.svg"]
+) {
+  filter: brightness(0) saturate(100%) invert(14%) sepia(23%) saturate(1100%) hue-rotate(122deg) brightness(95%) contrast(92%);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor :is(
+  img[src*="icone-receita.svg"],
+  img[src*="icone-consulta.svg"],
+  img[src*="icone-exame.svg"],
+  img[src*="icone-documento.svg"],
+  img[src*="icone-medicamento.svg"],
+  img[src*="icone-dado-oculto.svg"]
+) {
+  filter: brightness(0) invert(1);
+}
+
+html.tema--acolhedor :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not(.busca-topo__input):not(.editar-ficha__input-etiqueta),
+  select,
+  textarea,
+  [contenteditable="true"],
+  .editar-ficha__area-editor,
+  .editar-ficha__caixa-etiquetas
+) {
+  border: var(--espessura-borda) solid var(--cor-borda-controle);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not(.busca-topo__input):not(.editar-ficha__input-etiqueta),
+  select,
+  textarea,
+  [contenteditable="true"],
+  .editar-ficha__area-editor
+):focus {
+  outline: none;
+  border-color: var(--cor-primaria);
+  box-shadow: 3px 3px 0 var(--cor-primaria);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not(.busca-topo__input):not(.editar-ficha__input-etiqueta),
+  select,
+  textarea,
+  [contenteditable="true"],
+  .editar-ficha__area-editor,
+  .editar-ficha__caixa-etiquetas
+) {
   box-shadow: none;
 }
 
@@ -597,6 +655,17 @@ html.acessibilidade--alto-contraste.tema--acolhedor :is(.botao--primario, .botao
 .filtros__opcao:focus-visible {
   outline: var(--anel-foco);
   outline-offset: 2px;
+}
+
+html.tema--acolhedor .filtros__opcao {
+  border-width: var(--espessura-borda);
+  border-color: var(--cor-borda-controle);
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor .filtros__opcao:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
 }
 
 .faixa-alerta[hidden] {

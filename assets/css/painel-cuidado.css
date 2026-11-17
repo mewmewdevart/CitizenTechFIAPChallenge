@@ -813,6 +813,10 @@ html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
   color: var(--cor-neutra-clara-02);
 }
 
+html.tema--acolhedor :is(.meds__abas, .perfil__abas) {
+  box-shadow: var(--sombra-cartao);
+}
+
 .meds__painel-estoque,
 .perfil__painel {
   display: grid;
@@ -1450,7 +1454,11 @@ html.acessibilidade--alto-contraste .cuidar__faixa {
   background: var(--cor-aviso-info-claro);
 }
 
-html.tema--acolhedor .cuidar__retorno,
+html.tema--acolhedor .cuidar__retorno {
+  border: var(--espessura-borda) solid var(--cor-aviso-info-escuro);
+  box-shadow: var(--sombra-cartao);
+}
+
 html.acessibilidade--alto-contraste .cuidar__retorno {
   border: var(--espessura-borda) solid var(--cor-aviso-info-escuro);
 }
@@ -1635,7 +1643,11 @@ html.acessibilidade--alto-contraste .cuidar__retorno {
   background: var(--cor-aviso-alerta-claro);
 }
 
-html.tema--acolhedor .cuidar__alerta,
+html.tema--acolhedor .cuidar__alerta {
+  border: var(--espessura-borda) solid var(--cor-aviso-alerta-escuro);
+  box-shadow: var(--sombra-cartao);
+}
+
 html.acessibilidade--alto-contraste .cuidar__alerta {
   border: var(--espessura-borda) solid var(--cor-aviso-alerta-escuro);
 }
