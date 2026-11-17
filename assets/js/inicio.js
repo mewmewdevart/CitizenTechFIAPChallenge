@@ -35,7 +35,7 @@
   const faixaLacuna = pagina.querySelector('[data-inicio-lacuna]');
   const tituloLacuna = pagina.querySelector('[data-inicio-lacuna-titulo]');
 
-  const HORA_REGISTRO = '12:04';
+  const HORA_REGISTRO = '11:58';
   const ESPERA_ANIMACAO = 900;
   const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)');
   const aviso = document.createElement('div');
@@ -99,7 +99,9 @@
   const atualizarResumo = grupos => {
     const total = grupos.reduce((soma, grupo) => soma + grupo.itens.length, 0);
     const dados = grupos.reduce((soma, grupo) => soma + grupo.itens.length - grupo.faltam, 0);
-    resumoPorta.textContent = dados === total ? `${total} de ${total} dados · tudo certo por hoje` : `${dados} de ${total} dados · arraste para o lado`;
+    resumoPorta.textContent = dados === total
+      ? `${total} de ${total} administrados · tudo certo por hoje`
+      : `${dados} de ${total} administrados · deslize para ver mais`;
   };
 
   const obterResponsavelHorario = horaTexto => {
@@ -122,21 +124,17 @@
     const titulo = pagina.querySelector('[data-proxima-medicacao]');
     const responsavel = pagina.querySelector('[data-proxima-responsavel]');
     const bloco = titulo?.closest('.painel__bloco');
-    const temaAcolhedor = document.documentElement.classList.contains('tema--acolhedor');
     if (!titulo || !responsavel) return;
+    if (bloco) bloco.hidden = false;
     if (!proximo) {
-      if (temaAcolhedor) {
-        if (bloco) bloco.hidden = false;
-        titulo.textContent = 'Todos os remédios de hoje foram dados';
-        responsavel.textContent = 'Porta-remédios completo';
-      } else if (bloco) {
-        bloco.hidden = true;
-      }
+      titulo.textContent = 'Todos os remédios de hoje foram dados';
+      responsavel.textContent = 'Porta-remédios completo';
       return;
     }
-    if (bloco) bloco.hidden = false;
     const pendentes = proximo.itens.filter(dose => dose.estado !== 'administrado');
-    titulo.textContent = `${proximo.hora} · ${pendentes[0].nome}${pendentes.length > 1 ? ` e mais ${pendentes.length - 1}` : ''}`;
+    titulo.textContent = pendentes.length > 1
+      ? `${proximo.hora} · ${pendentes.length} medicamentos previstos (${pendentes[0].nome} + ${pendentes.length - 1})`
+      : `${proximo.hora} · ${pendentes[0].nome}`;
     const pessoaTurno = obterResponsavelHorario(proximo.hora);
     responsavel.textContent = pessoaTurno
       ? `Responsável: ${pessoaTurno}`
@@ -546,8 +544,10 @@
   });
 
   const sincronizarRedeInicio = () => {
-    const usuario = obterUsuarioAtual();
-    const itensRede = pagina.querySelectorAll('#titulo-rede ~ ul .painel__item');
+    const estado = obterEstado();
+    const usuario = obterUsuarioAtual(estado);
+    const listaRede = pagina.querySelector('#titulo-rede ~ ul');
+    const itensRede = listaRede?.querySelectorAll('.painel__item:not([data-convite-inicio])') || [];
     const itemUsuario = itensRede[itensRede.length - 1];
     if (itemUsuario) {
       const img = itemUsuario.querySelector('img');
@@ -557,13 +557,30 @@
       if (nomeEl) nomeEl.textContent = usuario.nomeComApelido;
       if (papelEl) papelEl.textContent = `${usuario.papel} · ${usuario.vinculo}`;
     }
+
+    if (listaRede) {
+      listaRede.querySelectorAll('[data-convite-inicio]').forEach(el => el.remove());
+      for (const convite of estado.convites || []) {
+        const li = document.createElement('li');
+        li.className = 'painel__item';
+        li.setAttribute('data-convite-inicio', '');
+        li.innerHTML = `<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span><span class="painel__texto"><strong>${escaparHtml(convite.email)}</strong><span>${escaparHtml(convite.papel)} · ${escaparHtml(convite.vinculo)} · Aguardando aceite</span></span>`;
+        listaRede.append(li);
+      }
+    }
+
+    const contextoRelato = pagina.querySelector('[data-contexto-relato-inicio]');
+    if (contextoRelato) {
+      const linhaTempo = construirLinhaDoTempoDia(HOJE, obterEstado());
+      const turnoAtual = linhaTempo.find(seg => seg.tipo === 'turno' && 11 >= seg.inicio && 11 < seg.fim);
+      const responsavelTurno = turnoAtual?.pessoa?.nome || 'Beatriz da Silva (Bea)';
+      const horarioTurnoAtual = turnoAtual?.horario || '07h–12h';
+      contextoRelato.textContent = `Maria das Dores (Mari) · Turno de ${responsavelTurno} · ${horarioTurnoAtual} · Registro por ${usuario.nomeComApelido}`;
+    }
   };
 
   renderizarPortaRemedios();
   renderizarEscala();
   sincronizarRedeInicio();
-
-  new MutationObserver(() => {
-    atualizarProximaMedicacao(obterCompartimentos());
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  window.addEventListener('mutirao:perfil-atualizado', sincronizarRedeInicio);
 })();

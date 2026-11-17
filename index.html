@@ -68,10 +68,6 @@
 </head>
 
 <body>
-  <script type="module" src="https://mutirao-pontobot-frontend.vercel.app/pontobot.js"></script>
-  <ponto-bot data-app="https://mutirao-citizen-tech.vercel.app/"></ponto-bot>
-
-
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
     <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
@@ -79,7 +75,7 @@
     <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante">Maria das Dores (Mari)</div>
+      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
@@ -88,8 +84,7 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
@@ -193,7 +188,6 @@
         <span>A Mari precisa de acompanhamento nesse horário.</span>
       </div>
       <div class="faixa-alerta__acoes">
-        <button type="button" class="botao botao--secundario" aria-disabled="true" title="Disponível em uma próxima versão">Atribuir a alguém</button>
         <button type="button" class="botao botao--primario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="2026-11-10" data-horario="12h–13h" data-inicio-cobrir-lacuna>Cobrir horário</button>
       </div>
     </section>
@@ -220,7 +214,7 @@
         <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
         <div class="painel__texto">
           <span class="inicio__rotulo">Próxima medicação</span>
-          <strong data-proxima-medicacao>12h · Omeprazol e mais 3</strong>
+          <strong data-proxima-medicacao>12h · 4 medicamentos previstos (Omeprazol + 3)</strong>
           <span data-proxima-responsavel>Sem responsável neste turno (horário sem cobertura)</span>
         </div>
         <a class="botao botao--secundario" href="medicamentos.html">Ver em Medicamentos</a>
@@ -232,7 +226,7 @@
         <section class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios">
           <div class="painel__cartao-cabecalho">
             <h2 id="titulo-porta-remedios">Porta-remédios de hoje</h2>
-            <small data-porta-remedios-resumo>7 de 20 dados · arraste para o lado</small>
+            <small data-porta-remedios-resumo>7 de 20 administrados · deslize para ver mais</small>
           </div>
           <div class="porta-remedios__trilho" tabindex="0" aria-label="Compartimentos do porta-remédios por horário" data-porta-remedios-trilho></div>
           <div class="porta-remedios__horas" role="group" aria-label="Ir para o horário" data-porta-remedios-horas></div>
@@ -255,7 +249,7 @@
             <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
             <div class="painel__texto">
               <strong>Beatriz da Silva (Bea)</strong>
-              <span>Cuidadora - <time datetime="2026-11-09T08:10">9 nov. 2026 · 08h10</span>
+              <span>Cuidadora - <time datetime="2026-11-09T08:10">9 nov. 2026 · 08h10</time></span>
             </div>
           </div>
           <p>Agendar consulta com otorrinolaringologista para Dona Mari.</p>
@@ -284,7 +278,7 @@
         <h2 id="titulo-registrar-cuidado">Registrar cuidado</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <p>Maria das Dores (Mari) · Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por Zé da Manga (Zé)</p>
+      <p data-contexto-relato-inicio>Maria das Dores (Mari) · Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por Zé da Manga (Zé)</p>
       <form class="formulario-mvp" data-formulario-mvp="relato">
         <label>Relato do turno<textarea name="relato" rows="4" placeholder="Descreva o que aconteceu durante o cuidado." required></textarea></label>
         <label>Tarefa relacionada · opcional
