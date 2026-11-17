@@ -1,7 +1,10 @@
 (() => {
   const CHAVE_PREFERENCIAS = 'mutirao-acessibilidade-preferencias';
+  const CHAVE_TEMA = 'mutirao-tema';
+  const TEMAS = ['neutro', 'acolhedor'];
+  const FONTES_TEMA_ACOLHEDOR = 'https://fonts.googleapis.com/css2?family=Gloock&family=Gochi+Hand&family=Onest:wght@400;600;700&display=swap';
   const FONTE_MINIMA = 90;
-  const FONTE_MAXIMA = 110;
+  const FONTE_MAXIMA = 200;
   const PASSO_FONTE = 5;
 
   const PADROES = {
@@ -55,7 +58,43 @@
     raiz.classList.toggle('acessibilidade--espacamento-texto', preferencias.espacamentoTexto);
   }
 
+  function obterTemaSalvo() {
+    try {
+      const salvo = localStorage.getItem(CHAVE_TEMA);
+      return TEMAS.includes(salvo) ? salvo : 'neutro';
+    } catch {
+      return 'neutro';
+    }
+  }
+
+  function aplicarTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    const acolhedor = valido === 'acolhedor';
+    document.documentElement.classList.toggle('tema--acolhedor', acolhedor);
+    if (acolhedor && !document.querySelector(`link[href="${FONTES_TEMA_ACOLHEDOR}"]`)) {
+      const fontes = document.createElement('link');
+      fontes.rel = 'stylesheet';
+      fontes.href = FONTES_TEMA_ACOLHEDOR;
+      document.head.append(fontes);
+    }
+    for (const botao of document.querySelectorAll('[data-tema]')) {
+      botao.setAttribute('aria-pressed', String(botao.dataset.tema === valido));
+    }
+    return valido;
+  }
+
+  function definirTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    try {
+      localStorage.setItem(CHAVE_TEMA, valido);
+    } catch {
+      return aplicarTema(valido);
+    }
+    return aplicarTema(valido);
+  }
+
   aplicarPreferencias(estado);
+  aplicarTema(obterTemaSalvo());
 
   function criarPainelAcessibilidade() {
     if (document.getElementById('mutirao-acessibilidade-raiz')) return;
@@ -192,6 +231,19 @@
               <span class="acessibilidade__interruptor-pino"></span>
             </span>
           </button>
+
+          <div class="acessibilidade__cartao-controle">
+            <span id="acessibilidade-rotulo-tema" class="acessibilidade__rotulo-controle">Tema da aplicação</span>
+            <span class="acessibilidade__descricao-controle">Escolha a aparência visual das telas</span>
+            <div class="acessibilidade__temas" role="group" aria-labelledby="acessibilidade-rotulo-tema">
+              <button type="button" class="acessibilidade__botao-tema" data-tema="neutro" aria-pressed="true">
+                <i class="fa-regular fa-sun" aria-hidden="true"></i> Neutro
+              </button>
+              <button type="button" class="acessibilidade__botao-tema" data-tema="acolhedor" aria-pressed="false">
+                <i class="fa-regular fa-heart" aria-hidden="true"></i> Acolhedor
+              </button>
+            </div>
+          </div>
         </div>
 
         <footer class="acessibilidade__rodape">
@@ -208,16 +260,6 @@
     document.body.append(raiz);
 
     const botaoFlutuante = raiz.querySelector('#acessibilidade-botao');
-    const acoesTopo = document.querySelector('.barra-topo__acoes');
-    if (acoesTopo) {
-      const telaMobile = matchMedia('(width < 1024px)');
-      const posicionarAtalho = () => {
-        if (telaMobile.matches) acoesTopo.append(botaoFlutuante);
-        else raiz.prepend(botaoFlutuante);
-      };
-      posicionarAtalho();
-      telaMobile.addEventListener('change', posicionarAtalho);
-    }
     const fundo = raiz.querySelector('#acessibilidade-fundo');
     const painel = raiz.querySelector('#acessibilidade-painel');
     const botaoFechar = raiz.querySelector('#acessibilidade-fechar');
@@ -238,8 +280,8 @@
 
     function sincronizarInterface() {
       valorFonte.textContent = `${estado.escalaFonte}%`;
-      botaoDiminuir.disabled = estado.escalaFonte <= FONTE_MINIMA;
-      botaoAumentar.disabled = estado.escalaFonte >= FONTE_MAXIMA;
+      botaoDiminuir.setAttribute('aria-disabled', String(estado.escalaFonte <= FONTE_MINIMA));
+      botaoAumentar.setAttribute('aria-disabled', String(estado.escalaFonte >= FONTE_MAXIMA));
 
       for (const interruptor of interruptores) {
         const chave = interruptor.dataset.preferencia;
@@ -249,7 +291,43 @@
 
     function atualizarEstado(parcial, anuncio) {
       estado = { ...estado, ...parcial };
-      aplicarPreferencias(estado);
+      function obterTemaSalvo() {
+    try {
+      const salvo = localStorage.getItem(CHAVE_TEMA);
+      return TEMAS.includes(salvo) ? salvo : 'neutro';
+    } catch {
+      return 'neutro';
+    }
+  }
+
+  function aplicarTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    const acolhedor = valido === 'acolhedor';
+    document.documentElement.classList.toggle('tema--acolhedor', acolhedor);
+    if (acolhedor && !document.querySelector(`link[href="${FONTES_TEMA_ACOLHEDOR}"]`)) {
+      const fontes = document.createElement('link');
+      fontes.rel = 'stylesheet';
+      fontes.href = FONTES_TEMA_ACOLHEDOR;
+      document.head.append(fontes);
+    }
+    for (const botao of document.querySelectorAll('[data-tema]')) {
+      botao.setAttribute('aria-pressed', String(botao.dataset.tema === valido));
+    }
+    return valido;
+  }
+
+  function definirTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    try {
+      localStorage.setItem(CHAVE_TEMA, valido);
+    } catch {
+      return aplicarTema(valido);
+    }
+    return aplicarTema(valido);
+  }
+
+  aplicarPreferencias(estado);
+  aplicarTema(obterTemaSalvo());
       salvarPreferencias(estado);
       sincronizarInterface();
       if (anuncio) anunciar(anuncio);
@@ -314,8 +392,18 @@
       });
     }
 
+    for (const botaoTema of raiz.querySelectorAll('.acessibilidade__botao-tema[data-tema]')) {
+      botaoTema.addEventListener('click', () => {
+        const tema = definirTema(botaoTema.dataset.tema);
+        anunciar(`Tema ${tema === 'acolhedor' ? 'acolhedor' : 'neutro'} ativado`);
+      });
+    }
+
+    aplicarTema(obterTemaSalvo());
+
     botaoRestaurar.addEventListener('click', () => {
       atualizarEstado({ ...PADROES }, 'Preferências de acessibilidade restauradas para o padrão');
+      definirTema('neutro');
     });
 
     document.addEventListener('keydown', evento => {
