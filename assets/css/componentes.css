@@ -149,6 +149,11 @@ button:disabled,
   color: var(--cor-aviso-atencao-escuro);
 }
 
+html.tema--acolhedor .faixa-alerta,
+html.acessibilidade--alto-contraste .faixa-alerta {
+  border: var(--espessura-borda) solid currentColor;
+}
+
 .faixa-alerta__icone {
   flex: none;
   display: grid;
@@ -205,12 +210,12 @@ html.tema--acolhedor .botao {
   border-color: var(--cor-borda-controle);
 }
 
-html.tema--acolhedor .botao--primario {
+html.tema--acolhedor :is(.botao--primario, .botao--secundario) {
   border-color: var(--cor-borda-controle);
   box-shadow: 3px 3px 0 var(--cor-sombra);
 }
 
-html.tema--acolhedor .botao--primario:active {
+html.tema--acolhedor :is(.botao--primario, .botao--secundario):active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--cor-sombra);
 }
@@ -233,7 +238,7 @@ html.tema--acolhedor .dialogo-mvp {
   box-shadow: var(--sombra-elevada);
 }
 
-html.acessibilidade--alto-contraste.tema--acolhedor .botao--primario {
+html.acessibilidade--alto-contraste.tema--acolhedor :is(.botao--primario, .botao--secundario) {
   box-shadow: none;
 }
 

@@ -886,7 +886,7 @@ function sincronizarStatusMedicamentos() {
   linha.classList.toggle('cartao-status__linha--alerta', ehAlerta);
   if (ehAlerta) {
     linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'dose pendente' : 'doses pendentes'}`;
-    linha.querySelector('small').textContent = 'Não administrada · ver detalhes';
+    linha.querySelector('small').textContent = 'Não administrada';
   } else if (grupoProximo.length) {
     linha.querySelector('strong').textContent = 'Há medicamentos previstos';
     linha.querySelector('small').textContent = `Próximo horário às ${proxima.hora.padStart(3, '0')}`;

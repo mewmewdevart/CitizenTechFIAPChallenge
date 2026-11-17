@@ -61,6 +61,7 @@ body.menu-fechado .conteudo-pagina.agenda {
   background: transparent;
   border-color: var(--cor-primaria);
   color: var(--cor-primaria);
+  box-shadow: 3px 3px 0 var(--cor-sombra);
 }
 
 .agenda .botao--secundario:hover {
