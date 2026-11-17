@@ -57,7 +57,7 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
 .acessibilidade__botao-flutuante {
   position: fixed;
   right: 0;
-  top: 50%;
+  top: calc(50% - 56px);
   transform: translateY(-50%);
   z-index: var(--z-acessibilidade-botao);
   display: inline-flex;
