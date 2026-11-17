@@ -137,7 +137,21 @@ function salvarNotificacoes() {
 
 const somNotificacao = new Audio('assets/media/sounds/pop-sound-effect.mp3');
 
+function lerConfiguracoesSessao() {
+  try {
+    return JSON.parse(sessionStorage.getItem('mutirao-configuracoes-sessao-v1') || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function preferenciaAtiva(chave, padrao = true) {
+  const cfg = lerConfiguracoesSessao();
+  return chave in cfg ? Boolean(cfg[chave]) : padrao;
+}
+
 function tocarSomNotificacao() {
+  if (!preferenciaAtiva('notificacoesSom', true)) return;
   try {
     somNotificacao.currentTime = 0;
     somNotificacao.play().catch(() => {});
@@ -147,29 +161,60 @@ function tocarSomNotificacao() {
 }
 
 const NOTIFICACOES_INICIAIS_REDE = [
-  { titulo: 'Horário sem cobertura', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).' },
-  { titulo: 'Pedido para agendar consulta', descricao: 'Beatriz pediu ajuda para agendar otorrinolaringologia.' },
-  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina prevista para 20h.' }
+  { titulo: 'Horário sem cobertura', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).', avatar: 'assets/media/mascotes/icone-mascote-espeto.svg' },
+  { titulo: 'Pedido para agendar consulta', descricao: 'Beatriz pediu ajuda para agendar otorrinolaringologia.', avatar: 'assets/media/mascotes/icone-mascote-trevo.svg' },
+  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina prevista para 20h.', avatar: 'assets/media/mascotes/icone-mascote-pingo.svg' }
 ];
+
+function resolverAvatarNotificacao(avatarInformado, titulo, descricao) {
+  if (avatarInformado) return avatarInformado;
+  const texto = `${titulo || ''} ${descricao || ''}`.toLocaleLowerCase('pt-BR');
+  if (texto.includes('ana')) return 'assets/media/mascotes/icone-mascote-espeto.svg';
+  if (texto.includes('beatriz') || texto.includes('bea')) return 'assets/media/mascotes/icone-mascote-trevo.svg';
+  if (texto.includes('paulo') || texto.includes('paul')) return 'assets/media/mascotes/icone-mascote-pingo.svg';
+  const usuario = window.MutiraoCuidado?.obterUsuarioAtual?.();
+  return usuario?.avatar || 'assets/media/mascotes/icone-mascote-cubado.svg';
+}
 
 function renderizarNotificacoes() {
   if (!listaNotificacoes || !gatilhoNotificacoes) return;
+  listaNotificacoes.setAttribute('aria-live', 'polite');
+  const core = window.MutiraoCuidado;
+  const lacunasHoje = core?.obterLacunasDia ? core.obterLacunasDia(core.HOJE) : [{ horario: '12h–13h' }];
   listaNotificacoes.querySelectorAll('.notificacao:not([data-notificacao-local])').forEach((item, indice) => {
     const padrao = NOTIFICACOES_INICIAIS_REDE[indice];
     if (!padrao) return;
+    if (indice === 0) {
+      item.hidden = lacunasHoje.length === 0;
+    }
     const h3 = item.querySelector('h3');
     const p = item.querySelector('p');
+    const link = item.querySelector('.notificacao__link');
     if (h3) h3.textContent = padrao.titulo;
     if (p) p.textContent = padrao.descricao;
+    if (link && !link.querySelector('.notificacao__avatar')) {
+      const img = document.createElement('img');
+      img.className = 'notificacao__avatar';
+      img.src = padrao.avatar;
+      img.alt = '';
+      img.setAttribute('aria-hidden', 'true');
+      link.prepend(img);
+    }
   });
   listaNotificacoes.querySelectorAll('[data-notificacao-local]').forEach(item => item.remove());
-  listaNotificacoes.prepend(...notificacoesLocais.map(({ titulo, descricao, destino }) => {
+  listaNotificacoes.prepend(...notificacoesLocais.map(({ titulo, descricao, destino, avatar, lida }) => {
     const item = document.createElement('li');
     item.className = 'notificacao';
     item.dataset.notificacaoLocal = '';
+    if (!lida) item.dataset.naoLida = 'true';
     const link = document.createElement('a');
     link.className = 'notificacao__link';
     link.href = destino || 'index.html';
+    const img = document.createElement('img');
+    img.className = 'notificacao__avatar';
+    img.src = resolverAvatarNotificacao(avatar, titulo, descricao);
+    img.alt = '';
+    img.setAttribute('aria-hidden', 'true');
     const bloco = document.createElement('div');
     const nome = document.createElement('h3');
     const texto = document.createElement('p');
@@ -179,21 +224,22 @@ function renderizarNotificacoes() {
     const seta = document.createElement('i');
     seta.className = 'fa-solid fa-chevron-right notificacao__seta';
     seta.setAttribute('aria-hidden', 'true');
-    link.append(bloco, seta);
+    link.append(img, bloco, seta);
     item.append(link);
     return item;
   }));
 
   const novas = notificacoesLocais.filter(item => !item.lida).length;
-  const total = listaNotificacoes.children.length;
+  const total = [...listaNotificacoes.children].filter(el => !el.hidden).length;
   gatilhoNotificacoes.setAttribute('aria-label', 'Notificações (' + total + ' itens' + (novas ? ', ' + novas + ' novas' : '') + ')');
   if (novas > 0) gatilhoNotificacoes.setAttribute('data-nova-notificacao', 'true');
   else gatilhoNotificacoes.removeAttribute('data-nova-notificacao');
 }
 
 window.MutiraoNotificacoes = {
-  registrar(titulo, descricao, destino) {
-    notificacoesLocais.unshift({ titulo, descricao, destino, lida: false });
+  registrar(titulo, descricao, destino, avatar) {
+    const foto = resolverAvatarNotificacao(avatar, titulo, descricao);
+    notificacoesLocais.unshift({ titulo, descricao, destino, avatar: foto, lida: false });
     notificacoesLocais = notificacoesLocais.slice(0, 12);
     salvarNotificacoes();
     renderizarNotificacoes();
@@ -205,12 +251,16 @@ renderizarNotificacoes();
 
 for (const menuSuspenso of document.querySelectorAll('.barra-topo details')) {
   menuSuspenso.addEventListener('toggle', () => {
-    if (!menuSuspenso.open) return;
     if (menuSuspenso.classList.contains('menu-notificacoes')) {
-      notificacoesLocais.forEach(item => { item.lida = true; });
-      salvarNotificacoes();
-      renderizarNotificacoes();
+      if (menuSuspenso.open) {
+        gatilhoNotificacoes?.removeAttribute('data-nova-notificacao');
+      } else {
+        notificacoesLocais.forEach(item => { item.lida = true; });
+        salvarNotificacoes();
+        renderizarNotificacoes();
+      }
     }
+    if (!menuSuspenso.open) return;
     for (const outro of document.querySelectorAll('.barra-topo details[open]')) {
       if (outro !== menuSuspenso) outro.open = false;
     }
@@ -301,7 +351,7 @@ const itensPesquisaveis = [
   { href: 'ficha.html', rotulo: 'Ficha da pessoa acompanhada · Maria das Dores (Mari)' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
-const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-dialogo="dialogo-busca"]');
+const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-busca-topo], .barra-topo [data-dialogo="dialogo-busca"]');
 
 function inicializarBuscaTopo() {
   if (!gatilhoBuscaTopo) return;
@@ -388,21 +438,58 @@ function inicializarBuscaTopo() {
     }));
 
     const extras = [
-      { href: 'ficha.html', rotulo: 'Alergias e ficha de saúde', detalhe: `Ficha · ${estado.person?.alergias || 'Dipirona'}`, busca: `alergia dipirona ficha saude historico ${estado.person?.alergias || ''}` },
-      { href: 'medicamentos.html?estoque=1', rotulo: 'Estoque de medicamentos e insumos', detalhe: 'Medicamentos · Fraldas, Metformina e reposição', busca: 'estoque fraldas insumo reposicao metformina' },
-      { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços (SUS, BPC, Farmácia Popular)', detalhe: 'Direitos e serviços', busca: 'direitos beneficios sus bpc loas farmacia popular estatuto' },
-      { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Configurações', busca: 'configuracoes tema contraste fonte acessibilidade' }
+      { href: 'medicamentos.html', rotulo: 'Medicamentos e rotina de doses', detalhe: 'Medicamentos · Remédios, horários e porta-remédios', busca: 'remedio remedios medicamento medicamentos pilula comprimido dose doses horario horarios rotina tomar administracao atrasado porta remedios' },
+      { href: 'medicamentos.html?estoque=1', rotulo: 'Insumos e controle de estoque', detalhe: 'Medicamentos · Fraldas, Metformina e reposição', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
+      { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços', detalhe: 'Direitos e serviços · SUS, BPC/LOAS, Farmácia Popular e CRAS', busca: 'servico servicos direito direitos beneficio beneficios sus ubs farmacia popular bpc loas inss cras caps estatuto idoso transporte gratuidade auxilio lei guia' },
+      { href: 'agenda.html', rotulo: 'Agenda, turnos e cobertura de horários', detalhe: 'Agenda · Escala semanal, consultas e exames', busca: 'agenda turno turnos escala cobertura cobrir horario calendario compromisso consulta exame' },
+      { href: 'ficha.html', rotulo: 'Ficha de saúde, alergias e diário', detalhe: `Ficha · ${estado.person?.alergias || 'Dipirona'} e histórico clínico`, busca: `alergia alergias dipirona ficha saude historico cirurgia trombose diario relato emergencia convenio imprimir resumo ${estado.person?.alergias || ''}` },
+      { href: 'documentos.html', rotulo: 'Documentos, receitas e exames', detalhe: 'Documentos · Receitas, laudos e arquivos', busca: 'documento documentos receita receitas laudo exame exames arquivo pasta pdf anexo' },
+      { href: 'pessoas.html', rotulo: 'Pessoas da rede e cuidadores', detalhe: 'Pessoas · Família, cuidadores e convites', busca: 'pessoa pessoas rede familia cuidador cuidadora convite convidar participante' },
+      { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Configurações · Tema acolhedor, alto contraste e fonte', busca: 'configuracao configuracoes tema acolhedor neutro contraste fonte acessibilidade som' },
+      { href: 'ajuda.html', rotulo: 'Ajuda, dúvidas e suporte', detalhe: 'Ajuda · Perguntas frequentes e contato', busca: 'ajuda suporte duvida duvidas orientacao contato' },
+      { href: 'privacidade.html', rotulo: 'Privacidade e proteção de dados', detalhe: 'Privacidade · Uso dos dados e LGPD', busca: 'privacidade dados lgpd seguranca' }
     ];
 
-    return [...itensMeds, ...itensCompromissos, ...itensDocs, ...equipe, ...extras, ...basePaginas];
+    const insumosExtras = (estado.itensExtras || [])
+      .filter(item => item.tipo === 'Insumo')
+      .map(item => ({
+        href: 'medicamentos.html',
+        rotulo: item.nome,
+        detalhe: 'Insumo · Medicamentos e estoque',
+        busca: `${item.nome} insumo estoque medicamento`
+      }));
+
+    return [...itensMeds, ...insumosExtras, ...itensCompromissos, ...itensDocs, ...equipe, ...extras, ...basePaginas];
   };
 
   function renderizarResultados() {
     const normalizar = texto => String(texto || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
     const termo = normalizar(campo.value.trim());
+    const palavras = termo.split(/\s+/).filter(Boolean);
     const todos = obterItensBusca();
-    const correspondencias = (termo
-      ? todos.filter(item => normalizar(`${item.rotulo} ${item.detalhe} ${item.busca}`).includes(termo))
+
+    const pontuar = item => {
+      const rotuloNorm = normalizar(item.rotulo);
+      const detalheNorm = normalizar(item.detalhe);
+      const buscaNorm = normalizar(item.busca);
+      const tudo = `${rotuloNorm} ${detalheNorm} ${buscaNorm}`;
+      if (!palavras.every(p => tudo.includes(p))) return 0;
+      let score = 1;
+      if (rotuloNorm.startsWith(termo)) score += 6;
+      else if (rotuloNorm.includes(termo)) score += 4;
+      for (const p of palavras) {
+        if (rotuloNorm.includes(p)) score += 2;
+        else if (detalheNorm.includes(p)) score += 1;
+      }
+      return score;
+    };
+
+    const correspondencias = (palavras.length
+      ? todos
+        .map(item => ({ item, score: pontuar(item) }))
+        .filter(entrada => entrada.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(entrada => entrada.item)
       : todos.slice(0, 6)
     ).slice(0, 8);
 
@@ -445,6 +532,36 @@ function inicializarBuscaTopo() {
 
   campo.addEventListener('input', renderizarResultados);
 
+  campo.addEventListener('keydown', evento => {
+    if (evento.key === 'ArrowDown') {
+      const primeiro = lista.querySelector('a');
+      if (primeiro) {
+        evento.preventDefault();
+        primeiro.focus();
+      }
+    } else if (evento.key === 'Enter' && campo.value.trim()) {
+      const primeiro = lista.querySelector('a');
+      if (primeiro) {
+        evento.preventDefault();
+        primeiro.click();
+      }
+    }
+  });
+
+  lista.addEventListener('keydown', evento => {
+    const links = [...lista.querySelectorAll('a')];
+    const atual = links.indexOf(document.activeElement);
+    if (atual === -1) return;
+    if (evento.key === 'ArrowDown') {
+      evento.preventDefault();
+      links[(atual + 1) % links.length]?.focus();
+    } else if (evento.key === 'ArrowUp') {
+      evento.preventDefault();
+      if (atual === 0) campo.focus();
+      else links[atual - 1]?.focus();
+    }
+  });
+
   document.addEventListener('click', evento => {
     if (container.classList.contains('busca-topo--aberta') && !container.contains(evento.target)) {
       definirBuscaAberta(false);
@@ -453,6 +570,12 @@ function inicializarBuscaTopo() {
 
   document.addEventListener('keydown', evento => {
     if (evento.key === 'Escape' && container.classList.contains('busca-topo--aberta')) {
+      if (campo.value) {
+        campo.value = '';
+        renderizarResultados();
+        campo.focus();
+        return;
+      }
       definirBuscaAberta(false);
       gatilhoBuscaTopo.focus();
     }
@@ -535,9 +658,6 @@ function sincronizarPerfilGlobal() {
 sincronizarPerfilGlobal();
 window.addEventListener('mutirao:perfil-atualizado', sincronizarPerfilGlobal);
 window.addEventListener('mutirao:pessoa-atualizada', sincronizarPerfilGlobal);
-window.addEventListener('storage', evento => {
-  if (evento.key === 'mutirao-mvp-estado-v1') sincronizarPerfilGlobal();
-});
 
 function sincronizarStatusMedicamentos() {
   const core = window.MutiraoCuidado;
@@ -647,30 +767,32 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
     };
 
     if (atual.registrosDose !== anterior.registrosDose) {
-      const [titulo, descricao, destino] = descreverMudancaDose();
-      window.MutiraoNotificacoes.registrar(titulo, descricao, destino);
-      anterior = atual;
-      return;
+      if (preferenciaAtiva('notificacoesMedicacao', true)) {
+        const [titulo, descricao, destino] = descreverMudancaDose();
+        window.MutiraoNotificacoes.registrar(titulo, descricao, destino, usuario.avatar);
+      }
     }
 
     const ultimoEstoque = estadoAtualObj.historicoEstoque?.[0]?.item;
+    const permitirMedicacao = preferenciaAtiva('notificacoesMedicacao', true);
+    const permitirRelatos = preferenciaAtiva('notificacoesRelatos', true);
     const regras = [
-      ['estoque', 'Estoque atualizado', ultimoEstoque ? `${primeiroNome} atualizou o estoque de ${ultimoEstoque}.` : `${primeiroNome} atualizou o estoque de itens.`, 'medicamentos.html'],
-      ['itens', 'Itens atualizados', `${primeiroNome} atualizou a lista de medicamentos.`, 'medicamentos.html'],
-      ['turnos', 'Turno atualizado', `${primeiroNome} atualizou a cobertura de turno.`, 'agenda.html'],
-      ['events', 'Agenda atualizada', `${primeiroNome} atualizou um compromisso na agenda.`, 'agenda.html'],
-      ['reports', 'Novo relato no diário', `${primeiroNome} registrou um relato no diário.`, 'ficha.html#diario'],
-      ['documents', 'Documentos atualizados', `${primeiroNome} atualizou os documentos da Mari.`, 'documentos.html'],
-      ['convites', 'Rede atualizada', `${primeiroNome} atualizou os participantes da rede.`, 'pessoas.html'],
-      ['perfil', 'Perfil atualizado', `${primeiroNome} atualizou os dados do perfil.`, 'meu-perfil.html'],
-      ['person', 'Ficha atualizada', `${primeiroNome} atualizou a ficha da Mari.`, 'ficha.html']
+      ['estoque', 'Estoque atualizado', ultimoEstoque ? `${primeiroNome} atualizou o estoque de ${ultimoEstoque}.` : `${primeiroNome} atualizou o estoque de itens.`, 'medicamentos.html', permitirMedicacao],
+      ['itens', 'Itens atualizados', `${primeiroNome} atualizou a lista de medicamentos.`, 'medicamentos.html', permitirMedicacao],
+      ['turnos', 'Turno atualizado', `${primeiroNome} atualizou a cobertura de turno.`, 'agenda.html', permitirRelatos],
+      ['events', 'Agenda atualizada', `${primeiroNome} atualizou um compromisso na agenda.`, 'agenda.html', permitirRelatos],
+      ['reports', 'Novo relato no diário', `${primeiroNome} registrou um relato no diário.`, 'ficha.html#diario', permitirRelatos],
+      ['documents', 'Documentos atualizados', `${primeiroNome} atualizou os documentos da Mari.`, 'documentos.html', true],
+      ['convites', 'Rede atualizada', `${primeiroNome} atualizou os participantes da rede.`, 'pessoas.html', true],
+      ['perfil', 'Perfil atualizado', `${primeiroNome} atualizou os dados do perfil.`, 'meu-perfil.html', true],
+      ['person', 'Ficha atualizada', `${primeiroNome} atualizou a ficha da Mari.`, 'ficha.html', true]
     ];
-    for (const [chave, titulo, descricao, destino] of regras) {
-      if (atual[chave] !== anterior[chave]) {
-        window.MutiraoNotificacoes.registrar(titulo, descricao, destino);
-        break;
+    for (const [chave, titulo, descricao, destino, ativo] of regras) {
+      if (ativo && atual[chave] !== anterior[chave]) {
+        window.MutiraoNotificacoes.registrar(titulo, descricao, destino, usuario.avatar);
       }
     }
+    renderizarNotificacoes();
     anterior = atual;
   });
 })();
