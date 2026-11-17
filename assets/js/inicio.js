@@ -95,19 +95,45 @@
     resumoPorta.textContent = dados === total ? `${total} de ${total} dados · tudo certo por hoje` : `${dados} de ${total} dados · arraste para o lado`;
   };
 
+  const obterResponsavelHorario = horaTexto => {
+    const hora = parseInt(horaTexto, 10);
+    if (Number.isNaN(hora)) return null;
+    const linhaTempo = construirLinhaDoTempoDia(HOJE, obterEstado());
+    const segmento = linhaTempo.find(item => {
+      const partes = String(item.horario || '').match(/(\d{1,2})h\D+(\d{1,2})h/);
+      if (!partes) return false;
+      const inicio = Number(partes[1]);
+      const fim = Number(partes[2]);
+      return hora >= inicio && hora < fim;
+    });
+    if (!segmento || segmento.tipo === 'lacuna' || !segmento.pessoa?.nome) return null;
+    return segmento.pessoa.nome;
+  };
+
   const atualizarProximaMedicacao = grupos => {
     const proximo = grupos.find(grupo => !grupo.completo && grupo.momento !== 'passado') || grupos.find(grupo => !grupo.completo);
     const titulo = pagina.querySelector('[data-proxima-medicacao]');
     const responsavel = pagina.querySelector('[data-proxima-responsavel]');
+    const bloco = titulo?.closest('.painel__bloco');
+    const temaAcolhedor = document.documentElement.classList.contains('tema--acolhedor');
     if (!titulo || !responsavel) return;
     if (!proximo) {
-      titulo.textContent = 'Todos os remédios de hoje foram dados';
-      responsavel.textContent = 'Porta-remédios completo';
+      if (temaAcolhedor) {
+        if (bloco) bloco.hidden = false;
+        titulo.textContent = 'Todos os remédios de hoje foram dados';
+        responsavel.textContent = 'Porta-remédios completo';
+      } else if (bloco) {
+        bloco.hidden = true;
+      }
       return;
     }
+    if (bloco) bloco.hidden = false;
     const pendentes = proximo.itens.filter(dose => dose.estado !== 'administrado');
     titulo.textContent = `${proximo.hora} · ${pendentes[0].nome}${pendentes.length > 1 ? ` e mais ${pendentes.length - 1}` : ''}`;
-    responsavel.textContent = `Responsável: ${proximo.responsavel}`;
+    const pessoaTurno = obterResponsavelHorario(proximo.hora);
+    responsavel.textContent = pessoaTurno
+      ? `Responsável: ${pessoaTurno}`
+      : 'Sem responsável neste turno (horário sem cobertura)';
   };
 
   const marcarHoraAtiva = hora => {
@@ -260,7 +286,7 @@
       if (segmento.tipo === 'lacuna') {
         return `<li class="faixa-alerta faixa-alerta--linha">
           <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-          <span class="faixa-alerta__texto"><strong>${escaparHtml(segmento.horario)} · Turno sem cobertura</strong><span>A Maria não pode ficar sozinha!</span></span>
+          <span class="faixa-alerta__texto"><strong>${escaparHtml(segmento.horario)} · Turno sem cobertura</strong><span>A Mari precisa de acompanhamento nesse horário.</span></span>
           <a class="botao botao--secundario" href="agenda.html">Cobrir horário</a>
         </li>`;
       }
@@ -319,4 +345,8 @@
 
   renderizarPortaRemedios();
   renderizarEscala();
+
+  new MutationObserver(() => {
+    atualizarProximaMedicacao(obterCompartimentos());
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 })();
