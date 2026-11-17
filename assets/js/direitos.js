@@ -375,21 +375,33 @@
       anunciarStatus(elementoStatus, `Serviços públicos atualizados para ${tituloLocal}.`);
     };
 
+    let requisicaoMunicipiosId = 0;
+    let abortControllerMunicipios = null;
+
     const carregarMunicipios = async (uf, ibgeSelecionado = '') => {
       if (!selectMunicipio) return;
+      const idAtual = ++requisicaoMunicipiosId;
+      if (abortControllerMunicipios) abortControllerMunicipios.abort();
+
       if (!uf) {
+        abortControllerMunicipios = null;
         selectMunicipio.innerHTML = '<option value="">Selecione o estado primeiro</option>';
         selectMunicipio.disabled = true;
         return;
       }
 
+      abortControllerMunicipios = new AbortController();
       selectMunicipio.disabled = true;
       selectMunicipio.innerHTML = '<option value="">Carregando municípios...</option>';
 
       try {
-        const resposta = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${encodeURIComponent(uf)}/municipios?orderBy=nome`);
+        const resposta = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${encodeURIComponent(uf)}/municipios?orderBy=nome`, {
+          signal: abortControllerMunicipios.signal
+        });
         if (!resposta.ok) throw new Error('Falha ao carregar municípios');
         const municipios = await resposta.json();
+        if (idAtual !== requisicaoMunicipiosId) return;
+
         selectMunicipio.innerHTML = '<option value="">Selecione o município...</option>' +
           municipios.map(m => `<option value="${escaparHtml(String(m.id))}" data-nome="${escaparHtml(m.nome)}">${escaparHtml(m.nome)}</option>`).join('');
         selectMunicipio.disabled = false;
@@ -397,7 +409,8 @@
         if (ibgeSelecionado) {
           selectMunicipio.value = String(ibgeSelecionado);
         }
-      } catch {
+      } catch (erro) {
+        if (erro?.name === 'AbortError' || idAtual !== requisicaoMunicipiosId) return;
         selectMunicipio.innerHTML = '<option value="">Não foi possível carregar</option>';
         mostrarErroLocalidade('Não foi possível consultar a lista de municípios do IBGE no momento.');
       }
@@ -422,12 +435,21 @@
       limparErroLocalidade();
     });
 
+    let acaoLocalidadeId = 0;
+    let abortControllerCep = null;
+
     selectUf?.addEventListener('change', () => {
+      acaoLocalidadeId += 1;
+      if (abortControllerCep) abortControllerCep.abort();
       limparErroLocalidade();
+      if (blocoResultado) blocoResultado.hidden = true;
+      if (selectMunicipio) selectMunicipio.value = '';
       carregarMunicipios(selectUf.value);
     });
 
     selectMunicipio?.addEventListener('change', () => {
+      acaoLocalidadeId += 1;
+      if (abortControllerCep) abortControllerCep.abort();
       const opcao = selectMunicipio.selectedOptions[0];
       const cidade = opcao?.dataset.nome;
       const uf = selectUf?.value;
@@ -445,14 +467,21 @@
         return;
       }
 
+      const idCep = ++acaoLocalidadeId;
+      if (abortControllerCep) abortControllerCep.abort();
+      abortControllerCep = new AbortController();
+
       limparErroLocalidade();
       botaoCep?.setAttribute('aria-busy', 'true');
       if (botaoCep) botaoCep.disabled = true;
 
       try {
-        const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+        const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`, {
+          signal: abortControllerCep.signal
+        });
         if (!resposta.ok) throw new Error('Erro na consulta do CEP');
         const dados = await resposta.json();
+        if (idCep !== acaoLocalidadeId) return;
         if (dados.erro) {
           mostrarErroLocalidade('CEP não encontrado. Confira os números ou selecione o estado e o município.');
           campoCep?.focus();
@@ -462,6 +491,7 @@
         if (selectUf) {
           selectUf.value = dados.uf;
           await carregarMunicipios(dados.uf, dados.ibge);
+          if (idCep !== acaoLocalidadeId) return;
         }
         exibirLocalidade({
           cidade: dados.localidade,
@@ -469,7 +499,8 @@
           bairro: dados.bairro || '',
           ibge: dados.ibge || ''
         });
-      } catch {
+      } catch (erro) {
+        if (erro?.name === 'AbortError' || idCep !== acaoLocalidadeId) return;
         mostrarErroLocalidade('Não foi possível consultar o CEP agora. Tente selecionar o estado e o município ao lado.');
       } finally {
         botaoCep?.removeAttribute('aria-busy');
