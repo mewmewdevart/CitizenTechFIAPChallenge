@@ -327,6 +327,7 @@
     delete formPerfil.dataset.fotoTemp;
     formPerfil.closest('dialog')?.close();
     renderizarPerfil();
+    window.dispatchEvent(new CustomEvent('mutirao:perfil-atualizado'));
     anunciarStatus(elementoStatus, 'Alterações salvas.');
   });
 

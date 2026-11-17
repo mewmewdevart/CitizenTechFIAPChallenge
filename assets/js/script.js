@@ -255,3 +255,38 @@ function inicializarPontoBot() {
 }
 
 inicializarPontoBot();
+
+function sincronizarPerfilGlobal() {
+  try {
+    const bruto = localStorage.getItem('mutirao-mvp-estado-v1');
+    if (!bruto) return;
+    const estado = JSON.parse(bruto);
+    const perfil = estado?.perfilUsuario;
+    if (!perfil) return;
+
+    const avatar = perfil.foto || perfil.mascote;
+    if (avatar) {
+      document.querySelectorAll('.menu-perfil summary img, .barra-lateral__perfil-mobile img').forEach(img => {
+        img.src = avatar;
+      });
+    }
+
+    const nomeExibido = (perfil.nome || '').trim();
+    if (nomeExibido) {
+      const resumoTopo = document.querySelector('.menu-perfil summary');
+      const nomeTopo = resumoTopo?.querySelector('strong');
+      if (nomeTopo) nomeTopo.textContent = `${nomeExibido} · Neto`;
+      if (resumoTopo) resumoTopo.setAttribute('aria-label', `Menu do perfil de ${nomeExibido}`);
+      const nomeMobile = document.querySelector('.barra-lateral__perfil-mobile strong');
+      if (nomeMobile) nomeMobile.textContent = nomeExibido;
+    }
+  } catch {
+    // Ignora estado ausente ou inválido
+  }
+}
+
+sincronizarPerfilGlobal();
+window.addEventListener('mutirao:perfil-atualizado', sincronizarPerfilGlobal);
+window.addEventListener('storage', evento => {
+  if (evento.key === 'mutirao-mvp-estado-v1') sincronizarPerfilGlobal();
+});
