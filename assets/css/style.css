@@ -142,13 +142,18 @@
 }
 
 .busca-topo__lista a {
-  display: flex;
-  align-items: center;
+  display: grid;
+  gap: 2px;
   min-height: 40px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border-radius: var(--raio-md);
   color: var(--cor-texto-principal);
   font-size: var(--texto-interface);
+}
+
+.busca-topo__lista small {
+  color: var(--cor-texto-secundario);
+  font-size: var(--texto-legenda);
 }
 
 .busca-topo__lista a:hover,
@@ -185,7 +190,7 @@ summary:hover {
   position: relative;
 }
 
-.menu-notificacoes .botao-icone--notificacao[data-nova-notificacao="true"]::before {
+.menu-notificacoes .botao-icone--notificacao[data-nova-notificacao]::before {
   content: "";
   position: absolute;
   top: 7px;
@@ -429,14 +434,6 @@ html.tema--acolhedor #barra-lateral nav a:is(:hover, :active, [aria-current="pag
 
 .cartao-status {
   margin-top: 14px;
-  border: 0;
-  border-top: var(--borda-padrao);
-  border-radius: 0;
-  padding: 14px 0 0;
-}
-
-html.tema--acolhedor .cartao-status,
-html.acessibilidade--alto-contraste .cartao-status {
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
   padding: 10px var(--espaco-md);
@@ -461,9 +458,25 @@ html.acessibilidade--alto-contraste .cartao-status {
   font-variant-numeric: tabular-nums;
 }
 
+.cartao-status__linha + .cartao-status__linha {
+  margin-top: var(--espaco-sm);
+}
+
 .cartao-status__linha img {
   width: 30px;
   height: 30px;
+}
+
+.cartao-status__linha > i {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--raio-lg);
+  background: var(--cor-neutra-clara-01);
+  color: var(--cor-texto-secundario);
+  font-size: 0.9375rem;
 }
 
 .cartao-status__linha--alerta {

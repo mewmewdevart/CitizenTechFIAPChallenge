@@ -135,8 +135,33 @@ function salvarNotificacoes() {
   }
 }
 
+const somNotificacao = new Audio('assets/media/sounds/pop-sound-effect.mp3');
+
+function tocarSomNotificacao() {
+  try {
+    somNotificacao.currentTime = 0;
+    somNotificacao.play().catch(() => {});
+  } catch {
+    // Ignora caso o navegador bloqueie áudio antes de interação.
+  }
+}
+
+const NOTIFICACOES_INICIAIS_REDE = [
+  { titulo: 'Horário sem cobertura', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).' },
+  { titulo: 'Pedido para agendar consulta', descricao: 'Beatriz pediu ajuda para agendar otorrinolaringologia.' },
+  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina prevista para 20h.' }
+];
+
 function renderizarNotificacoes() {
   if (!listaNotificacoes || !gatilhoNotificacoes) return;
+  listaNotificacoes.querySelectorAll('.notificacao:not([data-notificacao-local])').forEach((item, indice) => {
+    const padrao = NOTIFICACOES_INICIAIS_REDE[indice];
+    if (!padrao) return;
+    const h3 = item.querySelector('h3');
+    const p = item.querySelector('p');
+    if (h3) h3.textContent = padrao.titulo;
+    if (p) p.textContent = padrao.descricao;
+  });
   listaNotificacoes.querySelectorAll('[data-notificacao-local]').forEach(item => item.remove());
   listaNotificacoes.prepend(...notificacoesLocais.map(({ titulo, descricao, destino }) => {
     const item = document.createElement('li');
@@ -144,14 +169,17 @@ function renderizarNotificacoes() {
     item.dataset.notificacaoLocal = '';
     const link = document.createElement('a');
     link.className = 'notificacao__link';
-    link.href = destino === 'configuracoes.html' ? destino : 'ajuda.html#formulario-ajuda';
+    link.href = destino || 'index.html';
     const bloco = document.createElement('div');
     const nome = document.createElement('h3');
     const texto = document.createElement('p');
     nome.textContent = titulo;
     texto.textContent = descricao;
     bloco.append(nome, texto);
-    link.append(bloco);
+    const seta = document.createElement('i');
+    seta.className = 'fa-solid fa-chevron-right notificacao__seta';
+    seta.setAttribute('aria-hidden', 'true');
+    link.append(bloco, seta);
     item.append(link);
     return item;
   }));
@@ -159,7 +187,8 @@ function renderizarNotificacoes() {
   const novas = notificacoesLocais.filter(item => !item.lida).length;
   const total = listaNotificacoes.children.length;
   gatilhoNotificacoes.setAttribute('aria-label', 'Notificações (' + total + ' itens' + (novas ? ', ' + novas + ' novas' : '') + ')');
-  gatilhoNotificacoes.toggleAttribute('data-nova-notificacao', novas > 0);
+  if (novas > 0) gatilhoNotificacoes.setAttribute('data-nova-notificacao', 'true');
+  else gatilhoNotificacoes.removeAttribute('data-nova-notificacao');
 }
 
 window.MutiraoNotificacoes = {
@@ -168,6 +197,7 @@ window.MutiraoNotificacoes = {
     notificacoesLocais = notificacoesLocais.slice(0, 12);
     salvarNotificacoes();
     renderizarNotificacoes();
+    tocarSomNotificacao();
   }
 };
 
@@ -289,8 +319,8 @@ function inicializarBuscaTopo() {
   campo.id = 'campo-busca-topo';
   campo.type = 'search';
   campo.className = 'busca-topo__input';
-  campo.placeholder = 'Ex.: Agenda ou Documentos';
-  campo.setAttribute('aria-label', 'Buscar uma página');
+  campo.placeholder = 'Buscar medicamento, consulta, documento ou página';
+  campo.setAttribute('aria-label', 'Buscar no sistema');
   campo.setAttribute('autocomplete', 'off');
 
   const painel = document.createElement('div');
@@ -310,24 +340,89 @@ function inicializarBuscaTopo() {
   gatilhoBuscaTopo.replaceWith(container);
   container.append(gatilhoBuscaTopo, campo, painel);
 
+  const obterItensBusca = () => {
+    const core = window.MutiraoCuidado;
+    const basePaginas = itensPesquisaveis.map(item => ({
+      href: item.href,
+      rotulo: item.rotulo,
+      detalhe: 'Página',
+      busca: item.rotulo
+    }));
+    if (!core) return basePaginas;
+
+    const estado = core.obterEstado();
+    const doses = core.obterDoses(estado);
+    const medicamentosMap = new Map();
+    doses.forEach(dose => {
+      const atual = medicamentosMap.get(dose.itemId) || { nome: dose.nome, horarios: [], naoAdministrada: false };
+      atual.horarios.push(dose.hora);
+      if (dose.estado === 'nao-administrado') atual.naoAdministrada = true;
+      medicamentosMap.set(dose.itemId, atual);
+    });
+    const itensMeds = [...medicamentosMap.values()].map(med => ({
+      href: 'medicamentos.html',
+      rotulo: med.nome,
+      detalhe: `Medicamento · ${med.horarios.join(', ')}${med.naoAdministrada ? ' · Atenção' : ''}`,
+      busca: `${med.nome} medicamento remedio horario ${med.horarios.join(' ')}`
+    }));
+
+    const itensCompromissos = (core.obterCompromissos ? core.obterCompromissos(estado) : []).map(evt => ({
+      href: `agenda.html?dia=${encodeURIComponent(evt.dia)}&compromisso=${encodeURIComponent(evt.id)}`,
+      rotulo: evt.titulo,
+      detalhe: `Agenda · ${core.formatarDataCurta ? core.formatarDataCurta(evt.dia) : evt.dia} · ${evt.hora.replace(':00', 'h')}${evt.local ? ` · ${evt.local}` : ''}`,
+      busca: `${evt.titulo} agenda consulta exame ${evt.local || ''} ${evt.acompanhante || ''}`
+    }));
+
+    const itensDocs = (estado.documents || []).map(doc => ({
+      href: `documentos.html?documento=${encodeURIComponent(doc.id)}`,
+      rotulo: doc.titulo,
+      detalhe: `${doc.categoria || 'Documento'}${doc.vinculo ? ` · ${doc.vinculo}` : ''}`,
+      busca: `${doc.titulo} ${doc.categoria || ''} documento receita exame ${doc.observacoes || ''}`
+    }));
+
+    const equipe = (core.EQUIPE_CUIDADO || []).map(pessoa => ({
+      href: pessoa.nome.includes('Zé') ? 'meu-perfil.html' : 'pessoas.html',
+      rotulo: pessoa.nome,
+      detalhe: `${pessoa.papel} · ${pessoa.turno || 'Rede de cuidado'}`,
+      busca: `${pessoa.nome} ${pessoa.papel} pessoa cuidador rede`
+    }));
+
+    const extras = [
+      { href: 'ficha.html', rotulo: 'Alergias e ficha de saúde', detalhe: `Ficha · ${estado.person?.alergias || 'Dipirona'}`, busca: `alergia dipirona ficha saude historico ${estado.person?.alergias || ''}` },
+      { href: 'medicamentos.html?estoque=1', rotulo: 'Estoque de medicamentos e insumos', detalhe: 'Medicamentos · Fraldas, Metformina e reposição', busca: 'estoque fraldas insumo reposicao metformina' },
+      { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços (SUS, BPC, Farmácia Popular)', detalhe: 'Direitos e serviços', busca: 'direitos beneficios sus bpc loas farmacia popular estatuto' },
+      { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Configurações', busca: 'configuracoes tema contraste fonte acessibilidade' }
+    ];
+
+    return [...itensMeds, ...itensCompromissos, ...itensDocs, ...equipe, ...extras, ...basePaginas];
+  };
+
   function renderizarResultados() {
-    const normalizar = texto => texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
+    const normalizar = texto => String(texto || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
     const termo = normalizar(campo.value.trim());
-    const correspondencias = itensPesquisaveis.filter(item => normalizar(item.rotulo).includes(termo));
+    const todos = obterItensBusca();
+    const correspondencias = (termo
+      ? todos.filter(item => normalizar(`${item.rotulo} ${item.detalhe} ${item.busca}`).includes(termo))
+      : todos.slice(0, 6)
+    ).slice(0, 8);
 
     lista.replaceChildren(...correspondencias.map(item => {
       const itemLista = document.createElement('li');
       const resultado = document.createElement('a');
       resultado.href = item.href;
-      resultado.textContent = item.rotulo;
+      const tituloEl = document.createElement('strong');
+      tituloEl.textContent = item.rotulo;
+      const detalheEl = document.createElement('small');
+      detalheEl.textContent = item.detalhe;
+      resultado.append(tituloEl, detalheEl);
       resultado.addEventListener('click', () => definirBuscaAberta(false));
       itemLista.append(resultado);
       return itemLista;
     }));
 
     status.textContent = correspondencias.length
-      ? `${correspondencias.length} ${correspondencias.length === 1 ? 'item encontrado' : 'itens encontrados'}.`
-      : 'Nenhuma página encontrada. Tente outro nome ou use o menu.';
+      ? `${correspondencias.length} ${correspondencias.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}.`
+      : 'Nenhum resultado encontrado. Tente buscar por medicamento, consulta, documento ou página.';
   }
 
   function definirBuscaAberta(aberta) {
@@ -447,17 +542,135 @@ window.addEventListener('storage', evento => {
 function sincronizarStatusMedicamentos() {
   const core = window.MutiraoCuidado;
   const linha = document.querySelector('.cartao-status [data-status-medicamento]');
-  if (!core || !linha) return;
+  const cartao = linha?.closest('.cartao-status');
+  if (!core || !linha || !cartao) return;
+
+  cartao.querySelectorAll('[data-status-medicamento-extra]').forEach(el => el.remove());
+
   const doses = core.obterDoses();
-  const ocorrencia = doses.find(dose => dose.estado === 'nao-administrado');
+  const ocorrencias = doses.filter(dose => dose.estado === 'nao-administrado');
   const proxima = doses.find(dose => dose.estado === 'prevista' && dose.momento !== 'passado');
-  const destaque = ocorrencia || proxima;
-  linha.classList.toggle('cartao-status__linha--alerta', Boolean(ocorrencia));
-  linha.querySelector('strong').textContent = destaque
-    ? `${destaque.hora.padStart(3, '0')} · ${destaque.nome}` : 'Nenhuma dose futura';
-  linha.querySelector('small').textContent = ocorrencia ? 'Não administrada'
-    : proxima ? 'Prevista' : 'Veja os registros de hoje';
+  const grupoProximo = proxima
+    ? doses.filter(dose => dose.hora === proxima.hora && dose.estado === 'prevista')
+    : [];
+  const itens = ocorrencias.length ? ocorrencias : grupoProximo;
+  const ehAlerta = Boolean(ocorrencias.length);
+
+  const preencherLinha = (elemento, dose) => {
+    elemento.classList.toggle('cartao-status__linha--alerta', ehAlerta);
+    elemento.querySelector('strong').textContent = dose
+      ? `${dose.hora.padStart(3, '0')} · ${dose.nome}`
+      : 'Nenhuma dose futura';
+    elemento.querySelector('small').textContent = ehAlerta
+      ? 'Não administrada'
+      : dose ? 'Prevista' : 'Veja os registros de hoje';
+  };
+
+  if (!itens.length) {
+    preencherLinha(linha, null);
+    return;
+  }
+
+  preencherLinha(linha, itens[0]);
+  let anterior = linha;
+  itens.slice(1).forEach(dose => {
+    const extra = linha.cloneNode(true);
+    extra.removeAttribute('data-status-medicamento');
+    extra.setAttribute('data-status-medicamento-extra', '');
+    preencherLinha(extra, dose);
+    anterior.after(extra);
+    anterior = extra;
+  });
 }
 
 document.addEventListener('DOMContentLoaded', sincronizarStatusMedicamentos);
 window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamentos);
+
+(() => {
+  const resumirEstado = estado => ({
+    registrosDose: JSON.stringify(estado?.registrosDose || {}),
+    estoque: JSON.stringify([estado?.estoqueBase || {}, estado?.historicoEstoque || []]),
+    itens: JSON.stringify([estado?.itensExtras || [], estado?.itensEditados || {}, estado?.itensExcluidos || []]),
+    turnos: JSON.stringify([estado?.covered || {}, estado?.shiftEdits || {}]),
+    events: JSON.stringify(estado?.events || []),
+    reports: JSON.stringify(estado?.reports || {}),
+    documents: JSON.stringify(estado?.documents || []),
+    convites: JSON.stringify(estado?.convites || []),
+    perfil: JSON.stringify(estado?.perfilUsuario || {}),
+    person: JSON.stringify(estado?.person || {})
+  });
+
+  let anterior = null;
+  const inicializar = () => {
+    const core = window.MutiraoCuidado;
+    if (core && !anterior) anterior = resumirEstado(core.obterEstado());
+  };
+
+  document.addEventListener('DOMContentLoaded', inicializar);
+  window.addEventListener('mutirao:cuidado-atualizado', () => {
+    const core = window.MutiraoCuidado;
+    if (!core) return;
+    const estadoAtualObj = core.obterEstado();
+    const atual = resumirEstado(estadoAtualObj);
+    if (!anterior) {
+      anterior = atual;
+      return;
+    }
+    const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Manga' };
+    const primeiroNome = String(usuario.nome || 'Zé').trim().split(/\s+/)[0] || 'Zé';
+
+    const descreverMudancaDose = () => {
+      try {
+        const regAnt = JSON.parse(anterior.registrosDose);
+        const regAtual = estadoAtualObj.registrosDose || {};
+        const todasChaves = new Set([...Object.keys(regAnt), ...Object.keys(regAtual)]);
+        for (const chaveDose of todasChaves) {
+          if (JSON.stringify(regAnt[chaveDose]) !== JSON.stringify(regAtual[chaveDose])) {
+            const [hora, id] = chaveDose.split('|');
+            const nomeMed = estadoAtualObj.itensEditados?.[id]?.nome
+              || estadoAtualObj.itensExtras?.find(item => (item.chave || item.nome) === id)?.nome
+              || id;
+            const novo = regAtual[chaveDose];
+            if (novo?.estado === 'administrado') {
+              return ['Medicação administrada', `${primeiroNome} registrou ${nomeMed} (${hora}).`, 'medicamentos.html'];
+            }
+            if (novo?.estado === 'nao-administrado') {
+              return ['Medicação não administrada', `${primeiroNome} marcou ${nomeMed} (${hora}) como não administrada.`, 'medicamentos.html'];
+            }
+            return ['Medicação reaberta', `${primeiroNome} desfez o registro de ${nomeMed} (${hora}).`, 'medicamentos.html'];
+          }
+        }
+      } catch {
+        // Usa texto genérico se não for possível comparar as chaves.
+      }
+      return ['Medicação atualizada', `${primeiroNome} atualizou uma medicação da Mari.`, 'medicamentos.html'];
+    };
+
+    if (atual.registrosDose !== anterior.registrosDose) {
+      const [titulo, descricao, destino] = descreverMudancaDose();
+      window.MutiraoNotificacoes.registrar(titulo, descricao, destino);
+      anterior = atual;
+      return;
+    }
+
+    const ultimoEstoque = estadoAtualObj.historicoEstoque?.[0]?.item;
+    const regras = [
+      ['estoque', 'Estoque atualizado', ultimoEstoque ? `${primeiroNome} atualizou o estoque de ${ultimoEstoque}.` : `${primeiroNome} atualizou o estoque de itens.`, 'medicamentos.html'],
+      ['itens', 'Itens atualizados', `${primeiroNome} atualizou a lista de medicamentos.`, 'medicamentos.html'],
+      ['turnos', 'Turno atualizado', `${primeiroNome} atualizou a cobertura de turno.`, 'agenda.html'],
+      ['events', 'Agenda atualizada', `${primeiroNome} atualizou um compromisso na agenda.`, 'agenda.html'],
+      ['reports', 'Novo relato no diário', `${primeiroNome} registrou um relato no diário.`, 'ficha.html#diario'],
+      ['documents', 'Documentos atualizados', `${primeiroNome} atualizou os documentos da Mari.`, 'documentos.html'],
+      ['convites', 'Rede atualizada', `${primeiroNome} atualizou os participantes da rede.`, 'pessoas.html'],
+      ['perfil', 'Perfil atualizado', `${primeiroNome} atualizou os dados do perfil.`, 'meu-perfil.html'],
+      ['person', 'Ficha atualizada', `${primeiroNome} atualizou a ficha da Mari.`, 'ficha.html']
+    ];
+    for (const [chave, titulo, descricao, destino] of regras) {
+      if (atual[chave] !== anterior[chave]) {
+        window.MutiraoNotificacoes.registrar(titulo, descricao, destino);
+        break;
+      }
+    }
+    anterior = atual;
+  });
+})();
