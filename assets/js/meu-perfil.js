@@ -3,7 +3,7 @@
   const core = window.MutiraoCuidado;
   if (!pagina || !core) return;
 
-  const { obterEstado, atualizarEstado, anunciarStatus } = core;
+  const { HOJE, obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
 
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const grupoHumor = pagina.querySelector('[data-cuidar-humor]');
@@ -69,7 +69,7 @@
     if (!ano || !mes || !dia) return valor;
     const data = new Date(ano, mes - 1, dia);
     const dataTexto = new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' }).format(data);
-    const hoje = new Date();
+    const hoje = new Date(`${HOJE}T12:00:00`);
     let idade = hoje.getFullYear() - ano;
     if (hoje.getMonth() + 1 < mes || (hoje.getMonth() + 1 === mes && hoje.getDate() < dia)) idade -= 1;
     return `${dataTexto} · ${idade} anos`;
@@ -157,6 +157,23 @@
     atualizarContadoresRecado();
   };
 
+  const renderizarRecadosEnviados = () => {
+    const container = pagina.querySelector('[data-recados-enviados]');
+    if (!container) return;
+    const enviados = obterEstado().recadosEnviados || [];
+    container.hidden = enviados.length === 0;
+    if (!enviados.length) {
+      container.innerHTML = '';
+      return;
+    }
+    container.innerHTML = `<ul class="painel__lista">${[...enviados].reverse().map(item => `
+      <li class="painel__item">
+        <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-paper-plane"></i></span>
+        <span class="painel__texto"><strong>Recado enviado para ${escaparHtml(item.para)}</strong><span>${escaparHtml(item.texto)}</span></span>
+      </li>
+    `).join('')}</ul>`;
+  };
+
   const iniciar = () => {
     const cuidar = obterCuidar();
     const opcao = grupoHumor.querySelector(`input[value="${cuidar.humor}"]`);
@@ -167,6 +184,7 @@
     }
     renderizarAvisoFamilia(cuidar.preferencias.avisarFamilia);
     renderizarPerfil();
+    renderizarRecadosEnviados();
   };
 
   grupoHumor.addEventListener('change', evento => {
@@ -272,6 +290,7 @@
       recadosEnviados: [...(estado.recadosEnviados || []), { para, texto, em: new Date().toISOString() }]
     }));
     dialogoRecado.close();
+    renderizarRecadosEnviados();
     anunciarStatus(elementoStatus, `Recado enviado para ${para}.`);
   });
 

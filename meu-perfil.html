@@ -59,7 +59,6 @@
   <link rel="stylesheet" href="assets/css/mvp-telas.css" />
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" />
   <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
@@ -76,7 +75,7 @@
     <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante">Maria das Dores (Mari)</div>
+      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
@@ -85,8 +84,7 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
@@ -248,6 +246,7 @@
       <ul class="mural__quadro" data-mural></ul>
       <button type="button" class="botao botao--secundario mural__mandar" data-abrir-recado=""><i
           class="fa-regular fa-message" aria-hidden="true"></i> Mandar um recado para alguém</button>
+      <div class="painel__bloco" data-recados-enviados hidden></div>
     </section>
 
     <section class="cuidar__faixa" aria-labelledby="titulo-cuidar">

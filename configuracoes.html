@@ -83,8 +83,7 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
@@ -224,7 +223,7 @@
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
                   <strong id="rotulo-config-lacuna">Turno sem cobertura na escala</strong>
-                  <span>Destaca horários descobertos em alerta vermelho para ação rápida da rede.</span>
+                  <span>Destaca horários descobertos como alerta prioritário para ação rápida da rede.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-lacuna">
                   <input type="checkbox" id="config-notificacoes-lacuna" name="notificacoesLacuna" checked />
@@ -446,7 +445,7 @@
         </section>
 
         <div class="configuracoes__rodape">
-          <p>As alterações desta página são aplicadas imediatamente à sua sessão atual.</p>
+          <p>Clique em “Salvar alterações” para aplicar suas preferências nesta sessão.</p>
           <div class="configuracoes__rodape-botoes">
             <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar padrões</button>
             <button type="submit" class="botao botao--primario">Salvar alterações</button>

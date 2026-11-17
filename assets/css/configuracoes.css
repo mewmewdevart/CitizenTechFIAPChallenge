@@ -92,7 +92,7 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__
 }
 
 .configuracoes__painel-topo h2 {
-  font-size: var(--texto-subtitulo);
+  font-size: var(--texto-titulo-secao);
   font-weight: var(--peso-semibold);
   color: var(--cor-texto-principal);
 }
@@ -287,6 +287,10 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__
   gap: var(--espaco-md);
   padding-top: var(--espaco-lg);
   border-top: var(--borda-padrao);
+}
+
+.configuracoes__rodape[hidden] {
+  display: none;
 }
 
 .configuracoes__rodape p {

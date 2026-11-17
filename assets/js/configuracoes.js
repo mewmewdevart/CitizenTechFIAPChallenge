@@ -17,12 +17,48 @@
   const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
   const botaoNotificacoes = document.querySelector('.botao-icone--notificacao');
 
+  const CHAVE_CONFIG_SESSAO = 'mutirao-configuracoes-sessao-v1';
   const selectAntecedencia = formulario.querySelector('#config-antecedencia-medicacao');
   const toggleMedicacao = formulario.querySelector('#config-notificacoes-medicacao');
   const botaoSalvar = formulario.querySelector('button[type="submit"]');
+  const rodapeFormulario = formulario.querySelector('.configuracoes__rodape');
+  const ABAS_COM_FORMULARIO = new Set(['painel-notificacoes', 'painel-rede']);
 
   let timerStatus = null;
   let snapshotSalvo = '';
+
+  const carregarPreferenciasSessao = () => {
+    try {
+      const bruto = sessionStorage.getItem(CHAVE_CONFIG_SESSAO);
+      if (!bruto) return;
+      const dados = JSON.parse(bruto);
+      for (const campo of formulario.querySelectorAll('input, select')) {
+        const chave = campo.name || campo.id;
+        if (!chave || !(chave in dados)) continue;
+        if (campo.type === 'checkbox' || campo.type === 'radio') {
+          campo.checked = Boolean(dados[chave]);
+        } else {
+          campo.value = String(dados[chave]);
+        }
+      }
+    } catch {
+      // Ignora erro caso sessionStorage esteja indisponível
+    }
+  };
+
+  const salvarPreferenciasSessao = () => {
+    try {
+      const dados = {};
+      for (const campo of formulario.querySelectorAll('input, select')) {
+        const chave = campo.name || campo.id;
+        if (!chave) continue;
+        dados[chave] = campo.type === 'checkbox' || campo.type === 'radio' ? campo.checked : campo.value;
+      }
+      sessionStorage.setItem(CHAVE_CONFIG_SESSAO, JSON.stringify(dados));
+    } catch {
+      // Ignora erro caso sessionStorage esteja indisponível
+    }
+  };
 
   const serializarEstadoFormulario = () => {
     const campos = [...formulario.querySelectorAll('input, select, textarea')];
@@ -52,6 +88,9 @@
     paineis.forEach(painel => {
       painel.hidden = painel.id !== idPainel;
     });
+    if (rodapeFormulario) {
+      rodapeFormulario.hidden = !ABAS_COM_FORMULARIO.has(idPainel);
+    }
   };
 
   abas.forEach((aba, indice) => {
@@ -132,6 +171,7 @@
   };
 
   toggleMedicacao?.addEventListener('change', atualizarEstadoAntecedencia);
+  carregarPreferenciasSessao();
   atualizarEstadoAntecedencia();
 
   snapshotSalvo = serializarEstadoFormulario();
@@ -145,6 +185,7 @@
     evento.preventDefault();
     if (serializarEstadoFormulario() === snapshotSalvo) return;
 
+    salvarPreferenciasSessao();
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
     adicionarNotificacao(
@@ -156,6 +197,11 @@
 
   botaoRestaurar?.addEventListener('click', () => {
     formulario.reset();
+    try {
+      sessionStorage.removeItem(CHAVE_CONFIG_SESSAO);
+    } catch {
+      // Ignora erro caso sessionStorage esteja indisponível
+    }
     atualizarEstadoAntecedencia();
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
