@@ -110,10 +110,13 @@ button:disabled,
 
 .painel__bloco {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--espaco-sm);
   padding: var(--espaco-md);
   border-radius: var(--raio-lg);
   background: var(--cor-fundo-pagina);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .painel__bloco[hidden] {
