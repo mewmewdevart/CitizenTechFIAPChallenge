@@ -262,6 +262,7 @@
         <strong>${escaparHtml(horario)} · ${atribuicao ? 'Atribuição simulada' : 'Turno sem cobertura'}</strong>
         <p>${escaparHtml(detalhe)}</p>
       </div>
+       ${atribuicao ? `<div class="painel__acoes"><button type="button" class="botao botao--secundario" data-decidir-atribuicao="aceitar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Simular aceite</button><button type="button" class="botao botao--secundario" data-decidir-atribuicao="recusar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Simular recusa</button><button type="button" class="botao botao--secundario" data-decidir-atribuicao="cancelar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Cancelar pedido</button></div>` : ''}
       <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Cobrir horário</button>
     </div>`;
     };
@@ -395,9 +396,7 @@
     if (botaoDocumentos) {
       const tituloLower = String(item.titulo || '').toLowerCase();
       const docsVinculados = (obterEstado().documents || []).filter(doc =>
-        doc.compromissoId === item.id ||
-        doc.dia === item.dia ||
-        (tituloLower && String(doc.vinculo || '').toLowerCase().includes(tituloLower))
+        doc.compromissoId === item.id
       );
       botaoDocumentos.hidden = !docsVinculados.length;
       if (docsVinculados.length === 1) {
@@ -688,8 +687,9 @@
       const carimbo = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
       const calcularFim = (dia, hora) => {
         const [hh, mm] = hora.split(':').map(Number);
-        const fimHora = String(Math.min(23, (hh || 0) + 1)).padStart(2, '0');
-        return `${dia.replaceAll('-', '')}T${fimHora}${String(mm || 0).padStart(2, '0')}00`;
+        const [ano, mes, data] = dia.split('-').map(Number);
+        const fim = new Date(Date.UTC(ano, mes - 1, data, hh + 1, mm));
+        return fim.toISOString().slice(0, 19).replace(/[-:]/g, '');
       };
 
       const linhas = eventosMes.flatMap((item, indice) => [
@@ -722,7 +722,18 @@
     }
   });
 
-  pagina.addEventListener('submit', evento => {
+  pagina.addEventListener('click', evento => {
+    const botao = evento.target.closest('[data-decidir-atribuicao]');
+    if (!botao) return;
+    try {
+      core.resolverAtribuicao(botao.dataset.chave, botao.dataset.decidirAtribuicao === 'aceitar');
+      renderizar();
+      registrarStatus('Decisão simulada registrada. A escala foi atualizada.');
+      pagina.querySelector(`[data-dia-semana="${diaSemana}"]`)?.focus();
+    } catch (erro) { registrarStatus(erro.message); }
+  });
+
+  pagina.addEventListener('submit', async evento => {
     const formulario = evento.target;
     const tipoFormulario = formulario.dataset.formularioMvp;
     if (!tipoFormulario) return;
@@ -784,6 +795,9 @@
       const inicio = cobrirTudo ? gapInicio : Number(formulario.elements.inicio.value);
       const fim = cobrirTudo ? gapFim : Number(formulario.elements.fim.value);
 
+      if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
+        titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
+      })) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;

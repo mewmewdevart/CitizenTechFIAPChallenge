@@ -37,9 +37,7 @@
     const select = formDocumento?.elements?.autor;
     if (!select) return;
     const usuario = obterUsuarioAtual();
-    const pessoasRede = (EQUIPE_CUIDADO || []).map(pessoa =>
-      pessoa.nome === 'Zé da Manga' ? usuario.nomeComApelido : pessoa.nome
-    );
+    const pessoasRede = core.obterParticipantesRede().map(pessoa => pessoa.nome);
     const opcoes = [...new Set(pessoasRede)].filter(nome =>
       nome && !/maria das dores|\(mari\)/i.test(nome)
     );
@@ -95,6 +93,19 @@
   };
 
   const renderizar = () => {
+    let contexto = pagina.querySelector('[data-contexto-documentos]');
+    if (!contexto) {
+      contexto = document.createElement('div'); contexto.dataset.contextoDocumentos = '';
+      contexto.className = 'painel__bloco'; lista.before(contexto);
+    }
+    contexto.hidden = !compromissoFiltroId;
+    const eventoContexto = core.obterCompromissos().find(item => item.id === compromissoFiltroId);
+    contexto.innerHTML = compromissoFiltroId ? `<p>Documentos de: <strong>${escaparHtml(eventoContexto?.titulo || 'Atendimento não encontrado')}</strong></p><button class="botao botao--secundario" type="button" data-remover-contexto-documentos>Ver todo o acervo</button>` : '';
+    contexto.querySelector('button')?.addEventListener('click', () => {
+      compromissoFiltroId = ''; const url = new URL(location.href); url.searchParams.delete('compromisso');
+      history.replaceState(null, '', url); renderizar(); campoBusca?.focus();
+    });
+
     const termo = core.normalizarBusca(campoBusca?.value);
     const compromissoAlvo = compromissoFiltroId
       ? (core.obterCompromissos ? core.obterCompromissos() : (obterEstado().events || [])).find(e => e.id === compromissoFiltroId)
@@ -104,8 +115,7 @@
       .sort((a, b) => (b.dia || '').localeCompare(a.dia || ''))
       .filter(doc => {
         if (compromissoFiltroId) {
-          const bateCompromisso = doc.compromissoId === compromissoFiltroId ||
-            (compromissoAlvo && (doc.dia === compromissoAlvo.dia || (tituloCompromissoLower && String(doc.vinculo || '').toLowerCase().includes(tituloCompromissoLower))));
+          const bateCompromisso = doc.compromissoId === compromissoFiltroId;
           if (!bateCompromisso) return false;
         }
         if (categoriaAtiva !== 'Todos' && doc.categoria !== categoriaAtiva) return false;

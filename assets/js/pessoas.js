@@ -31,8 +31,8 @@
     const acao = pessoa.perfil
       ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
       : pessoa.pendente
-        ? `<button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}" aria-label="Cancelar convite para ${escaparHtml(pessoa.nome)}">Cancelar convite</button>`
-        : `<button type="button" class="botao botao--secundario" disabled title="Perfil disponível em breve" aria-label="Ver perfil de ${escaparHtml(pessoa.nome)} (disponível em breve)">Ver perfil</button>`;
+        ? `<div class="painel__acoes"><button type="button" class="botao botao--secundario" data-aceitar-convite="${escaparHtml(pessoa.nome)}">Simular aceite</button><button type="button" class="botao botao--secundario" data-recusar-convite="${escaparHtml(pessoa.nome)}">Simular recusa</button><button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}">Cancelar convite</button></div>`
+        : `<button type="button" class="botao botao--secundario" disabled>Ver perfil</button>`;
     const situacao = pessoa.pendente
       ? `<span class="selo selo--atencao">${escaparHtml(pessoa.situacao)}</span>`
       : pessoa.perfil
@@ -48,11 +48,12 @@
   const renderizar = () => {
     const perfil = obterEstado().perfilUsuario;
     const participantes = PARTICIPANTES.map((pessoa, indice) => {
-      if (indice !== 0 || !perfil) return pessoa;
+      if (indice !== 0 || !perfil) return obterEstado().administradorRede === pessoa.nome ? { ...pessoa, papel: 'Administrador' } : pessoa;
       const nome = `${perfil.nome || 'Zé da Manga'}${perfil.apelido ? ` (${perfil.apelido})` : ''}`;
       return {
         ...pessoa,
         nome,
+        papel: perfil.papel || pessoa.papel,
         foto: perfil.foto || '',
         avatar: perfil.mascote ? perfil.mascote.split('/').pop() : pessoa.avatar
       };
@@ -66,7 +67,7 @@
       pendente: true
     }));
 
-    lista.innerHTML = participantes.map(montarItemPessoa).join('');
+    lista.innerHTML = [...participantes, ...(obterEstado().participantesExtras || []).map(pessoa => ({ ...pessoa, situacao: 'Ativo na rede' }))].map(montarItemPessoa).join('');
     if (secaoConvites && listaConvites) {
       secaoConvites.hidden = convites.length === 0;
       listaConvites.innerHTML = convites.map(montarItemPessoa).join('');
@@ -77,6 +78,16 @@
     const botao = evento.target.closest('[data-fechar-dialogo]');
     if (botao) {
       botao.closest('dialog')?.close();
+      return;
+    }
+
+    const decisao = evento.target.closest('[data-aceitar-convite], [data-recusar-convite]');
+    if (decisao) {
+      const aceitar = decisao.hasAttribute('data-aceitar-convite');
+      core.resolverConvite(decisao.dataset.aceitarConvite || decisao.dataset.recusarConvite, aceitar);
+      renderizar();
+      anunciarStatus(elementoStatus, aceitar ? 'Aceite simulado: participante adicionado à rede e aos seletores.' : 'Recusa simulada: convite encerrado.');
+      secaoConvites?.querySelector('button')?.focus();
       return;
     }
 
@@ -104,7 +115,7 @@
     const email = (campos.email || '').trim().toLowerCase();
     const emailCampo = formConvite.elements.email;
 
-    if (obterConvites().some(convite => convite.email === email)) {
+    if (obterConvites().some(convite => convite.email === email) || (obterEstado().participantesExtras || []).some(pessoa => pessoa.email === email)) {
       erroConvite.textContent = 'Já existe um convite de demonstração para este e-mail.';
       emailCampo.setAttribute('aria-invalid', 'true');
       emailCampo.focus();

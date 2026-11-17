@@ -163,9 +163,10 @@
     }
     alerta.hidden = !baixos.length;
     if (baixos.length) {
+      baixos.sort((a, b) => a.estoque - b.estoque);
       const principal = baixos[0];
       const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
-      alerta.querySelector('strong').textContent = `Estoque baixo · ${principal.nome}`;
+      alerta.querySelector('strong').textContent = `${baixos.length} item(ns) com estoque baixo · ${principal.nome}`;
       alerta.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
         ? `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Previsão para ${dias} ${dias === 1 ? 'dia' : 'dias'}`
         : `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} em estoque`;
@@ -182,7 +183,9 @@
 
     resumo.querySelectorAll('[data-compromisso-extra]').forEach(el => el.remove());
 
-    const compromissos = core.obterCompromissos().filter(item => item.dia === HOJE);
+    const futuros = core.obterCompromissosFuturos();
+    const deHoje = futuros.filter(item => item.dia === HOJE);
+    const compromissos = deHoje.length ? deHoje : futuros.slice(0, 1);
     const preencherBloco = (bloco, item, indice) => {
       const pessoa = item ? core.resolverPessoaRede(item.acompanhante || item.criadoPor) : null;
       const avatar = bloco.querySelector('.avatar');
@@ -199,7 +202,7 @@
       bloco.querySelector('[data-compromisso-detalhes]').textContent = item
         ? [item.local, item.acompanhante && `${item.acompanhante} acompanha`].filter(Boolean).join(' · ')
         : 'Consulte a Agenda para organizar os próximos cuidados.';
-      bloco.querySelector('a').href = item ? `agenda.html?dia=${encodeURIComponent(item.dia)}` : 'agenda.html';
+      bloco.querySelector('a').href = item ? `agenda.html?dia=${encodeURIComponent(item.dia)}&compromisso=${encodeURIComponent(item.id)}` : 'agenda.html';
     };
 
     if (!compromissos.length) {
@@ -291,11 +294,11 @@
     timerAviso = setTimeout(() => { aviso.hidden = true; }, 6000);
   };
 
-  const alternarPote = (pote, abrir, horarioInformado = HORA_REGISTRO) => {
+  const alternarPote = (pote, abrir, horarioInformado = HORA_REGISTRO, origemExterna = '') => {
     const chave = pote.dataset.chave;
     const [hora, nome] = chave.split('|');
     const horario = horarioInformado || HORA_REGISTRO;
-    if (abrir) registrarDose(chave, { estado: 'administrado', quem: obterUsuarioAtual().nomeComApelido, horario });
+    if (abrir) registrarDose(chave, { estado: 'administrado', quem: obterUsuarioAtual().nomeComApelido, horario, origemExterna });
     else desfazerDose(chave);
 
     const dose = obterDoses().find(item => item.chave === chave);
@@ -424,6 +427,7 @@
     if (acoesRegistrado) acoesRegistrado.hidden = !administrada;
     if (botaoDesfazer) botaoDesfazer.hidden = !(administrada && dose.meu);
 
+    core.prepararOrigemEstoque(formRegistrar, dose);
     dialogoDetalhePote.showModal();
   };
 
@@ -454,7 +458,7 @@
     if (!chavePoteEmFoco) return;
     const horario = evento.target.elements.horario?.value || HORA_REGISTRO;
     const pote = trilho.querySelector(`.pote[data-chave="${CSS.escape(chavePoteEmFoco)}"]`);
-    if (pote) alternarPote(pote, true, horario);
+    if (pote) alternarPote(pote, true, horario, evento.target.elements.origemExterna?.value.trim() || '');
     dialogoDetalhePote.close();
   });
 
@@ -676,6 +680,7 @@
     if (!botao) return;
     diaSelecionado = botao.dataset.diaSemana;
     renderizarEscala();
+    atualizarProximaMedicacao(obterCompartimentos());
     listaDias.querySelector(`[data-dia-semana="${diaSelecionado}"]`)?.focus();
   });
 
@@ -782,7 +787,7 @@
     }
   });
 
-  pagina.querySelector('[data-formulario-mvp="cobertura"]')?.addEventListener('submit', evento => {
+  pagina.querySelector('[data-formulario-mvp="cobertura"]')?.addEventListener('submit', async evento => {
     evento.preventDefault();
     const form = evento.target;
     const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
@@ -790,6 +795,9 @@
     const inicio = cobrirTudo ? gapInicio : Number(form.elements.inicio.value);
     const fim = cobrirTudo ? gapFim : Number(form.elements.fim.value);
 
+    if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
+      titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
+    })) return;
     atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
     diaSelecionado = diaTurno;
     form.closest('dialog')?.close();
@@ -801,6 +809,7 @@
       avatar: usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg'
     });
     renderizarEscala();
+    atualizarProximaMedicacao(obterCompartimentos());
     listaDias.querySelector(`[data-dia-semana="${diaSelecionado}"]`)?.focus();
   });
 

@@ -82,7 +82,10 @@
   };
 
   const aplicarErroCampo = (elemento, erroEl, mensagem) => {
-    if (elemento) elemento.toggleAttribute('aria-invalid', Boolean(mensagem));
+    if (elemento) {
+      if (mensagem) elemento.setAttribute('aria-invalid', 'true');
+      else elemento.removeAttribute('aria-invalid');
+    }
     if (erroEl) erroEl.textContent = mensagem;
   };
 
@@ -118,6 +121,25 @@
     atualizarContadorMensagem();
   }
 
+  const core = window.MutiraoCuidado;
+  const historico = document.createElement('section');
+  historico.className = 'apoio__painel';
+  historico.setAttribute('aria-label', 'Seus chamados da simulação');
+  formulario.after(historico);
+  const renderizarChamados = () => {
+    const e = core.escaparHtml;
+    historico.innerHTML = '<h2>Seus chamados nesta sessão</h2>' + ((core.obterEstado().chamados || []).map(item =>
+      `<article class="painel__bloco"><h3>${e(item.protocolo)} · ${e(item.assunto)}</h3><p>${e(item.mensagem)}</p><p>${e(item.email)} · ${e(item.status)}</p>${item.status === 'Aberto' ? '' /* `<button class="botao botao--secundario" type="button" data-concluir-chamado="${e(item.protocolo)}">Simular resposta e concluir</button>` */ : `<p>Resposta simulada: recebemos seu relato sobre “${e(item.assunto)}”. Ele está disponível neste histórico; nenhum atendimento externo foi realizado.</p>`}</article>`).join('') || '<p>Nenhum chamado registrado.</p>');
+  };
+  historico.addEventListener('click', evento => {
+    const botao = evento.target.closest('[data-concluir-chamado]');
+    if (!botao) return;
+    core.atualizarEstado(estado => ({ ...estado, chamados: estado.chamados.map(item => item.protocolo === botao.dataset.concluirChamado ? { ...item, status: 'Concluído na simulação' } : item) }));
+    renderizarChamados(); mostrarStatus('Resposta simulada registrada no histórico.');
+    historico.tabIndex = -1; historico.focus();
+  });
+  renderizarChamados();
+
   formulario.addEventListener('submit', evento => {
     evento.preventDefault();
 
@@ -142,6 +164,11 @@
       return;
     }
 
+    const protocolo = `MUT-${Date.now()}`;
+    core.atualizarEstado(estado => ({ ...estado, chamados: [...(estado.chamados || []), {
+      protocolo, email: campoEmail.value.trim(), assunto: campoAssunto.value.trim(), mensagem: obterTextoMensagem(), status: 'Aberto'
+    }] }));
+    renderizarChamados();
     formulario.reset();
     aplicarErroCampo(campoEmail, erroEmailEl, '');
     aplicarErroCampo(campoAssunto, erroAssuntoEl, '');
@@ -149,6 +176,6 @@
     atualizarContadorMensagem();
 
     window.MutiraoNotificacoes.registrar('Mensagem de demonstração registrada', 'Formulário de Ajuda concluído somente nesta aba.', 'ajuda.html#formulario-ajuda');
-    mostrarStatus('Mensagem registrada nesta demonstração. Nenhum e-mail foi enviado.', 'sucesso');
+    mostrarStatus(`Chamado ${protocolo} registrado no histórico desta sessão. Nenhum e-mail foi enviado.`, 'sucesso');
   });
 })();
