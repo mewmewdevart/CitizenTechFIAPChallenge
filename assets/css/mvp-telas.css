@@ -389,6 +389,22 @@
   margin-right: auto;
 }
 
+.dialogo-mvp__acoes--iguais {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espaco-md);
+}
+
+.dialogo-mvp__acoes--iguais .botao--perigo {
+  margin-right: 0;
+}
+
+@media (max-width: 520px) {
+  .dialogo-mvp__acoes--iguais {
+    grid-template-columns: 1fr;
+  }
+}
+
 [data-mvp-status] {
   position: fixed;
   right: var(--espaco-lg);

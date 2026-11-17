@@ -25,6 +25,8 @@
   const listaRegistros = pagina.querySelector('[data-registros-dia]');
   const avisosEstoque = pagina.querySelector('[data-estoque-avisos]');
   const listaItens = pagina.querySelector('[data-itens-cadastrados]');
+  const abas = [...pagina.querySelectorAll('.meds__abas [role="tab"]')];
+  const paineisAba = [...pagina.querySelectorAll('[role="tabpanel"]')];
   const dialogos = {
     registrar: document.getElementById('dialogo-registrar-administracao'),
     confirmar: document.getElementById('dialogo-confirmar-administracao'),
@@ -46,6 +48,7 @@
 
   let doseEmFoco = null;
   let itemEmEstoque = 'Metformina';
+  let itemEmFoco = null;
 
   const formatarHorario = valor => (valor ? valor.replace(':', 'h') : '');
   const nomeCompleto = quem => NOMES_COMPLETOS[quem] || quem;
@@ -54,14 +57,27 @@
   const juntarHorarios = lista => (lista.length > 1 ? `${lista.slice(0, -1).join(', ')} e ${lista[lista.length - 1]}` : lista[0] || '');
 
   const obterItens = () => {
+    const estado = obterEstado();
     const doses = obterDoses();
+    const editados = estado.itensEditados || {};
+    const excluidos = new Set(estado.itensExcluidos || []);
     const nomes = [...new Set(doses.map(dose => dose.nome))];
     const medicamentos = nomes.map(nome => {
       const horarios = doses.filter(dose => dose.nome === nome).map(dose => dose.hora);
-      return { nome, tipo: 'Medicamento', horarios: juntarHorarios(horarios), consumoDia: horarios.length };
+      return { chave: nome, nome, tipo: 'Medicamento', horarios: juntarHorarios(horarios), consumoDia: horarios.length };
     });
-    const extras = (obterEstado().itensExtras || []).filter(item => !nomes.includes(item.nome));
-    return [...medicamentos, ...extras, ...INSUMOS].map(item => ({ ...item, estoque: obterEstoque(item.nome) }));
+    const insumos = INSUMOS.map(item => ({ ...item, chave: item.nome }));
+    const extras = (estado.itensExtras || [])
+      .filter(item => !nomes.includes(item.nome))
+      .map(item => ({ ...item, chave: item.chave || item.nome }));
+
+    return [...medicamentos, ...extras, ...insumos]
+      .filter(item => !excluidos.has(item.chave))
+      .map(item => {
+        const edicao = editados[item.chave];
+        const mesclado = edicao ? { ...item, ...edicao } : item;
+        return { ...mesclado, estoque: obterEstoque(mesclado.nome) ?? obterEstoque(item.chave) };
+      });
   };
 
   const descreverItem = item => {
@@ -71,9 +87,11 @@
 
   const detalharItem = item => {
     if (item.tipo === 'Insumo') return `Insumo · ${item.estoque ?? 0} unidades em estoque.`;
-    if (item.estoque === null) return `Medicamento · ${item.horarios}. Consulte a prescrição para conferir dose e apresentação.`;
+    const doseTexto = item.dose ? ` · ${item.dose}` : '';
+    const horariosTexto = item.horarios ? ` · ${item.horarios}` : '';
+    if (item.estoque === null) return `Medicamento${doseTexto}${horariosTexto}. Consulte a prescrição para conferir dose e apresentação.`;
     const dias = item.consumoDia ? Math.floor(item.estoque / item.consumoDia) : null;
-    return `Medicamento · ${item.horarios}. Estoque: ${item.estoque} unidades${dias !== null ? `; estimativa de ${plural(dias, 'dia', 'dias')}` : ''}.`;
+    return `Medicamento${doseTexto}${horariosTexto}. Estoque: ${item.estoque} unidades${dias !== null ? `; estimativa de ${plural(dias, 'dia', 'dias')}` : ''}.`;
   };
 
   const descreverRegistro = dose => {
@@ -194,16 +212,18 @@
 
   const renderizarEstoque = itens => {
     const baixos = itens.filter(item => item.tipo === 'Medicamento' && item.estoque !== null && item.consumoDia && item.estoque / item.consumoDia <= 3);
-    avisosEstoque.innerHTML = baixos.length
-      ? baixos.map(item => {
-        const dias = Math.floor(item.estoque / item.consumoDia);
-        return `<div class="estoque__aviso">
-          <span class="selo selo--atencao"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Estoque baixo</span>
-          <strong>${escaparHtml(item.nome)}</strong>
-          <small>${plural(item.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}</small>
-        </div>`;
-      }).join('')
-      : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nenhum item com previsão curta.</p></div>';
+    if (avisosEstoque) {
+      avisosEstoque.innerHTML = baixos.length
+        ? baixos.map(item => {
+          const dias = Math.floor(item.estoque / item.consumoDia);
+          return `<div class="estoque__aviso">
+            <span class="selo selo--atencao"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Estoque baixo</span>
+            <strong>${escaparHtml(item.nome)}</strong>
+            <small>${plural(item.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}</small>
+          </div>`;
+        }).join('')
+        : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nenhum item com previsão curta.</p></div>';
+    }
     itemEmEstoque = baixos[0]?.nome || itens.find(item => item.estoque !== null)?.nome || 'Metformina';
   };
 
@@ -331,17 +351,83 @@
   };
 
   const abrirDetalhe = nome => {
-    const item = obterItens().find(atual => atual.nome === nome);
+    const item = obterItens().find(atual => atual.nome === nome || atual.chave === nome);
     if (!item) return;
+    itemEmFoco = item;
     dialogos.detalhe.querySelector('[data-detalhe-titulo]').textContent = item.nome;
-    dialogos.detalhe.querySelector('[data-detalhe-texto]').textContent = `Maria das Dores (Mari) · ${detalharItem(item)}`;
+    const lista = dialogos.detalhe.querySelector('[data-detalhe-lista]');
+    if (lista) {
+      const dias = item.consumoDia && item.estoque !== null ? Math.floor(item.estoque / item.consumoDia) : null;
+      const textoEstoque = item.estoque === null || item.estoque === undefined
+        ? 'Não informado'
+        : `${plural(item.estoque, 'unidade', 'unidades')}${dias !== null ? ` · Previsão para ${plural(dias, 'dia', 'dias')}` : ''}`;
+
+      const linhas = [
+        ['Pessoa acompanhada', 'Maria das Dores (Mari)'],
+        ['Tipo', item.tipo || 'Medicamento'],
+        item.tipo !== 'Insumo' ? ['Apresentação e dose', item.dose || 'Consulte a prescrição'] : null,
+        item.horarios ? ['Horários previstos', item.horarios] : null,
+        ['Estoque atual', textoEstoque]
+      ].filter(Boolean);
+
+      lista.innerHTML = linhas.map(([rotulo, valor]) =>
+        `<div><dt>${escaparHtml(rotulo)}</dt><dd>${escaparHtml(valor)}</dd></div>`
+      ).join('');
+    }
     dialogos.detalhe.showModal();
+  };
+
+  const popularSelectHorarioItem = (valor = '08') => {
+    const form = dialogos.item?.querySelector('[data-formulario-mvp="item"]');
+    const sel = form?.elements.horario;
+    if (!sel) return;
+    const opcoes = Array.from({ length: 24 }, (_, hora) => {
+      const h = String(hora).padStart(2, '0');
+      return `<option value="${h}">${h}h00</option>`;
+    }).join('');
+    sel.innerHTML = `<option value="">Não se aplica</option>${opcoes}`;
+    sel.value = valor;
+  };
+
+  popularSelectHorarioItem();
+
+  const abrirEdicaoItem = item => {
+    const form = dialogos.item?.querySelector('[data-formulario-mvp="item"]');
+    const titulo = dialogos.item?.querySelector('[data-titulo-dialogo-item]');
+    if (!form || !item) return;
+    if (titulo) titulo.textContent = 'Editar item';
+    form.elements.nomeOriginal.value = item.chave || item.nome;
+    form.elements.tipo.value = item.tipo || 'Medicamento';
+    form.elements.nome.value = item.nome || '';
+    form.elements.dose.value = item.dose || '';
+    const horasExtraidas = (item.horarios || '').match(/\d{1,2}/g) || [];
+    const h = horasExtraidas[0] ? String(Number(horasExtraidas[0])).padStart(2, '0') : '';
+    popularSelectHorarioItem(h);
+    form.elements.estoque.value = item.estoque === null || item.estoque === undefined ? '' : String(item.estoque);
+    dialogos.detalhe?.close();
+    dialogos.item.showModal();
+  };
+
+  const ativarAba = aba => {
+    const painelId = aba.getAttribute('aria-controls');
+    for (const item of abas) {
+      const ativa = item === aba;
+      item.setAttribute('aria-selected', String(ativa));
+      item.tabIndex = ativa ? 0 : -1;
+    }
+    for (const painel of paineisAba) {
+      painel.hidden = painel.id !== painelId;
+    }
   };
 
   pagina.addEventListener('click', evento => {
     const botao = evento.target.closest('button');
     if (!botao) return;
 
+    if (botao.matches('.meds__abas [role="tab"]')) {
+      ativarAba(botao);
+      return;
+    }
     if (botao.hasAttribute('data-fechar-dialogo')) {
       botao.closest('dialog')?.close();
       return;
@@ -362,6 +448,35 @@
     }
     if (botao.hasAttribute('data-abrir-estoque')) {
       abrirEstoque(itemEmEstoque);
+      return;
+    }
+    if (botao.dataset.dialogo === 'dialogo-adicionar-item') {
+      const form = dialogos.item?.querySelector('[data-formulario-mvp="item"]');
+      const titulo = dialogos.item?.querySelector('[data-titulo-dialogo-item]');
+      if (form) {
+        form.reset();
+        form.elements.nomeOriginal.value = '';
+        popularSelectHorarioItem('08');
+      }
+      if (titulo) titulo.textContent = 'Adicionar item';
+    }
+    if (botao.hasAttribute('data-editar-item')) {
+      abrirEdicaoItem(itemEmFoco);
+      return;
+    }
+    if (botao.hasAttribute('data-excluir-item')) {
+      if (!itemEmFoco) return;
+      const chave = itemEmFoco.chave || itemEmFoco.nome;
+      const nomeExibido = itemEmFoco.nome;
+      atualizarEstado(estado => ({
+        ...estado,
+        itensExtras: (estado.itensExtras || []).filter(item => (item.chave || item.nome) !== chave),
+        itensExcluidos: [...new Set([...(estado.itensExcluidos || []), chave])]
+      }));
+      dialogos.detalhe?.close();
+      itemEmFoco = null;
+      anunciarStatus(elementoStatus, `${nomeExibido} removido dos itens da Mari.`);
+      renderizar();
       return;
     }
     if (botao.dataset.verItem) abrirDetalhe(botao.dataset.verItem);
@@ -395,23 +510,45 @@
     evento.preventDefault();
     const form = evento.target;
     const campos = Object.fromEntries(new FormData(form));
+    const nomeOriginal = (campos.nomeOriginal || '').trim();
     const nome = (campos.nome || '').trim();
     if (!nome) return;
-    const horarios = (campos.horarios || '').trim();
-    atualizarEstado(estado => ({
-      ...estado,
-      itensExtras: [...(estado.itensExtras || []), {
-        nome,
-        tipo: campos.tipo || 'Medicamento',
-        horarios,
-        dose: (campos.dose || '').trim(),
-        consumoDia: (horarios.match(/\d{1,2}h/g) || []).length
-      }],
-      estoqueBase: campos.estoque === '' ? estado.estoqueBase : { ...(estado.estoqueBase || {}), [nome]: Number(campos.estoque) }
-    }));
+    const horarios = campos.horario ? `${campos.horario}h` : '';
+    const dadosItem = {
+      nome,
+      tipo: campos.tipo || 'Medicamento',
+      horarios,
+      dose: (campos.dose || '').trim(),
+      consumoDia: campos.horario ? 1 : 0
+    };
+
+    if (nomeOriginal) {
+      atualizarEstado(estado => {
+        const ehExtra = (estado.itensExtras || []).some(item => (item.chave || item.nome) === nomeOriginal);
+        const itensExtras = ehExtra
+          ? (estado.itensExtras || []).map(item => ((item.chave || item.nome) === nomeOriginal ? { ...item, ...dadosItem, chave: nomeOriginal } : item))
+          : estado.itensExtras;
+        const itensEditados = ehExtra
+          ? estado.itensEditados
+          : { ...(estado.itensEditados || {}), [nomeOriginal]: dadosItem };
+        const estoqueBase = campos.estoque === ''
+          ? estado.estoqueBase
+          : { ...(estado.estoqueBase || {}), [nome]: Number(campos.estoque), [nomeOriginal]: Number(campos.estoque) };
+        return { ...estado, itensExtras, itensEditados, estoqueBase };
+      });
+      anunciarStatus(elementoStatus, `${nome} atualizado.`);
+    } else {
+      atualizarEstado(estado => ({
+        ...estado,
+        itensExtras: [...(estado.itensExtras || []), dadosItem],
+        estoqueBase: campos.estoque === '' ? estado.estoqueBase : { ...(estado.estoqueBase || {}), [nome]: Number(campos.estoque) }
+      }));
+      anunciarStatus(elementoStatus, `${nome} adicionado aos itens da Mari.`);
+    }
+
     form.reset();
+    form.elements.nomeOriginal.value = '';
     dialogos.item.close();
-    anunciarStatus(elementoStatus, `${nome} adicionado aos itens da Mari.`);
     renderizar();
   });
 

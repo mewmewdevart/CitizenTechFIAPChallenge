@@ -39,6 +39,7 @@
 
 .painel__lista {
   display: grid;
+  gap: var(--espaco-xs);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -84,13 +85,13 @@
 .painel__bloco {
   display: grid;
   gap: var(--espaco-sm);
-  padding: var(--espaco-md);
+  padding: 0 var(--espaco-md);
   border-radius: var(--raio-lg);
   background: var(--cor-fundo-pagina);
 }
 
 .painel__bloco .painel__item {
-  padding: var(--espaco-sm) 0;
+  padding: var(--espaco-md) 0;
 }
 
 .painel__icone {
@@ -153,6 +154,11 @@ html.tema--acolhedor .avatar {
   border: 2px dashed currentColor;
   border-radius: 50%;
   font-size: 1.125rem;
+}
+
+[data-pagina-mvp="medicamentos"] .faixa-alerta__icone {
+  border: 0;
+  background: color-mix(in srgb, currentColor 12%, transparent);
 }
 
 .faixa-alerta__texto {
@@ -823,6 +829,44 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa i
   translate: 0 -50%;
 }
 
+.meds__abas {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-self: start;
+  gap: var(--espaco-xs);
+  padding: var(--espaco-xs);
+  background: var(--cor-superficie);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-lg);
+}
+
+.meds__abas [role="tab"] {
+  min-height: 38px;
+  padding: 6px var(--espaco-lg);
+  border: 0;
+  border-radius: var(--raio-sm);
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  font: inherit;
+  font-size: var(--texto-interface);
+  font-weight: var(--peso-semibold);
+  cursor: pointer;
+}
+
+.meds__abas [role="tab"][aria-selected="true"] {
+  background: var(--cor-primaria);
+  color: var(--cor-neutra-clara-02);
+}
+
+.meds__painel-estoque {
+  display: grid;
+  gap: var(--gap-dashboard);
+}
+
+.meds__painel-estoque[hidden] {
+  display: none;
+}
+
 .rotina__painel {
   display: grid;
   grid-template-columns: auto minmax(120px, 0.8fr) minmax(0, 2fr);
@@ -1344,26 +1388,28 @@ html.acessibilidade--alto-contraste .perfil__recado {
 }
 
 [data-cuidar-humor].escolhas {
-  flex-wrap: nowrap;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-self: start;
+  max-width: 100%;
   gap: var(--espaco-xs);
-  overflow-x: auto;
-  scrollbar-gutter: stable;
-  border-bottom: var(--borda-padrao);
+  padding: var(--espaco-xs);
+  background: var(--cor-superficie);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-lg);
 }
 
 [data-cuidar-humor].escolhas label {
   flex: none;
-  min-height: var(--tamanho-alvo-toque);
-  margin-bottom: -1px;
-  padding: var(--espaco-sm) var(--espaco-md);
+  min-height: 38px;
+  padding: 6px var(--espaco-lg);
   border: 0;
-  border-bottom: 2px solid transparent;
-  border-radius: var(--raio-lg) var(--raio-lg) 0 0;
+  border-radius: var(--raio-sm);
   background: transparent;
   color: var(--cor-texto-secundario);
   font-size: var(--texto-interface);
   font-weight: var(--peso-semibold);
-  transition: color var(--transicao-padrao), background-color var(--transicao-padrao), border-color var(--transicao-padrao);
+  transition: color var(--transicao-padrao), background-color var(--transicao-padrao);
 }
 
 [data-cuidar-humor].escolhas label:hover {
@@ -1372,10 +1418,8 @@ html.acessibilidade--alto-contraste .perfil__recado {
 }
 
 [data-cuidar-humor].escolhas label:has(input:checked) {
-  color: var(--cor-primaria);
-  background: var(--cor-superficie-suave);
-  border-color: transparent;
-  border-bottom-color: var(--cor-primaria);
+  background: var(--cor-primaria);
+  color: var(--cor-neutra-clara-02);
 }
 
 .itens-cadastrados__controles {
@@ -1649,7 +1693,45 @@ html.acessibilidade--alto-contraste .perfil__recado {
     width: 100%;
   }
 
-  .rotina__painel {
+  .meds__abas {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-self: start;
+  gap: var(--espaco-xs);
+  padding: var(--espaco-xs);
+  background: var(--cor-superficie);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-lg);
+}
+
+.meds__abas [role="tab"] {
+  min-height: 38px;
+  padding: 6px var(--espaco-lg);
+  border: 0;
+  border-radius: var(--raio-sm);
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  font: inherit;
+  font-size: var(--texto-interface);
+  font-weight: var(--peso-semibold);
+  cursor: pointer;
+}
+
+.meds__abas [role="tab"][aria-selected="true"] {
+  background: var(--cor-primaria);
+  color: var(--cor-neutra-clara-02);
+}
+
+.meds__painel-estoque {
+  display: grid;
+  gap: var(--gap-dashboard);
+}
+
+.meds__painel-estoque[hidden] {
+  display: none;
+}
+
+.rotina__painel {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
