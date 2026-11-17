@@ -494,7 +494,7 @@ body.menu-fechado .barra-topo {
   margin-left: var(--largura-menu-lateral);
   max-width: none;
   min-width: 0;
-  padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-xl)) clamp(28px, 4vw, 56px) 32px 28px;
+  padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-xl)) 28px 32px 28px;
   transition: margin-left var(--transicao-padrao);
 }
 

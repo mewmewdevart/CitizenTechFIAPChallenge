@@ -293,7 +293,7 @@
       const texto = [
         `Mutirão · Levantamento de direitos da Mari (${idadePessoa} anos)`,
         ...itens.map(i => `• ${i.titulo} (${i.selo}): ${i.detalhe}`),
-        'Confirmação oficial realizada pelo CRAS, INSS ou UBS.'
+        'Confirme os critérios no CRAS, INSS ou UBS, conforme o serviço.'
       ].join('\n');
 
       try {

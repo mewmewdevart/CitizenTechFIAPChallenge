@@ -771,7 +771,34 @@
       }
     }
 
-    return { ...estado, covered, shiftEdits };
+    let atribuicoesTurno = estado.atribuicoesTurno ? { ...estado.atribuicoesTurno } : {};
+    if (novoInicio < novoFim) {
+      const novasAtribuicoes = {};
+      for (const [chave, item] of Object.entries(atribuicoesTurno)) {
+        if (!item || item.dia !== dia) {
+          novasAtribuicoes[chave] = item;
+          continue;
+        }
+        const seg = extrairHorasTurno(item.horario);
+        if (!(seg.inicio < novoFim && seg.fim > novoInicio)) {
+          novasAtribuicoes[chave] = item;
+          continue;
+        }
+        const partesRestantes = [];
+        if (seg.inicio < novoInicio) partesRestantes.push({ inicio: seg.inicio, fim: novoInicio });
+        if (seg.fim > novoFim) partesRestantes.push({ inicio: novoFim, fim: seg.fim });
+        for (const parte of partesRestantes) {
+          const horarioParte = formatarIntervaloTurno(parte.inicio, parte.fim - parte.inicio);
+          novasAtribuicoes[`${dia}|${horarioParte}`] = {
+            ...item,
+            horario: horarioParte
+          };
+        }
+      }
+      atribuicoesTurno = novasAtribuicoes;
+    }
+
+    return { ...estado, covered, shiftEdits, atribuicoesTurno };
   };
 
   const possuiLacuna = (dia, estado = estadoAtual) =>

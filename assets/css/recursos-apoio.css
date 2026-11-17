@@ -4,12 +4,6 @@ body.menu-fechado .conteudo-pagina.apoio {
   min-width: 0;
 }
 
-body .conteudo-pagina.apoio[data-pagina-mvp="documentos"],
-body.menu-fechado .conteudo-pagina.apoio[data-pagina-mvp="documentos"] {
-  width: 100%;
-  max-width: none;
-}
-
 body .conteudo-pagina.apoio.privacidade,
 body.menu-fechado .conteudo-pagina.apoio.privacidade {
   max-width: 820px;
@@ -180,6 +174,7 @@ body.menu-fechado .conteudo-pagina.apoio.privacidade {
 
 .apoio__painel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--espaco-md);
   padding: var(--espaco-lg);
   background: var(--cor-superficie);
@@ -235,6 +230,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
 
 .documentos__lista {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .documentos__item {
@@ -272,6 +268,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   font-size: var(--texto-interface);
   font-weight: var(--peso-semibold);
   color: var(--cor-texto-principal);
+  overflow-wrap: anywhere;
 }
 
 .documentos__conteudo p {

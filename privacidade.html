@@ -72,7 +72,7 @@
     <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
@@ -189,7 +189,7 @@
       <ul class="privacidade__lista">
         <li><strong>Fica nesta aba (sessão e memória):</strong> alterações simuladas na ficha, agenda, medicamentos, referências de documentos, perfil, convites e respostas do questionário permanecem apenas no navegador e somem ao encerrar a sessão.</li>
         <li><strong>Permanece no navegador entre visitas:</strong> apenas preferências de acessibilidade (fonte, contraste, espaçamento) e o tema visual escolhido (neutro ou acolhedor).</li>
-        <li><strong>Abre ou consulta um serviço externo:</strong> a busca por CEP/cidade em <a href="direitos.html">Direitos e serviços</a> consulta as APIs públicas do ViaCEP e IBGE, e o assistente virtual (<code>ponto-bot</code>) é carregado externamente quando utilizado.</li>
+        <li><strong>Abre ou consulta um serviço externo:</strong> a busca por CEP/cidade em <a href="direitos.html">Direitos e serviços</a> consulta as APIs públicas do ViaCEP e IBGE; já o componente do assistente virtual (<code>ponto-bot</code>) é carregado automaticamente nas páginas, e mensagens só são enviadas se você interagir com ele.</li>
       </ul>
     </section>
 
@@ -241,7 +241,7 @@
       <div class="privacidade__cabecalho-card">
         <h2 id="titulo-privacidade-contato"><i class="fa-regular fa-envelope" aria-hidden="true"></i> 5. Controle dos dados e limitações do protótipo</h2>
       </div>
-      <p>O formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a> é apenas uma simulação de interface e <strong>não envia nem processa solicitações reais de privacidade</strong>. Como os dados da rotina ficam apenas no seu navegador, basta fechar a aba para encerrar a sessão ou restaurar os padrões em Configurações.</p>
+      <p>O formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a> é apenas uma simulação de interface e <strong>não envia nem processa solicitações reais de privacidade</strong>. Como os dados da rotina ficam apenas no seu navegador, basta fechar a aba para encerrar a sessão; a opção “Restaurar preferências desta tela” em Configurações redefine apenas as escolhas daquele formulário.</p>
       <div class="privacidade__acoes">
         <a class="botao botao--primario" href="configuracoes.html">
           <i class="fa-solid fa-sliders" aria-hidden="true"></i> Gerenciar configurações

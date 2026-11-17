@@ -131,7 +131,7 @@ html.tema--acolhedor .avatar {
 
 .inicio__resumo {
   display: grid;
-  gap: var(--espaco-sm);
+  gap: var(--espaco-md);
 }
 
 .inicio__resumo>.painel__item {
@@ -153,9 +153,11 @@ html.tema--acolhedor .avatar {
 
 html:not(.tema--acolhedor) .inicio__resumo .painel__bloco {
   background: transparent;
-  border-top: var(--borda-padrao);
-  border-radius: 0;
   padding-inline: 0;
+
+  background: var(--cor-neutra-clara-01);
+  border-radius: var(--raio-lg);
+  padding: var(--espaco-md);
 }
 
 .inicio__rotulo {

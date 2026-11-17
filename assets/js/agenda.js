@@ -394,12 +394,23 @@
     const botaoDocumentos = dialogo.querySelector('[data-ver-documentos-compromisso]');
     if (botaoDocumentos) {
       const tituloLower = String(item.titulo || '').toLowerCase();
-      const temDocumentoVinculado = (obterEstado().documents || []).some(doc =>
-        doc.dia === item.dia || (tituloLower && String(doc.vinculo || '').toLowerCase().includes(tituloLower))
+      const docsVinculados = (obterEstado().documents || []).filter(doc =>
+        doc.compromissoId === item.id ||
+        doc.dia === item.dia ||
+        (tituloLower && String(doc.vinculo || '').toLowerCase().includes(tituloLower))
       );
-      botaoDocumentos.hidden = !temDocumentoVinculado;
+      botaoDocumentos.hidden = !docsVinculados.length;
+      if (docsVinculados.length === 1) {
+        botaoDocumentos.href = `documentos.html?documento=${encodeURIComponent(docsVinculados[0].id)}`;
+      } else if (docsVinculados.length > 1) {
+        botaoDocumentos.href = `documentos.html?compromisso=${encodeURIComponent(item.id)}`;
+      }
     }
     dialogo.showModal();
+    if (tituloEl) {
+      tituloEl.setAttribute('tabindex', '-1');
+      tituloEl.focus({ preventScroll: true });
+    }
   };
 
   document.querySelector('[data-dialogo="dialogo-novo-compromisso"]')?.addEventListener('click', evento => {
@@ -773,20 +784,7 @@
       const inicio = cobrirTudo ? gapInicio : Number(formulario.elements.inicio.value);
       const fim = cobrirTudo ? gapFim : Number(formulario.elements.fim.value);
 
-      atualizarEstado(estado => {
-        const proximoEstado = aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim);
-        const atribuicoesRestantes = Object.fromEntries(
-          Object.entries(proximoEstado.atribuicoesTurno || {}).filter(([, item]) => {
-            if (item.dia !== diaTurno) return true;
-            const seg = extrairHorasTurno(item.horario);
-            return !(seg.inicio < fim && seg.fim > inicio);
-          })
-        );
-        return {
-          ...proximoEstado,
-          atribuicoesTurno: atribuicoesRestantes
-        };
-      });
+      atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;
       const usuarioAtual = obterUsuarioAtual();

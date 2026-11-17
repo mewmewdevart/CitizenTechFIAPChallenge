@@ -26,6 +26,7 @@
   const tituloDialogoDoc = dialogoAdicionar?.querySelector('[data-titulo-dialogo-documento]');
   let documentoEmFocoId = null;
   let categoriaAtiva = 'Todos';
+  let compromissoFiltroId = new URLSearchParams(location.search).get('compromisso') || '';
 
   const limparErrosDocumento = () => {
     if (erroDocumento) erroDocumento.textContent = '';
@@ -95,9 +96,18 @@
 
   const renderizar = () => {
     const termo = core.normalizarBusca(campoBusca?.value);
+    const compromissoAlvo = compromissoFiltroId
+      ? (core.obterCompromissos ? core.obterCompromissos() : (obterEstado().events || [])).find(e => e.id === compromissoFiltroId)
+      : null;
+    const tituloCompromissoLower = String(compromissoAlvo?.titulo || '').toLowerCase();
     const docs = [...(obterEstado().documents || [])]
       .sort((a, b) => (b.dia || '').localeCompare(a.dia || ''))
       .filter(doc => {
+        if (compromissoFiltroId) {
+          const bateCompromisso = doc.compromissoId === compromissoFiltroId ||
+            (compromissoAlvo && (doc.dia === compromissoAlvo.dia || (tituloCompromissoLower && String(doc.vinculo || '').toLowerCase().includes(tituloCompromissoLower))));
+          if (!bateCompromisso) return false;
+        }
         if (categoriaAtiva !== 'Todos' && doc.categoria !== categoriaAtiva) return false;
         if (!termo) return true;
         const texto = core.normalizarBusca([doc.titulo, doc.categoria, doc.autor, doc.localOriginal, doc.vinculo, doc.observacoes, doc.nomeArquivo].filter(Boolean).join(' '));
@@ -105,7 +115,7 @@
       });
 
     if (!docs.length) {
-      const filtrado = Boolean(termo || categoriaAtiva !== 'Todos');
+      const filtrado = Boolean(termo || categoriaAtiva !== 'Todos' || compromissoFiltroId);
       lista.innerHTML = filtrado
         ? '<div class="estado-vazio"><strong>Nenhum documento encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros>Limpar filtros</button></div>'
         : '<div class="estado-vazio"><strong>Nenhuma referência cadastrada</strong><p>Use Cadastrar referência para organizar um documento da Mari.</p></div>';
@@ -123,7 +133,7 @@
         <div class="documentos__conteudo">
           <strong>${escaparHtml(doc.titulo)}</strong>
           <p>${escaparHtml(doc.categoria)}${dataRotulo ? ` · ${escaparHtml(dataRotulo)}` : ''}${doc.autor ? ` · ${verbo} ${escaparHtml(doc.autor)}` : ''}</p>
-          ${doc.localOriginal ? `<p><strong>Original:</strong> ${escaparHtml(doc.localOriginal)}</p>` : ''}
+          ${doc.localOriginal ? `<p><strong></strong> ${escaparHtml(doc.localOriginal)}</p>` : ''}
           ${doc.vinculo ? `<p>${escaparHtml(doc.vinculo)}</p>` : ''}
         </div>
         <button type="button" class="botao botao--secundario" data-ver-documento="${escaparHtml(doc.id)}">Ver detalhes</button>
@@ -145,12 +155,13 @@
     const compromisso = doc.compromissoId
       ? (core.obterCompromissos ? core.obterCompromissos() : (obterEstado().events || [])).find(e => e.id === doc.compromissoId)
       : null;
+    const garantirPontoFinal = texto => (/[.!?…]$/.test(texto) ? texto : `${texto}.`);
     const linhas = [
       `${doc.categoria} · ${dataTexto}`,
       `${adicionada} por ${doc.autor || 'Não informado'}.`,
-      doc.localOriginal ? `Onde encontrar o original: ${doc.localOriginal}.` : '',
-      compromisso ? `Atendimento vinculado: ${formatarDataCurta(compromisso.dia)} · ${compromisso.hora.replace(':00', 'h')} · ${compromisso.titulo}.` : '',
-      doc.vinculo ? `Anotação: ${doc.vinculo}.` : '',
+      doc.localOriginal ? garantirPontoFinal(`Onde encontrar o original: ${doc.localOriginal}`) : '',
+      compromisso ? garantirPontoFinal(`Atendimento vinculado: ${formatarDataCurta(compromisso.dia)} · ${compromisso.hora.replace(':00', 'h')} · ${compromisso.titulo}`) : '',
+      doc.vinculo ? garantirPontoFinal(`Anotação: ${doc.vinculo}`) : '',
       doc.observacoes ? doc.observacoes : '',
       doc.nomeArquivo ? `Nome do arquivo: ${doc.nomeArquivo}` : ''
     ].filter(Boolean);
@@ -170,6 +181,11 @@
       }
     }
     dialogoDetalhes.showModal();
+    const tituloDetalhes = dialogoDetalhes.querySelector('#titulo-detalhes-documento');
+    if (tituloDetalhes) {
+      tituloDetalhes.setAttribute('tabindex', '-1');
+      tituloDetalhes.focus({ preventScroll: true });
+    }
   };
 
   campoBusca?.addEventListener('input', renderizar);
@@ -184,6 +200,7 @@
     if (!botao) return;
 
     if (botao.hasAttribute('data-limpar-filtros')) {
+      compromissoFiltroId = '';
       campoBusca.value = '';
       filtrosCategoria.querySelector('[data-documentos-filtro="Todos"]').click();
       campoBusca.focus();

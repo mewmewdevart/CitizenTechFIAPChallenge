@@ -114,16 +114,6 @@ for (const link of [...linksMenu, ...atalhosInferiores, perfilMobile].filter(Boo
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const data = window.MutiraoCuidado?.HOJE;
-  if (!data) return;
-  const dataLonga = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' })
-    .format(new Date(data + 'T12:00:00'));
-  document.querySelectorAll('[data-contexto-demonstracao]').forEach(elemento => {
-    elemento.textContent = 'Demonstração · ' + dataLonga + ' · referência das 12h';
-  });
-});
-
 const painelNotificacoes = document.querySelector('.menu-notificacoes');
 const listaNotificacoes = painelNotificacoes?.querySelector('.menu-notificacoes__lista');
 const gatilhoNotificacoes = painelNotificacoes?.querySelector('summary');
