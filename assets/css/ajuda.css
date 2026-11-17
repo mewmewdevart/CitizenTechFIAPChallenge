@@ -1,17 +1,16 @@
 /* Ajuda: composição alinhada ao Design System e tokens do Mutirão. */
-.conteudo-pagina.apoio.ajuda {
-  padding-bottom: 0;
-}
-
 .ajuda__duvidas,
 .ajuda__grupo {
   display: grid;
-  gap: var(--espaco-md);
   min-width: 0;
 }
 
 .ajuda__duvidas {
-  gap: var(--espaco-lg);
+  gap: var(--espaco-xl);
+}
+
+.ajuda__grupo {
+  gap: var(--espaco-md);
 }
 
 .ajuda h2 {
@@ -24,6 +23,7 @@
   font-size: var(--texto-titulo-cartao);
   font-weight: var(--peso-semibold);
   color: var(--cor-texto-principal);
+  margin-bottom: 0;
 }
 
 .ajuda__pergunta,
@@ -31,6 +31,9 @@
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
   background: var(--cor-superficie);
+}
+
+html.tema--acolhedor .ajuda__contato {
   box-shadow: var(--sombra-cartao);
 }
 
@@ -133,7 +136,7 @@
   gap: 6px;
 }
 
-.ajuda__formulario input[aria-invalid="true"] {
+.ajuda__formulario :is(input, textarea)[aria-invalid="true"] {
   border-color: var(--cor-aviso-alerta-escuro);
 }
 
@@ -157,7 +160,7 @@
 }
 
 .ajuda__editor-rico {
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
   overflow: hidden;
@@ -239,7 +242,7 @@
   list-style: decimal;
 }
 
-.ajuda__editor-area li + li {
+.ajuda__editor-area li+li {
   margin-top: 2px;
 }
 
@@ -282,6 +285,11 @@
   padding-top: var(--espaco-xs);
 }
 
+.ajuda__acoes A {
+  color: var(--cor-primaria);
+  text-decoration: underline;
+}
+
 .ajuda__formulario [hidden] {
   display: none;
 }
@@ -311,6 +319,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .ajuda__pergunta,
   .ajuda__pergunta summary,
   .ajuda__pergunta summary i {

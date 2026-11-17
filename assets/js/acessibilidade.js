@@ -1,7 +1,10 @@
 (() => {
   const CHAVE_PREFERENCIAS = 'mutirao-acessibilidade-preferencias';
+  const CHAVE_TEMA = 'mutirao-tema';
+  const TEMAS = ['neutro', 'acolhedor'];
+  const FONTES_TEMA_ACOLHEDOR = 'https://fonts.googleapis.com/css2?family=Gloock&family=Gochi+Hand&family=Onest:wght@400;600;700&display=swap';
   const FONTE_MINIMA = 90;
-  const FONTE_MAXIMA = 110;
+  const FONTE_MAXIMA = 200;
   const PASSO_FONTE = 5;
 
   const PADROES = {
@@ -55,7 +58,43 @@
     raiz.classList.toggle('acessibilidade--espacamento-texto', preferencias.espacamentoTexto);
   }
 
+  function obterTemaSalvo() {
+    try {
+      const salvo = localStorage.getItem(CHAVE_TEMA);
+      return TEMAS.includes(salvo) ? salvo : 'neutro';
+    } catch {
+      return 'neutro';
+    }
+  }
+
+  function aplicarTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    const acolhedor = valido === 'acolhedor';
+    document.documentElement.classList.toggle('tema--acolhedor', acolhedor);
+    if (acolhedor && !document.querySelector(`link[href="${FONTES_TEMA_ACOLHEDOR}"]`)) {
+      const fontes = document.createElement('link');
+      fontes.rel = 'stylesheet';
+      fontes.href = FONTES_TEMA_ACOLHEDOR;
+      document.head.append(fontes);
+    }
+    for (const botao of document.querySelectorAll('[data-tema]')) {
+      botao.setAttribute('aria-pressed', String(botao.dataset.tema === valido));
+    }
+    return valido;
+  }
+
+  function definirTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    try {
+      localStorage.setItem(CHAVE_TEMA, valido);
+    } catch {
+      return aplicarTema(valido);
+    }
+    return aplicarTema(valido);
+  }
+
   aplicarPreferencias(estado);
+  aplicarTema(obterTemaSalvo());
 
   function criarPainelAcessibilidade() {
     if (document.getElementById('mutirao-acessibilidade-raiz')) return;
@@ -67,14 +106,14 @@
         type="button"
         id="acessibilidade-botao"
         class="acessibilidade__botao-flutuante"
-        aria-label="Recursos assistivos: abrir Central de Acessibilidade"
+        aria-label="Ajustes de leitura: abrir Ajustes de leitura"
         aria-haspopup="dialog"
         aria-expanded="false"
         aria-controls="acessibilidade-painel"
-        title="Recursos assistivos"
+        title="Ajustes de leitura"
       >
         <i class="fa-solid fa-person acessibilidade__icone-flutuante" aria-hidden="true"></i>
-        <span class="acessibilidade__rotulo-flutuante" aria-hidden="true">Recursos assistivos</span>
+        <span class="acessibilidade__rotulo-flutuante" aria-hidden="true">Ajustes de leitura</span>
       </button>
 
       <div id="acessibilidade-fundo" class="acessibilidade__fundo" hidden></div>
@@ -94,15 +133,15 @@
               <i class="fa-solid fa-person"></i>
             </span>
             <div>
-              <h2 id="acessibilidade-titulo" class="acessibilidade__titulo">Central de Acessibilidade</h2>
-              <p id="acessibilidade-subtitulo" class="acessibilidade__subtitulo">Personalize a leitura e a navegação do Mutirão</p>
+              <h2 id="acessibilidade-titulo" class="acessibilidade__titulo">Ajustes de leitura</h2>
+              <p id="acessibilidade-subtitulo" class="acessibilidade__subtitulo">Deixe o Mutirão mais fácil de ler e usar</p>
             </div>
           </div>
           <button
             type="button"
             id="acessibilidade-fechar"
             class="acessibilidade__fechar"
-            aria-label="Fechar Central de Acessibilidade"
+            aria-label="Fechar Ajustes de leitura"
           >
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
@@ -111,7 +150,7 @@
         <div class="acessibilidade__corpo">
           <div class="acessibilidade__cartao-controle">
             <span id="acessibilidade-rotulo-fonte" class="acessibilidade__rotulo-controle">Tamanho do texto</span>
-            <span class="acessibilidade__descricao-controle">Aumente ou diminua as fontes da página</span>
+            <span class="acessibilidade__descricao-controle">Deixe as letras maiores ou menores</span>
             <div class="acessibilidade__contador" role="group" aria-labelledby="acessibilidade-rotulo-fonte">
               <button
                 type="button"
@@ -138,7 +177,7 @@
           >
             <span class="acessibilidade__interruptor-info">
               <span class="acessibilidade__rotulo-controle">Alto contraste</span>
-              <span class="acessibilidade__descricao-controle">Cores com maior contraste para leitura</span>
+              <span class="acessibilidade__descricao-controle">Cores mais fortes para ler melhor</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -154,7 +193,7 @@
           >
             <span class="acessibilidade__interruptor-info">
               <span class="acessibilidade__rotulo-controle">Destacar links</span>
-              <span class="acessibilidade__descricao-controle">Sublinhar links para facilitar a identificação</span>
+              <span class="acessibilidade__descricao-controle">Sublinhar os links para achar mais fácil</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -170,7 +209,7 @@
           >
             <span class="acessibilidade__interruptor-info">
               <span class="acessibilidade__rotulo-controle">Reduzir animações</span>
-              <span class="acessibilidade__descricao-controle">Desativar movimentos e transições</span>
+              <span class="acessibilidade__descricao-controle">Tirar os movimentos da tela</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -185,19 +224,32 @@
             data-preferencia="espacamentoTexto"
           >
             <span class="acessibilidade__interruptor-info">
-              <span class="acessibilidade__rotulo-controle">Espaçamento do texto</span>
-              <span class="acessibilidade__descricao-controle">Aumentar o espaço entre as linhas</span>
+              <span class="acessibilidade__rotulo-controle">Espaço entre linhas</span>
+              <span class="acessibilidade__descricao-controle">Mais espaço entre as linhas</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
             </span>
           </button>
+
+          <div class="acessibilidade__cartao-controle">
+            <span id="acessibilidade-rotulo-tema" class="acessibilidade__rotulo-controle">Aparência</span>
+            <span class="acessibilidade__descricao-controle">Escolha a aparência visual das telas</span>
+            <div class="acessibilidade__temas" role="group" aria-labelledby="acessibilidade-rotulo-tema">
+              <button type="button" class="acessibilidade__botao-tema" data-tema="neutro" aria-pressed="true">
+                <i class="fa-regular fa-sun" aria-hidden="true"></i> Neutro
+              </button>
+              <button type="button" class="acessibilidade__botao-tema" data-tema="acolhedor" aria-pressed="false">
+                <i class="fa-regular fa-heart" aria-hidden="true"></i> Acolhedor
+              </button>
+            </div>
+          </div>
         </div>
 
         <footer class="acessibilidade__rodape">
           <button type="button" id="acessibilidade-restaurar" class="botao botao--secundario acessibilidade__botao-restaurar">
             <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
-            Restaurar padrões
+            Voltar ao padrão
           </button>
         </footer>
 
@@ -228,8 +280,8 @@
 
     function sincronizarInterface() {
       valorFonte.textContent = `${estado.escalaFonte}%`;
-      botaoDiminuir.disabled = estado.escalaFonte <= FONTE_MINIMA;
-      botaoAumentar.disabled = estado.escalaFonte >= FONTE_MAXIMA;
+      botaoDiminuir.setAttribute('aria-disabled', String(estado.escalaFonte <= FONTE_MINIMA));
+      botaoAumentar.setAttribute('aria-disabled', String(estado.escalaFonte >= FONTE_MAXIMA));
 
       for (const interruptor of interruptores) {
         const chave = interruptor.dataset.preferencia;
@@ -239,7 +291,43 @@
 
     function atualizarEstado(parcial, anuncio) {
       estado = { ...estado, ...parcial };
-      aplicarPreferencias(estado);
+      function obterTemaSalvo() {
+    try {
+      const salvo = localStorage.getItem(CHAVE_TEMA);
+      return TEMAS.includes(salvo) ? salvo : 'neutro';
+    } catch {
+      return 'neutro';
+    }
+  }
+
+  function aplicarTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    const acolhedor = valido === 'acolhedor';
+    document.documentElement.classList.toggle('tema--acolhedor', acolhedor);
+    if (acolhedor && !document.querySelector(`link[href="${FONTES_TEMA_ACOLHEDOR}"]`)) {
+      const fontes = document.createElement('link');
+      fontes.rel = 'stylesheet';
+      fontes.href = FONTES_TEMA_ACOLHEDOR;
+      document.head.append(fontes);
+    }
+    for (const botao of document.querySelectorAll('[data-tema]')) {
+      botao.setAttribute('aria-pressed', String(botao.dataset.tema === valido));
+    }
+    return valido;
+  }
+
+  function definirTema(tema) {
+    const valido = TEMAS.includes(tema) ? tema : 'neutro';
+    try {
+      localStorage.setItem(CHAVE_TEMA, valido);
+    } catch {
+      return aplicarTema(valido);
+    }
+    return aplicarTema(valido);
+  }
+
+  aplicarPreferencias(estado);
+  aplicarTema(obterTemaSalvo());
       salvarPreferencias(estado);
       sincronizarInterface();
       if (anuncio) anunciar(anuncio);
@@ -290,7 +378,7 @@
       altoContraste: 'Alto contraste',
       destacarLinks: 'Destacar links',
       reduzirAnimacoes: 'Reduzir animações',
-      espacamentoTexto: 'Espaçamento do texto'
+      espacamentoTexto: 'Espaço entre linhas'
     };
 
     for (const interruptor of interruptores) {
@@ -304,8 +392,18 @@
       });
     }
 
+    for (const botaoTema of raiz.querySelectorAll('.acessibilidade__botao-tema[data-tema]')) {
+      botaoTema.addEventListener('click', () => {
+        const tema = definirTema(botaoTema.dataset.tema);
+        anunciar(`Tema ${tema === 'acolhedor' ? 'acolhedor' : 'neutro'} ativado`);
+      });
+    }
+
+    aplicarTema(obterTemaSalvo());
+
     botaoRestaurar.addEventListener('click', () => {
-      atualizarEstado({ ...PADROES }, 'Preferências de acessibilidade restauradas para o padrão');
+      atualizarEstado({ ...PADROES }, 'Ajustes de leitura voltaram ao padrão');
+      definirTema('neutro');
     });
 
     document.addEventListener('keydown', evento => {

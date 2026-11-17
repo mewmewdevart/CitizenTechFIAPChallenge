@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
 
 <head>
@@ -68,33 +68,32 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><a href="ficha.html">Maria das Dores (Mari) · Ver ficha</a></div>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
-                    <ul class="menu-notificacoes__lista">
+          <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -103,8 +102,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -113,7 +112,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -125,13 +124,17 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+    <a class="barra-lateral__marca" href="home.html">
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -140,93 +143,111 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <p>Cuidado do dia a dia</p>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html" aria-current="page"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina agenda" id="conteudo" data-pagina-mvp="agenda">
-    <nav class="agenda__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Agenda</nav>
+    <nav class="agenda__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span
+        aria-hidden="true">›</span> Agenda</nav>
     <header class="agenda__cabecalho">
       <div>
         <h1>Agenda</h1>
-        <p>Consulte compromissos e organize os turnos de cuidado da Maria.</p>
+        <p>Veja as consultas e quem cuida da Mari em cada horário</p>
       </div>
       <div class="agenda__acoes">
-        <button type="button" class="botao botao--secundario" data-dialogo="dialogo-exportar-agenda"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Exportar agenda</button>
-        <button type="button" class="botao botao--secundario" data-dialogo="dialogo-compartilhar-agenda"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar agenda</button>
-        <button type="button" class="botao botao--primario" data-dialogo="dialogo-novo-compromisso"><i class="fa-solid fa-plus" aria-hidden="true"></i> Novo compromisso</button>
+        <button type="button" class="botao botao--primario" data-dialogo="dialogo-novo-compromisso"><i
+            class="fa-solid fa-plus" aria-hidden="true"></i> Novo compromisso</button>
+        <button type="button" class="botao botao--secundario" data-dialogo="dialogo-exportar-agenda"><i
+            class="fa-regular fa-calendar" aria-hidden="true"></i> Baixar</button>
+        <button type="button" class="botao botao--secundario" data-dialogo="dialogo-compartilhar-agenda"><i
+            class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar</button>
       </div>
     </header>
 
-    <section class="agenda__painel">
-      <h2>Calendário e compromissos</h2>
+    <section class="cartao agenda__painel">
+      <h2>Calendário e consultas</h2>
       <div class="agenda__visao-geral">
         <div class="agenda__coluna-calendario">
           <div class="calendario-mensal" data-mes="agenda">
             <div class="calendario-mensal__cabecalho">
-              <button type="button" class="botao-icone" data-passo-mes="-1" aria-label="Mês anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+              <button type="button" class="botao-icone" data-passo-mes="-1" aria-label="Mês anterior"><i
+                  class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
               <strong data-titulo-mes></strong>
-              <button type="button" class="botao-icone" data-passo-mes="1" aria-label="Próximo mês"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+              <button type="button" class="botao-icone" data-passo-mes="1" aria-label="Próximo mês"><i
+                  class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
             </div>
             <div class="calendario-mensal__grade" role="group" aria-label="Calendário">
-              <span aria-hidden="true">Dom</span><span aria-hidden="true">Seg</span><span aria-hidden="true">Ter</span><span aria-hidden="true">Qua</span><span aria-hidden="true">Qui</span><span aria-hidden="true">Sex</span><span aria-hidden="true">Sáb</span>
+              <span aria-hidden="true">Dom</span><span aria-hidden="true">Seg</span><span
+                aria-hidden="true">Ter</span><span aria-hidden="true">Qua</span><span aria-hidden="true">Qui</span><span
+                aria-hidden="true">Sex</span><span aria-hidden="true">Sáb</span>
               <div class="calendario-mensal__dias"></div>
             </div>
           </div>
           <div class="agenda__legenda">
-            <p><span class="agenda__legenda-selecionado" aria-hidden="true"><i class="fa-regular fa-square"></i></span> Dia selecionado</p>
-            <p><span class="agenda__legenda-evento" aria-hidden="true"><i class="fa-solid fa-circle"></i></span> Dia com consulta ou exame</p>
-            <p><span class="agenda__legenda-alerta" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span> Dia com horário sem cobertura</p>
+            <p><span class="agenda__amostra agenda__amostra--selecionado" aria-hidden="true">10</span> Dia que você está vendo</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--sem-ninguem" aria-hidden="true">11<span class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg></span></span> Sem ninguém em algum horário</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--parcial" aria-hidden="true">12<span class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></span></span> Falta alguém em parte do dia</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--coberto" aria-hidden="true">13<span class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span> Todos os horários com alguém</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--consulta" aria-hidden="true">18<span class="calendario-mensal__selo-consulta"></span></span> Tem consulta ou exame</p>
           </div>
         </div>
 
         <section class="agenda__tarefas">
           <div class="agenda__tarefas-cabecalho">
-            <h3>Tarefas diárias</h3>
+            <h3>Tarefas do dia</h3>
             <p data-resumo-dia></p>
           </div>
           <div class="agenda__lacuna" data-lacuna-dia>
             <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
             <div>
               <strong data-titulo-lacuna></strong>
-              <p>A Mari precisa de acompanhamento nesse horário.</p>
+              <p>A Mari precisa de alguém com ela nesse horário.</p>
             </div>
-            <a href="#escala" class="botao botao--secundario" data-ver-turno>Ver turno na escala</a>
+            <a href="#escala" class="botao botao--secundario" data-ver-turno>Ver na escala</a>
           </div>
           <div data-eventos></div>
           <div data-tarefas-diarias>
             <div class="agenda__tarefa">
-              <span class="agenda__tarefa-icone"><img src="assets/media/icones/icone-receita.svg" alt="" width="20" height="20"></span>
+              <span class="agenda__tarefa-icone"><img src="assets/media/icones/icone-receita.svg" alt="" width="20"
+                  height="20"></span>
               <div>
-                <strong>Retirar medicamento na UBS</strong>
-                <p>Após a consulta · Ana da Silva (Aninha) · Receita vinculada</p>
+                <strong>Pegar remédio no posto (UBS)</strong>
+                <p>Depois da consulta · Ana da Silva (Aninha) · Receita salva</p>
               </div>
-              <button class="botao botao--secundario" type="button" data-dialogo="dialogo-tarefa-ubs">Ver tarefa</button>
+              <button class="botao botao--secundario" type="button" data-dialogo="dialogo-tarefa-ubs">Ver
+                tarefa</button>
             </div>
             <div class="agenda__tarefa">
-              <span class="agenda__tarefa-icone"><img src="assets/media/icones/icone-medicamento.svg" alt="" width="20" height="20"></span>
+              <span class="agenda__tarefa-icone"><i class="bi bi-capsule" aria-hidden="true"></i></span>
               <div>
                 <strong>20h · Metformina</strong>
-                <p>Prevista para 20h</p>
+                <p>Para as 20h</p>
               </div>
-              <a class="botao botao--secundario" href="medicamentos.html">Registrar administração</a>
+              <a class="botao botao--secundario" href="medicamentos.html">Marcar como dado</a>
             </div>
           </div>
         </section>
@@ -234,63 +255,74 @@
     </section>
 
     <div class="agenda__inferior" id="escala">
-      <section class="agenda__painel">
-        <h2 data-titulo-escala tabindex="-1">Escala semanal · 9 a 15 nov.</h2>
+      <section class="cartao agenda__painel">
+        <h2 data-titulo-escala tabindex="-1">Quem cuida na semana · 9 a 15 nov.</h2>
+        <p class="agenda__subtitulo-escala" data-subtitulo-escala></p>
         <div class="agenda__semana" data-semana></div>
         <div data-turnos></div>
       </section>
-      <section class="agenda__painel agenda__descobertos">
-        <h2>Horários sem cobertura</h2>
+      <section class="cartao agenda__painel agenda__descobertos">
+        <h2>Horários sem ninguém</h2>
         <p>Turnos que ainda precisam de alguém.</p>
         <div data-lacunas></div>
       </section>
     </div>
 
-    <dialog class="dialogo-mvp dialogo-mvp--compartilhar" id="dialogo-compartilhar-agenda" aria-labelledby="titulo-compartilhar-agenda">
+    <dialog class="dialogo-mvp dialogo-mvp--compartilhar" id="dialogo-compartilhar-agenda"
+      aria-labelledby="titulo-compartilhar-agenda">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-compartilhar-agenda">Compartilhar agenda</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
-      <p>Escolha o período e as informações que deseja enviar para a rede de cuidado.</p>
+      <p>Escolha o período e o que quer mandar para a família.</p>
       <label class="dialogo-mvp__rotulo-compartilhar">Período
         <select data-periodo-compartilhar>
-          <option value="semana" selected>Semana selecionada</option>
-          <option value="dia">Somente o dia selecionado</option>
+          <option value="semana" selected>Semana escolhida</option>
+          <option value="dia">Só o dia escolhido</option>
         </select>
       </label>
       <fieldset class="dialogo-mvp__opcoes">
-        <legend>Incluir na mensagem</legend>
-        <label><input type="checkbox" value="Compromissos" checked> Compromissos da semana</label>
-        <label><input type="checkbox" value="Escala de turnos"> Escala de turnos</label>
-        <label><input type="checkbox" value="Tarefas"> Tarefas diárias</label>
+        <legend>O que vai na mensagem</legend>
+        <label><input type="checkbox" value="Compromissos" checked> Consultas e compromissos da semana</label>
+        <label><input type="checkbox" value="Escala de quem cuida"> Escala de quem cuida</label>
+        <label><input type="checkbox" value="Tarefas"> Tarefas do dia</label>
       </fieldset>
-      <label class="dialogo-mvp__rotulo-compartilhar">Prévia da mensagem<textarea data-previa-compartilhar readonly rows="6"></textarea></label>
+      <label class="dialogo-mvp__rotulo-compartilhar">Como a mensagem vai ficar<textarea data-previa-compartilhar readonly
+          rows="6"></textarea></label>
       <p class="dialogo-mvp__retorno" data-retorno-compartilhar role="status" aria-live="polite"></p>
       <div class="dialogo-mvp__acoes">
-        <button class="botao botao--secundario" type="button" data-compartilhar="copy"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button>
-        <button class="botao botao--secundario" type="button" data-compartilhar="whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</button>
-        <button class="botao botao--secundario" type="button" data-compartilhar="email"><i class="fa-regular fa-envelope" aria-hidden="true"></i> E-mail</button>
-        <button class="botao botao--primario" type="button" data-compartilhar="native"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar</button>
+        <button class="botao botao--secundario" type="button" data-compartilhar="copy"><i class="fa-regular fa-copy"
+            aria-hidden="true"></i> Copiar</button>
+        <button class="botao botao--secundario" type="button" data-compartilhar="whatsapp"><i
+            class="fa-brands fa-whatsapp" aria-hidden="true"></i> Abrir no WhatsApp</button>
+        <button class="botao botao--secundario" type="button" data-compartilhar="email"><i
+            class="fa-regular fa-envelope" aria-hidden="true"></i> Abrir no e-mail</button>
+        <button class="botao botao--primario" type="button" data-compartilhar="native"><i
+            class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar</button>
       </div>
       <p role="status" data-status-compartilhar></p>
     </dialog>
 
-    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-exportar-agenda" aria-labelledby="titulo-exportar-agenda">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-exportar-agenda"
+      aria-labelledby="titulo-exportar-agenda">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-exportar-agenda">Exportar agenda</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <h2 id="titulo-exportar-agenda">Baixar agenda</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
-      <p>Baixe os compromissos do mês exibido no calendário em um arquivo (.ics) para importar no Google Agenda, Apple Calendário ou Outlook.</p>
+      <p>Baixe as consultas do mês para colocar no calendário do celular (Google Agenda, Apple Calendário ou Outlook).</p>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <button data-agenda-exportar class="botao botao--primario" type="button">Baixar calendário (.ics)</button>
+        <button data-agenda-exportar class="botao botao--primario" type="button">Baixar para o calendário do celular</button>
       </div>
     </dialog>
 
     <dialog class="dialogo-mvp" id="dialogo-novo-compromisso" aria-labelledby="titulo-novo-compromisso">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-novo-compromisso" data-titulo-dialogo-evento>Novo compromisso</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <form class="formulario-mvp" data-formulario-mvp="evento">
         <input type="hidden" name="id" value="">
@@ -298,7 +330,7 @@
         <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
         <label>Horário<input type="time" name="hora" value="" required></label>
         <label>Local<input type="text" name="local" value="" required></label>
-        <label>Quem acompanha<input type="text" name="acompanhante" value="Zé da Manga" required></label>
+        <label>Quem acompanha<select name="acompanhante" required></select></label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario">Salvar compromisso</button>
@@ -308,88 +340,121 @@
 
     <dialog class="dialogo-mvp" id="dialogo-cobrir-horario" aria-labelledby="titulo-cobrir-horario">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-cobrir-horario">Cobrir horário</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <h2 id="titulo-cobrir-horario">Horário sem ninguém</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
-      <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
+      <div class="dialogo-mvp__aviso-caixa dialogo-mvp__aviso-caixa--alerta">
+        <strong data-contexto-turno></strong>
+        <span>Ninguém da família pegou esse horário ainda.</span>
+      </div>
       <form class="formulario-mvp" data-formulario-mvp="cobertura">
         <div class="dialogo-mvp__opcoes">
-          <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Cobrir todo o horário disponível</label>
+          <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Ficar o horário todo</label>
         </div>
         <div class="agenda__grade-horarios" data-horarios-cobertura hidden>
-          <label>Horário de entrada<select name="inicio"></select></label>
-          <label>Horário de saída<select name="fim"></select></label>
+          <label>Chego às<select name="inicio"></select></label>
+          <label>Saio às<select name="fim"></select></label>
         </div>
         <p class="agenda__previa-turno" data-previa-nova-cobertura></p>
         <div class="dialogo-mvp__acoes">
-          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Confirmar cobertura</button>
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
+          <button type="button" class="botao botao--secundario" data-abrir-atribuir-turno>Pedir para alguém</button>
+          <button type="submit" class="botao botao--primario">Ficar nesse horário</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-atribuir-turno"
+      aria-labelledby="titulo-atribuir-turno">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-atribuir-turno">Pedir para alguém</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p data-atribuir-contexto>Maria das Dores (Mari)</p>
+      <form class="formulario-mvp" data-formulario-mvp="atribuir-turno">
+        <label>Responsável
+          <select name="responsavel">
+            <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
+            <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
+            <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+          </select>
+        </label>
+        <div class="dialogo-mvp__aviso-caixa">
+          <strong>Antes de enviar</strong>
+          <span>O horário só fica com alguém depois que a pessoa aceitar.</span>
+        </div>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-voltar-cobrir>Voltar</button>
+          <button type="submit" class="botao botao--primario">Enviar pedido</button>
         </div>
       </form>
     </dialog>
 
     <dialog class="dialogo-mvp" id="dialogo-editar-cobertura" aria-labelledby="titulo-editar-cobertura">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-editar-cobertura">Editar cobertura de turno</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <h2 id="titulo-editar-cobertura">Mudar meu horário</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <p class="dialogo-mvp__contexto" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="editar-cobertura">
         <div class="agenda__grade-horarios">
-          <label>Horário de entrada<select name="inicio" required></select></label>
-          <label>Horário de saída<select name="fim" required></select></label>
+          <label>Chego às<select name="inicio" required></select></label>
+          <label>Saio às<select name="fim" required></select></label>
         </div>
         <p class="agenda__previa-turno" data-previa-cobertura></p>
         <div class="dialogo-mvp__acoes">
-          <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Cancelar cobertura</button>
+          <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
           <button type="submit" class="botao botao--primario">Salvar alterações</button>
         </div>
       </form>
     </dialog>
 
-    <dialog class="dialogo-mvp" id="dialogo-detalhes-compromisso" aria-labelledby="titulo-detalhes-compromisso">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhes-compromisso"
+      aria-labelledby="titulo-detalhes-compromisso">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-detalhes-compromisso">Detalhes do compromisso</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
-      <dl class="agenda__detalhes-lista dialogo-mvp__dados" data-detalhes-compromisso></dl>
+      <p data-detalhes-compromisso-pessoa>Maria das Dores (Mari)</p>
+      <div class="dialogo-mvp__detalhe-texto" data-detalhes-compromisso></div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-compromisso>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-compromisso>Editar</button>
-        <a class="botao botao--primario" href="documentos.html">Ver documentos</a>
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar à Agenda</button>
+        <a class="botao botao--primario" href="documentos.html" data-ver-documentos-compromisso hidden>Ver
+          documentos</a>
       </div>
     </dialog>
 
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-tarefa-ubs" aria-labelledby="titulo-tarefa-ubs">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-tarefa-ubs">Retirar medicamento na UBS</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <h2 id="titulo-tarefa-ubs">Pegar remédio no posto (UBS)</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
-      <p class="dialogo-mvp__contexto">Retirar o medicamento prescrito na UBS após a consulta das 14h. Responsável: Ana da Silva (Aninha).</p>
+      <p class="dialogo-mvp__contexto">Pegar no posto de saúde o remédio da receita, depois da consulta das 14h. Quem vai: Ana da Silva (Aninha).</p>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <a class="botao botao--primario" href="documentos.html">Ver receita em Documentos</a>
+        <a class="botao botao--secundario" href="documentos.html?documento=doc-receita-ubs">Ver receita em
+          Documentos</a>
+        <button type="button" class="botao botao--primario" data-concluir-tarefa-ubs>Marcar como retirada</button>
       </div>
     </dialog>
 
     <p role="status" class="agenda__status-geral" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html" aria-current="page"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
-        aria-hidden="true"></i>Mais</button>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
-    <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
-        type="search">
-      <p id="status-busca" role="status"></p>
-      <ul id="resultados-busca"></ul><button>Fechar</button>
-    </form>
-  </dialog>
 </body>
 
 </html>

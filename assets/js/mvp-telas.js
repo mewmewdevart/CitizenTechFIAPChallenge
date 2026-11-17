@@ -41,6 +41,12 @@
     }
   };
 
+  const rascunhoSensivel = {};
+
+  if (core.obterPreferencias().sigiloDados === false) {
+    Object.values(camposSensiveis).forEach(info => { info.visivelFicha = true; });
+  }
+
   const obterValorRealSensivel = chave => obterEstado().person?.[chave] || '';
 
   const obterValorMascarado = chave => {
@@ -76,51 +82,16 @@
     const formulario = pagina.querySelector('[data-formulario-mvp="ficha"]');
     const inputForm = formulario?.elements?.[chave];
     if (inputForm) {
-      inputForm.value = info.visivelForm ? valorReal : obterValorMascarado(chave);
+      inputForm.value = info.visivelForm ? (rascunhoSensivel[chave] ?? valorReal) : obterValorMascarado(chave);
+      inputForm.readOnly = !info.visivelForm;
+      inputForm.title = info.visivelForm ? '' : `Clique no ícone para ver e mudar ${info.rotulo}`;
     }
     const botaoForm = formulario?.querySelector(`.editar-ficha__botao-oculto[data-alternar-oculto="${chave}"]`);
     atualizarBotaoOculto(botaoForm, info.visivelForm, info.rotulo);
   };
 
-  const sanitizarHtmlEditor = html => {
-    const template = document.createElement('template');
-    template.innerHTML = String(html ?? '');
-    const tagsPermitidas = new Set(['B', 'STRONG', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV']);
-    const limparNo = no => {
-      [...no.childNodes].forEach(filho => {
-        if (filho.nodeType !== Node.ELEMENT_NODE) return;
-        if (!tagsPermitidas.has(filho.tagName)) {
-          filho.replaceWith(document.createTextNode(filho.textContent || ''));
-          return;
-        }
-        [...filho.attributes].forEach(attr => filho.removeAttribute(attr.name));
-        limparNo(filho);
-      });
-    };
-    limparNo(template.content);
-    if (!(template.content.textContent || '').trim() && !template.content.querySelector('li')) {
-      return '';
-    }
-    return template.innerHTML.trim();
-  };
-
-  const sincronizarEditorRico = editor => {
-    if (!editor) return;
-    const area = editor.querySelector('[data-editor-alvo]');
-    if (!area) return;
-    const chave = area.dataset.editorAlvo;
-    const inputOculto = pagina.querySelector(`[data-input-editor="${chave}"]`);
-    if (inputOculto) {
-      inputOculto.value = sanitizarHtmlEditor(area.innerHTML);
-    }
-    editor.querySelectorAll('[data-comando-editor]').forEach(botao => {
-      try {
-        botao.setAttribute('aria-pressed', String(document.queryCommandState(botao.dataset.comandoEditor)));
-      } catch {
-        botao.setAttribute('aria-pressed', 'false');
-      }
-    });
-  };
+  const sanitizarHtmlEditor = core.sanitizarHtmlEditor;
+  const editoresRicos = core.inicializarEditoresRicos(pagina);
 
   let diaSelecionado = HOJE;
   let anoAtual = 2026;
@@ -141,20 +112,60 @@
         const classe = completo ? 'calendario-mensal__indicador--sucesso' : 'calendario-mensal__indicador--atencao';
         return {
           indicadores: simbolo ? [`<span class="${classe}">${simbolo}</span>`] : [],
-          sufixoRotulo: completo ? ', relatos completos' : parcial ? ', com relatos' : ''
+          sufixoRotulo: completo ? ', todos com anotação' : parcial ? ', com anotações' : ''
         };
       }
     });
   };
 
+  const avatarPorNome = nome => (nome.startsWith('Ana')
+    ? 'icone-mascote-espeto.svg'
+    : nome.startsWith('Beatriz')
+      ? 'icone-mascote-trevo.svg'
+      : nome.startsWith('Paulo')
+        ? 'icone-mascote-pingo.svg'
+        : 'icone-mascote-cubado.svg');
+
+  const renderizarResumoUltimoRelato = () => {
+    const container = pagina.querySelector('[data-resumo-ultimo-relato-conteudo]');
+    if (!container) return;
+    const reports = obterEstado().reports || {};
+    const diasComRelato = Object.keys(reports)
+      .filter(dia => Array.isArray(reports[dia]) && reports[dia].length > 0)
+      .sort((a, b) => b.localeCompare(a));
+
+    if (!diasComRelato.length) {
+      container.innerHTML = '<p class="ficha__texto-suave">Nada anotado no diário ainda.</p>';
+      return;
+    }
+
+    const diaMaisRecente = diasComRelato[0];
+    const [nome, papel, , relato, proximo] = reports[diaMaisRecente][0];
+    const partes = String(papel || '').split(' · ');
+    const turno = partes.find(parte => parte.startsWith('Turno'));
+    const papelRestante = partes.filter(parte => parte !== turno).join(' · ');
+    const dataFormatada = formatarDataCurta(diaMaisRecente, true);
+
+    container.innerHTML = `<article class="ficha__relato">
+      <div class="ficha__relato-autor">
+        <img alt="" src="assets/media/mascotes/${avatarPorNome(nome)}">
+        <div><strong>${escaparHtml(nome)}</strong><p>${escaparHtml([dataFormatada, papelRestante].filter(Boolean).join(' · '))}</p></div>
+        ${turno ? `<span class="ficha__etiqueta">${escaparHtml(turno)}</span>` : ''}
+      </div>
+      <div class="ficha__relato-conteudo">${sanitizarHtmlEditor(relato)}</div>
+      ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><div class="ficha__relato-conteudo">${sanitizarHtmlEditor(String(proximo).replaceAll('\n', '<br>'))}</div></div>` : ''}
+    </article>`;
+  };
+
   const renderizarRelatos = () => {
+    renderizarResumoUltimoRelato();
     const containerRelatos = pagina.querySelector('[data-relatos]');
     if (!containerRelatos) return;
 
     const itens = obterRelatosDia(diaSelecionado);
     const resumo = itens.length
-      ? `<p class="ficha__relatos-resumo">${itens.length >= 4 ? 'Todos os turnos com relato · ' : 'Relatos parciais · '}${itens.length} ${itens.length === 1 ? 'turno registrado' : 'turnos registrados'}</p>`
-      : '<p class="ficha__relatos-resumo">Nenhum relato nesta data.</p>';
+      ? `<p class="ficha__relatos-resumo">${itens.length >= 4 ? 'Todos os turnos com anotação · ' : 'Algumas anotações · '}${itens.length} ${itens.length === 1 ? 'turno anotado' : 'turnos anotados'}</p>`
+      : '<p class="ficha__relatos-resumo">Ninguém anotou nada neste dia.</p>';
 
     containerRelatos.innerHTML = `${resumo}<h3>${formatarDataCurta(diaSelecionado, true)}</h3>${itens.map(([nome, papel, contexto, relato, proximo]) => {
       const avatar = nome.startsWith('Ana')
@@ -177,14 +188,18 @@
         </div>
         ${tarefa ? `<p class="ficha__texto-suave ficha__relato-meta"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> ${escaparHtml(tarefa)}</p>` : ''}
         ${ocorrencia ? `<p class="ficha__texto-suave ficha__relato-meta"><i class="fa-regular fa-note-sticky" aria-hidden="true"></i> Ocorrência${escaparHtml(ocorrencia)}</p>` : ''}
-        <p>${escaparHtml(relato)}</p>
-        ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><p>${escaparHtml(proximo).replaceAll('\n', '<br>')}</p></div>` : ''}
+        <div class="ficha__relato-conteudo">${sanitizarHtmlEditor(relato)}</div>
+        ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><div class="ficha__relato-conteudo">${sanitizarHtmlEditor(String(proximo).replaceAll('\n', '<br>'))}</div></div>` : ''}
       </article>`;
     }).join('')}`;
   };
 
   const renderizarConsultas = () => {
-    const eventos = [...obterEstado().events].sort((a, b) => (a.dia + a.hora).localeCompare(b.dia + b.hora));
+    const estado = obterEstado();
+    const eventos = core.obterCompromissos(estado);
+    const exames = estado.documents.filter(doc => doc.categoria === 'Exame')
+      .sort((a, b) => b.dia.localeCompare(a.dia));
+    const detalheExame = doc => `documentos.html?documento=${encodeURIComponent(doc.id)}`;
     const listaResumo = pagina.querySelector('[data-consultas-resumo]');
     if (listaResumo) {
       const itensHtml = eventos.slice(0, 3).map(item => {
@@ -199,27 +214,23 @@
           ? 'icone-exame.svg'
           : 'icone-consulta.svg';
         return `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/${icone}">
-          <dt><a href="agenda.html?dia=${escaparHtml(item.dia)}">${escaparHtml(tituloDia)}</a></dt>
+          <dt><a class="ficha__linha-acao" href="agenda.html?dia=${escaparHtml(item.dia)}&compromisso=${encodeURIComponent(item.id)}">${escaparHtml(tituloDia)}</a></dt>
           <dd>${escaparHtml(subtitulo)}</dd>
         </div>`;
       }).join('');
 
-      const exameCadastrado = `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
-        <dt>Exame cadastrado</dt>
-        <dd><a href="documentos.html">Hemograma · 4 nov. 2026 · 1 anexo</a></dd>
-      </div>`;
+      const exame = exames[0];
+      const ultimoExame = exame ? `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
+        <dt><a class="ficha__linha-acao" href="${detalheExame(exame)}">Último exame cadastrado · ${escaparHtml(exame.titulo)} (${escaparHtml(formatarData(exame.dia, { day: 'numeric', month: 'short' }))})</a></dt>
+        <dd>Ver referência em Documentos</dd>
+      </div>` : '';
 
-      listaResumo.innerHTML = itensHtml + exameCadastrado;
-    }
-
-    const listaExames = pagina.querySelector('[data-lista-exames]');
-    if (listaExames) {
-      listaExames.innerHTML = [
-        ...eventos.map(item => `<p><a href="agenda.html?dia=${escaparHtml(item.dia)}">${escaparHtml(formatarData(item.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</a></p>`),
-        '<p><a href="documentos.html">4 nov. · Hemograma (Documentos)</a></p>'
-      ].join('');
+      listaResumo.innerHTML = itensHtml + ultimoExame || '<div><dt>Nenhum compromisso ou exame cadastrado</dt></div>';
     }
   };
+
+  const AVISO_TITULO_PADRAO = 'Alergia à dipirona';
+  const AVISO_TEXTO_PADRAO = 'Não dar. Se tiver dúvida, fale antes com o responsável.';
 
   const atualizarAvisoAlergia = person => {
     const aviso = pagina.querySelector('[data-aviso-alergia]');
@@ -230,19 +241,23 @@
       .split(',')
       .map(i => i.trim())
       .filter(Boolean);
+    const tituloCustom = (person.avisoTitulo || '').trim();
+    const textoCustom = (person.avisoTexto || '').trim();
 
-    if (!alergias.length) {
+    if (!alergias.length && !tituloCustom && !textoCustom) {
       aviso.hidden = true;
       return;
     }
     aviso.hidden = false;
     if (titulo) {
-      titulo.textContent = alergias.length === 1 && alergias[0].toLowerCase() === 'dipirona'
-        ? 'Alergia à dipirona'
-        : `Alergias: ${alergias.join(', ')}`;
+      titulo.textContent = tituloCustom || (
+        alergias.length === 1 && alergias[0].toLowerCase() === 'dipirona'
+          ? AVISO_TITULO_PADRAO
+          : `Alergias: ${alergias.join(', ')}`
+      );
     }
     if (texto) {
-      texto.textContent = 'Não administrar. Em caso de dúvida, consultar o responsável antes.';
+      texto.textContent = textoCustom || AVISO_TEXTO_PADRAO;
     }
   };
 
@@ -257,8 +272,8 @@
 
   const serializarFormularioFicha = () => {
     if (!formularioFicha) return '';
-    formularioFicha.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditorRico);
-    const dados = [...new FormData(formularioFicha).entries()].map(([k, v]) => [k, String(v)]);
+    editoresRicos.sincronizarTodos(formularioFicha);
+    const dados = [...new FormData(formularioFicha).entries()].map(([k, v]) => [k, k in camposSensiveis && !camposSensiveis[k].visivelForm ? (rascunhoSensivel[k] ?? obterValorRealSensivel(k)) : String(v)]);
     const previaFoto = formularioFicha.querySelector('[data-foto-previa]');
     dados.push(['__fotoRemovida', previaFoto?.dataset.fotoRemovida || '']);
     dados.push(['__fotoAtualizada', previaFoto?.dataset.fotoAtualizada || '']);
@@ -272,9 +287,21 @@
     botaoSalvarFicha.setAttribute('aria-disabled', String(semAlteracoes));
   };
 
+  const atualizarContadoresAviso = () => {
+    if (!formularioFicha) return;
+    for (const [campo, limite] of [['avisoTitulo', 24], ['avisoTexto', 70]]) {
+      const input = formularioFicha.elements[campo];
+      const contador = formularioFicha.querySelector(`[data-contador-aviso="${campo}"]`);
+      if (input && contador) contador.textContent = `${input.value.length}/${limite} caracteres`;
+    }
+  };
+
   if (formularioFicha) {
     ['input', 'change'].forEach(tipoEvento => {
-      formularioFicha.addEventListener(tipoEvento, atualizarBotaoSalvarFicha);
+      formularioFicha.addEventListener(tipoEvento, () => {
+        atualizarContadoresAviso();
+        atualizarBotaoSalvarFicha();
+      });
     });
     formularioFicha.addEventListener('click', () => {
       requestAnimationFrame(atualizarBotaoSalvarFicha);
@@ -309,20 +336,20 @@
     const blocoAlergia = alergias
       ? `<div class="folha-impressao__alerta">
           <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à ${escaparHtml(alergias.toLowerCase())}</strong>
-          <p>Não administrar. Em caso de dor, consultar o responsável antes.</p>
+          <p>Não dar. Se tiver dúvida, fale antes com o responsável.</p>
         </div>`
       : `<div class="folha-impressao__cartao">
-          <h4>Alergias registradas</h4>
-          <p>Nenhuma alergia registrada até o momento.</p>
+          <h4>Alergias</h4>
+          <p>Nenhuma alergia anotada.</p>
         </div>`;
 
-    const medicamentosLista = String(person.medicamentos || '')
+    const medicamentosLista = core.obterResumoMedicamentos().join(', ')
       .split(',')
       .map(item => item.trim())
       .filter(Boolean);
     const medicamentosHtml = medicamentosLista.length
       ? `<ul class="folha-impressao__lista">${medicamentosLista.map(item => `<li>${escaparHtml(item)}</li>`).join('')}</ul>`
-      : '<p>Nenhum medicamento registrado</p>';
+      : '<p>Nenhum remédio anotado</p>';
 
     const incluirCondicoes = opcaoImpressaoAtiva('condicoes');
     const incluirHistorico = opcaoImpressaoAtiva('historico');
@@ -333,13 +360,13 @@
 
     const cartaoCondicoes = incluirCondicoes
       ? `<section class="folha-impressao__cartao">
-          <h4>Condições de saúde registradas</h4>
+          <h4>Doenças e condições</h4>
           <p>${escaparHtml(person.condicoes || 'Nenhuma registrada')}</p>
         </section>`
       : '';
 
     const cartaoMedicamentos = `<section class="folha-impressao__cartao">
-      <h4>Medicamentos de uso diário</h4>
+      <h4>Remédios de todo dia</h4>
       ${medicamentosHtml}
     </section>`;
 
@@ -355,7 +382,7 @@
           const dataItem = formatarData(item.dia, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '') + '.';
           const horaItem = item.hora ? item.hora.replace(':00', 'h') : '';
           const localTexto = item.local ? ` · ${item.local}` : '';
-          const respTexto = item.responsavel ? ` · ${item.responsavel} acompanha.` : '';
+          const respTexto = item.acompanhante ? ` · ${item.acompanhante} acompanha.` : '';
           return `<li>${escaparHtml(`${dataItem}${horaItem ? `, ${horaItem}` : ''} · ${item.titulo}${localTexto}${respTexto}`)}</li>`;
         }).join('')}</ul>`
       : '<p>Nenhum compromisso agendado</p>';
@@ -369,7 +396,7 @@
 
     const secaoPreferencias = incluirPreferencias && person.preferencias
       ? `<section class="folha-impressao__secao">
-          <h4>Preferências de cuidado</h4>
+          <h4>Do que ela gosta</h4>
           <p>${escaparHtml(person.preferencias)}</p>
         </section>`
       : '';
@@ -384,9 +411,9 @@
       ${secaoEventos}
       ${secaoPreferencias}
       <section class="folha-impressao__cartao">
-        <h4>Contato de referência</h4>
+        <h4>Contato principal</h4>
         <p>${escaparHtml(person.referencia || 'Não informado')}</p>
-        ${incluirAlternativo && person.alternativo ? `<p>Contato alternativo: ${escaparHtml(person.alternativo)}</p>` : ''}
+        ${incluirAlternativo && person.alternativo ? `<p>Segundo contato: ${escaparHtml(person.alternativo)}</p>` : ''}
         ${incluirConvenio && person.convenio ? `<p class="folha-impressao__convenio">Convênio: ${escaparHtml(person.convenio)}</p>` : ''}
       </section>
     `;
@@ -397,6 +424,7 @@
   });
 
   const renderizarPessoa = () => {
+    window.dispatchEvent(new Event('mutirao:pessoa-atualizada'));
     const person = obterEstado().person;
     if (!person) return;
 
@@ -416,6 +444,9 @@
       campos.apelido.value = apelido;
       if (campos.telefoneFixo) campos.telefoneFixo.value = person.telefoneFixo || '';
       if (campos.celular) campos.celular.value = person.celular || '';
+      if (campos.avisoTitulo) campos.avisoTitulo.value = (person.avisoTitulo || AVISO_TITULO_PADRAO).slice(0, 24);
+      if (campos.avisoTexto) campos.avisoTexto.value = (person.avisoTexto || AVISO_TEXTO_PADRAO).slice(0, 70);
+      atualizarContadoresAviso();
     }
 
     const mascoteAtual = person.mascote || 'assets/media/mascotes/icone-mascote-minhoca.svg';
@@ -473,12 +504,13 @@
         const areaEditor = formulario?.querySelector('[data-editor-alvo="historicoSaude"]');
         if (areaEditor) {
           areaEditor.innerHTML = htmlSeguro;
-          sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
+          editoresRicos.sincronizarTodos(formulario);
         }
       } else if (chave === 'alergias' || chave === 'condicoes') {
         const itens = String(valor || '').split(',').map(item => item.trim()).filter(Boolean);
+        const classeEtiqueta = chave === 'alergias' ? 'ficha__etiqueta ficha__etiqueta--alerta' : 'ficha__etiqueta';
         no.innerHTML = itens.length
-          ? itens.map(item => `<span class="ficha__etiqueta ficha__etiqueta--alerta">${escaparHtml(item)}</span>`).join(' ')
+          ? itens.map(item => `<span class="${classeEtiqueta}">${escaparHtml(item)}</span>`).join(' ')
           : 'Nenhuma registrada';
         const listaModal = formulario?.querySelector(`[data-lista-etiquetas="${chave}"]`);
         if (listaModal) {
@@ -486,13 +518,13 @@
           const inputEtiqueta = listaModal.querySelector('.editar-ficha__input-etiqueta');
           itens.forEach(item => {
             const span = document.createElement('span');
-            span.className = 'ficha__etiqueta ficha__etiqueta--alerta';
+            span.className = classeEtiqueta;
             span.innerHTML = `${escaparHtml(item)} <button type="button" class="editar-ficha__remover-etiqueta" aria-label="Remover ${escaparHtml(item)}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
             listaModal.insertBefore(span, inputEtiqueta);
           });
         }
       } else if (chave === 'medicamentos') {
-        const itens = String(valor || '').split(',').map(item => item.trim()).filter(Boolean);
+        const itens = core.obterResumoMedicamentos();
         no.innerHTML = itens.length
           ? itens.map(item => `<span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">${escaparHtml(item)}</span>`).join(' ')
           : 'Nenhum registrado';
@@ -545,8 +577,9 @@
     const jaExiste = [...lista.querySelectorAll('.ficha__etiqueta')]
       .some(el => el.textContent.trim().toLowerCase() === valor.toLowerCase());
     if (!jaExiste) {
+      const ehAlergia = lista.dataset.listaEtiquetas === 'alergias';
       const span = document.createElement('span');
-      span.className = 'ficha__etiqueta ficha__etiqueta--alerta';
+      span.className = ehAlergia ? 'ficha__etiqueta ficha__etiqueta--alerta' : 'ficha__etiqueta';
       span.innerHTML = `${escaparHtml(valor)} <button type="button" class="editar-ficha__remover-etiqueta" aria-label="Remover ${escaparHtml(valor)}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
       lista.insertBefore(span, lista.querySelector('.editar-ficha__input-etiqueta'));
       sincronizarInputEtiquetas(lista);
@@ -557,6 +590,7 @@
   document.querySelector('[data-dialogo="dialogo-editar-ficha"]')?.addEventListener('click', () => {
     Object.keys(camposSensiveis).forEach(chave => {
       camposSensiveis[chave].visivelForm = false;
+      delete rascunhoSensivel[chave];
     });
     renderizarPessoa();
   });
@@ -564,6 +598,7 @@
   dialogoEditarFicha?.addEventListener('close', () => {
     Object.keys(camposSensiveis).forEach(chave => {
       camposSensiveis[chave].visivelForm = false;
+      delete rascunhoSensivel[chave];
     });
     renderizarPessoa();
   });
@@ -598,19 +633,14 @@
         if (botao.closest('#dialogo-editar-ficha')) {
           const inputForm = botao.closest('form')?.elements?.[chave];
           if (info.visivelForm && inputForm) {
-            const valorAtual = inputForm.value.trim();
-            if (valorAtual) {
-              atualizarEstado(estado => ({
-                ...estado,
-                person: { ...estado.person, [chave]: valorAtual }
-              }));
-            }
+            rascunhoSensivel[chave] = inputForm.value.trim();
           }
           info.visivelForm = !info.visivelForm;
         } else {
           info.visivelFicha = !info.visivelFicha;
         }
         sincronizarCampoSensivel(chave);
+        atualizarBotaoSalvarFicha();
       }
     }
 
@@ -659,16 +689,6 @@
       });
     }
 
-    if (botao.dataset.comandoEditor) {
-      const editor = botao.closest('[data-editor-rico]');
-      const area = editor?.querySelector('[data-editor-alvo]');
-      if (area) {
-        area.focus();
-        document.execCommand(botao.dataset.comandoEditor, false, null);
-        sincronizarEditorRico(editor);
-      }
-    }
-
     if (botao.classList.contains('editar-ficha__remover-etiqueta')) {
       const lista = botao.closest('[data-lista-etiquetas]');
       botao.closest('.ficha__etiqueta')?.remove();
@@ -707,17 +727,17 @@
     const arquivo = evento.target.files?.[0];
     if (!arquivo) return;
     if (!['image/jpeg', 'image/png'].includes(arquivo.type)) {
-      registrarStatus('Selecione uma imagem em formato JPG ou PNG.');
+      registrarStatus('Escolha uma foto JPG ou PNG.');
       evento.target.value = '';
       return;
     }
     if (arquivo.size > 2 * 1024 * 1024) {
-      registrarStatus('A imagem deve ter no máximo 2 MB.');
+      registrarStatus('A foto é grande demais. Use uma de até 2 MB.');
       evento.target.value = '';
       return;
     }
     const leitor = new FileReader();
-    leitor.onerror = () => registrarStatus('Não foi possível ler a imagem selecionada.');
+    leitor.onerror = () => registrarStatus('Não deu para abrir essa foto.');
     leitor.onload = () => {
       const previa = pagina.querySelector('[data-foto-previa]');
       const formulario = previa?.closest('form');
@@ -734,34 +754,14 @@
     leitor.readAsDataURL(arquivo);
   });
 
-  pagina.addEventListener('mousedown', evento => {
-    if (evento.target.closest('[data-comando-editor]')) {
-      evento.preventDefault();
-    }
-  });
-
-  document.addEventListener('selectionchange', () => {
-    const areaEditor = document.activeElement?.closest?.('[data-editor-alvo]');
-    if (areaEditor && pagina.contains(areaEditor)) {
-      sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
-    }
-  });
-
-  ['input', 'keyup', 'mouseup'].forEach(tipoEvento => {
-    pagina.addEventListener(tipoEvento, evento => {
-      const areaEditor = evento.target.closest('[data-editor-alvo]');
-      if (areaEditor) sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
-    });
-  });
-
   pagina.addEventListener('submit', evento => {
     const formulario = evento.target;
     const tipoFormulario = formulario.dataset.formularioMvp;
     if (!tipoFormulario) return;
 
     evento.preventDefault();
+    editoresRicos.sincronizarTodos(formulario);
     if (tipoFormulario === 'ficha') {
-      formulario.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditorRico);
       formulario.querySelectorAll('.editar-ficha__input-etiqueta').forEach(inputEtiqueta => {
         if (!inputEtiqueta.value.trim()) return;
         adicionarEtiqueta(inputEtiqueta.closest('[data-lista-etiquetas]'), inputEtiqueta.value);
@@ -776,8 +776,9 @@
     if (tipoFormulario === 'ficha') {
       const estadoAnterior = obterEstado().person;
       Object.keys(camposSensiveis).forEach(chave => {
-        const valorInformado = (campos[chave] || '').trim();
-        if (valorInformado && valorInformado !== obterValorMascarado(chave)) {
+        const valorInformado = camposSensiveis[chave].visivelForm
+          ? (campos[chave] || '').trim() : (rascunhoSensivel[chave] ?? estadoAnterior[chave] ?? '');
+        if (valorInformado !== obterValorMascarado(chave)) {
           campos[chave] = valorInformado;
         } else {
           campos[chave] = estadoAnterior[chave] || '';
@@ -793,38 +794,49 @@
         campos.foto = estadoAnterior.foto || '';
       }
 
+      campos.avisoTitulo = (campos.avisoTitulo || '').trim().slice(0, 24);
+      campos.avisoTexto = (campos.avisoTexto || '').trim().slice(0, 70);
+
       atualizarEstado(estado => ({
         ...estado,
         person: { ...estado.person, ...campos }
       }));
-      mensagem = 'Ficha atualizada nesta sessão.';
+      mensagem = {
+        titulo: 'Ficha atualizada',
+        descricao: `Cadastro de ${core.nomePessoaAcompanhada()} atualizado.`
+      };
     }
 
     if (tipoFormulario === 'relato') {
       const textoRelato = (campos.relato || '').trim();
       if (!textoRelato) {
-        registrarStatus('Descreva o relato do turno antes de salvar.');
+        registrarStatus('Escreva como foi o turno antes de salvar.');
         return;
       }
-      const turno = campos.turno || 'Turno 19h–24h';
+      const turno = (campos.turno || '').trim();
+      const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Manga', papel: 'Administrador' };
+      const cabecalhoPapel = turno ? `${usuario.papel} · ${turno}` : usuario.papel;
       atualizarEstado(estado => ({
         ...estado,
         reports: {
           ...estado.reports,
           [campos.dia]: [
-            ...(estado.reports[campos.dia] || []),
-            ['Zé da Manga', `Administrador · ${turno}`, '', textoRelato, (campos.recado || '').trim()]
+            [usuario.nome, cabecalhoPapel, '', textoRelato, (campos.recado || '').trim()],
+            ...(estado.reports[campos.dia] || [])
           ]
         }
       }));
       diaSelecionado = campos.dia;
       anoAtual = Number(diaSelecionado.slice(0, 4));
       mesAtual = Number(diaSelecionado.slice(5, 7)) - 1;
-      mensagem = 'Relato salvo no Diário de turno.';
+      mensagem = 'Anotação salva no Diário de turno.';
     }
 
     formulario.closest('dialog')?.close();
-    if (tipoFormulario !== 'ficha') formulario.reset();
+    if (tipoFormulario !== 'ficha') {
+      formulario.reset();
+      editoresRicos.limparTodos(formulario);
+    }
     registrarStatus(mensagem);
     renderizar();
   });
@@ -844,7 +856,7 @@
             `Alergias: ${person.alergias || 'Nenhuma registrada'}`,
             `Condições: ${person.condicoes || 'Nenhuma registrada'}`
           ].join('\n'),
-          'Medicamentos de uso diário': () => person.medicamentos || 'Nenhum registrado.'
+          'Remédios de todo dia': () => core.obterResumoMedicamentos().join('; ') || 'Nenhum registrado.'
         };
       }
     }

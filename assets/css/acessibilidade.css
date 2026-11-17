@@ -287,6 +287,42 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
   color: var(--cor-texto-principal);
 }
 
+.acessibilidade__temas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-xs);
+  margin-top: var(--espaco-sm);
+}
+
+.acessibilidade__botao-tema {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px var(--espaco-sm);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-md);
+  background: var(--cor-fundo-pagina);
+  color: var(--cor-texto-principal);
+  font: inherit;
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  cursor: pointer;
+  transition: border-color var(--transicao-padrao), background-color var(--transicao-padrao), color var(--transicao-padrao);
+}
+
+.acessibilidade__botao-tema:hover {
+  border-color: var(--cor-primaria);
+  background: var(--cor-superficie);
+}
+
+.acessibilidade__botao-tema[aria-pressed="true"] {
+  border-color: var(--cor-primaria);
+  background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
+}
+
 .acessibilidade__interruptor {
   width: 100%;
   min-height: 56px;
@@ -350,6 +386,14 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
 .acessibilidade__botao-restaurar {
   width: 100%;
   min-height: var(--tamanho-alvo-toque);
+}
+
+html.tema--acolhedor :is(.acessibilidade__cartao-controle, .acessibilidade__interruptor, .acessibilidade__botao-tema, .acessibilidade__botao-passo) {
+  box-shadow: var(--sombra-cartao);
+}
+
+html.acessibilidade--alto-contraste.tema--acolhedor :is(.acessibilidade__cartao-controle, .acessibilidade__interruptor, .acessibilidade__botao-tema, .acessibilidade__botao-passo) {
+  box-shadow: none;
 }
 
 @media (width < 640px) {

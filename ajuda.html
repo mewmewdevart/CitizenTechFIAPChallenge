@@ -61,6 +61,7 @@
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/ajuda.css" />
   <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/ajuda.js" defer></script>
 </head>
@@ -68,32 +69,32 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
         <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
-                    <ul class="menu-notificacoes__lista">
+          <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -102,8 +103,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -112,7 +113,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -127,13 +128,14 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+    <a class="barra-lateral__marca" href="home.html">
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -142,26 +144,27 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <p>Cuidado do dia a dia</p>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html" aria-current="page"><i
           class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -169,29 +172,29 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio ajuda" id="conteudo">
-    <nav class="apoio__trilha" aria-label="Caminho da página"><a href="index.html">Início</a> <span
+    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span
         aria-hidden="true">›</span> <span aria-current="page">Ajuda</span></nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Ajuda</h1>
-        <p>Encontre orientações para organizar o cuidado no Mutirão.</p>
+        <p>Tire suas dúvidas sobre como usar o Mutirão.</p>
       </div>
     </header>
     <section class="ajuda__duvidas" aria-labelledby="titulo-duvidas">
-      <h2 id="titulo-duvidas">Dúvidas frequentes</h2>
+      <h2 id="titulo-duvidas">Perguntas mais comuns</h2>
 
       <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-agenda">
         <h3 id="titulo-ajuda-agenda">Agenda e turnos</h3>
         <details class="ajuda__pergunta">
-          <summary>Como assumir um turno sem cobertura?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+          <summary>Como ficar num horário que está sem ninguém?<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
           </summary>
           <div class="ajuda__resposta">
-            <p>Quando algum horário ficar descoberto, o alerta aparece no topo da tela e na barra lateral. Para assumir:
+            <p>Quando um horário fica sem ninguém, aparece um aviso no topo da tela e no menu. Para ficar nesse horário:
             </p>
             <ol>
-              <li>Acesse a <strong>Agenda</strong> e localize o horário indicado como sem cobertura.</li>
-              <li>Confira o período e as orientações previstas para aquele turno.</li>
-              <li>Confirme a responsabilidade para que toda a rede visualize quem estará cuidando.</li>
+              <li>Abra a <strong>Agenda</strong> e procure o horário marcado como sem ninguém.</li>
+              <li>Veja o horário e o que precisa ser feito nele.</li>
+              <li>Confirme que vai ficar, para toda a família saber quem estará com ela.</li>
             </ol>
             <div class="ajuda__resposta-acoes">
               <a class="botao botao--secundario botao--pequeno" href="agenda.html">Abrir agenda <i
@@ -200,12 +203,13 @@
           </div>
         </details>
         <details class="ajuda__pergunta">
-          <summary>Como combinar trocas ou avisar imprevistos na escala?<i class="fa-solid fa-chevron-down"
+          <summary>Como trocar um horário ou avisar que surgiu um imprevisto?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="ajuda__resposta">
-            <p>Sempre que precisar trocar um horário, consulte os contatos disponíveis em <strong>Pessoas da
-                rede</strong> para alinhar diretamente com outro familiar ou cuidador e registre o combinado no
-              <strong>Diário de cuidado</strong> para que o turno seguinte saiba da mudança.</p>
+            <p>Se precisar trocar um horário, veja os contatos em <strong>Pessoas da
+                rede</strong> para combinar direto com alguém da família ou cuidador, e anote o combinado no
+              <strong>Diário de turno</strong> para quem vem depois saber da mudança.
+            </p>
             <div class="ajuda__resposta-acoes">
               <a class="botao botao--secundario botao--pequeno" href="pessoas.html">Ver pessoas da rede <i
                   class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
@@ -215,14 +219,12 @@
       </section>
 
       <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-registros">
-        <h3 id="titulo-ajuda-registros">Medicamentos e registros</h3>
+        <h3 id="titulo-ajuda-registros">Remédios e anotações</h3>
         <details class="ajuda__pergunta">
-          <summary>Como acompanhar os horários e evitar doses duplicadas?<i class="fa-solid fa-chevron-down"
+          <summary>Como saber a hora dos remédios e não dar dose repetida?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="ajuda__resposta">
-            <p>Na tela de <strong>Medicamentos</strong> você visualiza os horários previstos, as doses do dia e os
-              alertas de pendência (como uma medicação ainda não administrada no turno atual). Antes de aplicar qualquer
-              dose, confira o registro mais recente e alinhe com quem esteve no turno anterior.</p>
+            <p>Na tela de <strong>Medicamentos</strong> você vê os horários, os remédios do dia e os avisos do que ainda não foi dado. Antes de dar qualquer remédio, confira a última anotação e fale com quem cuidou antes de você.</p>
             <div class="ajuda__resposta-acoes">
               <a class="botao botao--secundario botao--pequeno" href="medicamentos.html">Abrir medicamentos <i
                   class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
@@ -230,14 +232,12 @@
           </div>
         </details>
         <details class="ajuda__pergunta">
-          <summary>Como deixar um relato para o próximo turno?<i class="fa-solid fa-chevron-down"
+          <summary>Como deixar um recado para quem vem depois?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="ajuda__resposta">
-            <p>Abra a <strong>Ficha</strong> da pessoa acompanhada e acesse o <strong>Diário de cuidado</strong>. Anote
-              como foi a alimentação, o sono, o humor, medicações aplicadas e qualquer observação clínica ou recado de
-              consulta. Assim, quem chega depois encontra tudo em um único lugar, sem depender de mensagens soltas.</p>
+            <p>Abra a <strong>Ficha</strong> da pessoa cuidada e entre no <strong>Diário de turno</strong>. Anote como ela comeu, dormiu, como estava o humor, quais remédios tomou e qualquer coisa de saúde ou recado de consulta. Assim, quem chega depois acha tudo num lugar só, sem depender de mensagens soltas.</p>
             <div class="ajuda__resposta-acoes">
-              <a class="botao botao--secundario botao--pequeno" href="ficha.html#diario">Abrir diário de cuidado <i
+              <a class="botao botao--secundario botao--pequeno" href="ficha.html#diario">Abrir o Diário de turno <i
                   class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
             </div>
           </div>
@@ -247,12 +247,13 @@
       <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-rede">
         <h3 id="titulo-ajuda-rede">Documentos, ficha e direitos</h3>
         <details class="ajuda__pergunta">
-          <summary>Como preparar um resumo e separar documentos para consulta?<i class="fa-solid fa-chevron-down"
+          <summary>Como preparar um resumo e separar os papéis para a consulta?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="ajuda__resposta">
-            <p>Antes de ir à UBS, hospital ou especialista, revise os dados clínicos e anotações recentes na
-              <strong>Ficha</strong> e utilize a busca da página de <strong>Documentos</strong> para localizar receitas,
-              laudos, exames e o Cartão do SUS em segundos.</p>
+            <p>Antes de ir à UBS, hospital ou especialista, revise os dados da Mari na
+              <strong>Ficha</strong> e use a busca de <strong>Documentos</strong> para encontrar a referência cadastrada
+              e consultar onde o original está guardado.
+            </p>
             <div class="ajuda__resposta-acoes">
               <a class="botao botao--secundario botao--pequeno" href="ficha.html">Abrir ficha <i
                   class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
@@ -262,13 +263,10 @@
           </div>
         </details>
         <details class="ajuda__pergunta">
-          <summary>Como verificar benefícios e encontrar UBS ou CRAS na minha cidade?<i class="fa-solid fa-chevron-down"
+          <summary>Como saber quais ajudas ela pode ter e onde fica o posto de saúde ou o CRAS da minha cidade?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="ajuda__resposta">
-            <p>Na seção <strong>Direitos e serviços</strong>, responda às 5 perguntas rápidas para descobrir benefícios
-              como Farmácia Popular, BPC/LOAS, Tarifa Social e Melhor em Casa, com resumo pronto para copiar no grupo da
-              família. Logo ao lado, você também pode informar seu CEP ou município para localizar UBS, CRAS e Farmácia
-              Popular na região.</p>
+            <p>Na seção <strong>Direitos e serviços</strong>, responda 7 perguntas rápidas e descubra direitos como remédio de graça (Farmácia Popular), BPC/LOAS, desconto na conta de luz (Tarifa Social) e atendimento em casa (Melhor em Casa). No final, dá para copiar um resumo para o grupo da família. Ao lado, digite seu CEP ou cidade para achar o posto (UBS), o CRAS e a Farmácia Popular mais perto.</p>
             <div class="ajuda__resposta-acoes">
               <a class="botao botao--secundario botao--pequeno" href="direitos.html">Ver direitos e serviços <i
                   class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
@@ -278,63 +276,53 @@
       </section>
 
       <section class="ajuda__grupo" aria-labelledby="titulo-ajuda-acessibilidade">
-        <h3 id="titulo-ajuda-acessibilidade">Acessibilidade e uso da plataforma</h3>
+        <h3 id="titulo-ajuda-acessibilidade">Ler melhor e usar o Mutirão</h3>
         <details class="ajuda__pergunta">
-          <summary>Como ajustar fonte, contraste ou espaçamento de leitura?<i class="fa-solid fa-chevron-down"
+          <summary>Como aumentar a letra, mudar as cores ou deixar o texto mais espaçado?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="ajuda__resposta">
-            <p>O Mutirão conta com um painel dedicado de <strong>Acessibilidade</strong> no canto da tela. Por lá você
-              pode aumentar o tamanho do texto, ampliar o espaçamento entre linhas e ativar recursos de leitura conforme
-              a preferência de cada familiar ou cuidador.</p>
+            <p>No Mutirão, use o botão <strong>Ajustes de leitura</strong> no canto direito da tela para abrir a
+              <strong>Ajustes de leitura</strong>. Ali você aumenta a letra, deixa mais espaço entre as linhas e liga outras opções de leitura, do jeito que for melhor para você.
+            </p>
           </div>
         </details>
       </section>
     </section>
     <section class="ajuda__contato" aria-labelledby="titulo-contato">
       <div class="ajuda__contato-cabecalho">
-        <h2 id="titulo-contato">Não encontrou o que procurava?</h2>
-        <p>Conte em que podemos ajudar.</p>
+        <h2 id="titulo-contato">Não achou o que procurava?</h2>
+        <p>Conte para a gente como podemos ajudar.</p>
       </div>
       <form class="formulario-mvp ajuda__formulario" id="formulario-ajuda" novalidate>
         <div class="ajuda__campo">
-          <label for="ajuda-email">E-mail para resposta<input id="ajuda-email" name="email" type="email"
-              autocomplete="email" maxlength="254" placeholder="Ex.: nome@email.com" aria-describedby="ajuda-email-erro" required></label>
+          <label for="ajuda-email">Seu e-mail (para a gente responder)<input id="ajuda-email" name="email" type="email"
+              autocomplete="email" maxlength="254" placeholder="Ex.: nome@email.com" aria-describedby="ajuda-email-erro"
+              required></label>
           <p class="ajuda__erro" id="ajuda-email-erro" aria-live="polite"></p>
         </div>
         <div class="ajuda__campo">
-          <label for="ajuda-assunto">Assunto<input id="ajuda-assunto" name="assunto" type="text" minlength="5" maxlength="100"
-              placeholder="Ex.: Dúvida sobre a escala" aria-describedby="ajuda-assunto-erro" required></label>
+          <label for="ajuda-assunto">Assunto<input id="ajuda-assunto" name="assunto" type="text" minlength="5"
+              maxlength="100" placeholder="Ex.: Dúvida sobre a escala" aria-describedby="ajuda-assunto-erro"
+              required></label>
           <p class="ajuda__erro" id="ajuda-assunto-erro" aria-live="polite"></p>
         </div>
-        <div class="ajuda__campo-editor">
-          <span id="rotulo-ajuda-mensagem" class="ajuda__rotulo-campo">Mensagem</span>
-          <input type="hidden" id="ajuda-mensagem-valor" name="mensagem" data-input-editor="ajudaMensagem">
-          <div class="ajuda__editor-rico" data-editor-rico="ajudaMensagem">
-            <div class="ajuda__editor-barra" role="toolbar" aria-label="Formatação de texto">
-              <button type="button" class="ajuda__editor-botao" data-comando-editor="bold" aria-pressed="false"
-                aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
-              <button type="button" class="ajuda__editor-botao" data-comando-editor="underline" aria-pressed="false"
-                aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="ajuda__editor-botao" data-comando-editor="insertUnorderedList"
-                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
-                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
-              <button type="button" class="ajuda__editor-botao" data-comando-editor="insertOrderedList"
-                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i
-                  class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
-            </div>
-            <div class="ajuda__editor-area" id="ajuda-mensagem" contenteditable="true" role="textbox"
-              aria-multiline="true" aria-required="true" aria-labelledby="rotulo-ajuda-mensagem" aria-describedby="ajuda-mensagem-erro ajuda-mensagem-contador"
-              data-editor-alvo="ajudaMensagem" data-placeholder="Descreva sua dúvida sem incluir dados de saúde (mínimo 20 caracteres)."></div>
-          </div>
+        <div class="ajuda__campo">
+          <label for="ajuda-mensagem">Mensagem
+            <textarea id="ajuda-mensagem" name="mensagem" rows="5" minlength="20" maxlength="2000"
+              placeholder="Escreva sua dúvida sem colocar dados de saúde (pelo menos 20 letras)."
+              aria-describedby="ajuda-mensagem-erro ajuda-mensagem-contador" required></textarea>
+          </label>
           <div class="ajuda__rodape-campo">
             <p class="ajuda__erro" id="ajuda-mensagem-erro" aria-live="polite"></p>
-            <p class="ajuda__contador" id="ajuda-mensagem-contador" aria-live="polite">0 / 2000 caracteres (mínimo 20)</p>
+            <p class="ajuda__contador" id="ajuda-mensagem-contador" aria-live="polite">0 / 2000 caracteres (mínimo 20)
+            </p>
           </div>
         </div>
+        <button type="submit" class="botao botao--primario">Enviar mensagem</button>
         <div class="ajuda__acoes">
-          <button type="submit" class="botao botao--primario">Enviar mensagem</button>
-          <a class="botao botao--secundario" href="privacidade.html"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Política de Privacidade</a>
+          <p class="contexto-demonstracao">Formulário de demonstração. Use dados fictícios. Nenhum e-mail será enviado.
+            <a class="" href="privacidade.html">Privacidade</a>
+          </p>
         </div>
         <p id="ajuda-retorno" data-mvp-status role="status" aria-live="polite"></p>
       </form>
@@ -343,20 +331,12 @@
         width="551" height="119" loading="lazy"></div>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
-    <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
-        type="search">
-      <p id="status-busca" role="status"></p>
-      <ul id="resultados-busca"></ul><button>Fechar</button>
-    </form>
-  </dialog>
 </body>
 
 </html>

@@ -8,6 +8,7 @@
     LACUNAS_TURNO,
     obterEstado,
     atualizarEstado,
+    obterUsuarioAtual,
     escaparHtml,
     gerarChaveData,
     formatarData,
@@ -30,7 +31,11 @@
 
   const parametros = new URLSearchParams(location.search);
   const diaParam = parametros.get('dia');
-  const diaInicial = diaParam && /^\d{4}-\d{2}-\d{2}$/.test(diaParam) ? diaParam : HOJE;
+  const compromissoParam = parametros.get('compromisso');
+  const eventoInicial = compromissoParam ? core.obterCompromissos().find(item => item.id === compromissoParam) : null;
+  const diaInicial = diaParam && /^\d{4}-\d{2}-\d{2}$/.test(diaParam)
+    ? diaParam
+    : (eventoInicial?.dia && /^\d{4}-\d{2}-\d{2}$/.test(eventoInicial.dia) ? eventoInicial.dia : HOJE);
 
   let diaSelecionado = diaInicial;
   let diaSemana = diaInicial;
@@ -42,8 +47,48 @@
   let limiteMaxTurno = 24;
   let eventoEmFocoId = null;
 
-  const obterTodosEventos = () =>
-    [...obterEstado().events].sort((a, b) => (a.dia + a.hora).localeCompare(b.dia + b.hora));
+  const obterTodosEventos = () => core.obterCompromissos();
+
+  const obterTarefas = () => {
+    const doses = core.obterDoses();
+    const compartimentos = core.obterCompartimentos();
+    return obterEstado().tasks.flatMap(tarefa => {
+      if (tarefa.id === 'tarefa-hoje-jejum-06') {
+        const grupo6h = compartimentos.find(g => g.hora === '6h');
+        if (!grupo6h) return [tarefa];
+        const administradas = grupo6h.itens.filter(item => item.estado === 'administrado');
+        const horarios = [...new Set(administradas.map(item => item.horario).filter(Boolean))]
+          .sort()
+          .map(h => h.replace(':', 'h'));
+        const responsaveis = [...new Set(administradas.map(item => item.quem).filter(Boolean))];
+        const quemTexto = responsaveis.length ? responsaveis.join(', ') : (grupo6h.responsavel || 'Responsável do turno');
+        const horariosTexto = horarios.length > 1
+          ? `${horarios.slice(0, -1).join(', ')} e ${horarios[horarios.length - 1]}`
+          : (horarios[0] || '');
+        const titulo = grupo6h.completo
+          ? '06h · Remédios em jejum dados'
+          : `06h · Medicações em jejum (${administradas.length} de ${grupo6h.itens.length})`;
+        const descricao = administradas.length
+          ? `${administradas.length} ${administradas.length === 1 ? 'dose dada' : 'doses dadas'} por ${quemTexto}${horariosTexto ? ` (${horariosTexto})` : ''}${grupo6h.responsavel ? ` · Turno de ${grupo6h.responsavel}` : ''}`
+          : `Para as 06h${grupo6h.responsavel ? ` · Turno de ${grupo6h.responsavel}` : ''}`;
+        return [{ ...tarefa, titulo, descricao, concluida: grupo6h.completo }];
+      }
+      const hora = { 'tarefa-metformina-08': '8h', 'tarefa-metformina-20': '20h' }[tarefa.id];
+      if (!hora) return [tarefa];
+      const dose = doses.find(item => item.chave === core.chaveDose(hora, 'Metformina'));
+      if (!dose) return [];
+      const administrada = dose.estado === 'administrado';
+      const naoAdministrada = dose.estado === 'nao-administrado';
+      const titulo = `${hora.padStart(3, '0')} · ${dose.nome}`;
+      const descricao = administrada
+        ? ['Administrada', dose.horario && `às ${dose.horario}`, dose.quem && `por ${dose.quem}`].filter(Boolean).join(' ')
+        : naoAdministrada ? ['Não foi dado', dose.motivo].filter(Boolean).join(' · ') : `Às ${hora}`;
+      const href = administrada ? 'medicamentos.html#registros-de-hoje'
+        : `medicamentos.html?dose=${encodeURIComponent(dose.chave)}`;
+      return [{ ...tarefa, titulo, descricao, concluida: administrada, href,
+        rotuloAcao: administrada ? 'Ver anotações' : 'Marcar como dado' }];
+    });
+  };
 
   const obterEventosDia = dia => obterTodosEventos().filter(item => item.dia === dia);
 
@@ -59,9 +104,14 @@
     });
   };
 
-  const avatarMascote = arquivo =>
-    `<img class="agenda__avatar" alt="" src="assets/media/mascotes/${arquivo}" width="40" height="40">`;
+  const avatarMascote = pessoa => {
+    const src = typeof pessoa === 'string'
+      ? `assets/media/mascotes/${escaparHtml(pessoa)}`
+      : (pessoa?.foto || `assets/media/mascotes/${escaparHtml(pessoa?.avatar || 'icone-mascote-cubado.svg')}`);
+    return `<img class="agenda__avatar" alt="" src="${escaparHtml(src)}" width="40" height="40">`;
+  };
 
+  const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém' };
   const criarEtiquetaCobertura = dia => {
     const estado = obterEstado();
     const rotulo = obterRotuloLacuna(dia, estado);
@@ -69,10 +119,25 @@
     const parcial = rotulo === 'Parcial';
     const modificador = lacuna ? (parcial ? 'agenda__etiqueta--atencao' : 'agenda__etiqueta--alerta') : 'agenda__etiqueta--sucesso';
     const icone = lacuna ? (parcial ? 'icone-atencao.svg' : 'icone-sem-cobertura.svg') : 'icone-coberto.svg';
-    return `<span class="agenda__etiqueta ${modificador}"><img alt="" src="assets/media/icones/${icone}">${rotulo}</span>`;
+    return `<span class="agenda__etiqueta ${modificador}"><img alt="" src="assets/media/icones/${icone}">${ROTULO_COBERTURA[rotulo] || rotulo}</span>`;
   };
 
   const containerMes = pagina.querySelector('[data-mes]');
+
+  const ICONES_DIA = {
+    'sem-ninguem': '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg>',
+    parcial: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>',
+    coberto: '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    consulta: ''
+  };
+  const diaHoje = new Date(`${HOJE}T12:00:00`);
+  const somarDias = dias => {
+    const data = new Date(diaHoje);
+    data.setDate(data.getDate() + dias);
+    return data.toISOString().slice(0, 10);
+  };
+  const inicioSemana = somarDias(-diaHoje.getDay());
+  const fimSemana = somarDias(6 - diaHoje.getDay());
 
   const renderizarMes = () => {
     const estado = obterEstado();
@@ -83,12 +148,21 @@
       obterMetaDia: chave => {
         const temEvento = obterEventosDia(chave).length > 0;
         const temLacuna = possuiLacuna(chave, estado);
+        const parcial = temLacuna && obterRotuloLacuna(chave, estado) === 'Parcial';
+        const coberto = !temLacuna && chave >= inicioSemana && chave <= fimSemana;
+        const situacao = temLacuna ? (parcial ? 'parcial' : 'sem-ninguem') : coberto ? 'coberto' : '';
+        const textos = {
+          'sem-ninguem': ', sem ninguém em algum horário',
+          parcial: ', falta alguém em parte do dia',
+          coberto: ', todos os horários com alguém'
+        };
         return {
+          classes: [situacao && `calendario-mensal__dia--${situacao}`, temEvento && 'calendario-mensal__dia--consulta'],
           indicadores: [
-            temEvento ? '<span class="calendario-mensal__indicador--evento">●</span>' : '',
-            temLacuna ? '<span class="calendario-mensal__indicador--alerta">▲</span>' : ''
+            situacao ? `<span class="calendario-mensal__simbolo">${ICONES_DIA[situacao]}</span>` : '',
+            temEvento ? `<span class="calendario-mensal__selo-consulta">${ICONES_DIA.consulta}</span>` : ''
           ].filter(Boolean),
-          sufixoRotulo: `${temEvento ? ', compromisso' : ''}${temLacuna ? ', horário sem cobertura' : ''}`
+          sufixoRotulo: `${textos[situacao] || ''}${temEvento ? ', tem consulta ou exame' : ''}`
         };
       }
     });
@@ -98,25 +172,47 @@
     const containerTarefas = pagina.querySelector('[data-tarefas-diarias]');
     if (!containerTarefas) return;
 
-    const tarefas = obterEstado().tasks.filter(t => t.dia === diaSelecionado);
+    const tarefas = obterTarefas().filter(t => t.dia === diaSelecionado);
     containerTarefas.hidden = tarefas.length === 0;
     if (!tarefas.length) {
       containerTarefas.innerHTML = '';
       return;
     }
 
-    containerTarefas.innerHTML = tarefas.map(tarefa => `
+    const renderizarIconeTarefa = icone => {
+      if (icone === 'icone-medicamento.svg') {
+        return '<i class="bi bi-capsule" aria-hidden="true"></i>';
+      }
+      if (icone.startsWith('bi ') || icone.startsWith('fa-')) {
+        return `<i class="${escaparHtml(icone)}" aria-hidden="true"></i>`;
+      }
+      return `<img src="assets/media/icones/${escaparHtml(icone)}" alt="" width="20" height="20">`;
+    };
+
+    const renderizarItemTarefa = tarefa => `
       <div class="agenda__tarefa ${tarefa.concluida ? 'agenda__tarefa--concluida' : ''}">
-        <span class="agenda__tarefa-icone"><img src="assets/media/icones/${escaparHtml(tarefa.icone)}" alt="" width="20" height="20"></span>
+        <span class="agenda__tarefa-icone">${renderizarIconeTarefa(tarefa.icone)}</span>
         <div>
           <strong>${escaparHtml(tarefa.titulo)}</strong>
           <p>${escaparHtml(tarefa.descricao)}</p>
-          ${tarefa.concluida ? '<span class="agenda__etiqueta agenda__etiqueta--sucesso">Concluída</span>' : ''}
         </div>
         ${tarefa.dialogo ? `<button class="botao botao--secundario" type="button" data-dialogo="${escaparHtml(tarefa.dialogo)}">Ver tarefa</button>` : ''}
         ${tarefa.href ? `<a class="botao botao--secundario" href="${escaparHtml(tarefa.href)}">${escaparHtml(tarefa.rotuloAcao)}</a>` : ''}
       </div>
-    `).join('');
+    `;
+
+    const pendentes = tarefas.filter(tarefa => !tarefa.concluida);
+    const concluidas = tarefas.filter(tarefa => tarefa.concluida);
+
+    containerTarefas.innerHTML = [
+      pendentes.map(renderizarItemTarefa).join(''),
+      concluidas.length
+        ? `<section class="agenda__tarefas-concluidas" aria-label="Tarefas feitas">
+            <h4 class="agenda__tarefas-subtitulo">Tarefas feitas</h4>
+            ${concluidas.map(renderizarItemTarefa).join('')}
+          </section>`
+        : ''
+    ].filter(Boolean).join('');
   };
 
   const renderizarAgenda = () => {
@@ -126,19 +222,19 @@
     pagina.querySelector('[data-eventos]').innerHTML = itens.map(item => `
       <article class="agenda__evento">
         <div class="agenda__tarefa">
-          ${avatarMascote('icone-mascote-espeto.svg')}
+          ${avatarMascote(core.resolverPessoaRede(item.acompanhante || item.criadoPor))}
           <div>
             <strong>${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</strong>
             <p>${escaparHtml([item.local, item.acompanhante].filter(Boolean).join(' · '))}</p>
+            ${Array.isArray(item.preparacao) && item.preparacao.length ? `
+              <div class="agenda__preparacao">
+                <strong>Preparação e transporte</strong>
+                ${item.preparacao.map(linha => `<p>${escaparHtml(linha)}</p>`).join('')}
+              </div>
+            ` : ''}
           </div>
           <button class="botao botao--secundario" type="button" data-ver-compromisso="${escaparHtml(item.id)}">Ver compromisso</button>
         </div>
-        ${Array.isArray(item.preparacao) && item.preparacao.length ? `
-          <div class="agenda__preparacao">
-            <strong>Preparação e transporte</strong>
-            ${item.preparacao.map(linha => `<p>${escaparHtml(linha)}</p>`).join('')}
-          </div>
-        ` : ''}
       </article>
     `).join('') || '<p class="agenda__vazio">Nenhum compromisso nesta data.</p>';
 
@@ -150,14 +246,14 @@
     blocoLacuna.hidden = !lacunaDia;
     if (lacunaDia) {
       pagina.querySelector('[data-titulo-lacuna]').textContent = lacunasDia.length === 1
-        ? `${lacunasDia[0].horario} · Turno sem cobertura`
-        : `${lacunasDia.map(l => l.horario).join(', ')} · Turnos sem cobertura`;
+        ? `${lacunasDia[0].horario} · Horário sem ninguém`
+        : `${lacunasDia.map(l => l.horario).join(', ')} · Horários sem ninguém`;
     }
 
-    const totalTarefasDia = estado.tasks.filter(t => t.dia === diaSelecionado).length;
+    const totalTarefasDia = obterTarefas().filter(t => t.dia === diaSelecionado).length;
     pagina.querySelector('[data-resumo-dia]').textContent =
       `${itens.length} ${itens.length === 1 ? 'compromisso' : 'compromissos'}` +
-      (lacunaDia ? ` · ${lacunasDia.length} ${lacunasDia.length === 1 ? 'horário sem cobertura' : 'horários sem cobertura'}` : '') +
+      (lacunaDia ? ` · ${lacunasDia.length} ${lacunasDia.length === 1 ? 'horário sem ninguém' : 'horários sem ninguém'}` : '') +
       (totalTarefasDia ? ` · ${totalTarefasDia} ${totalTarefasDia === 1 ? 'tarefa' : 'tarefas'}` : '') +
       ` · ${formatarDataCurta(diaSelecionado)}`;
 
@@ -166,7 +262,11 @@
     const fimSemana = formatarData(semana[6], { day: 'numeric', month: 'short' });
     const tituloEscala = pagina.querySelector('[data-titulo-escala]');
     if (tituloEscala) {
-      tituloEscala.textContent = `Escala semanal · ${inicioSemana} a ${fimSemana}`;
+      tituloEscala.textContent = `Quem cuida na semana · ${inicioSemana} a ${fimSemana}`;
+    }
+    const subtituloEscala = pagina.querySelector('[data-subtitulo-escala]');
+    if (subtituloEscala) {
+      subtituloEscala.textContent = `Quem cuida na semana · turnos de ${formatarDataCurta(diaSemana, true)}`;
     }
 
     pagina.querySelector('[data-semana]').innerHTML = semana.map(dia => `
@@ -176,22 +276,29 @@
       </button>
     `).join('');
 
-    const linhaDescoberto = (horario, dia) => `<div class="agenda__lacuna">
+    const linhaDescoberto = (horario, dia) => {
+      const atribuicao = estado.atribuicoesTurno?.[`${dia}|${horario}`];
+      const detalhe = atribuicao
+        ? `Pedido de teste para ${atribuicao.responsavel} · Esperando aceitar (o horário ainda está sem ninguém).`
+        : 'A Mari precisa de alguém com ela nesse horário.';
+      return `<div class="agenda__lacuna">
       <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div>
-        <strong>${escaparHtml(horario)} · Turno sem cobertura</strong>
-        <p>A Mari precisa de acompanhamento nesse horário.</p>
+        <strong>${escaparHtml(horario)} · ${atribuicao ? 'Pedido de teste' : 'Horário sem ninguém'}</strong>
+        <p>${escaparHtml(detalhe)}</p>
       </div>
-      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Cobrir horário</button>
+       ${atribuicao ? `<div class="painel__acoes"><button type="button" class="botao botao--secundario" data-decidir-atribuicao="aceitar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Simular aceite</button><button type="button" class="botao botao--secundario" data-decidir-atribuicao="recusar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Simular recusa</button><button type="button" class="botao botao--secundario" data-decidir-atribuicao="cancelar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Cancelar pedido</button></div>` : ''}
+      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Ficar nesse horário</button>
     </div>`;
+    };
 
     const renderizarTurno = (seg, dia) => {
-      const ehZe = seg.pessoa.nome === 'Zé da Manga';
+      const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga');
       return `<div class="agenda__turno">
-        ${avatarMascote(seg.pessoa.avatar)}
+        ${avatarMascote(seg.pessoa)}
         <div>
           <strong>${escaparHtml(seg.horario)}</strong>
-          <p>${escaparHtml(seg.pessoa.nome)} · ${ehZe ? 'Cobertura assumida por você' : 'Coberto'}</p>
+          <p>${escaparHtml(seg.pessoa.nome)} · ${ehZe ? 'Você vai ficar nesse horário' : 'Vai ficar'}</p>
         </div>
         ${ehZe && dia >= HOJE ? `
           <div class="agenda__turno-acoes">
@@ -221,7 +328,7 @@
           ${criarEtiquetaCobertura(dia)}
         </button>
       `;
-      }).join('') || '<p>Todos os horários estão cobertos.</p>';
+      }).join('') || '<p>Todos os horários têm alguém.</p>';
   };
 
   const renderizar = () => {
@@ -250,6 +357,22 @@
     });
   });
 
+  const popularSelectAcompanhante = (select, valorSelecionado = '') => {
+    if (!select) return;
+    const usuario = core.obterUsuarioAtual();
+    const opcoes = core.obterParticipantesRede().map(pessoa => pessoa.nome);
+    const valorResolvido = valorSelecionado
+      ? core.resolverPessoaRede(valorSelecionado).nome
+      : usuario.nomeComApelido;
+    if (valorResolvido && !opcoes.includes(valorResolvido)) {
+      opcoes.push(valorResolvido);
+    }
+    select.innerHTML = opcoes
+      .map(nome => `<option value="${escaparHtml(nome)}">${escaparHtml(nome)}</option>`)
+      .join('');
+    select.value = valorResolvido || opcoes[0] || '';
+  };
+
   const abrirFormularioEvento = (eventoExistente = null) => {
     const dialogo = document.getElementById('dialogo-novo-compromisso');
     const formulario = dialogo?.querySelector('[data-formulario-mvp="evento"]');
@@ -262,7 +385,7 @@
     formulario.elements.dia.value = eventoExistente?.dia || diaSelecionado;
     formulario.elements.hora.value = eventoExistente?.hora || '';
     formulario.elements.local.value = eventoExistente?.local || '';
-    formulario.elements.acompanhante.value = eventoExistente?.acompanhante ?? 'Zé da Manga';
+    popularSelectAcompanhante(formulario.elements.acompanhante, eventoExistente?.acompanhante || '');
     if (tituloDialogo) {
       tituloDialogo.textContent = eventoExistente ? 'Editar compromisso' : 'Novo compromisso';
     }
@@ -282,16 +405,36 @@
     if (!item || !dialogo || !lista) return;
 
     eventoEmFocoId = item.id;
-    lista.innerHTML = `
-      <div><dt>Compromisso</dt><dd>${escaparHtml(item.titulo)}</dd></div>
-      <div><dt>Data e horário</dt><dd>${escaparHtml(formatarDataCurta(item.dia, true))} · ${escaparHtml(item.hora)}</dd></div>
-      <div><dt>Local</dt><dd>${escaparHtml(item.local || 'Não informado')}</dd></div>
-      <div><dt>Quem acompanha</dt><dd>${escaparHtml(item.acompanhante || 'Não definido')}</dd></div>
-      ${Array.isArray(item.preparacao) && item.preparacao.length
-        ? `<div><dt>Preparação e transporte</dt><dd>${item.preparacao.map(p => escaparHtml(p)).join('<br>')}</dd></div>`
-        : ''}
-    `;
+    const tituloEl = dialogo.querySelector('#titulo-detalhes-compromisso');
+    const pessoaEl = dialogo.querySelector('[data-detalhes-compromisso-pessoa]');
+    if (tituloEl) tituloEl.textContent = formatarDataCurta(item.dia, true);
+    if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
+    const horaTexto = item.hora ? item.hora.replace(':', 'h').replace(/h00$/, 'h') : '';
+    const linhas = [
+      `${horaTexto ? `${horaTexto} · ` : ''}${item.titulo}`,
+      item.local || 'Local não informado',
+      `Acompanhante: ${item.acompanhante || 'Não definido'}`,
+      ...(Array.isArray(item.preparacao) ? item.preparacao : [])
+    ].filter(Boolean);
+    lista.innerHTML = linhas.map(linha => `<span>${escaparHtml(linha)}</span>`).join('');
+    const botaoDocumentos = dialogo.querySelector('[data-ver-documentos-compromisso]');
+    if (botaoDocumentos) {
+      const tituloLower = String(item.titulo || '').toLowerCase();
+      const docsVinculados = (obterEstado().documents || []).filter(doc =>
+        doc.compromissoId === item.id
+      );
+      botaoDocumentos.hidden = !docsVinculados.length;
+      if (docsVinculados.length === 1) {
+        botaoDocumentos.href = `documentos.html?documento=${encodeURIComponent(docsVinculados[0].id)}`;
+      } else if (docsVinculados.length > 1) {
+        botaoDocumentos.href = `documentos.html?compromisso=${encodeURIComponent(item.id)}`;
+      }
+    }
     dialogo.showModal();
+    if (tituloEl) {
+      tituloEl.setAttribute('tabindex', '-1');
+      tituloEl.focus({ preventScroll: true });
+    }
   };
 
   document.querySelector('[data-dialogo="dialogo-novo-compromisso"]')?.addEventListener('click', evento => {
@@ -321,7 +464,7 @@
       fim = Number(form.elements.fim.value);
     }
     const duracao = fim - inicio;
-    previa.textContent = `Você cobrirá das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'} no total)`;
+    previa.textContent = `Você vai ficar das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'} no total)`;
   };
 
   dialogoEditarCobertura?.addEventListener('change', evento => {
@@ -344,7 +487,7 @@
     containerHorarios.hidden = cobrirTudo;
     if (cobrirTudo) {
       const duracao = gapFim - gapInicio;
-      previa.textContent = `Você assumirá todo o horário: das ${String(gapInicio).padStart(2, '0')}h às ${String(gapFim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).`;
+      previa.textContent = `Você vai ficar o horário todo: das ${String(gapInicio).padStart(2, '0')}h às ${String(gapFim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).`;
       return;
     }
 
@@ -360,15 +503,15 @@
     if (inicio > gapInicio) sobras.push(`${String(gapInicio).padStart(2, '0')}h–${String(inicio).padStart(2, '0')}h`);
     if (fim < gapFim) sobras.push(`${String(fim).padStart(2, '0')}h–${String(gapFim).padStart(2, '0')}h`);
 
-    previa.textContent = `Você assumirá das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).` +
-      (sobras.length ? ` Permanecerá sem cobertura: ${sobras.join(' e ')}.` : '');
+    previa.textContent = `Você vai ficar das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).` +
+      (sobras.length ? ` Vai continuar sem ninguém: ${sobras.join(' e ')}.` : '');
   };
 
   dialogoCobrirHorario?.addEventListener('change', evento => {
     atualizarPreviaNovaCobertura(evento.target.name === 'inicio');
   });
 
-  pagina.addEventListener('click', evento => {
+  pagina.addEventListener('click', async evento => {
     if (evento.target.closest('[data-ver-turno]')) {
       diaSemana = diaSelecionado;
       renderizarAgenda();
@@ -383,6 +526,12 @@
 
     if (botao.hasAttribute('data-fechar-dialogo')) {
       botao.closest('dialog')?.close();
+      return;
+    }
+
+    if (botao.dataset.dialogo === 'dialogo-tarefa-ubs') {
+      const dialogoTarefa = document.getElementById(botao.dataset.dialogo);
+      if (dialogoTarefa && !dialogoTarefa.open) dialogoTarefa.showModal();
       return;
     }
 
@@ -401,6 +550,12 @@
     if (botao.hasAttribute('data-excluir-compromisso')) {
       const item = obterTodosEventos().find(e => e.id === eventoEmFocoId);
       if (!item) return;
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Excluir compromisso',
+        descricao: `Deseja excluir o compromisso “${item.titulo}” da Agenda?`,
+        confirmarTexto: 'Excluir compromisso'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => ({
         ...estado,
         events: estado.events.filter(e => e.id !== item.id)
@@ -408,6 +563,7 @@
       botao.closest('dialog')?.close();
       registrarStatus(`Compromisso "${item.titulo}" removido da Agenda.`);
       renderizar();
+      pagina.querySelector(`[data-selecionar-dia="${diaSelecionado}"]`)?.focus();
       return;
     }
 
@@ -422,7 +578,7 @@
 
       if (dialogoEditarCobertura) {
         dialogoEditarCobertura.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário disponível para edição: ${String(limiteMinTurno).padStart(2, '0')}h às ${String(limiteMaxTurno).padStart(2, '0')}h`;
+          `${formatarDataCurta(diaTurno)} · Horário que dá para mudar: ${String(limiteMinTurno).padStart(2, '0')}h às ${String(limiteMaxTurno).padStart(2, '0')}h`;
         const form = dialogoEditarCobertura.querySelector('[data-formulario-mvp="editar-cobertura"]');
         popularOpcoesHorario(form.elements.inicio, limiteMinTurno, limiteMaxTurno - 1, atualInicio);
         popularOpcoesHorario(form.elements.fim, atualInicio + 1, limiteMaxTurno, atualFim);
@@ -435,9 +591,15 @@
     }
 
     if (botao.hasAttribute('data-cancelar-cobertura')) {
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Não vou mais poder ficar',
+        descricao: 'Sair desse horário e deixar ele livre para outra pessoa da família?',
+        confirmarTexto: 'Não vou mais poder ficar'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, 0, 0));
       botao.closest('dialog')?.close();
-      registrarStatus('Cobertura do turno cancelada. O horário ficou disponível para a rede.');
+      registrarStatus('Pronto, você saiu desse horário. Ele ficou livre para outra pessoa da família.');
       renderizar();
       return;
     }
@@ -470,13 +632,61 @@
       return;
     }
 
+    if (botao.hasAttribute('data-concluir-tarefa-ubs')) {
+      const tarefaAtual = obterEstado().tasks.find(t => t.id === 'tarefa-ubs-retirada');
+      const novaConclusao = !tarefaAtual?.concluida;
+      atualizarEstado(estado => ({
+        ...estado,
+        tasks: (estado.tasks || []).map(t => (t.id === 'tarefa-ubs-retirada'
+          ? {
+            ...t,
+            concluida: novaConclusao,
+            descricao: novaConclusao
+              ? 'Medicamento retirado na UBS · Ana da Silva (Aninha)'
+              : 'Depois da consulta · Ana da Silva (Aninha) · Receita salva'
+          }
+          : t))
+      }));
+      botao.closest('dialog')?.close();
+      registrarStatus(novaConclusao
+        ? 'Retirada de medicamento na UBS marcada como concluída.'
+        : 'Pegar remédio no posto voltou para a lista do que falta fazer.');
+      renderizar();
+      return;
+    }
+
+    if (botao.dataset.dialogo === 'dialogo-tarefa-ubs') {
+      const tarefaAtual = obterEstado().tasks.find(t => t.id === 'tarefa-ubs-retirada');
+      const botaoConcluir = document.querySelector('[data-concluir-tarefa-ubs]');
+      if (botaoConcluir) {
+        botaoConcluir.textContent = tarefaAtual?.concluida ? 'Desfazer retirada' : 'Marcar como retirada';
+      }
+    }
+
+    if (botao.hasAttribute('data-abrir-atribuir-turno')) {
+      dialogoCobrirHorario?.close();
+      const dialogoAtribuir = document.getElementById('dialogo-atribuir-turno');
+      if (dialogoAtribuir) {
+        const ctx = dialogoAtribuir.querySelector('[data-atribuir-contexto]');
+        if (ctx) ctx.textContent = `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)} · ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+        dialogoAtribuir.showModal();
+      }
+      return;
+    }
+
+    if (botao.hasAttribute('data-voltar-cobrir')) {
+      botao.closest('dialog')?.close();
+      dialogoCobrirHorario?.showModal();
+      return;
+    }
+
     if (botao.dataset.dialogoDinamico) {
       diaTurno = botao.dataset.dia;
       horarioTurno = botao.dataset.horario || '';
       const dialogo = document.getElementById(botao.dataset.dialogoDinamico);
       if (dialogo) {
         dialogo.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário disponível: ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
         if (dialogo.id === 'dialogo-cobrir-horario') {
           const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
           const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
@@ -494,7 +704,7 @@
       const prefixoMes = `${anoAtual}-${String(mesAtual + 1).padStart(2, '0')}`;
       const eventosMes = obterTodosEventos().filter(item => item.dia.startsWith(prefixoMes));
       if (!eventosMes.length) {
-        registrarStatus('Nenhum compromisso neste mês para exportar.');
+        registrarStatus('Não tem nada marcado neste mês para baixar.');
         return;
       }
 
@@ -502,8 +712,9 @@
       const carimbo = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
       const calcularFim = (dia, hora) => {
         const [hh, mm] = hora.split(':').map(Number);
-        const fimHora = String(Math.min(23, (hh || 0) + 1)).padStart(2, '0');
-        return `${dia.replaceAll('-', '')}T${fimHora}${String(mm || 0).padStart(2, '0')}00`;
+        const [ano, mes, data] = dia.split('-').map(Number);
+        const fim = new Date(Date.UTC(ano, mes - 1, data, hh + 1, mm));
+        return fim.toISOString().slice(0, 19).replace(/[-:]/g, '');
       };
 
       const linhas = eventosMes.flatMap((item, indice) => [
@@ -536,7 +747,18 @@
     }
   });
 
-  pagina.addEventListener('submit', evento => {
+  pagina.addEventListener('click', evento => {
+    const botao = evento.target.closest('[data-decidir-atribuicao]');
+    if (!botao) return;
+    try {
+      core.resolverAtribuicao(botao.dataset.chave, botao.dataset.decidirAtribuicao === 'aceitar');
+      renderizar();
+      registrarStatus('Pronto. A escala foi atualizada.');
+      pagina.querySelector(`[data-dia-semana="${diaSemana}"]`)?.focus();
+    } catch (erro) { registrarStatus(erro.message); }
+  });
+
+  pagina.addEventListener('submit', async evento => {
     const formulario = evento.target;
     const tipoFormulario = formulario.dataset.formularioMvp;
     if (!tipoFormulario) return;
@@ -554,7 +776,7 @@
       const local = (campos.local || '').trim();
       const acompanhante = (campos.acompanhante || '').trim();
       if (!titulo || !local || !campos.dia || !campos.hora) {
-        registrarStatus('Preencha todos os campos obrigatórios do compromisso.');
+        registrarStatus('Preencha os campos que faltam.');
         return;
       }
 
@@ -578,7 +800,8 @@
               dia: campos.dia,
               hora: campos.hora,
               local,
-              acompanhante
+              acompanhante,
+              criadoPor: core.obterUsuarioAtual().nomeComApelido
             }
           ]
         };
@@ -588,7 +811,7 @@
       diaSemana = campos.dia;
       anoAtual = Number(diaSelecionado.slice(0, 4));
       mesAtual = Number(diaSelecionado.slice(5, 7)) - 1;
-      mensagem = idEdicao ? 'Compromisso atualizado na Agenda.' : 'Compromisso salvo na Agenda.';
+      mensagem = idEdicao ? 'Compromisso alterado na Agenda.' : 'Compromisso salvo na Agenda.';
     }
 
     if (tipoFormulario === 'cobertura') {
@@ -597,10 +820,52 @@
       const inicio = cobrirTudo ? gapInicio : Number(formulario.elements.inicio.value);
       const fim = cobrirTudo ? gapFim : Number(formulario.elements.fim.value);
 
+      if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
+        titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
+      })) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;
-      mensagem = `Turno das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h assumido por Zé da Manga.`;
+      const usuarioAtual = obterUsuarioAtual();
+      const nomeCurto = usuarioAtual.apelido || usuarioAtual.nome;
+      mensagem = {
+        titulo: 'Horário assumido',
+        descricao: `${core.nomePessoaAcompanhada()} · ${nomeCurto} assumiu ${String(inicio).padStart(2, '0')}h–${String(fim).padStart(2, '0')}h.`,
+        avatar: usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg'
+      };
+    }
+
+    if (tipoFormulario === 'atribuir-turno') {
+      const responsavel = campos.responsavel || 'Beatriz da Silva (Bea)';
+      const avatares = {
+        'Beatriz da Silva (Bea)': 'assets/media/mascotes/icone-mascote-trevo.svg',
+        'Ana da Silva (Aninha)': 'assets/media/mascotes/icone-mascote-espeto.svg',
+        'Paulo da Silva (Paul)': 'assets/media/mascotes/icone-mascote-pingo.svg'
+      };
+      const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
+      const horarioAlvo = horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || '';
+      const avatar = avatares[responsavel] || 'assets/media/mascotes/icone-mascote-trevo.svg';
+      if (horarioAlvo) {
+        atualizarEstado(estado => ({
+          ...estado,
+          atribuicoesTurno: {
+            ...(estado.atribuicoesTurno || {}),
+            [`${diaTurno}|${horarioAlvo}`]: {
+              responsavel,
+              nomeCurto,
+              avatar,
+              dia: diaTurno,
+              horario: horarioAlvo,
+              status: 'Pedido de teste · Esperando aceitar'
+            }
+          }
+        }));
+      }
+      mensagem = {
+        titulo: 'Pedido de teste enviado',
+        descricao: `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)}, ${horarioAlvo}. Convite simulado para ${nomeCurto} (nenhum aviso foi enviado de verdade; o horário continua sem ninguém).`,
+        avatar
+      };
     }
 
     if (tipoFormulario === 'editar-cobertura') {
@@ -608,11 +873,11 @@
       const fim = Number(campos.fim);
       const duracao = fim - inicio;
       if (!Number.isInteger(inicio) || !Number.isInteger(fim) || duracao < 1 || inicio < limiteMinTurno || fim > limiteMaxTurno) {
-        registrarStatus('Selecione horários dentro da janela disponível deste turno.');
+        registrarStatus('Escolha um horário dentro do período livre.');
         return;
       }
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, inicio, fim));
-      mensagem = `Cobertura atualizada para ${formatarIntervaloTurno(inicio, duracao)}.`;
+      mensagem = `Seu horário agora é ${formatarIntervaloTurno(inicio, duracao)}.`;
     }
 
     formulario.closest('dialog')?.close();
@@ -635,7 +900,7 @@
     const optSemana = selectPeriodoCompartilhar.querySelector('option[value="semana"]');
     const optDia = selectPeriodoCompartilhar.querySelector('option[value="dia"]');
     if (optSemana) optSemana.textContent = `Semana (${inicioCurto} a ${fimCurto})`;
-    if (optDia) optDia.textContent = `Somente o dia selecionado (${formatarDataCurta(diaSelecionado)})`;
+    if (optDia) optDia.textContent = `Só o dia escolhido (${formatarDataCurta(diaSelecionado)})`;
   };
 
   pagina.querySelector('[data-dialogo="dialogo-compartilhar-agenda"]')?.addEventListener('click', atualizarOpcoesPeriodoCompartilhar);
@@ -649,33 +914,34 @@
         const semana = obterSemanaDe(diaSemana);
         const periodo = selectPeriodoCompartilhar?.value || 'semana';
         const diasAlvo = periodo === 'dia' ? [diaSelecionado] : semana;
-        const rotuloPeriodo = periodo === 'dia' ? 'no dia selecionado' : 'na semana selecionada';
+        const rotuloPeriodo = periodo === 'dia' ? 'no dia escolhido' : 'na semana escolhida';
 
         return {
           'Compromissos': () => obterTodosEventos()
             .filter(item => diasAlvo.includes(item.dia))
             .map(item => `• ${formatarDataCurta(item.dia)} às ${item.hora} — ${item.titulo}${item.local ? ` (${item.local})` : ''}${item.acompanhante ? ` · Acompanhante: ${item.acompanhante}` : ''}`)
             .join('\n') || `Nenhum compromisso ${rotuloPeriodo}.`,
-          'Escala de turnos': () => diasAlvo
+          'Escala de quem cuida': () => diasAlvo
             .map(dia => {
               const turnosDia = construirLinhaDoTempoDia(dia, estado)
                 .map(seg => {
-                  if (seg.tipo === 'lacuna') return `  ${seg.horario}: SEM COBERTURA`;
-                  const sufixo = seg.pessoa.nome === 'Zé da Manga' ? 'Cobertura assumida por você' : 'Coberto';
+                  if (seg.tipo === 'lacuna') return `  ${seg.horario}: SEM NINGUÉM`;
+                  const sufixo = (seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga') ? 'Você vai ficar nesse horário' : 'Vai ficar';
                   return `  ${seg.horario}: ${seg.pessoa.nome} · ${sufixo}`;
                 })
                 .join('\n');
-              return `• ${formatarDataCurta(dia)} (${obterRotuloLacuna(dia, estado)})\n${turnosDia}`;
+              return `• ${formatarDataCurta(dia)} (${ROTULO_COBERTURA[obterRotuloLacuna(dia, estado)] || obterRotuloLacuna(dia, estado)})\n${turnosDia}`;
             })
             .join('\n'),
-          'Tarefas': () => estado.tasks
+          'Tarefas': () => obterTarefas()
             .filter(t => diasAlvo.includes(t.dia))
             .map(t => `• ${formatarDataCurta(t.dia)} — ${t.titulo} (${t.concluida ? 'Concluída' : 'Pendente'})`)
-            .join('\n') || `Nenhuma tarefa registrada ${rotuloPeriodo}.`
+            .join('\n') || `Nenhuma tarefa ${rotuloPeriodo}.`
         };
       }
     }
   );
 
   renderizar();
+  if (compromissoParam) abrirDetalhesEvento(compromissoParam);
 })();

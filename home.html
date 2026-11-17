@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Principal -->
+  <title>Mutirão | Início — Painel de Rotina e Cuidado Compartilhado</title>
+  <meta name="description"
+    content="Acompanhe o turno atual, o porta-remédios do dia, os próximos compromissos e os avisos da rede de cuidado no painel inicial do Mutirão." />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="application-name" content="Mutirão" />
+  <meta name="author"
+    content="Grupo Ctrl + People — Ingrid Silva de Lima, Larissa Cristina Benedito e Mayla Mayumi Motobe" />
+  <meta name="theme-color" content="#8495E1" />
+
+  <!-- Open Graph / Compartilhamento Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Mutirão" />
+  <meta property="og:title" content="Mutirão | Início — Painel de Rotina e Cuidado Compartilhado" />
+  <meta property="og:description"
+    content="Acompanhe o turno atual, o porta-remédios do dia, os próximos compromissos e os avisos da rede de cuidado no painel inicial do Mutirão." />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mutirão | Início — Painel de Rotina e Cuidado Compartilhado" />
+  <meta name="twitter:description"
+    content="Acompanhe o turno atual, o porta-remédios do dia, os próximos compromissos e os avisos da rede de cuidado no painel inicial do Mutirão." />
+
+  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/home.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/home.html" />
+  <meta property="og:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+  <meta name="twitter:image"
+    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+
+  <!-- Favicons e Web App Manifest -->
+  <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/media/favicon_io/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/media/favicon_io/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicon_io/apple-touch-icon.png" />
+  <link rel="manifest" href="assets/media/favicon_io/site.webmanifest" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
+  </noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="assets/css/variaveis.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/acessibilidade.css" />
+  <link rel="stylesheet" href="assets/css/mvp-telas.css" />
+  <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/agenda.css" />
+  <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
+  <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/porta-remedios.js" defer></script>
+  <script src="assets/js/inicio.js" defer></script>
+</head>
+
+<body>
+  <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+  <header class="barra-topo">
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
+      aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
+    <details class="seletor-pessoa">
+      <summary>Maria das Dores (Mari)</summary>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
+    </details>
+    <div class="barra-topo__acoes">
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
+      <details class="menu-notificacoes">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
+          <i class="fa-regular fa-bell" aria-hidden="true"></i>
+        </summary>
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
+          <header class="menu-notificacoes__cabecalho">
+            <div>
+              <h2 id="titulo-alertas">Avisos</h2>
+
+            </div>
+          </header>
+          <ul class="menu-notificacoes__lista">
+            <li class="notificacao notificacao--alerta">
+              <a class="notificacao__link" href="agenda.html">
+                <div>
+                  <h3>Horário sem ninguém</h3>
+                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li class="notificacao">
+              <a class="notificacao__link" href="ficha.html#diario">
+                <div>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li class="notificacao">
+              <a class="notificacao__link" href="medicamentos.html">
+                <div>
+                  <h3>Próximo remédio</h3>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
+                </div>
+                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </details>
+      <details class="menu-perfil">
+        <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
+            alt=""><span><strong>Zé da
+              Manga · Neto</strong><small>Administrador</small></span></summary>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
+      </details>
+    </div>
+  </header>
+  <aside id="barra-lateral" class="barra-lateral">
+    <a class="barra-lateral__marca" href="home.html">
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <span>Mutirão</span>
+    </a>
+    <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
+      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
+      <span><strong>Zé da Manga</strong><small>Administrador · Meu perfil</small></span>
+      <span aria-hidden="true">›</span>
+    </a>
+    <nav aria-label="Menu principal">
+      <p>Cuidado do dia a dia</p>
+      <a href="home.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+      <p>Apoio e documentos</p>
+      <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
+      <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
+      <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
+    </nav>
+    <section class="cartao-status" aria-labelledby="titulo-status">
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
+            (Bea)</strong><small>07h–12h</small></span></div>
+      <h3>Medicamentos</h3>
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não foi dado</small></span></div>
+    </section>
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+  </aside>
+  <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="inicio">
+    <nav class="apoio__trilha" aria-label="Você está em">Início</nav>
+    <header class="apoio__cabecalho">
+      <div>
+        <h1>Cuidados de hoje</h1>
+        <p class="inicio__data"><time datetime="2026-11-10T11:58">Terça-feira, 10 de novembro de 2026 · 11h58</time></p>
+      </div>
+      <button type="button" class="botao botao--primario" data-dialogo="dialogo-registrar-cuidado"><i
+          class="fa-solid fa-plus" aria-hidden="true"></i> Anotar o turno</button>
+    </header>
+
+    <section class="faixa-alerta" aria-labelledby="titulo-lacuna" data-inicio-lacuna>
+      <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+      <div class="faixa-alerta__texto">
+        <strong id="titulo-lacuna" data-inicio-lacuna-titulo>12h–13h · Horário sem ninguém</strong>
+        <span>A Mari precisa de alguém com ela nesse horário.</span>
+      </div>
+      <div class="faixa-alerta__acoes">
+        <button type="button" class="botao botao--primario" data-dialogo-dinamico="dialogo-cobrir-horario"
+          data-dia="2026-11-10" data-horario="12h–13h" data-inicio-cobrir-lacuna>Ficar nesse horário</button>
+      </div>
+    </section>
+
+    <section class="faixa-alerta faixa-alerta--atencao" data-alerta-estoque-inicio hidden
+      aria-labelledby="titulo-alerta-estoque-inicio">
+      <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-regular fa-clock"></i></span>
+      <div class="faixa-alerta__texto">
+        <strong id="titulo-alerta-estoque-inicio">Estoque baixo</strong>
+        <span></span>
+      </div>
+      <div class="faixa-alerta__acoes">
+        <a class="botao botao--secundario" href="medicamentos.html?estoque=1">Adicionar ao estoque</a>
+      </div>
+    </section>
+
+    <section class="apoio__painel inicio__resumo" aria-labelledby="titulo-pessoa">
+      <div class="painel__item">
+        <img class="avatar avatar--medio" src="assets/media/fotos/foto-perfil-maria.png" alt="">
+        <div class="painel__texto">
+          <strong id="titulo-pessoa">Maria das Dores (Mari)</strong>
+          <span>Precisa de alguém com ela o dia todo</span>
+        </div>
+        <a class="botao botao--secundario" href="ficha.html"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+          Ver ficha</a>
+      </div>
+      <div class="painel__bloco" data-turno-atual>
+        <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
+        <div class="painel__texto">
+          <span class="inicio__rotulo">Quem cuida agora</span>
+          <strong data-turno-atual-titulo>07h–12h · Beatriz da Silva (Bea)</strong>
+          <span data-turno-atual-detalhe>Tem alguém com a Mari agora · Próximo horário sem ninguém: 12h–13h</span>
+        </div>
+        <a class="botao botao--secundario" href="agenda.html?dia=2026-11-10">Ver turnos</a>
+      </div>
+      <div class="painel__bloco" data-proximo-compromisso>
+        <img class="avatar" src="assets/media/mascotes/icone-mascote-espeto.svg" alt="">
+        <div class="painel__texto">
+          <span class="inicio__rotulo">Próximo compromisso</span>
+          <strong>14h · Consulta no posto (UBS)</strong>
+          <span data-compromisso-detalhes>Posto do bairro · Ana da Silva (Aninha) vai junto</span>
+        </div>
+        <a class="botao botao--secundario" href="agenda.html">Ver na Agenda</a>
+      </div>
+      <div class="painel__bloco">
+        <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
+        <div class="painel__texto">
+          <span class="inicio__rotulo">Próximo remédio</span>
+          <strong data-proxima-medicacao>12h · 4 remédios (Omeprazol e mais 3)</strong>
+          <span data-proxima-responsavel>Ninguém cuida nesse horário</span>
+        </div>
+        <a class="botao botao--secundario" href="medicamentos.html">Ver em Medicamentos</a>
+      </div>
+    </section>
+
+    <div class="painel__grade">
+      <div class="painel__coluna">
+        <section class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios">
+          <div class="painel__cartao-cabecalho">
+            <h2 id="titulo-porta-remedios">Porta remédios de hoje</h2>
+            <small data-porta-remedios-resumo>7 de 20 dados · arraste para o lado</small>
+          </div>
+          <div class="porta-remedios__trilho" tabindex="0" aria-label="Compartimentos do porta-remédios por horário"
+            data-porta-remedios-trilho></div>
+          <div class="porta-remedios__horas" role="group" aria-label="Ir para o horário" data-porta-remedios-horas>
+          </div>
+        </section>
+      </div>
+
+      <div class="painel__coluna">
+        <section class="apoio__painel" aria-labelledby="titulo-passagem">
+          <h2 id="titulo-passagem" class="painel__subtitulo">Recado de quem cuidou antes</h2>
+          <div class="painel__item">
+            <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
+            <div class="painel__texto">
+              <strong>Beatriz da Silva (Bea)</strong>
+              <span>Cuidadora - <time datetime="2026-11-09T08:10">9 nov. 2026 · 08h10</time></span>
+            </div>
+          </div>
+          <div class="passagem__conteudo" data-passagem-relato>Marcar consulta no otorrino (ouvido, nariz e garganta) para a Dona Mari.</div>
+          <div class="passagem__nota">
+            <strong>Antes de marcar</strong>
+            <span>Confirme se o convênio cobre a consulta.</span>
+          </div>
+          <button type="button" class="botao botao--secundario painel__acao-larga"
+            data-dialogo="dialogo-passagem-cuidado">Ver o recado completo</button>
+        </section>
+      </div>
+    </div>
+
+    <div class="painel__grade">
+      <div class="painel__coluna">
+        <section class="apoio__painel" aria-labelledby="titulo-escala">
+          <div class="painel__cartao-cabecalho">
+            <h2 id="titulo-escala" data-titulo-escala>Quem cuida na semana · 9 a 15 nov.</h2>
+            <a class="botao botao--secundario" href="agenda.html">Ver escala</a>
+          </div>
+          <div class="agenda__semana" role="group" aria-label="Dias da semana" data-semana></div>
+          <div aria-live="polite" data-turnos></div>
+        </section>
+      </div>
+
+      <div class="painel__coluna">
+        <section class="apoio__painel" aria-labelledby="titulo-rede">
+          <h2 id="titulo-rede" class="painel__subtitulo">Pessoas da rede</h2>
+          <ul class="painel__lista">
+            <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg"
+                alt=""><span class="painel__texto"><strong>Beatriz da Silva (Bea)</strong><span>Cuidadora</span></span>
+            </li>
+            <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-espeto.svg"
+                alt=""><span class="painel__texto"><strong>Ana da Silva (Aninha)</strong><span>Filha · Contato de
+                  referência</span></span></li>
+            <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-pingo.svg"
+                alt=""><span class="painel__texto"><strong>Paulo da Silva (Paul)</strong><span>Neto</span></span></li>
+            <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-cubado.svg"
+                alt=""><span class="painel__texto"><strong>Zé da Manga (Zé)</strong><span>Organiza a rede · Neto</span></span></li>
+          </ul>
+          <a class="botao botao--secundario painel__acao-larga" href="pessoas.html"><i class="fa-solid fa-users"
+              aria-hidden="true"></i> Ver todos</a>
+        </section>
+      </div>
+    </div>
+
+    <dialog class="dialogo-mvp" id="dialogo-registrar-cuidado" aria-labelledby="titulo-registrar-cuidado">
+      <div class="dialogo-mvp__cabecalho">
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-clipboard"></i></span>
+          <h2 id="titulo-registrar-cuidado">Anotar o turno</h2>
+        </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p>Maria das Dores (Mari) · Diário de turno</p>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Sobre esta anotação</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
+            aria-hidden="true" data-relato-avatar>
+          <span data-contexto-relato-inicio>Turno de Beatriz da Silva (Bea) · 07h–12h · Anotado por Zé da Manga (Zé)</span>
+        </div>
+      </div>
+      <form class="formulario-mvp" data-formulario-mvp="relato">
+        <label>Onde anotar
+          <select name="destino" data-destino-cuidado>
+            <option value="ficha" selected>Diário de turno (Ficha da Mari)</option>
+            <option value="agenda">Compromisso ou lembrete (Agenda)</option>
+          </select>
+        </label>
+        <div class="formulario-mvp" data-bloco-cuidado="ficha">
+          <label>Vincular a um turno (opcional)
+            <select name="turno">
+              <option value="">Sem turno (anotação geral)</option>
+              <option value="Turno 00h–07h">00h–07h</option>
+              <option value="Turno 07h–12h" selected>07h–12h (turno atual)</option>
+              <option value="Turno 13h–19h">13h–19h</option>
+              <option value="Turno 19h–24h">19h–24h</option>
+            </select>
+          </label>
+          <label>Como foi o turno
+            <textarea name="relato" rows="3" placeholder="Como a Mari passou, como comeu, como estava o humor, se aconteceu algo..."
+              required></textarea>
+          </label>
+          <label>Tarefa relacionada (opcional)
+            <select name="tarefa" data-select-tarefas-relato>
+              <option value="">Escolha uma tarefa</option>
+              <optgroup label="Rotina de cuidado">
+                <option>Dar os remédios do turno</option>
+                <option>Acompanhar hidratação e alimentação</option>
+                <option>Pegar remédio no posto (UBS)</option>
+                <option>Conferir estoque de medicamentos</option>
+                <option>Organizar documentos da consulta</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Recado para o próximo turno (opcional)
+            <textarea name="recado" rows="2"
+              placeholder="Orientações ou lembretes para quem assume o próximo turno"></textarea>
+          </label>
+        </div>
+        <div class="formulario-mvp" data-bloco-cuidado="agenda" hidden>
+          <label>Título do compromisso ou lembrete
+            <input type="text" name="tituloEvento" placeholder="Ex.: Retorno cardiologista, Exame de sangue">
+          </label>
+          <div class="formulario-mvp__grade">
+            <label>Data<input type="date" name="diaEvento" value="2026-11-10"></label>
+            <label>Horário<input type="time" name="horaEvento" value="14:00"></label>
+          </div>
+          <label>Local
+            <input type="text" name="localEvento" placeholder="Ex.: UBS do bairro, Casa, Clínica">
+          </label>
+          <label>Quem vai junto
+            <select name="acompanhanteEvento">
+              <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
+              <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
+              <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
+              <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+            </select>
+          </label>
+          <label class="dialogo-mvp__opcao-inline">
+            <input type="checkbox" name="espelharFicha"> Anotar também um resumo no Diário da Ficha
+          </label>
+        </div>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario" data-submit-cuidado>Salvar relato</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-cobrir-horario" aria-labelledby="titulo-cobrir-horario">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-cobrir-horario">Ficar nesse horário</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
+      <form class="formulario-mvp" data-formulario-mvp="cobertura">
+        <div class="dialogo-mvp__opcoes">
+          <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Ficar o horário todo</label>
+        </div>
+        <div class="agenda__grade-horarios" data-horarios-cobertura hidden>
+          <label>Chego às<select name="inicio"></select></label>
+          <label>Saio às<select name="fim"></select></label>
+        </div>
+        <p class="agenda__previa-turno" data-previa-nova-cobertura></p>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Confirmar que vou ficar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-editar-cobertura" aria-labelledby="titulo-editar-cobertura">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-editar-cobertura">Mudar meu horário</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p class="dialogo-mvp__contexto" data-contexto-turno></p>
+      <form class="formulario-mvp" data-formulario-mvp="editar-cobertura">
+        <div class="agenda__grade-horarios">
+          <label>Chego às<select name="inicio" required></select></label>
+          <label>Saio às<select name="fim" required></select></label>
+        </div>
+        <p class="agenda__previa-turno" data-previa-cobertura></p>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
+          <button type="submit" class="botao botao--primario">Salvar alterações</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-relato-registrado"
+      aria-labelledby="titulo-relato-registrado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-relato-registrado">Anotação salva</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p data-relato-registrado-contexto>Maria das Dores (Mari) · Diário de turno</p>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo" data-relato-registrado-turno>Das 7h às 12h</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
+            aria-hidden="true" data-relato-registrado-avatar>
+          <span data-relato-registrado-detalhe>Anotado por Zé da Manga (Zé) · Fica na ficha da Maria das Dores (Mari).</span>
+        </div>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="ficha.html#diario" data-relato-registrado-link>Ver na ficha</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-horario-expirado"
+      aria-labelledby="titulo-horario-expirado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-horario-expirado">Esse horário já passou</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p data-horario-expirado-contexto>Maria das Dores (Mari) · Terça, 10 nov. · 12h–13h</p>
+      <div class="dialogo-mvp__aviso-caixa">
+        <strong>Nada mudou na escala</strong>
+        <span>Esse horário já terminou. Veja os próximos horários sem ninguém.</span>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="agenda.html">Ver horários</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-passagem-cuidado"
+      aria-labelledby="titulo-passagem-cuidado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-passagem-cuidado">Recado de quem cuidou antes</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <div class="dialogo-mvp__linha-info">
+        <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" aria-hidden="true">
+        <div>
+          <strong>Beatriz da Silva (Bea)</strong>
+          <small style="display: block; color: var(--cor-texto-secundario);">Pedido feito em 9 nov. · 08h10</small>
+        </div>
+      </div>
+      <div class="dialogo-mvp__aviso-caixa">
+        <strong data-passagem-modal-titulo>Para o próximo turno</strong>
+        <span data-passagem-modal-texto>Marcar consulta no otorrino (médico de ouvido, nariz e garganta) para Maria das Dores (Mari). Antes, confira se o convênio paga a consulta.</span>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-pedido-andamento">Eu resolvo</button>
+        <a class="botao botao--primario" href="agenda.html" data-passagem-ver-consulta hidden>Ver consulta
+          cadastrada</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-pedido-andamento"
+      aria-labelledby="titulo-pedido-andamento">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-pedido-andamento">Você está resolvendo</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p data-pedido-contexto>Otorrino · Maria das Dores (Mari)</p>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Responsável</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
+            aria-hidden="true" data-pedido-avatar>
+          <div>
+            <strong data-pedido-responsavel>Zé da Manga (Zé)</strong>
+            <small style="display: block; color: var(--cor-texto-secundario);" data-pedido-papel>Organiza a rede · Neto</small>
+          </div>
+        </div>
+      </div>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">O que fazer agora</p>
+        <p style="color: var(--cor-texto-secundario); font-size: var(--texto-interface);">Depois de combinar a data com a clínica, coloque a consulta na Agenda.</p>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario"
+          data-passagem-etapa="dialogo-passagem-cuidado">Voltar</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-cadastrar-consulta">Colocar na Agenda</button>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-cadastrar-consulta" aria-labelledby="titulo-cadastrar-consulta">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-cadastrar-consulta">Colocar na Agenda</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p data-consulta-contexto>Otorrino · Maria das Dores (Mari)</p>
+      <form class="formulario-mvp" data-formulario-mvp="consulta-passagem">
+        <div class="formulario-mvp__grade">
+          <label>Data<input type="date" name="dia" value="2026-11-23" required></label>
+          <label>Horário<input type="time" name="hora" value="14:00" required></label>
+        </div>
+        <label>Local<input type="text" name="local" value="Clínica do convênio" required></label>
+        <label>Quem vai junto
+          <select name="acompanhante">
+            <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
+            <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
+            <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
+            <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+          </select>
+        </label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario"
+            data-passagem-etapa="dialogo-pedido-andamento">Voltar</button>
+          <button type="submit" class="botao botao--primario">Salvar compromisso</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-consulta-agendada"
+      aria-labelledby="titulo-consulta-agendada">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-consulta-agendada">Consulta adicionada à agenda</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <div class="dialogo-mvp__linha-info">
+        <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
+        <div>
+          <strong data-consulta-agendada-titulo>Otorrino · 23 nov. 2026 · 14h</strong>
+          <small style="display: block; color: var(--cor-texto-secundario);" data-consulta-agendada-detalhe>Clínica do convênio · Zé da Manga (Zé) vai junto.</small>
+        </div>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="agenda.html" data-consulta-agendada-link>Ver compromisso na Agenda</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhe-pote" aria-labelledby="titulo-detalhe-pote">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-detalhe-pote" data-pote-titulo>Detalhes do medicamento</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p class="dialogo-mvp__contexto" data-pote-contexto></p>
+      <div class="painel__item dialogo-mvp__item-pote" data-pote-resumo-estado>
+        <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" data-pote-avatar>
+        <span class="painel__texto">
+          <strong data-pote-estado-titulo></strong>
+          <span data-pote-estado-detalhe></span>
+        </span>
+        <span class="selo" data-pote-estado-selo></span>
+      </div>
+      <form class="formulario-mvp" data-formulario-mvp="registrar-pote">
+        <label>Hora que deu<input type="time" name="horario" value="11:58" required></label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+          <a class="botao botao--secundario" href="medicamentos.html" data-pote-link-medicamentos>Ver em
+            Medicamentos</a>
+          <button type="submit" class="botao botao--primario">Marcar como dado</button>
+        </div>
+      </form>
+      <div class="dialogo-mvp__acoes" data-pote-acoes-registrado hidden>
+        <button type="button" class="botao botao--perigo" data-pote-desfazer hidden>Desfazer</button>
+        <a class="botao botao--secundario" href="medicamentos.html" data-pote-link-medicamentos>Ver em Medicamentos</a>
+        <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
+      </div>
+    </dialog>
+
+    <p role="status" data-mvp-status></p>
+  </main>
+  <nav class="barra-inferior" aria-label="Atalhos principais">
+    <a href="home.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
+    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
+  </nav>
+</body>
+
+</html>

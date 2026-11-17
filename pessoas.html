@@ -69,33 +69,32 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante">Maria das Dores (Mari)</div>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
-                    <ul class="menu-notificacoes__lista">
+          <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -104,8 +103,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -114,7 +113,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -126,13 +125,17 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+    <a class="barra-lateral__marca" href="home.html">
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -141,65 +144,81 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <p>Cuidado do dia a dia</p>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html" aria-current="page"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="pessoas">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Pessoas da rede</nav>
+    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+      Pessoas da rede</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Pessoas da rede</h1>
-        <p>Gerencie quem recebe cuidado e quem participa da rede.</p>
+        <p>Veja quem recebe cuidado e quem faz parte da família de cuidado.</p>
       </div>
       <div class="painel__acoes">
-        <button type="button" class="botao botao--secundario" aria-disabled="true" title="Disponível em uma próxima versão">Adicionar acompanhada</button>
-        <button type="button" class="botao botao--primario" data-dialogo="dialogo-convidar"><i class="fa-solid fa-plus" aria-hidden="true"></i> Convidar participante</button>
+        <button type="button" class="botao botao--primario" data-dialogo="dialogo-convidar"><i class="fa-solid fa-plus"
+            aria-hidden="true"></i> Convidar alguém</button>
       </div>
     </header>
 
     <section class="apoio__painel" aria-labelledby="titulo-acompanhadas">
-      <h2 id="titulo-acompanhadas" class="painel__subtitulo">Pessoas acompanhadas</h2>
+      <h2 id="titulo-acompanhadas" class="painel__subtitulo">Quem recebe cuidado</h2>
       <ul class="painel__lista">
         <li class="painel__item">
-          <img class="avatar" src="assets/media/foto-perfil-maria.png" alt="">
-          <span class="painel__texto"><strong>Maria das Dores (Mari)</strong><span>Pessoa acompanhada · Cobertura de 24h</span><span>Rede em exibição</span></span>
+          <img class="avatar" src="assets/media/fotos/foto-perfil-maria.png" alt="">
+          <span class="painel__texto"><strong data-identidade-acompanhada>Maria das Dores (Mari)</strong><span>Precisa de alguém com ela o dia todo</span><span>Pessoas na rede</span></span>
           <a class="botao botao--secundario" href="ficha.html">Abrir ficha</a>
         </li>
       </ul>
     </section>
 
     <section class="apoio__painel" aria-labelledby="titulo-participantes">
-      <h2 id="titulo-participantes" class="painel__subtitulo">Participantes da rede</h2>
+      <h2 id="titulo-participantes" class="painel__subtitulo">Participantes ativos</h2>
       <ul class="painel__lista" data-participantes></ul>
+    </section>
+
+    <section class="apoio__painel" aria-labelledby="titulo-convites-demo" data-secao-convites hidden>
+      <h2 id="titulo-convites-demo" class="painel__subtitulo">Convites da demonstração</h2>
+      <ul class="painel__lista" data-convites-lista></ul>
     </section>
 
     <dialog class="dialogo-mvp" id="dialogo-convidar" aria-labelledby="titulo-convidar">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-convidar">Convidar participante</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <h2 id="titulo-convidar">Convidar alguém</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <p>Rede de Maria das Dores (Mari)</p>
+      <p class="contexto-demonstracao">Este cadastro simula um convite. Nenhum e-mail será enviado.</p>
       <form class="formulario-mvp" data-formulario-mvp="convite">
-        <label>E-mail da pessoa<input type="email" name="email" placeholder="Ex.: nome@exemplo.com" autocomplete="email" required></label>
-        <label>Vínculo<input type="text" name="vinculo" list="opcoes-vinculo" placeholder="Selecione ou informe o vínculo" required></label>
+        <label>E-mail da pessoa<input type="email" name="email" placeholder="Ex.: nome@exemplo.com" autocomplete="email"
+            required></label>
+        <label>Parentesco<input type="text" name="vinculo" list="opcoes-vinculo"
+            placeholder="Ex.: filha, neto, vizinha" required></label>
         <datalist id="opcoes-vinculo">
           <option value="Filha"></option>
           <option value="Filho"></option>
@@ -208,7 +227,7 @@
           <option value="Cuidadora"></option>
           <option value="Vizinha"></option>
         </datalist>
-        <label>Papel na rede
+        <label>O que vai poder fazer
           <select name="papel">
             <option value="Participante">Participante</option>
             <option value="Administrador">Administrador</option>
@@ -222,15 +241,18 @@
       </form>
     </dialog>
 
-    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-convite-enviado" aria-labelledby="titulo-convite-enviado">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-convite-enviado"
+      aria-labelledby="titulo-convite-enviado">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-convite-enviado">Convite enviado</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <p>Rede de Maria das Dores (Mari)</p>
-      <dl class="dialogo-mvp__dados">
-        <div><dt><span class="selo selo--atencao">Aguardando aceite</span></dt><dd data-convite-resumo>A pessoa terá acesso à rede após aceitar o convite.</dd></div>
-      </dl>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Convite simulado</p>
+        <p data-convite-resumo>Nesta demonstração, o convite fica salvo só nesta aba.</p>
+      </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--primario" data-fechar-dialogo>Voltar à rede</button>
       </div>
@@ -239,20 +261,12 @@
     <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
-        aria-hidden="true"></i>Mais</button>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
-    <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
-        type="search">
-      <p id="status-busca" role="status"></p>
-      <ul id="resultados-busca"></ul><button>Fechar</button>
-    </form>
-  </dialog>
 </body>
 
 </html>

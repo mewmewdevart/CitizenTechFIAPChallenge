@@ -66,7 +66,8 @@
   --raio-xl: 12px;
   --raio-pill: 999px;
   --borda-padrao: 1px solid var(--cor-borda-sutil);
-  --sombra-cartao: 0 1px 3px #302b3d0a;
+  --borda-controle: 1px solid var(--cor-borda-controle);
+  --sombra-cartao: none;
   --sombra-popover: 0 4px 14px #302b3d16;
   --sombra-elevada: 0 8px 24px #302b3d22;
   --transicao-padrao: 0.15s ease;
@@ -74,6 +75,7 @@
   --z-sidebar-mobile: 10;
   --z-topbar: 20;
   --z-popover: 30;
+  --z-chatbot: 40;
   --z-skip-link: 50;
   --z-acessibilidade-botao: 60;
   --z-acessibilidade-fundo: 65;
@@ -141,6 +143,7 @@ html.tema--acolhedor {
   --raio-xl: 16px;
   --espessura-borda: 2px;
   --borda-padrao: 2px solid var(--cor-borda-sutil);
+  --borda-controle: 2px solid var(--cor-borda-controle);
   --cor-sombra: #12332E;
   --sombra-cartao: 3px 3px 0 var(--cor-sombra);
   --sombra-popover: 5px 5px 0 var(--cor-sombra);
@@ -222,12 +225,13 @@ html.acessibilidade--alto-contraste {
   --postit-sombra: none;
 }
 
-@media (width < 1024px) {
+@media (width < 1150px) {
   :root {
     --altura-barra-superior: calc(76px + env(safe-area-inset-top));
     --texto-titulo-pagina: 1.375rem;
     --texto-titulo-secao: 1.125rem;
     --gap-dashboard: 14px;
+    --chatbot-bottom: calc(var(--altura-barra-inferior-mobile) + var(--espaco-md) + env(safe-area-inset-bottom));
   }
 }
 

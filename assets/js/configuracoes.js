@@ -14,15 +14,51 @@
   const dialogoSairRede = document.querySelector('#dialogo-sair-rede');
   const botaoConfirmarSair = dialogoSairRede?.querySelector('[data-confirmar-sair-rede]');
   const botaoFecharDialogo = dialogoSairRede?.querySelector('[data-fechar-dialogo]');
-  const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
-  const botaoNotificacoes = document.querySelector('.botao-icone--notificacao');
 
+  const CHAVE_CONFIG_SESSAO = 'mutirao-configuracoes-sessao-v1';
   const selectAntecedencia = formulario.querySelector('#config-antecedencia-medicacao');
   const toggleMedicacao = formulario.querySelector('#config-notificacoes-medicacao');
   const botaoSalvar = formulario.querySelector('button[type="submit"]');
+  const rodapeFormulario = formulario.querySelector('.configuracoes__rodape');
+  const ABAS_COM_FORMULARIO = new Set(['painel-notificacoes', 'painel-rede']);
 
   let timerStatus = null;
   let snapshotSalvo = '';
+
+  const carregarPreferenciasSessao = () => {
+    try {
+      const bruto = sessionStorage.getItem(CHAVE_CONFIG_SESSAO);
+      if (!bruto) return;
+      const dados = JSON.parse(bruto);
+      for (const campo of formulario.querySelectorAll('input, select')) {
+        const chave = campo.name || campo.id;
+        if (!chave || !(chave in dados)) continue;
+        if (campo.type === 'checkbox' || campo.type === 'radio') {
+          campo.checked = Boolean(dados[chave]);
+        } else {
+          campo.value = String(dados[chave]);
+        }
+      }
+    } catch {
+      // Ignora erro caso sessionStorage esteja indisponível
+    }
+  };
+
+  const salvarPreferenciasSessao = () => {
+    try {
+      const dados = {};
+      for (const campo of formulario.querySelectorAll('input, select')) {
+        const chave = campo.name || campo.id;
+        if (!chave) continue;
+        dados[chave] = campo.type === 'checkbox' || campo.type === 'radio' ? campo.checked : campo.value;
+      }
+      sessionStorage.setItem(CHAVE_CONFIG_SESSAO, JSON.stringify(dados));
+    } catch {
+      mostrarStatus('Não foi possível salvar. Suas alterações continuam no formulário.', 'erro');
+      return false;
+    }
+    return true;
+  };
 
   const serializarEstadoFormulario = () => {
     const campos = [...formulario.querySelectorAll('input, select, textarea')];
@@ -52,6 +88,9 @@
     paineis.forEach(painel => {
       painel.hidden = painel.id !== idPainel;
     });
+    if (rodapeFormulario) {
+      rodapeFormulario.hidden = !ABAS_COM_FORMULARIO.has(idPainel);
+    }
   };
 
   abas.forEach((aba, indice) => {
@@ -94,44 +133,13 @@
     }, 5000);
   };
 
-  const adicionarNotificacao = (titulo, descricao) => {
-    if (!listaNotificacoes) return;
-
-    const item = document.createElement('li');
-    item.className = 'notificacao';
-
-    const link = document.createElement('a');
-    link.className = 'notificacao__link';
-    link.href = 'configuracoes.html';
-
-    const bloco = document.createElement('div');
-    const h3 = document.createElement('h3');
-    h3.textContent = titulo;
-    const p = document.createElement('p');
-    p.textContent = descricao;
-    bloco.append(h3, p);
-
-    const seta = document.createElement('i');
-    seta.className = 'fa-solid fa-chevron-right notificacao__seta';
-    seta.setAttribute('aria-hidden', 'true');
-
-    link.append(bloco, seta);
-    item.append(link);
-    listaNotificacoes.prepend(item);
-
-    if (botaoNotificacoes) {
-      const total = listaNotificacoes.querySelectorAll('.notificacao').length;
-      botaoNotificacoes.setAttribute('aria-label', `Notificações (${total} pendentes)`);
-      botaoNotificacoes.setAttribute('data-nova-notificacao', 'true');
-    }
-  };
-
   const atualizarEstadoAntecedencia = () => {
     if (!selectAntecedencia || !toggleMedicacao) return;
     selectAntecedencia.disabled = !toggleMedicacao.checked;
   };
 
   toggleMedicacao?.addEventListener('change', atualizarEstadoAntecedencia);
+  carregarPreferenciasSessao();
   atualizarEstadoAntecedencia();
 
   snapshotSalvo = serializarEstadoFormulario();
@@ -145,21 +153,52 @@
     evento.preventDefault();
     if (serializarEstadoFormulario() === snapshotSalvo) return;
 
+    if (!salvarPreferenciasSessao()) return;
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
-    adicionarNotificacao(
-      'Configurações atualizadas',
-      'Preferências de alertas e permissões da rede de cuidado salvas para esta sessão.'
-    );
-    mostrarStatus('Configurações salvas com sucesso!', 'sucesso');
+    window.MutiraoNotificacoes.registrar('Configurações atualizadas', 'Suas escolhas foram salvas.', 'configuracoes.html');
+    mostrarStatus('Ajustes salvos!', 'sucesso');
   });
 
+  const limparCookiesSessao = () => {
+    if (!document.cookie) return;
+    document.cookie.split(';').forEach(cookie => {
+      const nome = cookie.split('=')[0].trim();
+      if (!nome) return;
+      document.cookie = `${nome}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+  };
+
   botaoRestaurar?.addEventListener('click', () => {
+    try {
+      sessionStorage.clear();
+    } catch {
+      // Ignora erro caso sessionStorage esteja indisponível
+    }
+    try {
+      localStorage.clear();
+    } catch {
+      // Ignora erro caso localStorage esteja indisponível
+    }
+    limparCookiesSessao();
+    if ('caches' in window) {
+      caches.keys().then(nomes => nomes.forEach(nome => caches.delete(nome))).catch(() => {});
+    }
+    document.getElementById('acessibilidade-restaurar')?.click();
+    window.MutiraoTema?.restaurar?.();
+    window.MutiraoNotificacoes?.limpar?.();
+    window.MutiraoCuidado?.restaurarEstadoPadrao?.();
+    try {
+      localStorage.clear();
+    } catch {
+      // Garante remoção de preferências gravadas ao restaurar acessibilidade
+    }
     formulario.reset();
     atualizarEstadoAntecedencia();
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
-    mostrarStatus('Padrões recomendados restaurados.', 'sucesso');
+    renderizarLembretes?.();
+    mostrarStatus('Tudo voltou ao começo.', 'sucesso');
   });
 
   botaoAcessibilidade?.addEventListener('click', () => {
@@ -167,30 +206,74 @@
     if (gatilho) {
       gatilho.click();
     } else {
-      mostrarStatus('Não foi possível abrir o painel de acessibilidade.', 'erro');
+      mostrarStatus('Não deu para abrir os ajustes de leitura.', 'erro');
     }
   });
+
+  const core = window.MutiraoCuidado;
+  const CANAIS_SIMULADOS = {
+    'app-email': 'Aplicativo e e-mail',
+    app: 'Só no aplicativo',
+    email: 'Só por e-mail'
+  };
+  const formatarQuandoLembrete = valor => {
+    const match = String(valor || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+    return match ? `${match[3]}/${match[2]}/${match[1]} às ${match[4]}h${match[5]}` : String(valor || '');
+  };
+
+  const simulacao = document.createElement('section');
+  simulacao.className = 'configuracoes__bloco configuracoes__simulacao';
+  simulacao.innerHTML = `<div class="configuracoes__bloco-cabecalho">
+    <h3>Testar lembretes</h3>
+  </div>
+  <p class="configuracoes__texto-apoio">Avance o horário para ver os lembretes chegando. É só um teste: nenhum e-mail é enviado.</p>
+  <div class="configuracoes__simulacao-controles">
+    <label>Avançar até
+      <input type="datetime-local" data-horario-lembretes>
+    </label>
+    <button type="button" class="botao botao--secundario" data-executar-lembretes>Executar lembretes</button>
+  </div>
+  <ul class="configuracoes__historico-lembretes" data-historico-lembretes></ul>`;
+  formulario.querySelector('#painel-notificacoes')?.append(simulacao);
+  const renderizarLembretes = () => {
+    simulacao.querySelector('input').value = core.obterEstado().relogioLembretes || `${core.HOJE}T11:58`;
+    const lista = core.obterEstado().lembretesExecutados || [];
+    simulacao.querySelector('ul').innerHTML = lista.length
+      ? lista.map(item => `<li><strong>${core.escaparHtml(item.texto)}</strong><small>${core.escaparHtml(formatarQuandoLembrete(item.quando))} · Canal simulado: ${core.escaparHtml(CANAIS_SIMULADOS[item.canal] || item.canal)}</small></li>`).join('')
+      : '<li class="configuracoes__historico-vazio">Nenhum lembrete enviado ainda.</li>';
+  };
+  simulacao.querySelector('button').addEventListener('click', () => {
+    try {
+      const novos = core.executarLembretes(simulacao.querySelector('input').value, core.obterPreferencias());
+      for (const item of novos) if (item.canal !== 'email') window.MutiraoNotificacoes?.registrar('Lembrete da simulação', item.texto, 'configuracoes.html');
+      renderizarLembretes(); mostrarStatus(`${novos.length} lembrete(s) executado(s). Consulte o histórico.`, 'sucesso');
+    } catch (erro) { mostrarStatus(erro.message, 'erro'); }
+  });
+  renderizarLembretes();
 
   botaoExportar?.addEventListener('click', async () => {
     const canal = formulario.querySelector('#config-canal-notificacao')?.selectedOptions?.[0]?.textContent || 'Aplicativo e e-mail';
     const antecedencia = selectAntecedencia?.selectedOptions?.[0]?.textContent || '30 minutos';
     const resumo = [
-      'Mutirão — Resumo de Configurações',
-      'Pessoa acompanhada: Maria das Dores (Mari)',
+      'Mutirão — Resumo dos ajustes',
+      'Quem recebe cuidado: Maria das Dores (Mari)',
       'Perfil: Zé da Manga · Neto (Administrador)',
-      `Canal de alertas: ${canal}`,
-      `Antecedência de medicação: ${toggleMedicacao?.checked ? antecedencia : 'Desativado'}`
+      `Onde recebe os avisos: ${canal}`,
+      `Lembrete do remédio: ${toggleMedicacao?.checked ? antecedencia : 'Desativado'}`
     ].join('\n');
 
     try {
       await navigator.clipboard.writeText(resumo);
-      mostrarStatus('Resumo das configurações copiado para a área de transferência.', 'sucesso');
+      mostrarStatus('Resumo copiado. Agora é só colar.', 'sucesso');
     } catch {
-      mostrarStatus('Não foi possível copiar automaticamente neste navegador.', 'erro');
+      mostrarStatus('Não deu para copiar sozinho neste navegador.', 'erro');
     }
   });
 
   botaoAbrirSairRede?.addEventListener('click', () => {
+    const select = dialogoSairRede.querySelector('[data-sucessor-rede]');
+    select.innerHTML = core.obterParticipantesRede().filter(p => p.nome !== core.obterUsuarioAtual().nomeComApelido)
+      .map(p => `<option value="${core.escaparHtml(p.nome)}">${core.escaparHtml(p.nome)}</option>`).join('');
     dialogoSairRede?.showModal();
   });
 
@@ -199,7 +282,10 @@
   });
 
   botaoConfirmarSair?.addEventListener('click', () => {
-    dialogoSairRede?.close();
-    mostrarStatus('Solicitação registrada: como administrador, transfira a gestão antes de sair da rede.', 'erro');
+    try {
+      core.sairDaRede(dialogoSairRede.querySelector('[data-sucessor-rede]').value);
+      dialogoSairRede.close();
+      core.mostrarSaidaRede();
+    } catch (erro) { mostrarStatus(erro.message, 'erro'); }
   });
 })();

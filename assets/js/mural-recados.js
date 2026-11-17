@@ -14,11 +14,11 @@
   const elementoStatus = document.querySelector('[data-mvp-status]');
 
   const PERSONAGENS = [
-    { id: 'ze', nome: 'Zé' },
-    { id: 'mari', nome: 'Mari' },
-    { id: 'bea', nome: 'Bea' },
-    { id: 'aninha', nome: 'Aninha' },
-    { id: 'paul', nome: 'Paul' },
+    { id: 'ze', nome: 'Cubado' },
+    { id: 'mari', nome: 'Idosa' },
+    { id: 'bea', nome: 'Cuidadora' },
+    { id: 'aninha', nome: 'Espeto' },
+    { id: 'paul', nome: 'Pingo' },
     { id: 'minhoca', nome: 'Minhoca' },
     { id: 'trevo', nome: 'Trevo' }
   ];
@@ -50,7 +50,7 @@
       cor: 'manteiga',
       pino: 'lilas',
       giro: -2,
-      figurinhas: [{ id: 'mari-coracao', por: 'Mari' }]
+      figurinhas: [{ id: 'mari-coracao', por: 'Aninha' }]
     },
     {
       id: 'recado-paul',
@@ -60,7 +60,7 @@
       cor: 'branco',
       pino: 'amarelo',
       giro: 1.5,
-      figurinhas: [{ id: 'minhoca-flor', por: 'Mari' }]
+      figurinhas: [{ id: 'minhoca-flor', por: 'Paul' }]
     },
     {
       id: 'recado-bea',
@@ -99,11 +99,14 @@
 
   const renderizar = () => {
     const reacoes = obterReacoes();
+    const perfilUsuario = obterEstado().perfilUsuario;
+    const quemReagiu = (perfilUsuario?.apelido || perfilUsuario?.nome || 'Zé').trim().split(/\s+/)[0] || 'Zé';
     total.textContent = `${RECADOS.length} esta semana`;
     mural.innerHTML = RECADOS.map(recado => {
       const coladas = recado.figurinhas.map((figurinha, indice) => montarFigurinha(figurinha, LUGARES[indice], false, recado));
       if (reacoes[recado.id]) {
-        coladas.push(montarFigurinha({ id: reacoes[recado.id], por: 'Zé' }, LUGARES[recado.figurinhas.length] || 'base', true, recado));
+        const lugarReacao = recado.figurinhas.length < 2 ? 'direita' : 'base';
+        coladas.push(montarFigurinha({ id: reacoes[recado.id], por: quemReagiu }, lugarReacao, true, recado));
       }
       return `<li class="recado-postit recado-postit--${recado.cor}" style="--giro: ${recado.giro}deg">
         <span class="recado-postit__pino recado-postit__pino--${recado.pino}" aria-hidden="true"></span>
@@ -121,7 +124,7 @@
 
   const renderizarAbas = () => {
     abas.innerHTML = PERSONAGENS.map(personagem => `<button type="button" role="tab" id="aba-figurinha-${personagem.id}" aria-selected="${personagem.id === personagemAtivo}" tabindex="${personagem.id === personagemAtivo ? 0 : -1}" data-personagem="${personagem.id}">
-      <img src="assets/media/figurinhas/${personagem.id}-${FIGURINHAS[personagem.id][0]}.webp" alt="" width="28" height="28">${escaparHtml(personagem.nome)}
+      <img src="assets/media/figurinhas/${personagem.id}-${FIGURINHAS[personagem.id][0]}.webp" alt="" width="32" height="32">${escaparHtml(personagem.nome)}
     </button>`).join('');
     grade.setAttribute('aria-labelledby', `aba-figurinha-${personagemAtivo}`);
     const atual = obterReacoes()[recadoEmFoco?.id];

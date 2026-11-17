@@ -61,6 +61,7 @@
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/configuracoes.css" />
   <script src="assets/js/script.js" defer></script>
+  <script src="assets/js/nucleo-cuidado.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/configuracoes.js" defer></script>
 </head>
@@ -68,26 +69,24 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver
-          ficha da Mari</a></div>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
@@ -95,7 +94,7 @@
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -104,8 +103,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -114,7 +113,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -129,13 +128,14 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html" aria-current="page"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+    <a class="barra-lateral__marca" href="home.html">
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -144,27 +144,27 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <p>Cuidado do dia a dia</p>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule"
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html" aria-current="page"><i
           class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i
           class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -172,14 +172,14 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio configuracoes" id="conteudo">
-    <nav class="apoio__trilha" aria-label="Localização">
-      <a href="index.html">Início</a> <span aria-hidden="true">›</span> <span aria-current="page">Configurações</span>
+    <nav class="apoio__trilha" aria-label="Você está em">
+      <a href="home.html">Início</a> <span aria-hidden="true">›</span> <span aria-current="page">Configurações</span>
     </nav>
 
     <header class="apoio__cabecalho">
       <div>
         <h1>Configurações</h1>
-        <p>Gerencie alertas do cuidado, permissões da rede da Mari, acessibilidade e preferências da conta.</p>
+        <p>Escolha os avisos, o que cada pessoa da rede da Mari pode fazer, como ler melhor e outros ajustes da sua conta.</p>
       </div>
       <a class="botao botao--secundario" href="meu-perfil.html">
         <i class="fa-regular fa-user" aria-hidden="true"></i> Meu perfil
@@ -187,11 +187,11 @@
     </header>
 
     <form id="formulario-configuracoes" class="configuracoes__layout">
-      <div class="configuracoes__menu" role="tablist" aria-label="Categorias de configuração"
+      <div class="configuracoes__menu" role="tablist" aria-label="Partes dos ajustes"
         aria-orientation="vertical">
         <button type="button" class="configuracoes__aba" role="tab" id="aba-notificacoes" aria-selected="true"
           aria-controls="painel-notificacoes" tabindex="0"><i class="fa-regular fa-bell"
-            aria-hidden="true"></i>Notificações</button>
+            aria-hidden="true"></i>Avisos</button>
         <button type="button" class="configuracoes__aba" role="tab" id="aba-rede" aria-selected="false"
           aria-controls="painel-rede" tabindex="-1"><i class="fa-solid fa-users" aria-hidden="true"></i>Rede de
           cuidado</button>
@@ -211,21 +211,20 @@
           aria-labelledby="aba-notificacoes">
           <div class="configuracoes__painel-topo">
             <div>
-              <h2>Notificações e alertas</h2>
-              <p>Defina quais avisos aparecem no topo da tela e como deseja recebê-los.</p>
+              <h2>Avisos</h2>
+              <p>Escolha quais avisos aparecem no topo da tela e como quer receber.</p>
             </div>
-            <span class="selo selo--info">Em tempo real</span>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Alertas da rotina</h3>
+              <h3>Avisos do dia a dia</h3>
             </div>
             <div class="configuracoes__lista">
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-lacuna">Turno sem cobertura na escala</strong>
-                  <span>Destaca horários descobertos em alerta vermelho para ação rápida da rede.</span>
+                  <strong id="rotulo-config-lacuna">Horário sem ninguém na escala</strong>
+                  <span>Mostra primeiro os horários sem ninguém, para a família agir rápido.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-lacuna">
                   <input type="checkbox" id="config-notificacoes-lacuna" name="notificacoesLacuna" checked />
@@ -235,8 +234,8 @@
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-medicacao">Lembretes de medicação</strong>
-                  <span>Avisa antes do horário previsto e sinaliza doses ainda não administradas.</span>
+                  <strong id="rotulo-config-medicacao">Lembrete dos remédios</strong>
+                  <span>Avisa antes da hora do remédio e mostra o que ainda não foi dado.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-medicacao">
                   <input type="checkbox" id="config-notificacoes-medicacao" name="notificacoesMedicacao" checked />
@@ -246,11 +245,22 @@
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-relatos">Passagens de turno e relatos</strong>
-                  <span>Notifica quando outro cuidador registrar observações ou pedidos de consulta.</span>
+                  <strong id="rotulo-config-relatos">Recados entre turnos</strong>
+                  <span>Avisa quando alguém deixar uma anotação ou pedir para marcar consulta.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-relatos">
                   <input type="checkbox" id="config-notificacoes-relatos" name="notificacoesRelatos" checked />
+                  <span class="config-switch__trilha" aria-hidden="true"></span>
+                </label>
+              </div>
+
+              <div class="configuracoes__item">
+                <div class="configuracoes__item-texto">
+                  <strong id="rotulo-config-som">Som das notificações</strong>
+                  <span>Reproduz um alerta sonoro discreto quando uma nova notificação chegar.</span>
+                </div>
+                <label class="config-switch" aria-labelledby="rotulo-config-som">
+                  <input type="checkbox" id="config-notificacoes-som" name="notificacoesSom" checked />
                   <span class="config-switch__trilha" aria-hidden="true"></span>
                 </label>
               </div>
@@ -259,11 +269,11 @@
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Frequência e canal</h3>
+              <h3>Quando e onde avisar</h3>
             </div>
             <div class="configuracoes__campos">
               <label for="config-antecedencia-medicacao">
-                Antecedência do lembrete
+                Avisar quanto tempo antes
                 <select id="config-antecedencia-medicacao" name="antecedenciaMedicacao">
                   <option value="15">15 minutos antes</option>
                   <option value="30" selected>30 minutos antes</option>
@@ -271,12 +281,14 @@
                 </select>
               </label>
               <label for="config-canal-notificacao">
-                Canal preferido
+                Canal preferido na demonstração
                 <select id="config-canal-notificacao" name="canalNotificacao">
                   <option value="app-email" selected>Aplicativo e e-mail</option>
-                  <option value="app">Somente no aplicativo</option>
-                  <option value="email">Somente por e-mail</option>
+                  <option value="app">Só no aplicativo</option>
+                  <option value="email">Só por e-mail</option>
                 </select>
+                <small>Preferência salva localmente para esta demonstração; nenhum e-mail ou notificação real é
+                  enviado.</small>
               </label>
             </div>
           </div>
@@ -286,20 +298,20 @@
           <div class="configuracoes__painel-topo">
             <div>
               <h2>Rede de cuidado da Mari</h2>
-              <p>Regras de colaboração para familiares e cuidadores vinculados à ficha.</p>
+              <p>Regras para a família e os cuidadores que fazem parte da rede.</p>
             </div>
-            <span class="selo selo--info">Administrador</span>
+            <span class="selo selo--neutro">Organiza a rede: Zé</span>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Permissões da equipe</h3>
+              <h3>O que cada um pode fazer</h3>
             </div>
             <div class="configuracoes__lista">
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-assumir">Assumir turnos sem confirmação</strong>
-                  <span>Permite que pessoas da rede assumam horários livres diretamente na agenda.</span>
+                  <strong id="rotulo-config-assumir">Ficar em horário livre sem pedir</strong>
+                  <span>Deixa qualquer pessoa da rede pegar um horário livre direto na agenda.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-assumir">
                   <input type="checkbox" id="config-assumir-turno" name="assumirTurnoDireto" checked />
@@ -309,8 +321,8 @@
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-dupla-checagem">Confirmar horário ao registrar dose</strong>
-                  <span>Exige registro de horário e responsável ao marcar medicamentos como administrados.</span>
+                  <strong id="rotulo-config-dupla-checagem">Pedir a hora ao marcar remédio</strong>
+                  <span>Ao marcar um remédio como dado, pede a hora e quem deu.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-dupla-checagem">
                   <input type="checkbox" id="config-confirmar-dose" name="confirmarDose" checked />
@@ -320,8 +332,8 @@
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-sigilo">Ocultar dados sensíveis para convidados</strong>
-                  <span>Restringe CPF, cartão SUS e contato de emergência apenas aos administradores.</span>
+                  <strong id="rotulo-config-sigilo">Ocultar dados sensíveis ao abrir a ficha</strong>
+                  <span>Ajusta a visibilidade inicial de CPF, RG e carteirinha. Use apenas dados fictícios.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-sigilo">
                   <input type="checkbox" id="config-sigilo-dados" name="sigiloDados" checked />
@@ -333,14 +345,24 @@
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Atalhos da rede</h3>
+              <h3>Acesso rápido da rede</h3>
             </div>
-            <div class="configuracoes__acoes-linha">
-              <a class="botao botao--secundario botao--pequeno" href="pessoas.html">
-                <i class="fa-solid fa-user-group" aria-hidden="true"></i> Gerenciar pessoas da rede
+            <div class="configuracoes__grade-cards">
+              <a class="configuracoes__card-link" href="pessoas.html">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-solid fa-user-group"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Pessoas da rede</strong>
+                  <small>Veja participantes ativos, convites e papéis.</small>
+                </span>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
               </a>
-              <a class="botao botao--secundario botao--pequeno" href="ficha.html">
-                <i class="fa-regular fa-id-card" aria-hidden="true"></i> Abrir ficha da Mari
+              <a class="configuracoes__card-link" href="ficha.html">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-regular fa-id-card"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Ficha de saúde da Mari</strong>
+                  <small>Confira alergias, medicamentos e contatos.</small>
+                </span>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
               </a>
             </div>
           </div>
@@ -350,37 +372,43 @@
           aria-labelledby="aba-acessibilidade" hidden>
           <div class="configuracoes__painel-topo">
             <div>
-              <h2>Acessibilidade e leitura</h2>
-              <p>Ajustes assistivos de fonte, contraste, destaque de links e redução de movimento.</p>
+              <h2>Ler melhor</h2>
+              <p>Letra maior, mais contraste, links sublinhados e menos movimento na tela.</p>
             </div>
-            <span class="selo selo--sucesso">Salvo no navegador</span>
+            <span class="selo selo--sucesso">Fica salvo neste aparelho</span>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Central de Acessibilidade</h3>
+              <h3>Tema visual</h3>
             </div>
-            <p class="configuracoes__texto-apoio">As preferências assistivas são mantidas automaticamente neste
-              dispositivo para garantir conforto contínuo de leitura em todas as telas.</p>
+            <p class="configuracoes__texto-apoio">Escolha a identidade visual do Mutirão. A estrutura e as funções permanecem iguais nos dois temas.</p>
+            <div class="configuracoes__grade-cards" role="group" aria-label="Aparência">
+              <button type="button" class="configuracoes__card-opcao" data-tema="neutro" aria-pressed="true">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-regular fa-sun"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Tema neutro</strong>
+                  <small>Visual limpo e direto para leitura rápida.</small>
+                </span>
+              </button>
+              <button type="button" class="configuracoes__card-opcao" data-tema="acolhedor" aria-pressed="false">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-regular fa-heart"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Tema acolhedor</strong>
+                  <small>Tons quentes e suaves para uso prolongado.</small>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="configuracoes__bloco">
+            <div class="configuracoes__bloco-cabecalho">
+              <h3>Ajustes de leitura</h3>
+            </div>
+            <p class="configuracoes__texto-apoio">Ajuste tamanho da fonte, alto contraste, destaque de links e redução de animações na Central de Acessibilidade.</p>
             <div class="configuracoes__acoes-linha">
               <button type="button" class="botao botao--secundario" data-abrir-acessibilidade>
-                <i class="fa-solid fa-sliders" aria-hidden="true"></i> Abrir Central de Acessibilidade
-              </button>
-            </div>
-          </div>
-
-          <div class="configuracoes__bloco">
-            <div class="configuracoes__bloco-cabecalho">
-              <h3>Tema da aplicação</h3>
-            </div>
-            <p class="configuracoes__texto-apoio">Escolha a identidade visual do Mutirão. A estrutura, a posição dos
-              elementos e as funções continuam iguais nos dois temas, e a escolha fica salva neste dispositivo.</p>
-            <div class="configuracoes__acoes-linha" role="group" aria-label="Tema da aplicação">
-              <button type="button" class="botao botao--secundario" data-tema="neutro" aria-pressed="true">
-                <i class="fa-regular fa-sun" aria-hidden="true"></i> Tema neutro
-              </button>
-              <button type="button" class="botao botao--secundario" data-tema="acolhedor" aria-pressed="false">
-                <i class="fa-regular fa-heart" aria-hidden="true"></i> Tema acolhedor
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i> Abrir ajustes de leitura
               </button>
             </div>
           </div>
@@ -391,33 +419,37 @@
           <div class="configuracoes__painel-topo">
             <div>
               <h2>Privacidade e dados</h2>
-              <p>Exporte um resumo das suas preferências atuais sem expor dados de saúde.</p>
+              <p>Veja o que fica salvo neste navegador e exporte um resumo sem expor dados de saúde.</p>
             </div>
             <span class="selo selo--neutro">Zé da Manga · Neto</span>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Resumo da conta</h3>
+              <h3>Armazenamento local</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Copie rapidamente suas preferências de alertas e canal de contato para
-              compartilhar com outros familiares administradores.</p>
-            <div class="configuracoes__acoes-linha">
-              <button type="button" class="botao botao--secundario" data-exportar-resumo>
-                <i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar resumo das configurações
-              </button>
-            </div>
+            <dl class="configuracoes__resumo-dados">
+              <div>
+                <dt>Neste navegador</dt>
+                <dd>Rotina, escala, recados e avisos ficam salvos só nesta aba.</dd>
+              </div>
+              <div>
+                <dt>Preferências visuais</dt>
+                <dd>Tema e ajustes de acessibilidade ficam salvos localmente neste navegador.</dd>
+              </div>
+            </dl>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Transparência e termos</h3>
+              <h3>Exportação e documentos legais</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Consulte como tratamos dados da rotina de cuidado, armazenamento local
-              de acessibilidade e integrações públicas.</p>
             <div class="configuracoes__acoes-linha">
+              <button type="button" class="botao botao--secundario" data-exportar-resumo>
+                <i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar resumo
+              </button>
               <a class="botao botao--secundario" href="privacidade.html">
-                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Ler Política de Privacidade e Termos
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Ler como cuidamos dos seus dados
               </a>
             </div>
           </div>
@@ -428,17 +460,20 @@
           <div class="configuracoes__painel-topo">
             <div>
               <h2>Sair da rede de cuidado</h2>
-              <p>Encerre seu vínculo como cuidador ou administrador da rede da Mari.</p>
+              <p>Saia da rede de cuidado da Mari.</p>
             </div>
-            <span class="selo selo--alerta">Ação sensível</span>
+            <span class="selo selo--alerta">Atenção</span>
           </div>
 
           <div class="configuracoes__bloco configuracoes__bloco--perigo">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Desvincular conta</h3>
+              <h3>Sair da rede</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Como administrador atual, você precisa garantir que outro familiar
-              assumiu a gestão em Pessoas da rede antes de concluir sua saída.</p>
+            <p class="configuracoes__texto-apoio">Você organiza a rede. Antes de sair, passe essa função para outra pessoa da família.</p>
+            <div class="dialogo-mvp__aviso-caixa" role="note">
+              <strong>Transferência e saída simuladas</strong>
+              <span>Escolha quem vai organizar a rede. Essa pessoa fica com os seus próximos turnos.</span>
+            </div>
             <div class="configuracoes__acoes-linha">
               <button type="button" class="botao botao--perigo" data-abrir-sair-rede>
                 <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair da rede da Mari
@@ -448,9 +483,10 @@
         </section>
 
         <div class="configuracoes__rodape">
-          <p>As alterações desta página são aplicadas imediatamente à sua sessão atual.</p>
+          <p>Clique em “Salvar alterações” para usar suas escolhas agora, ou volte tudo ao começo.</p>
           <div class="configuracoes__rodape-botoes">
-            <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar padrões</button>
+            <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar preferências desta
+              tela</button>
             <button type="submit" class="botao botao--primario">Salvar alterações</button>
           </div>
         </div>
@@ -461,29 +497,27 @@
   </main>
 
   <dialog id="dialogo-sair-rede" class="dialogo-mvp" aria-labelledby="titulo-sair-rede">
-    <h2 id="titulo-sair-rede">Sair da rede de cuidado?</h2>
+    <div class="dialogo-mvp__cabecalho">
+      <h2 id="titulo-sair-rede">Sair da rede de cuidado?</h2>
+      <button type="button" class="botao-icone" data-fechar-dialogo aria-label="Fechar">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
     <p>Você está conectado como administrador da rede de Maria das Dores (Mari). Antes de sair, certifique-se de que
-      outro familiar assumiu a administração em Pessoas da rede.</p>
+      outro familiar assuma a administração e seus turnos futuros nesta simulação.</p>
+    <label>Quem vai organizar a rede e ficar com seus turnos<select data-sucessor-rede></select></label>
     <div class="dialogo-mvp__acoes">
       <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede>Confirmar saída</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede disabled aria-disabled="true">Sim, quero sair</button>
     </div>
   </dialog>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
-    <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
-        type="search">
-      <p id="status-busca" role="status"></p>
-      <ul id="resultados-busca"></ul><button>Fechar</button>
-    </form>
-  </dialog>
 </body>
 
 </html>

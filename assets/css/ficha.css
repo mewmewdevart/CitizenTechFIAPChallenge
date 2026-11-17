@@ -71,9 +71,10 @@ body.menu-fechado .conteudo-pagina.ficha {
 }
 
 .ficha__retrato>img:first-child {
-  width: 136px;
-  height: 148px;
-  border-radius: var(--raio-pill);
+  width: 140px;
+  height: 140px;
+  aspect-ratio: 1;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -112,13 +113,43 @@ body.menu-fechado .conteudo-pagina.ficha {
 
 .ficha__aviso-alergia {
   position: relative;
-  flex: none;
-  width: 406px;
+  flex: 0 1 406px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(406px, calc(100% - 62px));
   min-height: 96px;
-  margin-right: 48px;
-  padding: 18px 32px 18px 22px;
-  background: transparent url('../media/alerta-fundo-ficha.svg') center / 100% 100% no-repeat;
+  margin-left: auto;
+  margin-right: 62px;
+  padding: 16px 20px;
+  background: var(--cor-aviso-alerta-claro);
+  border: 1.5px solid color-mix(in srgb, var(--cor-aviso-alerta-escuro) 35%, transparent);
+  border-radius: var(--raio-xl);
   color: var(--cor-aviso-alerta-escuro);
+}
+
+.ficha__aviso-alergia::before,
+.ficha__aviso-alergia::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  bottom: 26px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.ficha__aviso-alergia::before {
+  border-width: 8px 0 8px 12px;
+  border-color: transparent transparent transparent color-mix(in srgb, var(--cor-aviso-alerta-escuro) 35%, transparent);
+}
+
+.ficha__aviso-alergia::after {
+  margin-left: -1.5px;
+  bottom: 27px;
+  border-width: 7px 0 7px 11px;
+  border-color: transparent transparent transparent var(--cor-aviso-alerta-claro);
 }
 
 .ficha__aviso-alergia strong {
@@ -142,12 +173,21 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   border-radius: var(--raio-xl);
 }
 
+html.acessibilidade--alto-contraste .ficha__aviso-alergia::before {
+  border-left-color: var(--cor-aviso-alerta-escuro);
+}
+
+html.acessibilidade--alto-contraste .ficha__aviso-alergia::after {
+  margin-left: -2.5px;
+}
+
 .ficha__alerta-mascote {
   position: absolute;
-  right: -54px;
-  bottom: 18px;
+  right: -62px;
+  bottom: 14px;
   width: 49px;
   height: 49px;
+  object-fit: contain;
 }
 
 .ficha>.ficha__grade {
@@ -210,50 +250,80 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   color: var(--cor-texto-principal);
 }
 
+.ficha__cartao--consultas .ficha__linha-icone {
+  padding: 8px 10px;
+  margin-inline: -10px;
+  border-radius: var(--raio-lg);
+  transition: background-color var(--transicao-padrao);
+}
+
+.ficha__cartao--consultas .ficha__linha-icone:hover {
+  background: var(--cor-superficie-suave);
+}
+
+.ficha__cartao--consultas dt {
+  font-size: var(--texto-interface);
+  font-weight: var(--peso-semibold);
+  color: var(--cor-texto-principal);
+}
+
+.ficha__cartao--consultas dd {
+  font-size: var(--texto-legenda);
+  color: var(--cor-texto-secundario);
+}
+
+.ficha__cartao--consultas .ficha__linha-acao {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ficha__cartao--consultas .ficha__linha-acao::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--raio-lg);
+}
+
+.ficha__cartao--consultas .ficha__linha-icone:hover .ficha__linha-acao {
+  color: var(--cor-primaria);
+}
+
 .ficha__cartao--saude dd :is(ul, ol),
-.editar-ficha__editor-area :is(ul, ol) {
+.ficha__relato-conteudo :is(ul, ol) {
   margin: 6px 0;
   padding-left: 20px;
 }
 
 .ficha__cartao--saude dd ul,
-.editar-ficha__editor-area ul {
+.ficha__relato-conteudo ul {
   list-style-type: disc;
 }
 
 .ficha__cartao--saude dd ol,
-.editar-ficha__editor-area ol {
+.ficha__relato-conteudo ol {
   list-style-type: decimal;
 }
 
 .ficha__cartao--saude dd li+li,
-.editar-ficha__editor-area li+li {
+.ficha__relato-conteudo li+li {
   margin-top: 2px;
 }
 
 .ficha__cartao--saude dd :is(b, strong),
-.editar-ficha__editor-area :is(b, strong) {
+.ficha__relato-conteudo :is(b, strong) {
   font-weight: var(--peso-negrito);
   color: var(--cor-texto-principal);
 }
 
 .ficha__cartao--saude dd u,
-.editar-ficha__editor-area u {
+.ficha__relato-conteudo u {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .ficha__cartao--saude dd :is(p, div)+ :is(p, div),
-.editar-ficha__editor-area :is(p, div)+ :is(p, div) {
+.ficha__relato-conteudo :is(p, div)+ :is(p, div) {
   margin-top: 4px;
-}
-
-.ficha__cartao--saude .ficha__etiqueta--medicamento {
-  display: table;
-}
-
-.ficha__cartao--saude .ficha__etiqueta--medicamento+.ficha__etiqueta--medicamento {
-  margin-top: var(--espaco-sm);
 }
 
 .ficha__secao-cabecalho {
@@ -295,6 +365,15 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   font-weight: var(--peso-semibold);
   font-size: var(--texto-interface);
   color: var(--cor-texto-principal);
+}
+
+.ficha__cartao--consultas dt a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ficha__cartao--consultas dt a:hover {
+  text-decoration: underline;
 }
 
 .ficha__cartao--consultas dd {
@@ -456,8 +535,9 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   }
 
   .ficha__aviso-alergia {
-    width: min(406px, calc(100% - 48px));
-    margin-right: 42px;
+    width: min(406px, calc(100% - 62px));
+    margin-left: 0;
+    margin-right: 62px;
   }
 
   .ficha__aviso-alergia strong {
@@ -491,8 +571,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   }
 
   .ficha__retrato>img:first-child {
-    width: 90px;
-    height: 100px;
+    width: 96px;
+    height: 96px;
   }
 
   .ficha__mascote {
@@ -507,12 +587,13 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   }
 
   .ficha__aviso-alergia {
-    width: calc(100% - 36px);
-    margin-right: 36px;
+    width: calc(100% - 54px);
+    margin-right: 54px;
   }
 
   .ficha__alerta-mascote {
-    right: -40px;
+    right: -54px;
+    bottom: 14px;
     width: 42px;
     height: 42px;
   }
@@ -536,143 +617,8 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   }
 }
 
-.dialogo-mvp--largo {
-  --largura-dialogo: 960px;
-}
-
-.dialogo-mvp__subtitulo {
-  margin-top: var(--espaco-xs);
-  font-size: var(--texto-legenda);
-  color: var(--cor-texto-secundario);
-}
-
-.editar-ficha {
-  display: grid;
-  gap: var(--espaco-lg);
-  margin-top: var(--espaco-lg);
-}
-
-.editar-ficha__secao {
-  display: grid;
-  gap: var(--espaco-md);
-  padding-top: var(--espaco-lg);
-  border-top: var(--borda-padrao);
-}
-
-.editar-ficha__subtitulo,
-.editar-ficha__rotulo-secao {
-  font-size: var(--texto-interface);
-  font-weight: var(--peso-negrito);
-  color: var(--cor-texto-principal);
-}
-
-.editar-ficha__rotulo-secao {
-  font-size: var(--texto-legenda);
-  font-weight: var(--peso-semibold);
-}
-
-.editar-ficha__foto-linha {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--espaco-lg);
-}
-
-.editar-ficha__foto-linha input[hidden] {
+.ficha__mascote[hidden] {
   display: none;
-}
-
-.editar-ficha__foto-previa {
-  width: 80px;
-  height: 80px;
-  border-radius: var(--raio-pill);
-  object-fit: cover;
-  flex: none;
-}
-
-.editar-ficha__foto-info {
-  flex: 1 1 160px;
-  min-width: 0;
-  display: grid;
-  gap: 2px;
-}
-
-.editar-ficha__foto-info strong {
-  font-size: var(--texto-interface);
-  color: var(--cor-texto-principal);
-}
-
-.editar-ficha__foto-info small {
-  font-size: var(--texto-legenda);
-  color: var(--cor-texto-secundario);
-}
-
-.editar-ficha__foto-acoes {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--espaco-sm);
-}
-
-.ficha__mascote[hidden],
-.editar-ficha__foto-acoes [hidden] {
-  display: none;
-}
-
-.editar-ficha__mascotes {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: var(--espaco-sm);
-}
-
-.editar-ficha__mascote-cartao {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-height: 112px;
-  padding: var(--espaco-sm);
-  border: var(--borda-padrao);
-  border-radius: var(--raio-lg);
-  background: var(--cor-superficie);
-  color: var(--cor-texto-principal);
-  transition: background-color var(--transicao-padrao), border-color var(--transicao-padrao);
-}
-
-.editar-ficha__mascote-cartao:hover {
-  background: var(--cor-superficie-suave);
-  border-color: var(--cor-primaria);
-}
-
-.editar-ficha__mascote-cartao[aria-pressed="true"] {
-  background: var(--cor-superficie-suave);
-  border-color: var(--cor-primaria);
-}
-
-.editar-ficha__mascote-cartao strong {
-  font-size: var(--texto-legenda);
-  font-weight: var(--peso-semibold);
-}
-
-.editar-ficha__mascote-cartao span {
-  font-size: var(--texto-legenda);
-  color: var(--cor-primaria);
-  font-weight: var(--peso-semibold);
-}
-
-.editar-ficha__grade {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--espaco-md);
-}
-
-.editar-ficha__grade label,
-.editar-ficha__rotulo-campo {
-  font-size: var(--texto-legenda);
-  font-weight: var(--peso-semibold);
-  color: var(--cor-texto-principal);
 }
 
 .editar-ficha__rotulo-campo {
@@ -680,59 +626,14 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   margin-bottom: var(--espaco-xs);
 }
 
-.editar-ficha__campo--largo {
-  grid-column: 1 / -1;
-}
-
-.ficha .botao--secundario,
-.editar-ficha .botao--secundario {
+.ficha .botao--secundario {
   background: transparent;
   border-color: var(--cor-primaria);
   color: var(--cor-primaria);
 }
 
-.ficha .botao--secundario:hover,
-.editar-ficha .botao--secundario:hover {
+.ficha .botao--secundario:hover {
   background: var(--cor-superficie-suave);
-}
-
-.editar-ficha__campo-icone {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.editar-ficha__campo-icone input {
-  margin-top: 0;
-  padding-right: 42px;
-}
-
-.editar-ficha__botao-oculto {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--cor-texto-secundario);
-  cursor: pointer;
-  border-radius: var(--raio-md);
-}
-
-.editar-ficha__botao-oculto:hover {
-  color: var(--cor-primaria);
-}
-
-.editar-ficha__botao-oculto img {
-  display: block;
-  width: 18px;
-  height: 18px;
 }
 
 .editar-ficha__caixa-etiquetas {
@@ -742,7 +643,7 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   gap: 6px;
   min-height: var(--tamanho-alvo-toque);
   padding: 6px 10px;
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
   cursor: text;
@@ -796,100 +697,24 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
   font-size: var(--texto-micro);
 }
 
-.editar-ficha__editor-rico {
-  border: 1px solid var(--cor-borda-controle);
-  border-radius: var(--raio-lg);
-  background: var(--cor-superficie);
-  overflow: hidden;
-}
-
-.editar-ficha__editor-rico:focus-within {
-  border-color: var(--cor-primaria);
-}
-
-.editar-ficha__editor-barra {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-bottom: var(--borda-padrao);
-  background: var(--cor-fundo-pagina);
-}
-
-.editar-ficha__editor-botao {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: var(--raio-sm);
-  background: transparent;
-  color: var(--cor-texto-secundario);
-  cursor: pointer;
-}
-
-.editar-ficha__editor-botao:hover {
-  background: var(--cor-superficie-suave);
-  color: var(--cor-primaria);
-}
-
-.editar-ficha__editor-botao[aria-pressed="true"] {
-  background: var(--cor-superficie-suave);
-  border-color: var(--cor-borda-sutil);
-  color: var(--cor-primaria);
-}
-
-.editar-ficha__editor-area {
-  min-height: 100px;
-  padding: 10px var(--espaco-md);
-  font: inherit;
-  font-size: var(--texto-interface);
-  line-height: 1.5;
-  color: var(--cor-texto-secundario);
-  outline: none;
-  overflow-wrap: anywhere;
-}
-
-.editar-ficha__rodape {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--espaco-sm);
-  padding-top: var(--espaco-lg);
-  border-top: var(--borda-padrao);
-}
-
-@media (max-width: 760px) {
-  .editar-ficha__mascotes {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .editar-ficha__grade {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 @media (max-width: 600px) {
-
-  .ficha__acoes,
-  .editar-ficha__foto-acoes {
+  .ficha__acoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
   }
 
-  .ficha__acoes .botao,
-  .editar-ficha__foto-acoes .botao,
+  .ficha__acoes .botao--primario {
+    grid-column: 1 / -1;
+  }
+
+  .ficha__acoes .botao {
+    min-height: var(--tamanho-alvo-toque);
+    white-space: normal;
+    text-align: center;
+  }
+
   .dialogo-mvp>.botao {
-    width: 100%;
-  }
-
-  .editar-ficha__rodape {
-    flex-direction: column-reverse;
-  }
-
-  .editar-ficha__rodape .botao {
     width: 100%;
   }
 }
@@ -1019,7 +844,7 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
   margin: 0;
   font-size: clamp(1.5rem, 2.5vw, 1.875rem);
   line-height: 1.2;
-  font-weight: var(--peso-bold);
+  font-weight: var(--peso-negrito);
   color: var(--cor-texto-principal);
 }
 
@@ -1066,7 +891,7 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
   align-items: center;
   gap: var(--espaco-xs);
   font-size: var(--texto-interface);
-  font-weight: var(--peso-bold);
+  font-weight: var(--peso-negrito);
 }
 
 .folha-impressao__alerta p {

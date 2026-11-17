@@ -74,22 +74,31 @@
         convenio: 'Convênio Vida Plena · Plano Familiar (fictício)',
         carteira: '4128 9910 3304 2048',
         alergias: 'Dipirona',
-        condicoes: 'Epilepsia, Diabetes tipo 2, Asma, Hipertensão arterial',
+        condicoes: 'Epilepsia, Diabetes tipo 2, Asma, Pressão alta',
         medicamentos: 'Losartana · 08h, Metformina · 08h e 20h',
-        historicoSaude: 'Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Histórico de trombose venosa profunda (2022).',
+        historicoSaude: 'Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Já teve trombose venosa profunda, um coágulo na veia (2022).',
         referencia: 'Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186',
         alternativo: 'Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193',
         cobertura: '24 horas por dia',
         preferencias: 'Prefere consultas à tarde e gosta de conferir a agenda com a família.',
-        foto: 'assets/media/foto-perfil-maria.png',
+        foto: 'assets/media/fotos/foto-perfil-maria.png',
         mascote: 'assets/media/mascotes/icone-mascote-minhoca.svg'
       },
       events: [
         {
+          id: 'evt-caminhada-09',
+          dia: '2026-11-09',
+          hora: '15:30',
+          titulo: 'Caminhada leve no quintal e hidratação',
+          local: 'Casa · Turno 13h–19h',
+          acompanhante: 'Paulo da Silva (Paul)',
+          criadoPor: 'Paulo da Silva (Paul)'
+        },
+        {
           id: 'evt-ubs-10',
           dia: HOJE,
           hora: '14:00',
-          titulo: 'Consulta na UBS',
+          titulo: 'Consulta no posto (UBS)',
           local: 'UBS do bairro',
           acompanhante: 'Ana da Silva (Aninha)',
           preparacao: [
@@ -102,7 +111,7 @@
           dia: '2026-11-18',
           hora: '14:00',
           titulo: 'Geriatria',
-          local: 'Consultório de Geriatria',
+          local: 'Consultório do geriatra (médico de idosos)',
           acompanhante: 'Ana da Silva (Aninha)'
         },
         {
@@ -118,10 +127,50 @@
       shiftEdits: {},
       tasks: [
         {
+          id: 'tarefa-ontem-06-08',
+          dia: '2026-11-09',
+          titulo: '06h e 08h · Remédios da manhã dados',
+          descricao: 'Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h',
+          icone: 'bi bi-capsule',
+          concluida: true,
+          href: 'ficha.html#diario',
+          rotuloAcao: 'Ver no Diário'
+        },
+        {
+          id: 'tarefa-ontem-otorrino',
+          dia: '2026-11-09',
+          titulo: '08h10 · Recado: marcar consulta no otorrino',
+          descricao: 'Ver se o Convênio Vida Plena paga antes de marcar · Beatriz da Silva (Bea)',
+          icone: 'icone-receita.svg',
+          concluida: true,
+          href: 'home.html#passagem-cuidado',
+          rotuloAcao: 'Ver passagem'
+        },
+        {
+          id: 'tarefa-ontem-retorno-ubs',
+          dia: '2026-11-09',
+          titulo: '16h · Retorno da consulta de terça combinado',
+          descricao: 'Paulo da Silva (Paul) confirmou buscar Mari e Ana na UBS após as 14h · Turno 13h–19h',
+          icone: 'icone-receita.svg',
+          concluida: true,
+          href: 'agenda.html?dia=2026-11-10',
+          rotuloAcao: 'Ver dia 10/11'
+        },
+        {
+          id: 'tarefa-ontem-20h-docs',
+          dia: '2026-11-09',
+          titulo: '20h · Metformina e separação de documentos',
+          descricao: 'Zé da Manga (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h',
+          icone: 'bi bi-capsule',
+          concluida: true,
+          href: 'documentos.html',
+          rotuloAcao: 'Ver Documentos'
+        },
+        {
           id: 'tarefa-ubs-retirada',
           dia: HOJE,
-          titulo: 'Retirar medicamento na UBS',
-          descricao: 'Após a consulta · Ana da Silva (Aninha) · Receita vinculada',
+          titulo: 'Pegar remédio no posto (UBS)',
+          descricao: 'Depois da consulta · Ana da Silva (Aninha) · Receita salva',
           icone: 'icone-receita.svg',
           concluida: false,
           dialogo: 'dialogo-tarefa-ubs'
@@ -130,21 +179,31 @@
           id: 'tarefa-metformina-08',
           dia: HOJE,
           titulo: '08h · Metformina',
-          descricao: 'Não administrada · Ocorrência registrada por Bea',
-          icone: 'icone-medicamento.svg',
+          descricao: 'Não foi dado · Bea anotou',
+          icone: 'bi bi-capsule',
           concluida: false,
           href: 'medicamentos.html',
-          rotuloAcao: 'Registrar administração'
+          rotuloAcao: 'Marcar como dado'
         },
         {
           id: 'tarefa-metformina-20',
           dia: HOJE,
           titulo: '20h · Metformina',
-          descricao: 'Prevista para 20h',
-          icone: 'icone-medicamento.svg',
+          descricao: 'Às 20h · Turno de Zé da Manga (Zé)',
+          icone: 'bi bi-capsule',
           concluida: false,
           href: 'medicamentos.html',
-          rotuloAcao: 'Registrar administração'
+          rotuloAcao: 'Marcar como dado'
+        },
+        {
+          id: 'tarefa-hoje-jejum-06',
+          dia: HOJE,
+          titulo: '06h · Remédios em jejum dados',
+          descricao: 'Aninha deu 3 remédios (06h10 e 06h12) · Turno de Ana da Silva (Aninha)',
+          icone: 'bi bi-capsule',
+          concluida: true,
+          href: 'medicamentos.html#registros-de-hoje',
+          rotuloAcao: 'Ver anotações'
         }
       ],
       reports: {
@@ -152,13 +211,13 @@
           [
             'Beatriz da Silva (Bea)',
             'Cuidadora · Turno 07h–12h',
-            'Tarefa relacionada · Retirar medicamento na UBS · Ocorrência · Metformina das 08h não administrada',
-            'Confirmei a consulta das 14h. A metformina das 08h não foi administrada e o motivo não foi informado. Caso não apareça ninguém para assumir o turno seguinte, posso estender meu turno até 13h.',
-            'Ana leva a pasta e retira o medicamento na UBS. A volta está combinada com Paulo.\nA agendar consulta com otorrinolaringologista. Antes de agendar, confirme se o convênio cobre a consulta.'
+            'Tarefa relacionada · Pegar remédio no posto (UBS) · Ocorrência · Metformina das 08h não foi dada',
+            'Confirmei a consulta das 14h. A metformina das 8h não foi dada, e ninguém disse por quê.',
+            'Falta marcar a consulta no otorrino (ouvido, nariz e garganta). Antes, confira se o convênio paga.'
           ],
           [
             'Ana da Silva (Aninha)',
-            'Filha · Contato de referência · Turno 00h–07h',
+            'Filha · Contato principal · Turno 00h–07h',
             'Tarefa relacionada · Levar a pasta da consulta',
             'Separei os documentos e deixei a pasta na bolsa azul.',
             'Levar a pasta para a consulta das 14h.'
@@ -168,42 +227,44 @@
           [
             'Zé da Manga',
             'Administrador · Turno 19h–24h',
-            'Tarefa relacionada · Conferir medicações da noite',
-            'Maria jantou sopa de legumes e tomou a metformina das 20h sem intercorrências. Foi dormir por volta das 22h30.',
+            'Tarefa relacionada · Conferir os remédios da noite',
+            'Maria jantou sopa de legumes e tomou a metformina das 20h sem problemas. Foi dormir por volta das 22h30.',
             'Deixei o RG e a carteirinha do convênio separados em cima da cômoda para a consulta de amanhã.'
           ],
           [
             'Paulo da Silva (Paul)',
-            'Neto · Contato alternativo · Turno 13h–19h',
-            'Tarefa relacionada · Combinar retorno da consulta de terça',
-            'Fizemos uma caminhada leve no quintal à tarde e mantivemos boa hidratação. Sem queixas de dor.',
+            'Neto · Segundo contato · Turno 13h–19h',
+            'Tarefa relacionada · Combinar a volta da consulta de terça',
+            'Fizemos uma caminhada leve no quintal à tarde e ela bebeu bastante água. Não reclamou de dor.',
             'Confirmado que busco a Maria e a Ana na UBS amanhã após a consulta das 14h.'
           ],
           [
             'Beatriz da Silva (Bea)',
             'Cuidadora · Turno 07h–13h',
-            'Tarefa relacionada · Administrar medicamentos da manhã',
-            'Café da manhã completo. Losartana e metformina das 08h administradas corretamente; pressão arterial estável (12x8).',
+            'Tarefa relacionada · Dar os remédios da manhã',
+            'Tomou todo o café da manhã. Losartana e metformina das 08h dadas certinho; pressão boa (12x8).',
             'Lembrar de oferecer água ao longo da tarde.'
           ],
           [
             'Ana da Silva (Aninha)',
-            'Filha · Contato de referência · Turno 00h–07h',
-            'Tarefa relacionada · Acompanhar repouso noturno',
-            'Noite tranquila, dormiu sem despertares e acordou bem-disposta às 06h40.',
-            'Receita da medicação de uso contínuo ficou na pasta azul.'
+            'Filha · Contato principal · Turno 00h–07h',
+            'Tarefa relacionada · Ficar com ela à noite',
+            'Noite tranquila, dormiu direto e acordou bem às 06h40.',
+            'A receita do remédio de todo dia ficou na pasta azul.'
           ]
         ]
       },
       documents: [
         {
           id: 'doc-receita-ubs',
-          titulo: 'Receita para retirada na UBS',
+          titulo: 'Receita para pegar remédio no posto',
           categoria: 'Receita',
           dia: '2026-11-10',
           autor: 'Ana da Silva (Aninha)',
-          vinculo: 'Consulta na UBS de 10 nov.',
-          observacoes: 'Receita para retirada de medicamento após a consulta das 14h na UBS do bairro.'
+          compromissoId: 'evt-ubs-10',
+          vinculo: 'Consulta no posto de 10 nov.',
+          localOriginal: 'Pasta azul da Mari (sala) · cópia no WhatsApp da Aninha',
+          observacoes: 'Receita para pegar o remédio no posto do bairro, depois da consulta das 14h.'
         },
         {
           id: 'doc-hemograma',
@@ -211,8 +272,9 @@
           categoria: 'Exame',
           dia: '2026-11-04',
           autor: 'Paulo da Silva (Paul)',
-          vinculo: 'Exame cadastrado em 4 nov.',
-          observacoes: 'Resultado completo do hemograma realizado em 4 de novembro de 2026.'
+          vinculo: 'Exame salvo em 4 nov.',
+          localOriginal: 'Pasta de exames (gaveta do quarto) · PDF com o Paul',
+          observacoes: 'Resultado completo do hemograma (exame de sangue) feito em 4 de novembro de 2026.'
         },
         {
           id: 'doc-ficha-atendimento',
@@ -221,10 +283,22 @@
           dia: '2026-11-06',
           autor: 'Beatriz da Silva (Bea)',
           vinculo: 'Documento geral',
-          observacoes: 'Registro de atendimento ambulatorial e orientações da equipe.'
+          localOriginal: 'Pasta azul da Mari (sala)',
+          observacoes: 'Papel do atendimento e o que a equipe orientou.'
         }
       ]
     };
+  }
+
+  function migrarRegistrosDose(anterior) {
+    const registros = { ...anterior };
+    const chaveAnterior = '18h|Metformina';
+    const chaveAtual = '20h|Metformina';
+    if (registros[chaveAnterior] && !registros[chaveAtual]) {
+      registros[chaveAtual] = registros[chaveAnterior];
+      delete registros[chaveAnterior];
+    }
+    return registros;
   }
 
   function carregarEstado() {
@@ -236,6 +310,7 @@
       return {
         ...base,
         ...dados,
+        registrosDose: migrarRegistrosDose(dados?.registrosDose),
         person: { ...base.person, ...(dados?.person || {}) },
         events: Array.isArray(dados?.events) ? dados.events : base.events,
         covered: dados?.covered && typeof dados.covered === 'object' ? dados.covered : {},
@@ -251,18 +326,159 @@
 
   let estadoAtual = carregarEstado();
 
-  function persistirEstado() {
+  function atualizarEstado(transformador) {
+    const rascunho = JSON.parse(JSON.stringify(estadoAtual));
+    const proximo = typeof transformador === 'function' ? transformador(rascunho) : { ...rascunho, ...transformador };
     try {
-      sessionStorage.setItem(CHAVE_ESTADO, JSON.stringify(estadoAtual));
-    } catch {
-      // Ignora caso o navegador restrinja sessionStorage
+      sessionStorage.setItem(CHAVE_ESTADO, JSON.stringify(proximo));
+    } catch (causa) {
+      const mensagem = 'Não foi possível salvar. A alteração não foi aplicada. Mantenha esta tela aberta, revise o espaço disponível e tente novamente.';
+      let aviso = document.getElementById('erro-persistencia-mutirao');
+      if (!aviso) {
+        aviso = document.createElement('p');
+        aviso.id = 'erro-persistencia-mutirao';
+        aviso.className = 'faixa-alerta faixa-alerta--atencao';
+        aviso.setAttribute('role', 'alert');
+        document.querySelector('main')?.prepend(aviso);
+      }
+      aviso.textContent = mensagem;
+      throw new Error(mensagem, { cause: causa });
     }
+    document.getElementById('erro-persistencia-mutirao')?.remove();
+    estadoAtual = proximo;
+    window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
+    return estadoAtual;
   }
 
-  function atualizarEstado(transformador) {
-    estadoAtual = typeof transformador === 'function' ? transformador(estadoAtual) : { ...estadoAtual, ...transformador };
-    persistirEstado();
+  function restaurarEstadoPadrao() {
+    try {
+      sessionStorage.removeItem(CHAVE_ESTADO);
+      localStorage.removeItem(CHAVE_ESTADO);
+    } catch {
+      // Ignora erro caso o armazenamento esteja indisponível.
+    }
+    estadoAtual = criarEstadoInicial();
+    document.getElementById('erro-persistencia-mutirao')?.remove();
+    window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
+    window.dispatchEvent(new CustomEvent('mutirao:perfil-atualizado'));
     return estadoAtual;
+  }
+
+  const obterUsuarioAtual = (estado = estadoAtual) => {
+    const perfil = estado?.perfilUsuario || {};
+    const nome = (perfil.nome ?? 'Zé da Manga').trim() || 'Zé da Manga';
+    const apelido = (perfil.apelido ?? 'Zé').trim();
+    const nomeComApelido = apelido ? `${nome} (${apelido})` : nome;
+    const mascote = perfil.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
+    const foto = perfil.foto || '';
+    return {
+      nome,
+      apelido,
+      nomeComApelido,
+      vinculo: (perfil.vinculo || 'Neto').trim(),
+      papel: (perfil.papel || 'Administrador').trim(),
+      mascote,
+      foto,
+      avatar: foto || mascote,
+      avatarArquivo: mascote.split('/').pop()
+    };
+  };
+
+  const nomePessoaAcompanhada = (estado = estadoAtual) => {
+    const { nome, apelido } = estado.person;
+    return apelido ? `${nome} (${apelido})` : nome;
+  };
+
+  const obterCompromissos = (estado = estadoAtual) =>
+    [...estado.events].sort((a, b) => `${a.dia}T${a.hora}`.localeCompare(`${b.dia}T${b.hora}`));
+
+  const obterCompromissosFuturos = (estado = estadoAtual) =>
+    obterCompromissos(estado).filter(item => `${item.dia}T${item.hora}` >= `${HOJE}T11:58`);
+
+  const obterProximoCompromisso = () => obterCompromissosFuturos()[0];
+
+  const obterParticipantesRede = (estado = estadoAtual) => {
+    const usuario = obterUsuarioAtual(estado);
+    const lista = EQUIPE_CUIDADO.map(pessoa => {
+      if (pessoa.nome === 'Zé da Manga') {
+        return {
+          nome: usuario.nomeComApelido,
+          nomeBase: usuario.nome,
+          avatar: usuario.avatarArquivo,
+          foto: usuario.foto
+        };
+      }
+      return {
+        nome: pessoa.nome,
+        nomeBase: pessoa.nome.split(' (')[0].trim(),
+        avatar: pessoa.avatar,
+        foto: ''
+      };
+    });
+    return [...lista, ...(estado.participantesExtras || [])].filter(pessoa => !/maria das dores|\(mari\)/i.test(pessoa.nome));
+  };
+
+  const resolverConvite = (email, aceitar) => atualizarEstado(estado => {
+    const convite = (estado.convites || []).find(item => item.email === email);
+    if (!convite) throw new Error('Este convite já foi respondido.');
+    const participantesExtras = [...(estado.participantesExtras || [])];
+    if (aceitar && !participantesExtras.some(item => item.email === email)) {
+      participantesExtras.push({ ...convite, nome: email, nomeBase: email,
+        avatar: 'icone-mascote-cubado.svg', foto: '' });
+    }
+    return { ...estado, participantesExtras,
+      convites: estado.convites.filter(item => item.email !== email),
+      historicoConvites: [...(estado.historicoConvites || []), { ...convite, status: aceitar ? 'Aceito' : 'Recusado' }] };
+  });
+
+  const atualizarSeletoresRede = () => {
+    const pessoas = obterParticipantesRede();
+    document.querySelectorAll('select[name="responsavel"], select[name="acompanhante"], select[name="acompanhanteEvento"], select[name="para"]').forEach(select => {
+      for (const pessoa of pessoas) {
+        if (![...select.options].some(opcao => opcao.value === pessoa.nome)) {
+          const opcao = document.createElement('option');
+          opcao.value = pessoa.nome;
+          opcao.textContent = pessoa.nome;
+          select.append(opcao);
+        }
+      }
+    });
+  };
+  document.addEventListener('DOMContentLoaded', atualizarSeletoresRede);
+  window.addEventListener('mutirao:cuidado-atualizado', atualizarSeletoresRede);
+
+  const resolverPessoaRede = (nome, estado = estadoAtual) => {
+    const participantes = obterParticipantesRede(estado);
+    const alvo = normalizarBusca(nome);
+    const usuario = obterUsuarioAtual(estado);
+    let encontrada = participantes.find(pessoa =>
+      normalizarBusca(pessoa.nome) === alvo || normalizarBusca(pessoa.nomeBase) === alvo
+    );
+    if (!encontrada && alvo && (alvo.includes('ze da manga') || alvo === normalizarBusca(usuario.apelido))) {
+      encontrada = participantes.find(pessoa => normalizarBusca(pessoa.nome) === normalizarBusca(usuario.nomeComApelido));
+    }
+    const avatar = encontrada?.avatar || 'icone-mascote-cubado.svg';
+    const foto = encontrada?.foto || '';
+    return {
+      nome: encontrada?.nome || nome || usuario.nomeComApelido,
+      avatar,
+      foto,
+      src: foto || `assets/media/mascotes/${avatar}`
+    };
+  };
+
+  const normalizarBusca = valor => String(valor ?? '').normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR').trim();
+
+  function vincularFiltro(grupo, seletor, selecionar) {
+    grupo?.addEventListener('click', evento => {
+      const botao = evento.target.closest(seletor);
+      if (!botao || !grupo.contains(botao)) return;
+      grupo.querySelectorAll(seletor).forEach(item => {
+        item.setAttribute('aria-pressed', String(item === botao));
+      });
+      selecionar(botao);
+    });
   }
 
   const escaparHtml = valor => String(valor ?? '').replace(/[&<>"']/g, caractere => ({
@@ -272,6 +488,96 @@
     '"': '&quot;',
     "'": '&#39;'
   })[caractere]);
+
+  const sanitizarHtmlEditor = html => {
+    const template = document.createElement('template');
+    template.innerHTML = String(html ?? '');
+    const tagsPermitidas = new Set(['B', 'STRONG', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV']);
+    const limparNo = no => {
+      [...no.childNodes].forEach(filho => {
+        if (filho.nodeType !== Node.ELEMENT_NODE) return;
+        if (!tagsPermitidas.has(filho.tagName)) {
+          filho.replaceWith(document.createTextNode(filho.textContent || ''));
+          return;
+        }
+        [...filho.attributes].forEach(attr => filho.removeAttribute(attr.name));
+        limparNo(filho);
+      });
+    };
+    limparNo(template.content);
+    if (!(template.content.textContent || '').trim() && !template.content.querySelector('li')) {
+      return '';
+    }
+    return template.innerHTML.trim();
+  };
+
+  const inicializarEditoresRicos = raiz => {
+    if (!raiz) {
+      return { sincronizarTodos: () => { }, limparTodos: () => { } };
+    }
+
+    const sincronizarEditor = editor => {
+      if (!editor) return;
+      const area = editor.querySelector('[data-editor-alvo]');
+      if (!area) return;
+      const chave = area.dataset.editorAlvo;
+      const inputOculto = raiz.querySelector(`[data-input-editor="${chave}"]`);
+      if (inputOculto) {
+        inputOculto.value = sanitizarHtmlEditor(area.innerHTML);
+      }
+      editor.querySelectorAll('[data-comando-editor]').forEach(botao => {
+        try {
+          botao.setAttribute('aria-pressed', String(document.queryCommandState(botao.dataset.comandoEditor)));
+        } catch {
+          botao.setAttribute('aria-pressed', 'false');
+        }
+      });
+    };
+
+    raiz.addEventListener('mousedown', evento => {
+      if (evento.target.closest('[data-comando-editor]')) {
+        evento.preventDefault();
+      }
+    });
+
+    raiz.addEventListener('click', evento => {
+      const botao = evento.target.closest('[data-comando-editor]');
+      if (!botao) return;
+      const editor = botao.closest('[data-editor-rico]');
+      const area = editor?.querySelector('[data-editor-alvo]');
+      if (!area) return;
+      area.focus();
+      document.execCommand(botao.dataset.comandoEditor, false, null);
+      sincronizarEditor(editor);
+    });
+
+    document.addEventListener('selectionchange', () => {
+      const areaEditor = document.activeElement?.closest?.('[data-editor-alvo]');
+      if (areaEditor && raiz.contains(areaEditor)) {
+        sincronizarEditor(areaEditor.closest('[data-editor-rico]'));
+      }
+    });
+
+    ['input', 'keyup', 'mouseup'].forEach(tipoEvento => {
+      raiz.addEventListener(tipoEvento, evento => {
+        const areaEditor = evento.target.closest('[data-editor-alvo]');
+        if (areaEditor) sincronizarEditor(areaEditor.closest('[data-editor-rico]'));
+      });
+    });
+
+    return {
+      sincronizarTodos: (container = raiz) => {
+        container.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditor);
+      },
+      limparTodos: (container = raiz) => {
+        container.querySelectorAll('[data-editor-rico]').forEach(editor => {
+          const area = editor.querySelector('[data-editor-alvo]');
+          if (area) area.innerHTML = '';
+          sincronizarEditor(editor);
+        });
+      }
+    };
+  };
 
   const gerarChaveData = (ano, mes, dia) => [
     ano,
@@ -327,49 +633,14 @@
     return mesclados;
   };
 
-  const obterLacunasDia = (dia, estado = estadoAtual) => {
-    const escala = obterEscalaDia(dia);
-    const lacunas = [];
-
-    for (const item of escala) {
-      const slot = extrairHorasTurno(item.horario);
-      const chave = `${dia}|${item.horario}`;
-      const edicao = estado.shiftEdits?.[chave];
-
-      if (item.lacuna) {
-        const cobertos = normalizarIntervalos(estado.covered?.[dia], slot.inicio, slot.fim);
-        let cursor = slot.inicio;
-        for (const cob of cobertos) {
-          if (cob.inicio > cursor) {
-            lacunas.push({ inicio: cursor, fim: cob.inicio, horario: formatarIntervaloTurno(cursor, cob.inicio - cursor) });
-          }
-          cursor = Math.max(cursor, cob.fim);
-        }
-        if (cursor < slot.fim) {
-          lacunas.push({ inicio: cursor, fim: slot.fim, horario: formatarIntervaloTurno(cursor, slot.fim - cursor) });
-        }
-      } else if (edicao?.cancelado) {
-        lacunas.push({ inicio: slot.inicio, fim: slot.fim, horario: item.horario });
-      } else if (edicao && typeof edicao.inicio === 'number' && typeof edicao.duracao === 'number') {
-        if (edicao.inicio > slot.inicio) {
-          lacunas.push({ inicio: slot.inicio, fim: edicao.inicio, horario: formatarIntervaloTurno(slot.inicio, edicao.inicio - slot.inicio) });
-        }
-        const fimEdicao = edicao.inicio + edicao.duracao;
-        if (fimEdicao < slot.fim) {
-          lacunas.push({ inicio: fimEdicao, fim: slot.fim, horario: formatarIntervaloTurno(fimEdicao, slot.fim - fimEdicao) });
-        }
-      }
-    }
-
-    return normalizarIntervalos(lacunas, 0, 24).map(l => ({
-      inicio: l.inicio,
-      fim: l.fim,
-      horario: formatarIntervaloTurno(l.inicio, l.fim - l.inicio)
-    }));
-  };
+  const obterLacunasDia = (dia, estado = estadoAtual) => construirLinhaDoTempoDia(dia, estado)
+    .filter(item => item.tipo === 'lacuna')
+    .map(({ inicio, fim }) => ({ inicio, fim, horario: formatarIntervaloTurno(inicio, fim - inicio) }));
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
     const escala = obterEscalaDia(dia);
+    const usuario = obterUsuarioAtual(estado);
+    const pessoaUsuario = { nome: usuario.nomeComApelido, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
     const segmentos = [];
 
     for (const item of escala) {
@@ -388,7 +659,7 @@
             tipo: 'turno',
             inicio: cob.inicio,
             fim: cob.fim,
-            pessoa: EQUIPE_CUIDADO[3],
+            pessoa: pessoaUsuario,
             temCobertura: true
           });
           cursor = Math.max(cursor, cob.fim);
@@ -408,7 +679,7 @@
             tipo: 'turno',
             inicio: edicao.inicio,
             fim: fimEdicao,
-            pessoa: item.pessoa,
+            pessoa: pessoaUsuario,
             temCobertura: false
           });
           if (fimEdicao < slot.fim) {
@@ -419,7 +690,7 @@
             tipo: 'turno',
             inicio: slot.inicio,
             fim: slot.fim,
-            pessoa: item.pessoa,
+            pessoa: pessoaUsuario,
             temCobertura: false
           });
         }
@@ -434,14 +705,27 @@
       }
     }
 
+    let linha = segmentos;
+    for (const cobertura of (estado.coberturasRede || []).filter(item => item.dia === dia)) {
+      linha = linha.flatMap(seg => {
+        const inicio = Math.max(seg.inicio, cobertura.inicio);
+        const fim = Math.min(seg.fim, cobertura.fim);
+        if (inicio >= fim) return [seg];
+        return [
+          ...(seg.inicio < inicio ? [{ ...seg, fim: inicio }] : []),
+          { tipo: 'turno', inicio, fim, pessoa: resolverPessoaRede(cobertura.responsavel, estado), temCobertura: false },
+          ...(fim < seg.fim ? [{ ...seg, inicio: fim }] : [])
+        ];
+      });
+    }
     const mesclados = [];
-    for (const seg of segmentos) {
+    for (const seg of linha) {
       const ultimo = mesclados[mesclados.length - 1];
       const mesmoTurnoZe = ultimo
         && ultimo.tipo === 'turno'
         && seg.tipo === 'turno'
-        && ultimo.pessoa?.nome === 'Zé da Manga'
-        && seg.pessoa?.nome === 'Zé da Manga'
+        && (ultimo.pessoa?.ehUsuarioAtual || ultimo.pessoa?.nome === 'Zé da Manga')
+        && (seg.pessoa?.ehUsuarioAtual || seg.pessoa?.nome === 'Zé da Manga')
         && ultimo.fim === seg.inicio;
       const mesmaLacuna = ultimo
         && ultimo.tipo === 'lacuna'
@@ -515,7 +799,138 @@
       }
     }
 
-    return { ...estado, covered, shiftEdits };
+    let atribuicoesTurno = estado.atribuicoesTurno ? { ...estado.atribuicoesTurno } : {};
+    if (novoInicio < novoFim) {
+      const novasAtribuicoes = {};
+      for (const [chave, item] of Object.entries(atribuicoesTurno)) {
+        if (!item || item.dia !== dia) {
+          novasAtribuicoes[chave] = item;
+          continue;
+        }
+        const seg = extrairHorasTurno(item.horario);
+        if (!(seg.inicio < novoFim && seg.fim > novoInicio)) {
+          novasAtribuicoes[chave] = item;
+          continue;
+        }
+        const partesRestantes = [];
+        if (seg.inicio < novoInicio) partesRestantes.push({ inicio: seg.inicio, fim: novoInicio });
+        if (seg.fim > novoFim) partesRestantes.push({ inicio: novoFim, fim: seg.fim });
+        for (const parte of partesRestantes) {
+          const horarioParte = formatarIntervaloTurno(parte.inicio, parte.fim - parte.inicio);
+          novasAtribuicoes[`${dia}|${horarioParte}`] = {
+            ...item,
+            horario: horarioParte
+          };
+        }
+      }
+      atribuicoesTurno = novasAtribuicoes;
+    }
+
+    return { ...estado, covered, shiftEdits, atribuicoesTurno };
+  };
+
+  const pessoaDisponivel = (nome, dia, inicio, fim, estado = estadoAtual) => !construirLinhaDoTempoDia(dia, estado)
+    .some(seg => seg.tipo === 'turno' && seg.pessoa.nome === nome && seg.inicio < fim && seg.fim > inicio);
+
+  const resolverAtribuicao = (chave, aceitar) => atualizarEstado(estado => {
+    const item = estado.atribuicoesTurno?.[chave];
+    if (!item) throw new Error('Este pedido já foi respondido.');
+    const { inicio, fim } = extrairHorasTurno(item.horario);
+    if (aceitar && (!obterLacunasDia(item.dia, estado).some(l => l.inicio <= inicio && l.fim >= fim)
+      || !pessoaDisponivel(item.responsavel, item.dia, inicio, fim, estado))) {
+      throw new Error('O turno mudou ou a pessoa não está disponível. Atualize a escala.');
+    }
+    const atribuicoesTurno = { ...estado.atribuicoesTurno };
+    delete atribuicoesTurno[chave];
+    return { ...estado, atribuicoesTurno,
+      coberturasRede: [...(estado.coberturasRede || []), ...(aceitar ? [{ dia: item.dia, inicio, fim, responsavel: item.responsavel }] : [])],
+      historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Recusada ou cancelada' }] };
+  });
+
+  const resolverFolga = (id, status, responsavel = '') => atualizarEstado(estado => {
+    const pedido = (estado.pedidosFolga || []).find(item => item.id === id);
+    if (!pedido || pedido.status !== 'Pendente') throw new Error('Este pedido já foi respondido.');
+    if (status === 'Aceita') {
+      const turnoAtual = construirLinhaDoTempoDia(pedido.dia, estado).find(seg => seg.tipo === 'turno'
+        && seg.pessoa.ehUsuarioAtual && seg.inicio <= pedido.inicio && seg.fim >= pedido.fim);
+      if (!turnoAtual || !obterParticipantesRede(estado).some(p => p.nome === responsavel)
+        || !pessoaDisponivel(responsavel, pedido.dia, pedido.inicio, pedido.fim, estado)) {
+        throw new Error('Escala alterada ou substituto indisponível. Revise o pedido.');
+      }
+    }
+    return { ...estado,
+      pedidosFolga: estado.pedidosFolga.map(item => item.id === id ? { ...item, status, responsavel } : item),
+      coberturasRede: [...(estado.coberturasRede || []), ...(status === 'Aceita' ? [{ dia: pedido.dia, inicio: pedido.inicio, fim: pedido.fim, responsavel }] : [])] };
+  });
+
+  const sairDaRede = responsavel => atualizarEstado(estado => {
+    const usuario = obterUsuarioAtual(estado);
+    if (!obterParticipantesRede(estado).some(p => p.nome === responsavel) || responsavel === usuario.nomeComApelido) throw new Error('Escolha outro participante ativo.');
+    const dias = [...new Set([...Object.keys(ESCALAS_FIXAS), ...Object.keys(estado.covered || {}), ...Object.keys(estado.shiftEdits || {}).map(k => k.split('|')[0])])].filter(dia => dia >= HOJE);
+    const transferencias = dias.flatMap(dia => construirLinhaDoTempoDia(dia, estado)
+      .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
+      .map(seg => ({ dia, inicio: seg.inicio, fim: seg.fim, responsavel })));
+    if (transferencias.some(seg => !pessoaDisponivel(responsavel, seg.dia, seg.inicio, seg.fim, estado))) throw new Error('O substituto possui conflito de horários. Escolha outra pessoa.');
+    return { ...estado, redeSaiu: true, administradorRede: responsavel,
+      coberturasRede: [...(estado.coberturasRede || []), ...transferencias],
+      pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item),
+      perfilUsuario: { ...estado.perfilUsuario, papel: 'Participante' } };
+  });
+
+  const mostrarSaidaRede = () => {
+    if (!estadoAtual.redeSaiu) return;
+    let dialogo = document.getElementById('dialogo-rede-encerrada');
+    if (!dialogo) {
+      dialogo = document.createElement('dialog'); dialogo.id = 'dialogo-rede-encerrada';
+      dialogo.className = 'dialogo-mvp'; dialogo.setAttribute('aria-labelledby', 'titulo-rede-encerrada');
+      dialogo.innerHTML = '<h2 id="titulo-rede-encerrada">Você saiu da rede nesta simulação</h2><p>A administração e seus turnos futuros foram transferidos. A rotina permanece preservada nesta sessão.</p><button type="button" class="botao botao--primario">Voltar à demonstração como participante</button>';
+      dialogo.addEventListener('cancel', evento => evento.preventDefault());
+      dialogo.querySelector('button').addEventListener('click', () => {
+        atualizarEstado(estado => ({ ...estado, redeSaiu: false })); location.href = 'home.html';
+      });
+      document.body.append(dialogo);
+    }
+    if (!dialogo.open) dialogo.showModal();
+  };
+  document.addEventListener('DOMContentLoaded', mostrarSaidaRede);
+
+  const executarLembretes = (ate, preferencias = {}) => {
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(ate) || !Number.isFinite(Date.parse(ate))) throw new Error('Informe uma data e hora válidas.');
+    const estado = estadoAtual;
+    const desde = estado.relogioLembretes || `${HOJE}T00:00`;
+    if (ate < desde) throw new Error('O relógio deve avançar.');
+    const novos = [];
+    const existentes = new Set((estado.lembretesExecutados || []).map(item => item.id));
+    const incluir = (id, quando, texto) => {
+      if (quando > desde && quando <= ate && !existentes.has(id)) novos.push({ id, quando, texto, canal: preferencias.canalNotificacao || 'app-email' });
+    };
+    if (preferencias.notificacoesMedicacao !== false) {
+      for (const dose of obterDoses(estado).filter(item => item.estado === 'prevista')) {
+        const minutos = Number(preferencias.antecedenciaMedicacao || 30);
+        const data = new Date(`${HOJE}T${String(parseInt(dose.hora, 10)).padStart(2, '0')}:00:00Z`);
+        data.setUTCMinutes(data.getUTCMinutes() - minutos);
+        incluir(`dose-${HOJE}-${dose.chave}`, data.toISOString().slice(0, 16), `Horário do remédio: ${dose.nome} · ${dose.hora}`);
+      }
+    }
+    const cuidar = { pausa: true, apoio: true, agradecer: false, ...estado.cuidar?.preferencias };
+    const usuario = obterUsuarioAtual(estado);
+    const primeiro = new Date(`${desde.slice(0, 10)}T00:00:00Z`);
+    const ultimo = new Date(`${ate.slice(0, 10)}T00:00:00Z`);
+    if ((ultimo - primeiro) / 86400000 > 366) throw new Error('Avance no máximo um ano por vez.');
+    for (let data = primeiro; data <= ultimo; data.setUTCDate(data.getUTCDate() + 1)) {
+      const dia = data.toISOString().slice(0, 10);
+      if (cuidar.pausa) for (const turno of construirLinhaDoTempoDia(dia, estado)) {
+        if (turno.tipo === 'turno' && turno.pessoa.nome === usuario.nomeComApelido && turno.fim - turno.inicio > 5) {
+          incluir(`pausa-${dia}-${turno.inicio}`, `${dia}T${String(turno.inicio + 5).padStart(2, '0')}:00`, 'Seu turno passou de cinco horas. Combine uma pausa com a rede.');
+        }
+      }
+      if (data.getUTCDay() === 0) {
+        if (cuidar.apoio) incluir(`apoio-${dia}`, `${dia}T18:00`, 'Cuidar cansa. Pedir ajuda também é cuidar.');
+        if (cuidar.agradecer) incluir(`agradecer-${dia}`, `${dia}T18:00`, 'Que tal agradecer alguém da rede nesta semana?');
+      }
+    }
+    atualizarEstado(atual => ({ ...atual, relogioLembretes: ate, lembretesExecutados: [...(atual.lembretesExecutados || []), ...novos] }));
+    return novos;
   };
 
   const possuiLacuna = (dia, estado = estadoAtual) =>
@@ -526,7 +941,7 @@
     if (!lacunas.length) return 'Coberto';
     const totalHoras = lacunas.reduce((soma, l) => soma + (l.fim - l.inicio), 0);
     if (totalHoras >= 24) return 'Descoberto';
-    if (LACUNAS_TURNO[dia]?.[1] === 'Descoberto' && !estado.covered?.[dia]) return 'Descoberto';
+
     return 'Parcial';
   };
 
@@ -563,7 +978,8 @@
       const meta = obterMetaDia(chave);
       const indicadoresHtml = (meta.indicadores || []).join('');
       const rotulo = `${formatarDataCurta(chave, true)}${meta.sufixoRotulo || ''}`;
-      conteudo += `<button type="button" data-selecionar-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="${escaparHtml(rotulo)}">${dia}${indicadoresHtml ? `<small class="calendario-mensal__indicadores" aria-hidden="true">${indicadoresHtml}</small>` : ''}</button>`;
+      const classes = (meta.classes || []).filter(Boolean).join(' ');
+      conteudo += `<button type="button"${classes ? ` class="${escaparHtml(classes)}"` : ''} data-selecionar-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="${escaparHtml(rotulo)}">${dia}${indicadoresHtml ? `<small class="calendario-mensal__indicadores" aria-hidden="true">${indicadoresHtml}</small>` : ''}</button>`;
     }
 
     gradeDias.innerHTML = conteudo;
@@ -614,30 +1030,125 @@
         } else {
           previa.focus();
           previa.select();
-          if (retorno) retorno.textContent = 'Selecione e copie a mensagem para compartilhar.';
+          if (retorno) retorno.textContent = 'Selecione e copie a mensagem para mandar.';
         }
       } catch (erro) {
         if (erro.name === 'AbortError') return;
         previa.focus();
         previa.select();
-        if (retorno) retorno.textContent = 'Selecione e copie a mensagem manualmente.';
+        if (retorno) retorno.textContent = 'Selecione e copie a mensagem.';
       }
     });
 
     return atualizarPrevia;
   }
 
+  function confirmarAcao({
+    titulo = 'Confirmar ação',
+    descricao = '',
+    confirmarTexto = 'Confirmar',
+    cancelarTexto = 'Voltar',
+    perigoso = true
+  } = {}) {
+    return new Promise(resolve => {
+      let dialogo = document.getElementById('dialogo-confirmacao-mvp');
+      if (!dialogo) {
+        dialogo = document.createElement('dialog');
+        dialogo.id = 'dialogo-confirmacao-mvp';
+        dialogo.className = 'dialogo-mvp dialogo-mvp--compacto';
+        dialogo.setAttribute('aria-labelledby', 'titulo-confirmacao-mvp');
+        dialogo.innerHTML = `
+          <div class="dialogo-mvp__cabecalho">
+            <h2 id="titulo-confirmacao-mvp"></h2>
+          </div>
+          <p data-confirmacao-descricao></p>
+          <div class="dialogo-mvp__acoes">
+            <button type="button" class="botao botao--secundario" data-confirmacao-cancelar></button>
+            <button type="button" class="botao" data-confirmacao-ok></button>
+          </div>
+        `;
+        document.body.appendChild(dialogo);
+      }
+
+      const tituloEl = dialogo.querySelector('#titulo-confirmacao-mvp');
+      const descEl = dialogo.querySelector('[data-confirmacao-descricao]');
+      const btnCancelar = dialogo.querySelector('[data-confirmacao-cancelar]');
+      const btnOk = dialogo.querySelector('[data-confirmacao-ok]');
+
+      tituloEl.textContent = titulo;
+      descEl.textContent = descricao;
+      descEl.hidden = !descricao;
+      btnCancelar.textContent = cancelarTexto;
+      btnOk.textContent = confirmarTexto;
+      btnOk.className = `botao ${perigoso ? 'botao--perigo' : 'botao--primario'}`;
+
+      let resolvido = false;
+      const finalizar = resultado => {
+        if (resolvido) return;
+        resolvido = true;
+        btnCancelar.removeEventListener('click', aoCancelar);
+        btnOk.removeEventListener('click', aoConfirmar);
+        dialogo.removeEventListener('close', aoFechar);
+        if (dialogo.open) dialogo.close();
+        resolve(resultado);
+      };
+
+      const aoCancelar = () => finalizar(false);
+      const aoConfirmar = () => finalizar(true);
+      const aoFechar = () => finalizar(false);
+
+      btnCancelar.addEventListener('click', aoCancelar);
+      btnOk.addEventListener('click', aoConfirmar);
+      dialogo.addEventListener('close', aoFechar);
+      dialogo.showModal();
+      btnCancelar.focus();
+    });
+  }
+
   let timerStatus = null;
-  function anunciarStatus(elementoStatus, mensagem) {
+  function anunciarStatus(elementoStatus, mensagem, opcoes = {}) {
     if (!elementoStatus) return;
     clearTimeout(timerStatus);
-    elementoStatus.textContent = '';
+
+    const dados = typeof mensagem === 'object' && mensagem !== null
+      ? mensagem
+      : { titulo: opcoes.titulo || '', descricao: mensagem, ...opcoes };
+
+    const titulo = String(dados.titulo || '').trim();
+    const descricao = String(dados.descricao || '').trim();
+    if (!titulo && !descricao) {
+      elementoStatus.innerHTML = '';
+      elementoStatus.removeAttribute('data-mvp-status');
+      elementoStatus.setAttribute('data-mvp-status', '');
+      return;
+    }
+
+    const limpar = () => {
+      clearTimeout(timerStatus);
+      elementoStatus.innerHTML = '';
+      elementoStatus.setAttribute('data-mvp-status', '');
+    };
+
+    const avatarHtml = dados.avatar
+      ? `<img class="status-mvp__avatar" src="${escaparHtml(dados.avatar)}" alt="" aria-hidden="true">`
+      : '';
+    const tituloHtml = titulo ? `<strong>${escaparHtml(titulo)}</strong>` : '';
+    const descricaoHtml = descricao
+      ? (titulo ? `<span>${escaparHtml(descricao)}</span>` : `<strong>${escaparHtml(descricao)}</strong>`)
+      : '';
+
+    elementoStatus.setAttribute('data-mvp-status', dados.tipo || '');
+    elementoStatus.innerHTML = '';
     requestAnimationFrame(() => {
-      elementoStatus.textContent = mensagem;
+      elementoStatus.innerHTML = `
+        ${avatarHtml}
+        <div class="status-mvp__conteudo">${tituloHtml}${descricaoHtml}</div>
+        <button type="button" class="botao botao--secundario botao--pequeno status-mvp__fechar">Fechar</button>
+      `;
+      elementoStatus.querySelector('.status-mvp__fechar')?.addEventListener('click', limpar);
     });
-    timerStatus = setTimeout(() => {
-      elementoStatus.textContent = '';
-    }, 5000);
+
+    timerStatus = setTimeout(limpar, 6000);
   }
 
   const PORTA_REMEDIOS = [
@@ -657,7 +1168,7 @@
       responsavel: 'Beatriz da Silva (Bea)',
       itens: [
         ['Losartana', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
-        ['Metformina', { estado: 'nao-administrado', quem: 'Bea', motivo: 'Motivo não informado' }],
+        ['Metformina', { estado: 'nao-administrado', quem: 'Bea', motivo: 'Não disseram o motivo' }],
         ['Hidroclorotiazida', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
         ['Cálcio + vit. D', { estado: 'administrado', quem: 'Bea', horario: '08:16' }],
         ['Ácido fólico', { estado: 'administrado', quem: 'Bea', horario: '08:16' }]
@@ -665,7 +1176,8 @@
     },
     { hora: '12h', momento: 'agora', responsavel: 'Zé da Manga (Zé)', itens: [['Omeprazol'], ['Metformina'], ['AAS'], ['Vitamina B12']] },
     { hora: '14h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Carbamazepina'], ['Colírio']] },
-    { hora: '18h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Metformina'], ['Losartana'], ['Bombinha']] },
+    { hora: '18h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Losartana'], ['Bombinha']] },
+    { hora: '20h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Metformina']] },
     { hora: '22h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Sinvastatina'], ['Carbamazepina'], ['Pomada']] }
   ];
 
@@ -673,15 +1185,83 @@
 
   const chaveDose = (hora, nome) => `${hora}|${nome}`;
 
+  const normalizarHoraPorta = hora => {
+    const num = parseInt(String(hora || ''), 10);
+    return Number.isFinite(num) ? `${num}h` : '';
+  };
+
+  const obterGruposPortaRemedios = (estado = estadoAtual) => {
+    const editados = estado.itensEditados || {};
+    const registros = estado.registrosDose || {};
+    const grupos = PORTA_REMEDIOS.map(g => ({
+      ...g,
+      itens: g.itens.filter(([id, inicial]) => {
+        const edicao = editados[id];
+        return inicial || registros[chaveDose(g.hora, id)]
+          || (edicao?.tipo !== 'Insumo' && (!edicao?.horarioDefinido || edicao.horarioDefinido === g.hora));
+      }).map(item => [...item])
+    }));
+    const excluidos = new Set(estado.itensExcluidos || []);
+    const usuario = obterUsuarioAtual(estado);
+
+    const reagendados = Object.entries(editados).filter(([, item]) => item.horarioDefinido)
+      .map(([chave, item]) => ({ ...item, chave, horarios: item.horarioDefinido }));
+    for (const extra of [...(estado.itensExtras || []), ...reagendados]) {
+      if (extra?.tipo !== 'Medicamento' || !extra.horarios || excluidos.has(extra.chave || extra.nome)) continue;
+      const hora = normalizarHoraPorta(extra.horarios);
+      if (!hora) continue;
+      let grupo = grupos.find(g => g.hora === hora);
+      if (!grupo) {
+        const horaNum = parseInt(hora, 10);
+        grupo = {
+          hora,
+          momento: horaNum < 12 ? 'passado' : horaNum === 12 ? 'agora' : 'depois',
+          responsavel: usuario.nomeComApelido,
+          itens: []
+        };
+        grupos.push(grupo);
+      }
+      const id = extra.chave || extra.nome;
+      if (!grupo.itens.some(([chave]) => chave === id)) {
+        grupo.itens.push([id]);
+      }
+    }
+
+    for (const [chaveRegistro] of Object.entries(registros)) {
+      const [hora, id] = chaveRegistro.split('|');
+      const origem = editados[id] || estado.itensExtras?.find(item => (item.chave || item.nome) === id);
+      if (!origem || excluidos.has(id) || !/^\d{1,2}h$/.test(hora)) continue;
+      let grupo = grupos.find(item => item.hora === hora);
+      if (!grupo) {
+        const horaNum = parseInt(hora, 10);
+        grupo = {
+          hora, momento: horaNum < 12 ? 'passado' : horaNum === 12 ? 'agora' : 'depois',
+          responsavel: usuario.nomeComApelido, itens: []
+        };
+        grupos.push(grupo);
+      }
+      if (!grupo.itens.some(([chave]) => chave === id)) grupo.itens.push([id]);
+    }
+
+    return grupos
+      .map(g => ({ ...g, itens: g.itens.filter(([nome]) => !excluidos.has(nome)) }))
+      .filter(g => g.itens.length > 0)
+      .sort((a, b) => parseInt(a.hora, 10) - parseInt(b.hora, 10));
+  };
+
   const obterDoses = (estado = estadoAtual) => {
     const registros = estado.registrosDose || {};
-    return PORTA_REMEDIOS.flatMap(grupo => grupo.itens.map(([nome, base]) => {
-      const chave = chaveDose(grupo.hora, nome);
+    return obterGruposPortaRemedios(estado).flatMap(grupo => grupo.itens.map(([nome, base]) => {
+      const itemId = nome;
+      const chave = chaveDose(grupo.hora, itemId);
+      const nomeExibido = estado.itensEditados?.[itemId]?.nome
+        || estado.itensExtras?.find(item => (item.chave || item.nome) === itemId)?.nome || itemId;
       const meu = registros[chave];
       const registro = meu || base || { estado: 'prevista' };
       return {
         chave,
-        nome,
+        itemId,
+        nome: nomeExibido,
         hora: grupo.hora,
         momento: grupo.momento,
         responsavel: grupo.responsavel,
@@ -689,6 +1269,7 @@
         quem: registro.quem || '',
         horario: registro.horario || '',
         motivo: registro.motivo || '',
+        origemExterna: registro.origemExterna || '',
         meu: Boolean(meu)
       };
     }));
@@ -696,19 +1277,45 @@
 
   const obterCompartimentos = (estado = estadoAtual) => {
     const doses = obterDoses(estado);
-    return PORTA_REMEDIOS.map(grupo => {
+    const escala = construirLinhaDoTempoDia(HOJE, estado);
+    return obterGruposPortaRemedios(estado).map(grupo => {
+      const hora = parseInt(grupo.hora, 10);
+      const turno = escala.find(item => item.tipo === 'turno' && hora >= item.inicio && hora < item.fim);
+      const responsavel = turno?.pessoa?.nome || '';
       const itens = doses.filter(dose => dose.hora === grupo.hora);
       const faltam = itens.filter(dose => dose.estado !== 'administrado').length;
       const naoDados = itens.filter(dose => dose.estado === 'nao-administrado').length;
       const situacao = faltam === 0 ? 'dado' : naoDados || grupo.momento === 'passado' ? 'falta' : grupo.momento;
-      return { hora: grupo.hora, responsavel: grupo.responsavel, momento: grupo.momento, itens, faltam, completo: faltam === 0, situacao };
+      return { hora: grupo.hora, responsavel, momento: grupo.momento, itens, faltam, completo: faltam === 0, situacao };
     });
   };
 
-  const registrarDose = (chave, registro) => atualizarEstado(estado => ({
-    ...estado,
-    registrosDose: { ...(estado.registrosDose || {}), [chave]: registro }
-  }));
+  const prepararOrigemEstoque = (form, dose) => {
+    if (!form || !dose) return;
+    let campo = form.querySelector('[data-origem-estoque]');
+    if (!campo) {
+      campo = document.createElement('label');
+      campo.dataset.origemEstoque = '';
+      campo.textContent = 'Acabou o remédio em casa. Se você já deu, diga de onde veio (não vai sair do que tem em casa):';
+      const input = document.createElement('textarea');
+      input.name = 'origemExterna'; input.maxLength = 300; input.rows = 2;
+      campo.append(input);
+      form.prepend(campo);
+    }
+    const semSaldo = obterEstoque(dose.itemId) === 0 && dose.estado !== 'administrado';
+    campo.hidden = !semSaldo;
+    campo.querySelector('textarea').required = semSaldo;
+    campo.querySelector('textarea').value = '';
+  };
+
+  const registrarDose = (chave, registro) => atualizarEstado(estado => {
+    const dose = obterDoses(estado).find(item => item.chave === chave);
+    if (!dose) throw new Error('Dose não encontrada. Atualize a rotina.');
+    if (registro.estado === 'administrado' && dose.estado !== 'administrado' && obterEstoque(dose.itemId, estado) === 0 && !registro.origemExterna?.trim()) {
+      throw new Error('Estoque zerado. Reponha o saldo ou informe a origem externa da unidade utilizada.');
+    }
+    return { ...estado, registrosDose: { ...(estado.registrosDose || {}), [chave]: registro } };
+  });
 
   const desfazerDose = chave => atualizarEstado(estado => {
     const registros = { ...(estado.registrosDose || {}) };
@@ -716,17 +1323,41 @@
     return { ...estado, registrosDose: registros };
   });
 
-  const obterEstoque = (nome, estado = estadoAtual) => {
-    const base = estado.estoqueBase?.[nome] ?? ESTOQUE_INICIAL[nome];
-    if (base === undefined) return null;
-    const usados = Object.entries(estado.registrosDose || {})
-      .filter(([chave, registro]) => chave.split('|')[1] === nome && registro.estado === 'administrado').length;
-    return Math.max(0, base - usados);
+  const contarUnidadesUsadas = (id, estado) => Object.entries(estado.registrosDose || {})
+    .filter(([chave, registro]) => chave.split('|')[1] === id && registro.estado === 'administrado' && !registro.origemExterna).length;
+
+  const obterEstoque = (id, estado = estadoAtual) => {
+    const nomeAnterior = estado.itensEditados?.[id]?.nome
+      || estado.itensExtras?.find(item => item.chave === id)?.nome;
+    const base = estado.estoqueBase?.[id] ?? estado.estoqueBase?.[nomeAnterior] ?? ESTOQUE_INICIAL[id];
+    return base === undefined ? null : Math.max(0, base - contarUnidadesUsadas(id, estado));
   };
 
-  const reporEstoque = (nome, quantidade) => atualizarEstado(estado => {
-    const base = estado.estoqueBase?.[nome] ?? ESTOQUE_INICIAL[nome] ?? 0;
-    return { ...estado, estoqueBase: { ...(estado.estoqueBase || {}), [nome]: base + quantidade } };
+  const definirSaldoEstoque = (estado, id, quantidade) => ({
+    ...estado.estoqueBase, [id]: quantidade + contarUnidadesUsadas(id, estado)
+  });
+
+  const reporEstoque = (id, quantidade, observacao = '') => {
+    if (!Number.isInteger(quantidade) || quantidade < 1) return estadoAtual;
+    return atualizarEstado(estado => {
+      const anotacao = {
+        quantidade, autor: obterUsuarioAtual(estado).nomeComApelido,
+        dia: HOJE, observacao: observacao.trim()
+      };
+      return {
+        ...estado,
+        estoqueBase: definirSaldoEstoque(estado, id, (obterEstoque(id, estado) ?? 0) + quantidade),
+        reposicoesEstoque: {
+          ...estado.reposicoesEstoque,
+          [id]: [anotacao, ...(estado.reposicoesEstoque?.[id] || [])]
+        }
+      };
+    });
+  };
+
+  window.addEventListener('pageshow', evento => {
+    if (!evento.persisted) return;
+    if (JSON.stringify(carregarEstado()) !== JSON.stringify(estadoAtual)) location.reload();
   });
 
   window.MutiraoCuidado = {
@@ -734,8 +1365,30 @@
     EQUIPE_CUIDADO,
     LACUNAS_TURNO,
     obterEstado: () => estadoAtual,
+    obterPreferencias: () => {
+      try { return JSON.parse(sessionStorage.getItem('mutirao-configuracoes-sessao-v1') || '{}'); }
+      catch { return {}; }
+    },
     atualizarEstado,
+    obterUsuarioAtual,
+    nomePessoaAcompanhada,
+    obterCompromissos,
+    obterCompromissosFuturos,
+    obterProximoCompromisso,
+    obterParticipantesRede,
+    resolverConvite,
+    resolverAtribuicao,
+    resolverFolga,
+    executarLembretes,
+    sairDaRede,
+    mostrarSaidaRede,
+    pessoaDisponivel,
+    resolverPessoaRede,
+    normalizarBusca,
+    vincularFiltro,
     escaparHtml,
+    sanitizarHtmlEditor,
+    inicializarEditoresRicos,
     gerarChaveData,
     formatarData,
     formatarDataCurta,
@@ -751,13 +1404,18 @@
     obterEscalaDia,
     renderizarCalendarioMensal,
     inicializarCompartilhamento,
+    confirmarAcao,
     anunciarStatus,
     chaveDose,
     obterDoses,
+    obterResumoMedicamentos: (estado = estadoAtual) => [...new Set(obterDoses(estado).map(dose => `${dose.nome} · ${dose.hora}`))],
     obterCompartimentos,
     registrarDose,
+    prepararOrigemEstoque,
     desfazerDose,
     obterEstoque,
-    reporEstoque
+    definirSaldoEstoque,
+    reporEstoque,
+    restaurarEstadoPadrao
   };
 })();
