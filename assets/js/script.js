@@ -114,11 +114,82 @@ for (const link of [...linksMenu, ...atalhosInferiores, perfilMobile].filter(Boo
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const data = window.MutiraoCuidado?.HOJE;
+  if (!data) return;
+  const dataLonga = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' })
+    .format(new Date(data + 'T12:00:00'));
+  document.querySelectorAll('[data-contexto-demonstracao]').forEach(elemento => {
+    elemento.textContent = 'Demonstração · ' + dataLonga + ' · referência das 12h';
+  });
+});
+
+const painelNotificacoes = document.querySelector('.menu-notificacoes');
+const listaNotificacoes = painelNotificacoes?.querySelector('.menu-notificacoes__lista');
+const gatilhoNotificacoes = painelNotificacoes?.querySelector('summary');
+const CHAVE_NOTIFICACOES = 'mutirao-notificacoes-sessao-v1';
+let notificacoesLocais = [];
+
+try {
+  const salvo = JSON.parse(sessionStorage.getItem(CHAVE_NOTIFICACOES) || '[]');
+  if (Array.isArray(salvo)) notificacoesLocais = salvo;
+} catch {
+  // Mantém as notificações desta página quando o armazenamento estiver indisponível.
+}
+
+function salvarNotificacoes() {
+  try {
+    sessionStorage.setItem(CHAVE_NOTIFICACOES, JSON.stringify(notificacoesLocais));
+  } catch {
+    // O painel continua funcional nesta página.
+  }
+}
+
+function renderizarNotificacoes() {
+  if (!listaNotificacoes || !gatilhoNotificacoes) return;
+  listaNotificacoes.querySelectorAll('[data-notificacao-local]').forEach(item => item.remove());
+  listaNotificacoes.prepend(...notificacoesLocais.map(({ titulo, descricao, destino }) => {
+    const item = document.createElement('li');
+    item.className = 'notificacao';
+    item.dataset.notificacaoLocal = '';
+    const link = document.createElement('a');
+    link.className = 'notificacao__link';
+    link.href = destino === 'configuracoes.html' ? destino : 'ajuda.html#formulario-ajuda';
+    const bloco = document.createElement('div');
+    const nome = document.createElement('h3');
+    const texto = document.createElement('p');
+    nome.textContent = titulo;
+    texto.textContent = descricao;
+    bloco.append(nome, texto);
+    link.append(bloco);
+    item.append(link);
+    return item;
+  }));
+
+  const novas = notificacoesLocais.filter(item => !item.lida).length;
+  const total = listaNotificacoes.children.length;
+  gatilhoNotificacoes.setAttribute('aria-label', 'Notificações (' + total + ' itens' + (novas ? ', ' + novas + ' novas' : '') + ')');
+  gatilhoNotificacoes.toggleAttribute('data-nova-notificacao', novas > 0);
+}
+
+window.MutiraoNotificacoes = {
+  registrar(titulo, descricao, destino) {
+    notificacoesLocais.unshift({ titulo, descricao, destino, lida: false });
+    notificacoesLocais = notificacoesLocais.slice(0, 12);
+    salvarNotificacoes();
+    renderizarNotificacoes();
+  }
+};
+
+renderizarNotificacoes();
+
 for (const menuSuspenso of document.querySelectorAll('.barra-topo details')) {
   menuSuspenso.addEventListener('toggle', () => {
     if (!menuSuspenso.open) return;
     if (menuSuspenso.classList.contains('menu-notificacoes')) {
-      menuSuspenso.querySelector('.botao-icone--notificacao')?.removeAttribute('data-nova-notificacao');
+      notificacoesLocais.forEach(item => { item.lida = true; });
+      salvarNotificacoes();
+      renderizarNotificacoes();
     }
     for (const outro of document.querySelectorAll('.barra-topo details[open]')) {
       if (outro !== menuSuspenso) outro.open = false;
@@ -167,21 +238,23 @@ const criarDialogoSair = () => {
   dialogo.setAttribute('aria-labelledby', 'titulo-sair-conta');
   dialogo.innerHTML = `
     <div class="dialogo-mvp__cabecalho">
-      <h2 id="titulo-sair-conta">Sair da sua conta?</h2>
+      <h2 id="titulo-sair-conta">Voltar ao Início?</h2>
       <button type="button" class="botao-icone" data-cancelar-saida aria-label="Fechar">
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
     </div>
-    <p>Você será redirecionado para a tela inicial do Mutirão nesta sessão.</p>
+    <p>As alterações da demonstração continuam disponíveis nesta aba.</p>
     <div class="dialogo-mvp__acoes">
       <button type="button" class="botao botao--secundario" data-cancelar-saida>Cancelar</button>
-      <button type="button" class="botao botao--perigo" data-confirmar-saida>Sair da conta</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-saida>Voltar ao Início</button>
     </div>
   `;
   dialogo.addEventListener('click', evento => {
     if (evento.target === dialogo) dialogo.close();
   });
-  dialogo.querySelector('[data-cancelar-saida]')?.addEventListener('click', () => dialogo.close());
+  dialogo.querySelectorAll('[data-cancelar-saida]').forEach(botao => {
+    botao.addEventListener('click', () => dialogo.close());
+  });
   dialogo.querySelector('[data-confirmar-saida]')?.addEventListener('click', () => {
     try {
       sessionStorage.removeItem(CHAVE_MENU_STORAGE);
@@ -226,8 +299,8 @@ function inicializarBuscaTopo() {
   campo.id = 'campo-busca-topo';
   campo.type = 'search';
   campo.className = 'busca-topo__input';
-  campo.placeholder = 'Pesquisar no menu...';
-  campo.setAttribute('aria-label', 'Encontrar no menu');
+  campo.placeholder = 'Ex.: Agenda ou Documentos';
+  campo.setAttribute('aria-label', 'Buscar uma página');
   campo.setAttribute('autocomplete', 'off');
 
   const painel = document.createElement('div');
@@ -248,8 +321,9 @@ function inicializarBuscaTopo() {
   container.append(gatilhoBuscaTopo, campo, painel);
 
   function renderizarResultados() {
-    const termo = campo.value.trim().toLocaleLowerCase('pt-BR');
-    const correspondencias = itensPesquisaveis.filter(item => item.rotulo.toLocaleLowerCase('pt-BR').includes(termo));
+    const normalizar = texto => texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
+    const termo = normalizar(campo.value.trim());
+    const correspondencias = itensPesquisaveis.filter(item => normalizar(item.rotulo).includes(termo));
 
     lista.replaceChildren(...correspondencias.map(item => {
       const itemLista = document.createElement('li');
@@ -263,7 +337,7 @@ function inicializarBuscaTopo() {
 
     status.textContent = correspondencias.length
       ? `${correspondencias.length} ${correspondencias.length === 1 ? 'item encontrado' : 'itens encontrados'}.`
-      : 'Nenhum item encontrado.';
+      : 'Nenhuma página encontrada. Tente outro nome ou use o menu.';
   }
 
   function definirBuscaAberta(aberta) {

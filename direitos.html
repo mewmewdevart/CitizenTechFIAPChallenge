@@ -76,7 +76,7 @@
       <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
           class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
@@ -127,13 +127,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
     <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -167,7 +167,7 @@
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
   </aside>
   <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="direitos">
     <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
@@ -196,19 +196,19 @@
             <span class="selo selo--info">Maria das Dores</span>
             <span class="selo selo--info" data-simulador-idade-selo>79 anos</span>
           </div>
-          <h2 id="titulo-simulador-mari">Você ainda não verificou os direitos da Maria</h2>
+          <h2 id="titulo-simulador-mari">Veja quais serviços e benefícios podem apoiar a Mari</h2>
           <p class="direitos-banner__descricao">Responda a 7 perguntas rápidas sobre a rotina, renda, saúde e cadastro
             dela para descobrir quais benefícios e serviços do SUS/INSS podem se encaixar melhor.</p>
           <div class="direitos-simulador__acoes">
-            <button type="button" class="botao direitos-banner__cta" data-simulador-iniciar>Verificar direitos <i
+            <button type="button" class="botao direitos-banner__cta" data-simulador-iniciar>Responder questionário <i
                 class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
             <a class="botao direitos-banner__secundario" href="#localidade-servicos">Serviços na sua cidade</a>
           </div>
         </div>
         <div class="direitos-banner__arte" aria-hidden="true">
           <picture>
-            <source srcset="assets/media/idosa-cuidadores-mascotes.webp" type="image/webp" />
-            <img src="assets/media/idosa-cuidadores-mascotes.png" alt="" width="840" height="672" loading="lazy" />
+            <source srcset="assets/media/ilustracoes/idosa-cuidadores-mascotes.webp" type="image/webp" />
+            <img src="assets/media/ilustracoes/idosa-cuidadores-mascotes.png" alt="" width="840" height="672" loading="lazy" />
           </picture>
         </div>
       </div>
@@ -233,22 +233,19 @@
               <button type="button" data-simulador-valor="familia" aria-pressed="false">Com a família</button>
               <button type="button" data-simulador-valor="instituicao" aria-pressed="false">Casa de repouso</button>
             </div>
-            <p class="direitos-simulador__nota">A renda per capita considera quem vive sob o mesmo teto.</p>
+            <p class="direitos-simulador__nota">A resposta descreve a moradia da Mari e aparece no resumo.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="1" hidden>
             <h3 id="pergunta-renda" tabindex="-1">Qual é a renda por pessoa da casa?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-renda"
               data-simulador-grupo="renda">
-              <button type="button" data-simulador-valor="ate-um-quarto" aria-pressed="false">Até R$ 405 (1/4 do
-                mínimo)</button>
-              <button type="button" data-simulador-valor="ate-meio" aria-pressed="false">Até R$ 810 (1/2
-                mínimo)</button>
-              <button type="button" data-simulador-valor="acima-meio" aria-pressed="false">Acima de R$ 810</button>
+              <button type="button" data-simulador-valor="ate-um-quarto" aria-pressed="false">Até 1/4 do salário mínimo</button>
+              <button type="button" data-simulador-valor="ate-meio" aria-pressed="false">Acima de 1/4 e até 1/2 do salário mínimo</button>
+              <button type="button" data-simulador-valor="acima-meio" aria-pressed="false">Acima de 1/2 do salário mínimo</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">Referência de 2026: BPC exige até R$ 405,25 por pessoa; Tarifa Social,
-              até R$ 810,50.</p>
+            <p class="direitos-simulador__nota">Selecione a faixa aproximada. A composição da família e a renda são verificadas pelo órgão responsável.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="2" hidden>
@@ -313,15 +310,15 @@
               class="fa-solid fa-arrow-left" aria-hidden="true"></i> <span>Voltar ao início</span></button>
           <button type="button" class="botao botao--primario" data-simulador-proximo disabled>Próxima pergunta <i
               class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-          <button type="submit" class="botao botao--primario" data-simulador-concluir hidden disabled>Ver o que a Mari
-            tem direito <i class="fa-solid fa-check" aria-hidden="true"></i></button>
+          <button type="submit" class="botao botao--primario" data-simulador-concluir hidden disabled>Ver resultado da triagem <i class="fa-solid fa-check" aria-hidden="true"></i></button>
         </div>
       </form>
 
       <div class="direitos-simulador__etapa" data-etapa="resultado" aria-live="polite" hidden>
         <div class="direitos-resumo__cabecalho">
           <span class="selo selo--info">Resultado estimado · Maria das Dores (Mari)</span>
-          <h2 data-simulador-titulo></h2>
+          <h2 data-simulador-titulo tabindex="-1"></h2>
+        <p class="direitos-simulador__nota">Triagem informativa. A concessão e os critérios devem ser confirmados nos canais oficiais.</p>
           <p class="direitos-simulador__nota" data-simulador-resumo-respostas></p>
         </div>
         <ul class="direitos-simulador__resultados" data-simulador-resultados></ul>
@@ -333,8 +330,6 @@
             href="https://www.gov.br/pt-br/servicos/inscrever-se-no-cadastro-unico-para-programas-sociais-do-governo-federal"
             target="_blank" rel="noopener noreferrer">Como fazer o Cadastro Único</a>
         </div>
-        <p class="direitos-simulador__nota">Esta prévia não substitui a análise oficial feita pelo CRAS, INSS ou UBS.
-        </p>
       </div>
     </section>
 
@@ -389,7 +384,7 @@
               <h3>UBS na região</h3>
               <p data-localidade-ubs-desc>Encontre Unidades Básicas de Saúde para acompanhamento e encaminhamentos.</p>
             </div>
-            <a class="botao botao--secundario botao--pequeno" href="#" target="_blank" rel="noopener noreferrer"
+            <a class="botao botao--secundario botao--pequeno" target="_blank" rel="noopener noreferrer"
               data-localidade-link-ubs>Ver no mapa</a>
           </article>
 
@@ -399,7 +394,7 @@
               <h3>CRAS e CadÚnico</h3>
               <p data-localidade-cras-desc>Localize o CRAS do município para fazer ou atualizar o Cadastro Único e BPC.</p>
             </div>
-            <a class="botao botao--secundario botao--pequeno" href="#" target="_blank" rel="noopener noreferrer"
+            <a class="botao botao--secundario botao--pequeno" target="_blank" rel="noopener noreferrer"
               data-localidade-link-cras>Ver no mapa</a>
           </article>
 
@@ -443,7 +438,7 @@
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+      <h2 id="titulo-busca">Buscar uma página</h2><label for="campo-busca">Nome da página</label><input id="campo-busca"
         type="search">
       <p id="status-busca" role="status"></p>
       <ul id="resultados-busca"></ul><button>Fechar</button>

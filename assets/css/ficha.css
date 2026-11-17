@@ -121,7 +121,7 @@ body.menu-fechado .conteudo-pagina.ficha {
   min-height: 96px;
   margin-right: 48px;
   padding: 18px 32px 18px 22px;
-  background: transparent url('../media/alerta-fundo-ficha.svg') center / 100% 100% no-repeat;
+  background: transparent url('../media/fundos/alerta-fundo-ficha.svg') center / 100% 100% no-repeat;
   color: var(--cor-aviso-alerta-escuro);
 }
 

@@ -75,7 +75,7 @@
       <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
           class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
@@ -122,13 +122,13 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
     <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -156,7 +156,7 @@
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
   </aside>
 
   <main class="conteudo-pagina apoio privacidade" id="conteudo">
@@ -189,7 +189,7 @@
       <p>As informações exibidas na rotina de cuidado (turnos, medicações, documentos e ficha da pessoa acompanhada) destinam-se exclusivamente à organização familiar e apoio ao cuidador.</p>
       <ul class="privacidade__lista">
         <li><strong>Dados de saúde e documentos:</strong> informações como CPF, Cartão SUS e histórico clínico devem ser acessadas apenas por integrantes autorizados da rede de cuidado.</li>
-        <li><strong>Formulário de Ajuda:</strong> orientamos que nenhuma dúvida enviada pelo suporte inclua diagnósticos, exames ou números de documentos pessoais.</li>
+        <li><strong>Formulário de Ajuda:</strong> orientamos que nenhuma mensagem inserida na demonstração de Ajuda inclua diagnósticos, exames ou números de documentos pessoais.</li>
       </ul>
     </section>
 
@@ -200,8 +200,8 @@
       <p>O Mutirão não utiliza cookies de publicidade ou rastreamento comportamental. O armazenamento no seu dispositivo ocorre apenas para melhorar a experiência de uso:</p>
       <ul class="privacidade__lista">
         <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas preferências assistivas (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave <code>mutirao-acessibilidade-preferencias</code> e o tema visual escolhido (neutro ou acolhedor) na chave <code>mutirao-tema</code>.</li>
-        <li><strong>Estado da sessão (<code>sessionStorage</code>):</strong> guarda se o menu lateral está aberto ou recolhido (<code>mutirao-menu-aberto</code>), preferências de configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha, agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v1</code>), permanecendo apenas no seu navegador até o encerramento da sessão.</li>
-        <li><strong>Dados em memória:</strong> respostas do verificador de direitos e envios do formulário de Ajuda permanecem apenas em memória durante a visualização atual e não são gravados em banco externo.</li>
+        <li><strong>Estado da sessão (<code>sessionStorage</code>):</strong> guarda se o menu lateral está aberto ou recolhido (<code>mutirao-menu-aberto</code>), avisos locais de Ajuda e Configurações, preferências de configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha, agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v1</code>), permanecendo apenas no seu navegador até o encerramento da sessão.</li>
+        <li><strong>Dados em memória:</strong> as respostas do questionário ficam em memória. O formulário de Ajuda simula o registro e não envia nem armazena o conteúdo da mensagem.</li>
       </ul>
     </section>
 
@@ -233,7 +233,7 @@
       <p>Caso tenha dúvidas sobre esta Política de Privacidade ou precise de apoio para ajustar suas preferências, fale com nossa equipe pela Central de Ajuda ou revise suas permissões em Configurações.</p>
       <div class="privacidade__acoes">
         <a class="botao botao--primario" href="ajuda.html#formulario-ajuda">
-          <i class="fa-regular fa-comment-dots" aria-hidden="true"></i> Enviar mensagem na Ajuda
+          <i class="fa-regular fa-comment-dots" aria-hidden="true"></i> Abrir o formulário de demonstração da Ajuda
         </a>
         <a class="botao botao--secundario" href="configuracoes.html">
           <i class="fa-solid fa-sliders" aria-hidden="true"></i> Gerenciar configurações
@@ -251,7 +251,7 @@
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+      <h2 id="titulo-busca">Buscar uma página</h2><label for="campo-busca">Nome da página</label><input id="campo-busca"
         type="search">
       <p id="status-busca" role="status"></p>
       <ul id="resultados-busca"></ul><button>Fechar</button>

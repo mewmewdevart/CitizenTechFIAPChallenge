@@ -18,8 +18,6 @@
   const campoMensagem = formulario.querySelector('#ajuda-mensagem');
   const erroMensagemEl = formulario.querySelector('#ajuda-mensagem-erro');
   const contadorMensagem = formulario.querySelector('#ajuda-mensagem-contador');
-  const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
-  const botaoNotificacoes = document.querySelector('.botao-icone--notificacao');
 
   let timerStatus = null;
 
@@ -44,38 +42,6 @@
       retorno.replaceChildren();
       retorno.setAttribute('data-mvp-status', '');
     }, 5000);
-  };
-
-  const adicionarNotificacao = (titulo, descricao, href = '#formulario-ajuda') => {
-    if (!listaNotificacoes) return;
-
-    const item = document.createElement('li');
-    item.className = 'notificacao';
-
-    const link = document.createElement('a');
-    link.className = 'notificacao__link';
-    link.href = href;
-
-    const blocoTexto = document.createElement('div');
-    const h3 = document.createElement('h3');
-    h3.textContent = titulo;
-    const p = document.createElement('p');
-    p.textContent = descricao;
-    blocoTexto.append(h3, p);
-
-    const seta = document.createElement('i');
-    seta.className = 'fa-solid fa-chevron-right notificacao__seta';
-    seta.setAttribute('aria-hidden', 'true');
-
-    link.append(blocoTexto, seta);
-    item.append(link);
-    listaNotificacoes.prepend(item);
-
-    if (botaoNotificacoes) {
-      const total = listaNotificacoes.querySelectorAll('.notificacao').length;
-      botaoNotificacoes.setAttribute('aria-label', `Notificações (${total} itens)`);
-      botaoNotificacoes.setAttribute('data-nova-notificacao', 'true');
-    }
   };
 
   const obterTextoMensagem = () => (campoMensagem?.value || '').replace(/\s+/g, ' ').trim();
@@ -176,20 +142,13 @@
       return;
     }
 
-    const email = campoEmail?.value.trim() || '';
-    const assunto = campoAssunto?.value.trim() || '';
-
     formulario.reset();
     aplicarErroCampo(campoEmail, erroEmailEl, '');
     aplicarErroCampo(campoAssunto, erroAssuntoEl, '');
     aplicarErroCampo(campoMensagem, erroMensagemEl, '');
     atualizarContadorMensagem();
 
-    adicionarNotificacao(
-      'E-mail enviado com sucesso',
-      `Assunto: "${assunto}" · Em breve entraremos em contato pelo e-mail ${email}.`,
-      'ajuda.html#formulario-ajuda'
-    );
-    mostrarStatus('E-mail enviado com sucesso! Em breve entraremos em contato.', 'sucesso');
+    window.MutiraoNotificacoes.registrar('Mensagem de demonstração registrada', 'Formulário de Ajuda concluído somente nesta aba.', 'ajuda.html#formulario-ajuda');
+    mostrarStatus('Mensagem registrada nesta demonstração. Nenhum e-mail foi enviado.', 'sucesso');
   });
 })();

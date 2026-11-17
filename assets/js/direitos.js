@@ -100,27 +100,26 @@
   const calcularDireitos = () => {
     const idosa60 = idadePessoa >= 60;
     const idosa65 = idadePessoa >= 65;
-    const rendaAteUmQuarto = respostas.renda === 'ate-um-quarto' || respostas.renda === 'nao-sei';
+    const rendaDesconhecida = respostas.renda === 'nao-sei';
+    const rendaAteUmQuarto = respostas.renda === 'ate-um-quarto';
     const rendaAteMeio = rendaAteUmQuarto || respostas.renda === 'ate-meio';
     const precisaAjuda = respostas.assistencia === 'integral' || respostas.assistencia === 'parcial';
 
-    const bpcElegivel = idosa65 && rendaAteUmQuarto && respostas.aposentadoriaIncapacidade !== 'sim';
+    const bpcElegivel = idosa65 && rendaAteUmQuarto && respostas.aposentadoriaIncapacidade === 'nao';
     const acrescimoElegivel = respostas.aposentadoriaIncapacidade === 'sim' && respostas.assistencia === 'integral';
-    const tarifaElegivel = rendaAteMeio || bpcElegivel;
-    const ceafElegivel = respostas.saudeEspecializada === 'sim' || respostas.saudeEspecializada === 'nao-sei';
+    const tarifaElegivel = rendaAteMeio;
+    const ceafElegivel = respostas.saudeEspecializada === 'sim';
     const reabilitacaoElegivel = respostas.saudeEspecializada === 'sim';
-    const tfdElegivel = respostas.tratamentoFora === 'sim' || respostas.tratamentoFora === 'nao-sei';
+    const tfdElegivel = respostas.tratamentoFora === 'sim';
 
     return [
       {
         titulo: 'Farmácia Popular',
         icone: 'fa-solid fa-pills',
-        detalhe: idosa60
-          ? 'Medicamentos gratuitos (Losartana e Metformina) e fraldas geriátricas com receita médica.'
-          : 'Medicamentos gratuitos para hipertensão, diabetes e asma com receita médica.',
-        selo: 'Tem direito',
-        classeSelo: 'selo--sucesso',
-        elegivel: true,
+        detalhe: 'Confira a lista de itens e os requisitos de retirada no canal oficial do programa.',
+        selo: 'Consultar critérios oficiais',
+        classeSelo: 'selo--neutro',
+        elegivel: false,
         link: 'https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular',
         rotuloLink: 'Ver lista no gov.br'
       },
@@ -130,7 +129,7 @@
         detalhe: idosa60
           ? 'Garantido pelo Estatuto da Pessoa Idosa (60+) em internações ou observação hospitalar.'
           : 'Previsto em lei para pessoas com 60 anos ou mais durante internação hospitalar.',
-        selo: idosa60 ? 'Tem direito' : 'A partir de 60+',
+        selo: idosa60 ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: idosa60 ? 'selo--sucesso' : 'selo--neutro',
         elegivel: idosa60,
         link: 'https://www.planalto.gov.br/ccivil_03/leis/2003/l10.741.htm',
@@ -139,18 +138,12 @@
       {
         titulo: 'BPC / LOAS (1 salário mínimo/mês)',
         icone: 'fa-solid fa-hand-holding-heart',
-        detalhe: bpcElegivel
-          ? (respostas.cadunico === 'em-dia'
-            ? 'Atende aos critérios de 65+ e baixa renda; solicite no Meu INSS ou 135.'
-            : 'Atende ao perfil de 65+ e baixa renda; é necessário fazer ou atualizar o CadÚnico no CRAS.')
-          : (respostas.aposentadoriaIncapacidade === 'sim'
-            ? 'Não acumula com aposentadoria paga pelo INSS.'
-            : 'Exige 65+ e renda familiar por pessoa de até R$ 405,25 (1/4 do salário mínimo).'),
-        selo: bpcElegivel ? 'Pode ter direito' : 'Não se aplica',
+        detalhe: 'Consulte o INSS para confirmar idade, renda familiar, CadÚnico e acumulação com outros benefícios.',
+        selo: rendaDesconhecida || respostas.aposentadoriaIncapacidade === 'nao-sei' ? 'Faltam informações' : bpcElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: bpcElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: bpcElegivel,
         link: 'https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-ao-idoso',
-        rotuloLink: 'Solicitar no gov.br'
+        rotuloLink: 'Consultar critérios do BPC'
       },
       {
         titulo: 'Acréscimo de 25% na aposentadoria',
@@ -158,7 +151,7 @@
         detalhe: acrescimoElegivel
           ? 'Disponível para aposentadoria por incapacidade permanente quando há necessidade de cuidador em tempo integral.'
           : 'Exclusivo para quem recebe aposentadoria por incapacidade permanente e precisa de assistência contínua.',
-        selo: acrescimoElegivel ? 'Pode ter direito' : 'Não se aplica',
+        selo: respostas.aposentadoriaIncapacidade === 'nao-sei' ? 'Faltam informações' : acrescimoElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: acrescimoElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: acrescimoElegivel,
         link: 'https://www.gov.br/pt-br/servicos/solicitar-acrescimo-de-25-por-cento-na-aposentadoria-por-incapacidade-permanente-aposentadoria-por-invalidez',
@@ -167,16 +160,12 @@
       {
         titulo: 'Tarifa Social de Energia Elétrica',
         icone: 'fa-solid fa-bolt',
-        detalhe: tarifaElegivel
-          ? (respostas.cadunico === 'em-dia'
-            ? '100% de desconto na tarifa para consumo de até 80 kWh/mês.'
-            : 'Desconto de até 100% na tarifa até 80 kWh/mês após cadastrar/atualizar o CadÚnico no CRAS.')
-          : 'Voltada a famílias inscritas no CadÚnico com renda por pessoa de até R$ 810,50 (1/2 mínimo) ou BPC.',
-        selo: tarifaElegivel ? (respostas.cadunico === 'em-dia' ? 'Tem direito' : 'Precisa CadÚnico') : 'Não se aplica',
+        detalhe: 'Consulte a distribuidora ou o canal oficial para verificar os critérios de renda, cadastro e consumo.',
+        selo: rendaDesconhecida || respostas.cadunico === 'nao-sei' ? 'Faltam informações' : tarifaElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: tarifaElegivel ? (respostas.cadunico === 'em-dia' ? 'selo--sucesso' : 'selo--info') : 'selo--neutro',
         elegivel: tarifaElegivel,
-        link: 'https://www.gov.br/pt-br/servicos/inscrever-se-no-cadastro-unico-para-programas-sociais-do-governo-federal',
-        rotuloLink: 'Ver CadÚnico no gov.br'
+        link: 'https://www.gov.br/aneel/pt-br/assuntos/tarifas/tarifa-social',
+        rotuloLink: 'Consultar Tarifa Social na ANEEL'
       },
       {
         titulo: 'Melhor em Casa (Atenção domiciliar do SUS)',
@@ -184,7 +173,7 @@
         detalhe: precisaAjuda
           ? 'Atendimento domiciliar pelo SUS conforme avaliação clínica; solicite encaminhamento na UBS ou hospital.'
           : 'Indicado quando há restrição ao leito ou necessidade de cuidados contínuos em casa.',
-        selo: precisaAjuda ? 'Pode ter direito' : 'Não se aplica',
+        selo: precisaAjuda ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: precisaAjuda ? 'selo--atencao' : 'selo--neutro',
         elegivel: precisaAjuda,
         link: 'https://www.gov.br/saude/pt-br/composicao/saes/melhor-em-casa',
@@ -196,7 +185,7 @@
         detalhe: ceafElegivel
           ? 'Atende condições previstas nos protocolos do SUS; confirme documentos e laudo na Secretaria de Saúde do estado.'
           : 'Voltado a tratamentos contínuos de alto custo previstos nos protocolos clínicos do SUS.',
-        selo: ceafElegivel ? 'Pode ter direito' : 'Não se aplica',
+        selo: respostas.saudeEspecializada === 'nao-sei' ? 'Faltam informações' : ceafElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: ceafElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: ceafElegivel,
         link: 'https://www.gov.br/saude/pt-br/composicao/sectics/daf/ceaf',
@@ -208,7 +197,7 @@
         detalhe: reabilitacaoElegivel
           ? 'A rede do SUS oferece reabilitação e pode fornecer órteses, próteses e meios auxiliares após avaliação na UBS.'
           : 'Disponível pelo SUS mediante avaliação clínica quando há necessidade de reabilitação ou apoio à mobilidade.',
-        selo: reabilitacaoElegivel ? 'Pode ter direito' : 'Não se aplica',
+        selo: respostas.saudeEspecializada === 'nao-sei' ? 'Faltam informações' : reabilitacaoElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: reabilitacaoElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: reabilitacaoElegivel,
         link: 'https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-com-deficiencia',
@@ -220,7 +209,7 @@
         detalhe: tfdElegivel
           ? 'Pode apoiar transporte e diárias para tratamento pelo SUS em outra cidade; consulte a Secretaria Municipal de Saúde.'
           : 'Aplicável apenas quando o tratamento especializado pelo SUS não está disponível no município.',
-        selo: tfdElegivel ? 'Pode ter direito' : 'Não se aplica',
+        selo: respostas.tratamentoFora === 'nao-sei' ? 'Faltam informações' : tfdElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: tfdElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: tfdElegivel,
         link: 'https://wiki.saude.gov.br/regulacao/index.php/Tratamento_Fora_do_Domic%C3%ADlio_(TFD)',
@@ -231,9 +220,8 @@
 
   const renderizarResultado = () => {
     const itens = calcularDireitos();
-    const qtdElegiveis = itens.filter(i => i.elegivel).length;
     if (tituloResultado) {
-      tituloResultado.textContent = `A Mari pode ter acesso a ${qtdElegiveis} de ${itens.length} direitos e serviços avaliados`;
+      tituloResultado.textContent = 'Serviços e benefícios para a Mari consultar';
     }
     const resumoRespostasEl = pagina.querySelector('[data-simulador-resumo-respostas]');
     if (resumoRespostasEl) {
@@ -309,9 +297,7 @@
       ].join('\n');
 
       try {
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(texto);
-        }
+        await navigator.clipboard.writeText(texto);
         anunciarStatus(elementoStatus, 'Resumo dos direitos da Mari copiado para compartilhar no grupo.');
       } catch {
         anunciarStatus(elementoStatus, 'Não foi possível copiar automaticamente.');
@@ -324,6 +310,7 @@
     if (!passoTemResposta(passoAtual)) return;
     renderizarResultado();
     mostrarEtapa('resultado');
+    tituloResultado?.focus();
   });
 
   mostrarEtapa('inicial');
@@ -358,7 +345,7 @@
         erroLocalidade.textContent = mensagem;
         erroLocalidade.hidden = false;
       }
-      campoCep?.setAttribute('aria-invalid', 'true');
+      if (blocoResultado) blocoResultado.hidden = true;
     };
 
     const exibirLocalidade = ({ cidade, uf, bairro = '', ibge = '' }) => {

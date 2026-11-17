@@ -14,8 +14,6 @@
   const dialogoSairRede = document.querySelector('#dialogo-sair-rede');
   const botaoConfirmarSair = dialogoSairRede?.querySelector('[data-confirmar-sair-rede]');
   const botaoFecharDialogo = dialogoSairRede?.querySelector('[data-fechar-dialogo]');
-  const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
-  const botaoNotificacoes = document.querySelector('.botao-icone--notificacao');
 
   const CHAVE_CONFIG_SESSAO = 'mutirao-configuracoes-sessao-v1';
   const selectAntecedencia = formulario.querySelector('#config-antecedencia-medicacao');
@@ -133,38 +131,6 @@
     }, 5000);
   };
 
-  const adicionarNotificacao = (titulo, descricao) => {
-    if (!listaNotificacoes) return;
-
-    const item = document.createElement('li');
-    item.className = 'notificacao';
-
-    const link = document.createElement('a');
-    link.className = 'notificacao__link';
-    link.href = 'configuracoes.html';
-
-    const bloco = document.createElement('div');
-    const h3 = document.createElement('h3');
-    h3.textContent = titulo;
-    const p = document.createElement('p');
-    p.textContent = descricao;
-    bloco.append(h3, p);
-
-    const seta = document.createElement('i');
-    seta.className = 'fa-solid fa-chevron-right notificacao__seta';
-    seta.setAttribute('aria-hidden', 'true');
-
-    link.append(bloco, seta);
-    item.append(link);
-    listaNotificacoes.prepend(item);
-
-    if (botaoNotificacoes) {
-      const total = listaNotificacoes.querySelectorAll('.notificacao').length;
-      botaoNotificacoes.setAttribute('aria-label', `Notificações (${total} pendentes)`);
-      botaoNotificacoes.setAttribute('data-nova-notificacao', 'true');
-    }
-  };
-
   const atualizarEstadoAntecedencia = () => {
     if (!selectAntecedencia || !toggleMedicacao) return;
     selectAntecedencia.disabled = !toggleMedicacao.checked;
@@ -188,10 +154,7 @@
     salvarPreferenciasSessao();
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
-    adicionarNotificacao(
-      'Configurações atualizadas',
-      'Preferências de alertas e permissões da rede de cuidado salvas para esta sessão.'
-    );
+    window.MutiraoNotificacoes.registrar('Configurações atualizadas', 'Preferências salvas para esta sessão.', 'configuracoes.html');
     mostrarStatus('Configurações salvas com sucesso!', 'sucesso');
   });
 
@@ -246,6 +209,6 @@
 
   botaoConfirmarSair?.addEventListener('click', () => {
     dialogoSairRede?.close();
-    mostrarStatus('Solicitação registrada: como administrador, transfira a gestão antes de sair da rede.', 'erro');
+    mostrarStatus('A saída da rede exige transferir a administração. Esta demonstração não oferece transferência.', 'erro');
   });
 })();

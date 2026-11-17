@@ -74,6 +74,7 @@
     const cancelar = evento.target.closest('[data-cancelar-convite]');
     if (cancelar) {
       const emailAlvo = cancelar.dataset.cancelarConvite;
+      if (!window.confirm(`Cancelar o convite de demonstração para ${emailAlvo}?`)) return;
       atualizarEstado(estado => ({
         ...estado,
         convites: (estado.convites || []).filter(c => c.email !== emailAlvo)
@@ -90,7 +91,7 @@
     const emailCampo = formConvite.elements.email;
 
     if (obterConvites().some(convite => convite.email === email)) {
-      erroConvite.textContent = 'Convite já enviado para este e-mail. Aguarde o aceite da pessoa.';
+      erroConvite.textContent = 'Já existe um convite de demonstração para este e-mail.';
       emailCampo.setAttribute('aria-invalid', 'true');
       emailCampo.focus();
       return;
@@ -105,7 +106,7 @@
 
     formConvite.reset();
     formConvite.closest('dialog')?.close();
-    dialogoEnviado.querySelector('[data-convite-resumo]').textContent = `${email} terá acesso à rede após aceitar o convite.`;
+    dialogoEnviado.querySelector('[data-convite-resumo]').textContent = `${email} foi registrado nesta demonstração. Nenhum convite foi enviado.`;
     dialogoEnviado.showModal();
     renderizar();
   });

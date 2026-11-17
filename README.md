@@ -31,7 +31,9 @@ A proposta centraliza essas informações em um único espaço compartilhado, fa
 
 ## 📁 Estrutura do Projeto
 
-A landing page seguirá esta organização.
+O painel é uma aplicação multipágina em HTML, CSS e JavaScript. `index.html` abre o Início. As outras páginas ficam na raiz, e os estilos, scripts e imagens ficam em `assets/`.
+
+O cenário de demonstração usa 10 de novembro de 2026 como referência. Registros de cuidado e preferências da sessão ficam na aba atual. Convites e mensagens da Ajuda são simulados, e Documentos cadastra referências sem guardar anexos.
 
 ```text
 CitizenTechFIAPChallenge/
@@ -39,14 +41,13 @@ CitizenTechFIAPChallenge/
 │   ├── css/       # Estilos compartilhados e por seção
 │   ├── js/        # Scripts e interações da página
 │   └── media/     # Logos, ícones e imagens
-├── docs/          # Documentação das etapas de entrega
 ├── index.html     # Página principal
 └── README.md      # Visão geral e instruções do projeto
 ```
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **HTML5** — estrutura semântica da landing page.
+- **HTML5** — estrutura semântica do painel e das páginas.
 - **CSS3** — identidade visual, layout e responsividade.
 - **JavaScript** — interações da interface.
 - **Figma** — design e prototipação da interface.

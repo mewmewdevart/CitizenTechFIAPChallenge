@@ -47,7 +47,7 @@
 
   const renderizarAvisoFamilia = ligado => {
     avisoFamilia.textContent = ligado
-      ? 'Ligado. A família recebe um aviso se você marcar “sobrecarregado”.'
+      ? 'Ligado. Um aviso será simulado nesta aba.'
       : 'Desligado. Você decide se e quando contar.';
   };
 
@@ -169,7 +169,7 @@
     container.innerHTML = `<ul class="painel__lista">${[...enviados].reverse().map(item => `
       <li class="painel__item">
         <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-paper-plane"></i></span>
-        <span class="painel__texto"><strong>Recado enviado para ${escaparHtml(item.para)}</strong><span>${escaparHtml(item.texto)}</span></span>
+        <span class="painel__texto"><strong>Recado registrado para ${escaparHtml(item.para)}</strong><span>${escaparHtml(item.texto)}</span></span>
       </li>
     `).join('')}</ul>`;
   };
@@ -192,7 +192,7 @@
     renderizarHumor(humor);
     salvarCuidar(() => ({ humor }));
     if (humor === 'sobrecarregado' && obterCuidar().preferencias.avisarFamilia) {
-      anunciarStatus(elementoStatus, 'A família foi avisada de que você está sobrecarregado.');
+      anunciarStatus(elementoStatus, 'Aviso de sobrecarga simulado. A família não recebeu uma mensagem.');
     }
   });
 
@@ -291,7 +291,7 @@
     }));
     dialogoRecado.close();
     renderizarRecadosEnviados();
-    anunciarStatus(elementoStatus, `Recado enviado para ${para}.`);
+    anunciarStatus(elementoStatus, `Recado registrado para ${para}.`);
   });
 
   pagina.querySelector('[data-formulario-mvp="folga"]')?.addEventListener('submit', evento => {
@@ -303,7 +303,7 @@
       pedidosFolga: [...(estado.pedidosFolga || []), { turno, recado: form.elements.recado.value.trim() }]
     }));
     form.closest('dialog')?.close();
-    anunciarStatus(elementoStatus, `Pedido de folga enviado: ${turno}. Você será avisado quando alguém aceitar.`);
+    anunciarStatus(elementoStatus, `Pedido de folga registrado nesta demonstração: ${turno}.`);
   });
 
   formPerfil?.addEventListener('input', evento => {

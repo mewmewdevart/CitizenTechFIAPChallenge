@@ -77,7 +77,7 @@
       <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
           class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
@@ -128,13 +128,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
     <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -167,7 +167,7 @@
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html" aria-current="page"><i
           class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
   </aside>
   <main class="conteudo-pagina apoio ajuda" id="conteudo">
     <nav class="apoio__trilha" aria-label="Caminho da página"><a href="index.html">Início</a> <span
@@ -319,7 +319,8 @@
           </div>
         </div>
         <div class="ajuda__acoes">
-          <button type="submit" class="botao botao--primario">Enviar mensagem</button>
+          <p class="contexto-demonstracao">Formulário de demonstração. Use dados fictícios. Nenhum e-mail será enviado.</p>
+          <button type="submit" class="botao botao--primario">Registrar mensagem</button>
           <a class="botao botao--secundario" href="privacidade.html"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Política de Privacidade</a>
         </div>
         <p id="ajuda-retorno" data-mvp-status role="status" aria-live="polite"></p>
@@ -337,7 +338,7 @@
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+      <h2 id="titulo-busca">Buscar uma página</h2><label for="campo-busca">Nome da página</label><input id="campo-busca"
         type="search">
       <p id="status-busca" role="status"></p>
       <ul id="resultados-busca"></ul><button>Fechar</button>
