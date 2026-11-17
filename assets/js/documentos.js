@@ -51,6 +51,17 @@
     select.value = valorSelecionado || usuario.nomeComApelido;
   };
 
+  const popularSelectCompromissos = (valorSelecionado = '') => {
+    const select = formDocumento?.elements?.compromissoId;
+    if (!select) return;
+    const eventos = core.obterCompromissos ? core.obterCompromissos() : (obterEstado().events || []);
+    select.innerHTML = [
+      '<option value="">Nenhum compromisso vinculado</option>',
+      ...eventos.map(evt => `<option value="${escaparHtml(evt.id)}">${escaparHtml(formatarDataCurta(evt.dia))} · ${escaparHtml(evt.hora.replace(':00', 'h'))} · ${escaparHtml(evt.titulo)}</option>`)
+    ].join('');
+    select.value = valorSelecionado || '';
+  };
+
   const abrirFormularioDocumento = (doc = null) => {
     if (!formDocumento || !dialogoAdicionar) return;
     formDocumento.reset();
@@ -60,6 +71,8 @@
     formDocumento.elements.categoria.value = doc?.categoria || 'Receita';
     formDocumento.elements.dia.value = doc?.dia || HOJE;
     popularSelectAutor(doc?.autor || obterUsuarioAtual().nomeComApelido);
+    if (formDocumento.elements.localOriginal) formDocumento.elements.localOriginal.value = doc?.localOriginal || '';
+    popularSelectCompromissos(doc?.compromissoId || '');
     formDocumento.elements.vinculo.value = doc?.vinculo || '';
     formDocumento.elements.observacoes.value = doc?.observacoes || '';
     formDocumento.elements.nomeArquivo.value = doc?.nomeArquivo || '';
@@ -87,7 +100,7 @@
       .filter(doc => {
         if (categoriaAtiva !== 'Todos' && doc.categoria !== categoriaAtiva) return false;
         if (!termo) return true;
-        const texto = core.normalizarBusca([doc.titulo, doc.categoria, doc.autor, doc.vinculo, doc.observacoes, doc.nomeArquivo].filter(Boolean).join(' '));
+        const texto = core.normalizarBusca([doc.titulo, doc.categoria, doc.autor, doc.localOriginal, doc.vinculo, doc.observacoes, doc.nomeArquivo].filter(Boolean).join(' '));
         return texto.includes(termo);
       });
 
@@ -110,6 +123,7 @@
         <div class="documentos__conteudo">
           <strong>${escaparHtml(doc.titulo)}</strong>
           <p>${escaparHtml(doc.categoria)}${dataRotulo ? ` · ${escaparHtml(dataRotulo)}` : ''}${doc.autor ? ` · ${verbo} ${escaparHtml(doc.autor)}` : ''}</p>
+          ${doc.localOriginal ? `<p><strong>Original:</strong> ${escaparHtml(doc.localOriginal)}</p>` : ''}
           ${doc.vinculo ? `<p>${escaparHtml(doc.vinculo)}</p>` : ''}
         </div>
         <button type="button" class="botao botao--secundario" data-ver-documento="${escaparHtml(doc.id)}">Ver detalhes</button>
@@ -128,16 +142,33 @@
     if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
     const dataTexto = doc.dia ? formatarDataCurta(doc.dia, true) : 'Data não informada';
     const adicionada = doc.categoria === 'Receita' ? 'Adicionada' : 'Adicionado';
+    const compromisso = doc.compromissoId
+      ? (core.obterCompromissos ? core.obterCompromissos() : (obterEstado().events || [])).find(e => e.id === doc.compromissoId)
+      : null;
     const linhas = [
       `${doc.categoria} · ${dataTexto}`,
       `${adicionada} por ${doc.autor || 'Não informado'}.`,
-      doc.vinculo ? `Vinculado(a) à ${doc.vinculo}.` : '',
+      doc.localOriginal ? `Onde encontrar o original: ${doc.localOriginal}.` : '',
+      compromisso ? `Atendimento vinculado: ${formatarDataCurta(compromisso.dia)} · ${compromisso.hora.replace(':00', 'h')} · ${compromisso.titulo}.` : '',
+      doc.vinculo ? `Anotação: ${doc.vinculo}.` : '',
       doc.observacoes ? doc.observacoes : '',
       doc.nomeArquivo ? `Nome do arquivo: ${doc.nomeArquivo}` : ''
     ].filter(Boolean);
     bloco.innerHTML = linhas.map(linha => `<span>${escaparHtml(linha)}</span>`).join('');
     const botaoAtendimento = dialogoDetalhes.querySelector('[data-ver-atendimento]');
-    if (botaoAtendimento) botaoAtendimento.hidden = !doc.vinculo;
+    if (botaoAtendimento) {
+      if (compromisso) {
+        botaoAtendimento.hidden = false;
+        botaoAtendimento.textContent = 'Ver atendimento';
+        botaoAtendimento.href = `agenda.html?dia=${encodeURIComponent(compromisso.dia)}&compromisso=${encodeURIComponent(compromisso.id)}`;
+      } else if (doc.vinculo) {
+        botaoAtendimento.hidden = false;
+        botaoAtendimento.textContent = 'Abrir Agenda';
+        botaoAtendimento.href = 'agenda.html';
+      } else {
+        botaoAtendimento.hidden = true;
+      }
+    }
     dialogoDetalhes.showModal();
   };
 
@@ -236,6 +267,8 @@
     }
 
     const nomeArquivo = (campos.nomeArquivo || '').trim();
+    const localOriginal = (campos.localOriginal || '').trim();
+    const compromissoId = (campos.compromissoId || '').trim();
     const idEdicao = (campos.id || '').trim();
 
     if (idEdicao) {
@@ -248,7 +281,9 @@
             categoria: campos.categoria || 'Documento',
             dia: campos.dia,
             autor,
+            compromissoId,
             vinculo: (campos.vinculo || '').trim(),
+            localOriginal,
             observacoes: (campos.observacoes || '').trim(),
             nomeArquivo
           }
@@ -262,7 +297,9 @@
         categoria: campos.categoria || 'Documento',
         dia: campos.dia || HOJE,
         autor,
+        compromissoId,
         vinculo: (campos.vinculo || '').trim(),
+        localOriginal,
         observacoes: (campos.observacoes || '').trim(),
         nomeArquivo
       };
@@ -283,6 +320,7 @@
   });
 
   popularSelectAutor();
+  popularSelectCompromissos();
   window.addEventListener('mutirao:perfil-atualizado', () => popularSelectAutor());
   renderizar();
   const idInicial = new URLSearchParams(location.search).get('documento');

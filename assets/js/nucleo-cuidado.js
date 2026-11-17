@@ -199,7 +199,7 @@
           id: 'tarefa-hoje-jejum-06',
           dia: HOJE,
           titulo: '06h · Medicações em jejum administradas',
-          descricao: '3 doses administradas às 06h10 por Beatriz da Silva (Bea) · Turno 07h–12h',
+          descricao: '3 doses administradas por Aninha (06h10 e 06h12) · Turno de Ana da Silva (Aninha)',
           icone: 'bi bi-capsule',
           concluida: true,
           href: 'medicamentos.html#registros-de-hoje',
@@ -261,7 +261,9 @@
           categoria: 'Receita',
           dia: '2026-11-10',
           autor: 'Ana da Silva (Aninha)',
+          compromissoId: 'evt-ubs-10',
           vinculo: 'Consulta na UBS de 10 nov.',
+          localOriginal: 'Pasta azul da Mari (sala) · cópia no WhatsApp da Aninha',
           observacoes: 'Receita para retirada de medicamento após a consulta das 14h na UBS do bairro.'
         },
         {
@@ -271,6 +273,7 @@
           dia: '2026-11-04',
           autor: 'Paulo da Silva (Paul)',
           vinculo: 'Exame cadastrado em 4 nov.',
+          localOriginal: 'Pasta de exames (gaveta do quarto) · PDF com o Paul',
           observacoes: 'Resultado completo do hemograma realizado em 4 de novembro de 2026.'
         },
         {
@@ -280,6 +283,7 @@
           dia: '2026-11-06',
           autor: 'Beatriz da Silva (Bea)',
           vinculo: 'Documento geral',
+          localOriginal: 'Pasta azul da Mari (sala)',
           observacoes: 'Registro de atendimento ambulatorial e orientações da equipe.'
         }
       ]

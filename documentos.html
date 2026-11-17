@@ -215,7 +215,13 @@
             </select>
           </label>
         </div>
-        <label>Vínculo ou assunto<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
+        <label>Onde encontrar o original<input type="text" name="localOriginal" placeholder="Ex.: Pasta azul na sala ou WhatsApp da Aninha"></label>
+        <label>Compromisso associado na Agenda (opcional)
+          <select name="compromissoId">
+            <option value="">Nenhum compromisso vinculado</option>
+          </select>
+        </label>
+        <label>Anotação ou assunto (opcional)<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
         <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
         <label>Nome do arquivo (opcional)
           <input type="text" name="nomeArquivo" maxlength="255" aria-describedby="ajuda-arquivo-documento">
