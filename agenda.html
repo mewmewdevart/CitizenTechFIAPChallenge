@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
 
 <head>
@@ -82,8 +82,7 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
@@ -166,7 +165,7 @@
     <header class="agenda__cabecalho">
       <div>
         <h1>Agenda</h1>
-        <p>Consulte compromissos e organize os turnos de cuidado da Maria.</p>
+        <p>Consulte compromissos e organize os turnos de cuidado da Mari.</p>
       </div>
       <div class="agenda__acoes">
         <button type="button" class="botao botao--secundario" data-dialogo="dialogo-exportar-agenda"><i class="fa-regular fa-calendar" aria-hidden="true"></i> Exportar agenda</button>
@@ -175,7 +174,7 @@
       </div>
     </header>
 
-    <section class="agenda__painel">
+    <section class="cartao agenda__painel">
       <h2>Calendário e compromissos</h2>
       <div class="agenda__visao-geral">
         <div class="agenda__coluna-calendario">
@@ -193,7 +192,7 @@
           <div class="agenda__legenda">
             <p><span class="agenda__legenda-selecionado" aria-hidden="true"><i class="fa-regular fa-square"></i></span> Dia selecionado</p>
             <p><span class="agenda__legenda-evento" aria-hidden="true"><i class="fa-solid fa-circle"></i></span> Dia com consulta ou exame</p>
-            <p><span class="agenda__legenda-alerta" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span> Dia com horário sem cobertura</p>
+            <p><span class="agenda__legenda-alerta" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span> Dia com turno parcial ou sem cobertura</p>
           </div>
         </div>
 
@@ -234,12 +233,12 @@
     </section>
 
     <div class="agenda__inferior" id="escala">
-      <section class="agenda__painel">
+      <section class="cartao agenda__painel">
         <h2 data-titulo-escala tabindex="-1">Escala semanal · 9 a 15 nov.</h2>
         <div class="agenda__semana" data-semana></div>
         <div data-turnos></div>
       </section>
-      <section class="agenda__painel agenda__descobertos">
+      <section class="cartao agenda__painel agenda__descobertos">
         <h2>Horários sem cobertura</h2>
         <p>Turnos que ainda precisam de alguém.</p>
         <div data-lacunas></div>
@@ -357,7 +356,7 @@
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-compromisso>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-compromisso>Editar</button>
-        <a class="botao botao--primario" href="documentos.html">Ver documentos</a>
+        <a class="botao botao--primario" href="documentos.html" data-ver-documentos-compromisso hidden>Ver documentos</a>
       </div>
     </dialog>
 

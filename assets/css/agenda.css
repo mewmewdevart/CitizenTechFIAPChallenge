@@ -68,16 +68,7 @@ body.menu-fechado .conteudo-pagina.agenda {
 }
 
 .agenda__painel {
-  background: var(--cor-superficie);
-  border: var(--borda-padrao);
-  border-radius: var(--raio-xl);
-  padding: var(--espaco-lg);
-  box-shadow: var(--sombra-cartao);
   min-width: 0;
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel {
-  box-shadow: none;
 }
 
 html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
@@ -277,6 +268,12 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel 
   width: 40px;
   height: 40px;
   flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+html.tema--acolhedor .agenda__avatar {
+  border: 2px solid var(--cor-borda-sutil);
 }
 
 .agenda__preparacao {
@@ -435,14 +432,10 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel 
 
 [data-turnos] {
   margin-top: var(--espaco-md);
-  background: #F9F9F9;
+  background: var(--cor-fundo-pagina);
   border: var(--borda-padrao);
   border-radius: var(--raio-md);
   overflow: hidden;
-}
-
-html.acessibilidade--alto-contraste [data-turnos] {
-  background: var(--cor-fundo-pagina);
 }
 
 .agenda__turno {

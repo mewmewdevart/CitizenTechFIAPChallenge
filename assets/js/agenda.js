@@ -296,6 +296,14 @@
         ? `<div><dt>Preparação e transporte</dt><dd>${item.preparacao.map(p => escaparHtml(p)).join('<br>')}</dd></div>`
         : ''}
     `;
+    const botaoDocumentos = dialogo.querySelector('[data-ver-documentos-compromisso]');
+    if (botaoDocumentos) {
+      const tituloLower = String(item.titulo || '').toLowerCase();
+      const temDocumentoVinculado = (obterEstado().documents || []).some(doc =>
+        doc.dia === item.dia || (tituloLower && String(doc.vinculo || '').toLowerCase().includes(tituloLower))
+      );
+      botaoDocumentos.hidden = !temDocumentoVinculado;
+    }
     dialogo.showModal();
   };
 
