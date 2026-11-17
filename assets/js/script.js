@@ -185,7 +185,8 @@ function tocarSomNotificacao() {
 const NOTIFICACOES_INICIAIS_REDE = [
   { titulo: 'Horário sem cobertura', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).', avatar: 'assets/media/mascotes/icone-mascote-espeto.svg' },
   { titulo: 'Pedido para agendar consulta', descricao: 'Beatriz pediu ajuda para agendar otorrinolaringologia.', avatar: 'assets/media/mascotes/icone-mascote-trevo.svg' },
-  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina prevista para 20h.', avatar: 'assets/media/mascotes/icone-mascote-pingo.svg' }
+  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina prevista para 20h.', avatar: 'assets/media/mascotes/icone-mascote-pingo.svg' },
+  { titulo: 'Quiz em Direitos e serviços', descricao: 'Há um questionário pendente para consultar possíveis benefícios e serviços para a Mari.', avatar: 'assets/media/mascotes/icone-mascote-cubado.svg', destino: 'direitos.html#titulo-simulador-mari' }
 ];
 
 function resolverAvatarNotificacao(avatarInformado, titulo, descricao) {
@@ -214,7 +215,10 @@ function renderizarNotificacoes() {
     const link = item.querySelector('.notificacao__link');
     if (h3) h3.textContent = padrao.titulo;
     if (p) p.textContent = padrao.descricao;
-    if (link && !link.querySelector('.notificacao__avatar')) {
+    const avatarExistente = link?.querySelector('.notificacao__avatar');
+    if (avatarExistente) {
+      avatarExistente.src = padrao.avatar;
+    } else if (link) {
       const img = document.createElement('img');
       img.className = 'notificacao__avatar';
       img.src = padrao.avatar;
