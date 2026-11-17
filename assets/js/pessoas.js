@@ -3,9 +3,10 @@
   const core = window.MutiraoCuidado;
   if (!pagina || !core) return;
 
-  const { obterEstado, atualizarEstado, escaparHtml } = core;
+  const { obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
 
   const lista = pagina.querySelector('[data-participantes]');
+  const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const dialogoEnviado = document.getElementById('dialogo-convite-enviado');
   const formConvite = pagina.querySelector('[data-formulario-mvp="convite"]');
   const erroConvite = pagina.querySelector('[data-erro-convite]');
@@ -47,10 +48,14 @@
           : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';
       const acao = pessoa.perfil
         ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
-        : `<button type="button" class="botao botao--secundario" aria-disabled="true" aria-label="Ver perfil de ${escaparHtml(pessoa.nome)}, disponível quando a pessoa compartilhar o perfil">Ver perfil</button>`;
+        : pessoa.pendente
+          ? `<button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}" aria-label="Cancelar convite para ${escaparHtml(pessoa.nome)}">Cancelar convite</button>`
+          : '<span class="selo selo--sucesso">Ativo na rede</span>';
       const situacao = pessoa.pendente
         ? `<span class="selo selo--atencao">${escaparHtml(pessoa.situacao)}</span>`
-        : `<span>${escaparHtml(pessoa.situacao)}</span>`;
+        : pessoa.perfil
+          ? `<span>${escaparHtml(pessoa.situacao)}</span>`
+          : '';
       return `<li class="painel__item">
         ${imagem}
         <span class="painel__texto"><strong>${escaparHtml(pessoa.nome)}</strong><span>${escaparHtml(pessoa.papel)}</span>${situacao}</span>
@@ -61,7 +66,21 @@
 
   pagina.addEventListener('click', evento => {
     const botao = evento.target.closest('[data-fechar-dialogo]');
-    if (botao) botao.closest('dialog')?.close();
+    if (botao) {
+      botao.closest('dialog')?.close();
+      return;
+    }
+
+    const cancelar = evento.target.closest('[data-cancelar-convite]');
+    if (cancelar) {
+      const emailAlvo = cancelar.dataset.cancelarConvite;
+      atualizarEstado(estado => ({
+        ...estado,
+        convites: (estado.convites || []).filter(c => c.email !== emailAlvo)
+      }));
+      anunciarStatus(elementoStatus, `Convite para ${emailAlvo} cancelado.`);
+      renderizar();
+    }
   });
 
   formConvite?.addEventListener('submit', evento => {

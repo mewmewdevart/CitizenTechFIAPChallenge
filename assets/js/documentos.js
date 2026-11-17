@@ -5,6 +5,7 @@
 
   const {
     HOJE,
+    EQUIPE_CUIDADO,
     obterEstado,
     atualizarEstado,
     obterUsuarioAtual,
@@ -20,8 +21,52 @@
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const dialogoDetalhes = document.getElementById('dialogo-detalhes-documento');
   const dialogoAdicionar = document.getElementById('dialogo-adicionar-documento');
+  const formDocumento = dialogoAdicionar?.querySelector('[data-formulario-mvp="documento"]');
+  const erroDocumento = dialogoAdicionar?.querySelector('[data-erro-documento]');
+  const tituloDialogoDoc = dialogoAdicionar?.querySelector('[data-titulo-dialogo-documento]');
   let documentoEmFocoId = null;
   let categoriaAtiva = 'Todos';
+
+  const limparErrosDocumento = () => {
+    if (erroDocumento) erroDocumento.textContent = '';
+    formDocumento?.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+  };
+
+  const popularSelectAutor = (valorSelecionado = '') => {
+    const select = formDocumento?.elements?.autor;
+    if (!select) return;
+    const usuario = obterUsuarioAtual();
+    const pessoasRede = (EQUIPE_CUIDADO || []).map(pessoa =>
+      pessoa.nome === 'Zé da Manga' ? usuario.nomeComApelido : pessoa.nome
+    );
+    const opcoes = [...new Set(pessoasRede)].filter(nome =>
+      nome && !/maria das dores|\(mari\)/i.test(nome)
+    );
+    if (valorSelecionado && !opcoes.includes(valorSelecionado)) {
+      opcoes.push(valorSelecionado);
+    }
+    select.innerHTML = opcoes
+      .map(nome => `<option value="${escaparHtml(nome)}">${escaparHtml(nome)}</option>`)
+      .join('');
+    select.value = valorSelecionado || usuario.nomeComApelido;
+  };
+
+  const abrirFormularioDocumento = (doc = null) => {
+    if (!formDocumento || !dialogoAdicionar) return;
+    formDocumento.reset();
+    limparErrosDocumento();
+    formDocumento.elements.id.value = doc?.id || '';
+    formDocumento.elements.titulo.value = doc?.titulo || '';
+    formDocumento.elements.categoria.value = doc?.categoria || 'Receita';
+    formDocumento.elements.dia.value = doc?.dia || HOJE;
+    popularSelectAutor(doc?.autor || obterUsuarioAtual().nomeComApelido);
+    formDocumento.elements.vinculo.value = doc?.vinculo || '';
+    formDocumento.elements.observacoes.value = doc?.observacoes || '';
+    if (tituloDialogoDoc) {
+      tituloDialogoDoc.textContent = doc ? 'Editar documento da Mari' : 'Adicionar documento da Mari';
+    }
+    dialogoAdicionar.showModal();
+  };
 
   const ICONES_CATEGORIA = {
     Receita: 'icone-receita.svg',
@@ -115,6 +160,18 @@
       return;
     }
 
+    if (botao.dataset.dialogo === 'dialogo-adicionar-documento') {
+      abrirFormularioDocumento(null);
+      return;
+    }
+
+    if (botao.hasAttribute('data-editar-documento')) {
+      const doc = (obterEstado().documents || []).find(d => d.id === documentoEmFocoId);
+      dialogoDetalhes?.close();
+      if (doc) abrirFormularioDocumento(doc);
+      return;
+    }
+
     if (botao.hasAttribute('data-excluir-documento')) {
       const doc = (obterEstado().documents || []).find(d => d.id === documentoEmFocoId);
       if (!doc) return;
@@ -128,40 +185,88 @@
     }
   });
 
-  dialogoAdicionar?.querySelector('[data-formulario-mvp="documento"]')?.addEventListener('submit', evento => {
+  formDocumento?.addEventListener('input', evento => {
+    if (evento.target.hasAttribute('aria-invalid')) {
+      evento.target.removeAttribute('aria-invalid');
+      if (erroDocumento) erroDocumento.textContent = '';
+    }
+  });
+
+  formDocumento?.addEventListener('submit', evento => {
     evento.preventDefault();
     const form = evento.target;
     const campos = Object.fromEntries(new FormData(form));
     const titulo = (campos.titulo || '').trim();
-    if (!titulo || !campos.dia) {
-      anunciarStatus(elementoStatus, 'Preencha o título e a data do documento.');
+    const autor = (campos.autor || '').trim();
+    limparErrosDocumento();
+
+    if (!titulo) {
+      if (erroDocumento) erroDocumento.textContent = 'Informe o título do documento.';
+      form.elements.titulo.setAttribute('aria-invalid', 'true');
+      form.elements.titulo.focus();
+      return;
+    }
+    if (!campos.dia) {
+      if (erroDocumento) erroDocumento.textContent = 'Informe a data do documento.';
+      form.elements.dia.setAttribute('aria-invalid', 'true');
+      form.elements.dia.focus();
+      return;
+    }
+    if (!autor) {
+      if (erroDocumento) erroDocumento.textContent = 'Informe quem adicionou o documento.';
+      form.elements.autor.setAttribute('aria-invalid', 'true');
+      form.elements.autor.focus();
       return;
     }
 
     const arquivo = form.elements.arquivo?.files?.[0];
-    const novoDoc = {
-      id: `doc-${Date.now()}`,
-      titulo,
-      categoria: campos.categoria || 'Documento',
-      dia: campos.dia || HOJE,
-      autor: (campos.autor || obterUsuarioAtual().nome).trim(),
-      vinculo: (campos.vinculo || '').trim(),
-      observacoes: (campos.observacoes || '').trim(),
-      nomeArquivo: arquivo ? arquivo.name : ''
-    };
+    const idEdicao = (campos.id || '').trim();
 
-    atualizarEstado(estado => ({
-      ...estado,
-      documents: [novoDoc, ...(estado.documents || [])]
-    }));
+    if (idEdicao) {
+      atualizarEstado(estado => ({
+        ...estado,
+        documents: (estado.documents || []).map(d => (d.id === idEdicao
+          ? {
+            ...d,
+            titulo,
+            categoria: campos.categoria || 'Documento',
+            dia: campos.dia,
+            autor,
+            vinculo: (campos.vinculo || '').trim(),
+            observacoes: (campos.observacoes || '').trim(),
+            nomeArquivo: arquivo ? arquivo.name : (d.nomeArquivo || '')
+          }
+          : d))
+      }));
+      anunciarStatus(elementoStatus, `Documento "${titulo}" atualizado.`);
+    } else {
+      const novoDoc = {
+        id: `doc-${Date.now()}`,
+        titulo,
+        categoria: campos.categoria || 'Documento',
+        dia: campos.dia || HOJE,
+        autor,
+        vinculo: (campos.vinculo || '').trim(),
+        observacoes: (campos.observacoes || '').trim(),
+        nomeArquivo: arquivo ? arquivo.name : ''
+      };
+
+      atualizarEstado(estado => ({
+        ...estado,
+        documents: [novoDoc, ...(estado.documents || [])]
+      }));
+      anunciarStatus(elementoStatus, `Documento "${titulo}" adicionado.`);
+    }
 
     form.reset();
+    if (form.elements.id) form.elements.id.value = '';
     if (form.elements.dia) form.elements.dia.value = HOJE;
-    if (form.elements.autor) form.elements.autor.value = obterUsuarioAtual().nome;
+    popularSelectAutor(obterUsuarioAtual().nomeComApelido);
     dialogoAdicionar.close();
-    anunciarStatus(elementoStatus, `Documento "${titulo}" adicionado.`);
     renderizar();
   });
 
+  popularSelectAutor();
+  window.addEventListener('mutirao:perfil-atualizado', () => popularSelectAutor());
   renderizar();
 })();

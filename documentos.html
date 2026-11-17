@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
 
 <head>
@@ -82,8 +82,7 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
@@ -173,7 +172,7 @@
     </header>
 
     <section class="apoio__painel" aria-labelledby="titulo-arquivos">
-      <h2 id="titulo-arquivos">Arquivos da Maria</h2>
+      <h2 id="titulo-arquivos">Arquivos da Mari</h2>
       <div class="documentos__busca">
         <label for="pesquisa-documentos">Pesquisar documentos</label>
         <div class="documentos__campo-busca">
@@ -192,11 +191,12 @@
 
     <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-adicionar-documento">Adicionar documento da Mari</h2>
+        <h2 id="titulo-adicionar-documento" data-titulo-dialogo-documento>Adicionar documento da Mari</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p>Relacione o documento ao atendimento para manter o histórico organizado.</p>
-      <form class="formulario-mvp" data-formulario-mvp="documento">
+      <form class="formulario-mvp" data-formulario-mvp="documento" novalidate>
+        <input type="hidden" name="id" value="">
         <label>Título<input type="text" name="titulo" placeholder="Ex.: Receita de losartana" required></label>
         <label>Categoria
           <select name="categoria">
@@ -207,7 +207,14 @@
         </label>
         <div class="formulario-mvp__grade">
           <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
-          <label>Adicionado por<input type="text" name="autor" value="Zé da Manga" required></label>
+          <label>Adicionado por
+            <select name="autor" required>
+              <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
+              <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
+              <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
+              <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+            </select>
+          </label>
         </div>
         <label>Vínculo ou assunto<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
         <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
@@ -216,6 +223,7 @@
           <input type="file" name="arquivo" aria-describedby="ajuda-arquivo-documento">
           <small id="ajuda-arquivo-documento">O cadastro guarda o nome do arquivo.</small>
         </label>
+        <p class="formulario-mvp__erro" data-erro-documento role="alert"></p>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario">Salvar documento</button>
@@ -231,6 +239,7 @@
       <dl class="dialogo-mvp__dados" data-detalhes-documento></dl>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-documento>Excluir</button>
+        <button type="button" class="botao botao--secundario" data-editar-documento>Editar</button>
         <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
       </div>
     </dialog>
