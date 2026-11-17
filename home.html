@@ -64,15 +64,16 @@
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/porta-remedios.js" defer></script>
   <script src="assets/js/inicio.js" defer></script>
 </head>
 
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
@@ -81,13 +82,13 @@
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
           aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
         <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
@@ -95,7 +96,7 @@
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -104,8 +105,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -113,8 +114,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
-                  <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <h3>Próximo remédio</h3>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -145,27 +146,27 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
+      <p>Cuidado do dia a dia</p>
       <a href="home.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
       <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -173,25 +174,25 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="inicio">
-    <nav class="apoio__trilha" aria-label="Localização">Início</nav>
+    <nav class="apoio__trilha" aria-label="Você está em">Início</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Cuidados de hoje</h1>
         <p class="inicio__data"><time datetime="2026-11-10T11:58">Terça-feira, 10 de novembro de 2026 · 11h58</time></p>
       </div>
       <button type="button" class="botao botao--primario" data-dialogo="dialogo-registrar-cuidado"><i
-          class="fa-solid fa-plus" aria-hidden="true"></i> Registrar cuidado</button>
+          class="fa-solid fa-plus" aria-hidden="true"></i> Anotar o turno</button>
     </header>
 
     <section class="faixa-alerta" aria-labelledby="titulo-lacuna" data-inicio-lacuna>
       <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div class="faixa-alerta__texto">
-        <strong id="titulo-lacuna" data-inicio-lacuna-titulo>12h–13h · Turno sem cobertura</strong>
-        <span>A Mari precisa de acompanhamento nesse horário.</span>
+        <strong id="titulo-lacuna" data-inicio-lacuna-titulo>12h–13h · Horário sem ninguém</strong>
+        <span>A Mari precisa de alguém com ela nesse horário.</span>
       </div>
       <div class="faixa-alerta__acoes">
         <button type="button" class="botao botao--primario" data-dialogo-dinamico="dialogo-cobrir-horario"
-          data-dia="2026-11-10" data-horario="12h–13h" data-inicio-cobrir-lacuna>Cobrir horário</button>
+          data-dia="2026-11-10" data-horario="12h–13h" data-inicio-cobrir-lacuna>Ficar nesse horário</button>
       </div>
     </section>
 
@@ -212,7 +213,7 @@
         <img class="avatar avatar--medio" src="assets/media/fotos/foto-perfil-maria.png" alt="">
         <div class="painel__texto">
           <strong id="titulo-pessoa">Maria das Dores (Mari)</strong>
-          <span>Pessoa acompanhada · Precisa de alguém 24h por dia</span>
+          <span>Precisa de alguém com ela o dia todo</span>
         </div>
         <a class="botao botao--secundario" href="ficha.html"><i class="fa-regular fa-file-lines" aria-hidden="true"></i>
           Ver ficha</a>
@@ -220,9 +221,9 @@
       <div class="painel__bloco" data-turno-atual>
         <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
         <div class="painel__texto">
-          <span class="inicio__rotulo">Turno atual</span>
+          <span class="inicio__rotulo">Quem cuida agora</span>
           <strong data-turno-atual-titulo>07h–12h · Beatriz da Silva (Bea)</strong>
-          <span data-turno-atual-detalhe>Cobertura ativa agora · Próximo turno sem cobertura: 12h–13h</span>
+          <span data-turno-atual-detalhe>Tem alguém com a Mari agora · Próximo horário sem ninguém: 12h–13h</span>
         </div>
         <a class="botao botao--secundario" href="agenda.html?dia=2026-11-10">Ver turnos</a>
       </div>
@@ -230,17 +231,17 @@
         <img class="avatar" src="assets/media/mascotes/icone-mascote-espeto.svg" alt="">
         <div class="painel__texto">
           <span class="inicio__rotulo">Próximo compromisso</span>
-          <strong>14h · Consulta na UBS</strong>
-          <span data-compromisso-detalhes>UBS do bairro · Ana da Silva (Aninha) acompanha</span>
+          <strong>14h · Consulta no posto (UBS)</strong>
+          <span data-compromisso-detalhes>Posto do bairro · Ana da Silva (Aninha) vai junto</span>
         </div>
         <a class="botao botao--secundario" href="agenda.html">Ver na Agenda</a>
       </div>
       <div class="painel__bloco">
         <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
         <div class="painel__texto">
-          <span class="inicio__rotulo">Próxima medicação</span>
-          <strong data-proxima-medicacao>12h · 4 medicamentos previstos (Omeprazol + 3)</strong>
-          <span data-proxima-responsavel>Sem responsável neste turno (horário sem cobertura)</span>
+          <span class="inicio__rotulo">Próximo remédio</span>
+          <strong data-proxima-medicacao>12h · 4 remédios (Omeprazol e mais 3)</strong>
+          <span data-proxima-responsavel>Ninguém cuida nesse horário</span>
         </div>
         <a class="botao botao--secundario" href="medicamentos.html">Ver em Medicamentos</a>
       </div>
@@ -251,7 +252,7 @@
         <section class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios">
           <div class="painel__cartao-cabecalho">
             <h2 id="titulo-porta-remedios">Porta remédios de hoje</h2>
-            <small data-porta-remedios-resumo>7 de 20 administrados · deslize para ver mais</small>
+            <small data-porta-remedios-resumo>7 de 20 dados · arraste para o lado</small>
           </div>
           <div class="porta-remedios__trilho" tabindex="0" aria-label="Compartimentos do porta-remédios por horário"
             data-porta-remedios-trilho></div>
@@ -262,7 +263,7 @@
 
       <div class="painel__coluna">
         <section class="apoio__painel" aria-labelledby="titulo-passagem">
-          <h2 id="titulo-passagem" class="painel__subtitulo">Passagem de cuidado</h2>
+          <h2 id="titulo-passagem" class="painel__subtitulo">Recado de quem cuidou antes</h2>
           <div class="painel__item">
             <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
             <div class="painel__texto">
@@ -270,14 +271,13 @@
               <span>Cuidadora - <time datetime="2026-11-09T08:10">9 nov. 2026 · 08h10</time></span>
             </div>
           </div>
-          <div class="passagem__conteudo" data-passagem-relato>Agendar consulta com otorrinolaringologista para Dona
-            Mari.</div>
+          <div class="passagem__conteudo" data-passagem-relato>Marcar consulta no otorrino (ouvido, nariz e garganta) para a Dona Mari.</div>
           <div class="passagem__nota">
-            <strong>Antes de agendar</strong>
+            <strong>Antes de marcar</strong>
             <span>Confirme se o convênio cobre a consulta.</span>
           </div>
           <button type="button" class="botao botao--secundario painel__acao-larga"
-            data-dialogo="dialogo-passagem-cuidado">Ver detalhes da passagem</button>
+            data-dialogo="dialogo-passagem-cuidado">Ver o recado completo</button>
         </section>
       </div>
     </div>
@@ -286,7 +286,7 @@
       <div class="painel__coluna">
         <section class="apoio__painel" aria-labelledby="titulo-escala">
           <div class="painel__cartao-cabecalho">
-            <h2 id="titulo-escala" data-titulo-escala>Escala semanal · 9 a 15 nov.</h2>
+            <h2 id="titulo-escala" data-titulo-escala>Quem cuida na semana · 9 a 15 nov.</h2>
             <a class="botao botao--secundario" href="agenda.html">Ver escala</a>
           </div>
           <div class="agenda__semana" role="group" aria-label="Dias da semana" data-semana></div>
@@ -307,8 +307,7 @@
             <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-pingo.svg"
                 alt=""><span class="painel__texto"><strong>Paulo da Silva (Paul)</strong><span>Neto</span></span></li>
             <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-cubado.svg"
-                alt=""><span class="painel__texto"><strong>Zé da Manga (Zé)</strong><span>Administrador ·
-                  Neto</span></span></li>
+                alt=""><span class="painel__texto"><strong>Zé da Manga (Zé)</strong><span>Organiza a rede · Neto</span></span></li>
           </ul>
           <a class="botao botao--secundario painel__acao-larga" href="pessoas.html"><i class="fa-solid fa-users"
               aria-hidden="true"></i> Ver todos</a>
@@ -320,23 +319,22 @@
       <div class="dialogo-mvp__cabecalho">
         <div class="dialogo-mvp__titulo-com-icone">
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-clipboard"></i></span>
-          <h2 id="titulo-registrar-cuidado">Registrar cuidado</h2>
+          <h2 id="titulo-registrar-cuidado">Anotar o turno</h2>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <p>Maria das Dores (Mari) · Diário de turno</p>
       <div class="dialogo-mvp__secao">
-        <p class="dialogo-mvp__secao-titulo">Contexto do registro</p>
+        <p class="dialogo-mvp__secao-titulo">Sobre esta anotação</p>
         <div class="dialogo-mvp__linha-info">
           <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
             aria-hidden="true" data-relato-avatar>
-          <span data-contexto-relato-inicio>Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por Zé da Manga
-            (Zé)</span>
+          <span data-contexto-relato-inicio>Turno de Beatriz da Silva (Bea) · 07h–12h · Anotado por Zé da Manga (Zé)</span>
         </div>
       </div>
       <form class="formulario-mvp" data-formulario-mvp="relato">
-        <label>Onde registrar
+        <label>Onde anotar
           <select name="destino" data-destino-cuidado>
             <option value="ficha" selected>Diário de turno (Ficha da Mari)</option>
             <option value="agenda">Compromisso ou lembrete (Agenda)</option>
@@ -345,24 +343,24 @@
         <div class="formulario-mvp" data-bloco-cuidado="ficha">
           <label>Vincular a um turno (opcional)
             <select name="turno">
-              <option value="">Não vincular a um turno (registro geral)</option>
+              <option value="">Sem turno (anotação geral)</option>
               <option value="Turno 00h–07h">00h–07h</option>
               <option value="Turno 07h–12h" selected>07h–12h (turno atual)</option>
               <option value="Turno 13h–19h">13h–19h</option>
               <option value="Turno 19h–24h">19h–24h</option>
             </select>
           </label>
-          <label>Relato do turno
-            <textarea name="relato" rows="3" placeholder="Como a Mari passou, alimentação, humor ou intercorrências..."
+          <label>Como foi o turno
+            <textarea name="relato" rows="3" placeholder="Como a Mari passou, como comeu, como estava o humor, se aconteceu algo..."
               required></textarea>
           </label>
           <label>Tarefa relacionada (opcional)
             <select name="tarefa" data-select-tarefas-relato>
-              <option value="">Selecione uma tarefa</option>
+              <option value="">Escolha uma tarefa</option>
               <optgroup label="Rotina de cuidado">
-                <option>Administrar medicamentos do turno</option>
+                <option>Dar os remédios do turno</option>
                 <option>Acompanhar hidratação e alimentação</option>
-                <option>Retirar medicamento na UBS</option>
+                <option>Pegar remédio no posto (UBS)</option>
                 <option>Conferir estoque de medicamentos</option>
                 <option>Organizar documentos da consulta</option>
               </optgroup>
@@ -384,7 +382,7 @@
           <label>Local
             <input type="text" name="localEvento" placeholder="Ex.: UBS do bairro, Casa, Clínica">
           </label>
-          <label>Quem acompanha
+          <label>Quem vai junto
             <select name="acompanhanteEvento">
               <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
               <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
@@ -393,7 +391,7 @@
             </select>
           </label>
           <label class="dialogo-mvp__opcao-inline">
-            <input type="checkbox" name="espelharFicha"> Registrar também um resumo no Diário da Ficha
+            <input type="checkbox" name="espelharFicha"> Anotar também um resumo no Diário da Ficha
           </label>
         </div>
         <div class="dialogo-mvp__acoes">
@@ -405,43 +403,42 @@
 
     <dialog class="dialogo-mvp" id="dialogo-cobrir-horario" aria-labelledby="titulo-cobrir-horario">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-cobrir-horario">Cobrir horário</h2>
+        <h2 id="titulo-cobrir-horario">Ficar nesse horário</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="cobertura">
         <div class="dialogo-mvp__opcoes">
-          <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Cobrir todo o horário
-            disponível</label>
+          <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Ficar o horário todo</label>
         </div>
         <div class="agenda__grade-horarios" data-horarios-cobertura hidden>
-          <label>Horário de entrada<select name="inicio"></select></label>
-          <label>Horário de saída<select name="fim"></select></label>
+          <label>Chego às<select name="inicio"></select></label>
+          <label>Saio às<select name="fim"></select></label>
         </div>
         <p class="agenda__previa-turno" data-previa-nova-cobertura></p>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Confirmar cobertura</button>
+          <button type="submit" class="botao botao--primario">Confirmar que vou ficar</button>
         </div>
       </form>
     </dialog>
 
     <dialog class="dialogo-mvp" id="dialogo-editar-cobertura" aria-labelledby="titulo-editar-cobertura">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-editar-cobertura">Editar cobertura de turno</h2>
+        <h2 id="titulo-editar-cobertura">Mudar meu horário</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <p class="dialogo-mvp__contexto" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="editar-cobertura">
         <div class="agenda__grade-horarios">
-          <label>Horário de entrada<select name="inicio" required></select></label>
-          <label>Horário de saída<select name="fim" required></select></label>
+          <label>Chego às<select name="inicio" required></select></label>
+          <label>Saio às<select name="fim" required></select></label>
         </div>
         <p class="agenda__previa-turno" data-previa-cobertura></p>
         <div class="dialogo-mvp__acoes">
-          <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Cancelar cobertura</button>
+          <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
           <button type="submit" class="botao botao--primario">Salvar alterações</button>
         </div>
@@ -451,37 +448,36 @@
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-relato-registrado"
       aria-labelledby="titulo-relato-registrado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-relato-registrado">Relato registrado</h2>
+        <h2 id="titulo-relato-registrado">Anotação salva</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <p data-relato-registrado-contexto>Maria das Dores (Mari) · Diário de turno</p>
       <div class="dialogo-mvp__secao">
-        <p class="dialogo-mvp__secao-titulo" data-relato-registrado-turno>Turno das 07h às 12h</p>
+        <p class="dialogo-mvp__secao-titulo" data-relato-registrado-turno>Das 7h às 12h</p>
         <div class="dialogo-mvp__linha-info">
           <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
             aria-hidden="true" data-relato-registrado-avatar>
-          <span data-relato-registrado-detalhe>Registro por Zé da Manga (Zé) · Disponível na ficha da Maria das Dores
-            (Mari).</span>
+          <span data-relato-registrado-detalhe>Anotado por Zé da Manga (Zé) · Fica na ficha da Maria das Dores (Mari).</span>
         </div>
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <a class="botao botao--primario" href="ficha.html#diario" data-relato-registrado-link>Ver diário na ficha</a>
+        <a class="botao botao--primario" href="ficha.html#diario" data-relato-registrado-link>Ver na ficha</a>
       </div>
     </dialog>
 
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-horario-expirado"
       aria-labelledby="titulo-horario-expirado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-horario-expirado">Horário expirado</h2>
+        <h2 id="titulo-horario-expirado">Esse horário já passou</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <p data-horario-expirado-contexto>Maria das Dores (Mari) · Terça, 10 nov. · 12h–13h</p>
       <div class="dialogo-mvp__aviso-caixa">
-        <strong>A cobertura não foi alterada</strong>
-        <span>Este turno já terminou. Confira os próximos horários sem cobertura.</span>
+        <strong>Nada mudou na escala</strong>
+        <span>Esse horário já terminou. Veja os próximos horários sem ninguém.</span>
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
@@ -492,7 +488,7 @@
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-passagem-cuidado"
       aria-labelledby="titulo-passagem-cuidado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-passagem-cuidado">Passagem de cuidado</h2>
+        <h2 id="titulo-passagem-cuidado">Recado de quem cuidou antes</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
@@ -500,18 +496,16 @@
         <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" aria-hidden="true">
         <div>
           <strong>Beatriz da Silva (Bea)</strong>
-          <small style="display: block; color: var(--cor-texto-secundario);">Solicitação feita em 9 nov. · 08h10</small>
+          <small style="display: block; color: var(--cor-texto-secundario);">Pedido feito em 9 nov. · 08h10</small>
         </div>
       </div>
       <div class="dialogo-mvp__aviso-caixa">
         <strong data-passagem-modal-titulo>Para o próximo turno</strong>
-        <span data-passagem-modal-texto>Agendar consulta de otorrinolaringologia para Maria das Dores (Mari). Antes de
-          agendar, confirmar a cobertura do convênio.</span>
+        <span data-passagem-modal-texto>Marcar consulta no otorrino (médico de ouvido, nariz e garganta) para Maria das Dores (Mari). Antes, confira se o convênio paga a consulta.</span>
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
-        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-pedido-andamento">Assumir
-          pedido</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-pedido-andamento">Eu resolvo</button>
         <a class="botao botao--primario" href="agenda.html" data-passagem-ver-consulta hidden>Ver consulta
           cadastrada</a>
       </div>
@@ -520,11 +514,11 @@
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-pedido-andamento"
       aria-labelledby="titulo-pedido-andamento">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-pedido-andamento">Pedido em andamento</h2>
+        <h2 id="titulo-pedido-andamento">Você está resolvendo</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p data-pedido-contexto>Otorrinolaringologia · Maria das Dores (Mari)</p>
+      <p data-pedido-contexto>Otorrino · Maria das Dores (Mari)</p>
       <div class="dialogo-mvp__secao">
         <p class="dialogo-mvp__secao-titulo">Responsável</p>
         <div class="dialogo-mvp__linha-info">
@@ -532,38 +526,35 @@
             aria-hidden="true" data-pedido-avatar>
           <div>
             <strong data-pedido-responsavel>Zé da Manga (Zé)</strong>
-            <small style="display: block; color: var(--cor-texto-secundario);" data-pedido-papel>Administrador ·
-              Neto</small>
+            <small style="display: block; color: var(--cor-texto-secundario);" data-pedido-papel>Organiza a rede · Neto</small>
           </div>
         </div>
       </div>
       <div class="dialogo-mvp__secao">
-        <p class="dialogo-mvp__secao-titulo">Próximo passo</p>
-        <p style="color: var(--cor-texto-secundario); font-size: var(--texto-interface);">Após combinar a data com a
-          clínica, cadastre a consulta na Agenda.</p>
+        <p class="dialogo-mvp__secao-titulo">O que fazer agora</p>
+        <p style="color: var(--cor-texto-secundario); font-size: var(--texto-interface);">Depois de combinar a data com a clínica, coloque a consulta na Agenda.</p>
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario"
           data-passagem-etapa="dialogo-passagem-cuidado">Voltar</button>
-        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-cadastrar-consulta">Cadastrar
-          consulta</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-cadastrar-consulta">Colocar na Agenda</button>
       </div>
     </dialog>
 
     <dialog class="dialogo-mvp" id="dialogo-cadastrar-consulta" aria-labelledby="titulo-cadastrar-consulta">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-cadastrar-consulta">Cadastrar consulta</h2>
+        <h2 id="titulo-cadastrar-consulta">Colocar na Agenda</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p data-consulta-contexto>Otorrinolaringologia · Maria das Dores (Mari)</p>
+      <p data-consulta-contexto>Otorrino · Maria das Dores (Mari)</p>
       <form class="formulario-mvp" data-formulario-mvp="consulta-passagem">
         <div class="formulario-mvp__grade">
           <label>Data<input type="date" name="dia" value="2026-11-23" required></label>
           <label>Horário<input type="time" name="hora" value="14:00" required></label>
         </div>
         <label>Local<input type="text" name="local" value="Clínica do convênio" required></label>
-        <label>Quem acompanha
+        <label>Quem vai junto
           <select name="acompanhante">
             <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
             <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
@@ -589,9 +580,8 @@
       <div class="dialogo-mvp__linha-info">
         <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
         <div>
-          <strong data-consulta-agendada-titulo>Otorrinolaringologia · 23 nov. 2026 · 14h</strong>
-          <small style="display: block; color: var(--cor-texto-secundario);" data-consulta-agendada-detalhe>Clínica do
-            convênio · Zé da Manga (Zé) acompanha.</small>
+          <strong data-consulta-agendada-titulo>Otorrino · 23 nov. 2026 · 14h</strong>
+          <small style="display: block; color: var(--cor-texto-secundario);" data-consulta-agendada-detalhe>Clínica do convênio · Zé da Manga (Zé) vai junto.</small>
         </div>
       </div>
       <div class="dialogo-mvp__acoes">
@@ -616,16 +606,16 @@
         <span class="selo" data-pote-estado-selo></span>
       </div>
       <form class="formulario-mvp" data-formulario-mvp="registrar-pote">
-        <label>Horário da administração<input type="time" name="horario" value="11:58" required></label>
+        <label>Hora que deu<input type="time" name="horario" value="11:58" required></label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
           <a class="botao botao--secundario" href="medicamentos.html" data-pote-link-medicamentos>Ver em
             Medicamentos</a>
-          <button type="submit" class="botao botao--primario">Registrar administração</button>
+          <button type="submit" class="botao botao--primario">Marcar como dado</button>
         </div>
       </form>
       <div class="dialogo-mvp__acoes" data-pote-acoes-registrado hidden>
-        <button type="button" class="botao botao--perigo" data-pote-desfazer hidden>Desfazer registro</button>
+        <button type="button" class="botao botao--perigo" data-pote-desfazer hidden>Desfazer</button>
         <a class="botao botao--secundario" href="medicamentos.html" data-pote-link-medicamentos>Ver em Medicamentos</a>
         <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
       </div>

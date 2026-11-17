@@ -183,10 +183,10 @@ function tocarSomNotificacao() {
 }
 
 const NOTIFICACOES_INICIAIS_REDE = [
-  { titulo: 'Horário sem cobertura', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).', avatar: 'assets/media/mascotes/icone-mascote-espeto.svg' },
-  { titulo: 'Pedido para agendar consulta', descricao: 'Beatriz pediu ajuda para agendar otorrinolaringologia.', avatar: 'assets/media/mascotes/icone-mascote-trevo.svg' },
-  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina prevista para 20h.', avatar: 'assets/media/mascotes/icone-mascote-pingo.svg' },
-  { titulo: 'Quiz em Direitos e serviços', descricao: 'Há um questionário pendente para consultar possíveis benefícios e serviços para a Mari.', avatar: 'assets/media/mascotes/icone-mascote-cubado.svg', destino: 'direitos.html#titulo-simulador-mari' }
+  { titulo: 'Horário sem ninguém', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).', avatar: 'assets/media/mascotes/icone-mascote-espeto.svg' },
+  { titulo: 'Pedido para marcar consulta', descricao: 'Beatriz pediu ajuda para marcar o otorrino.', avatar: 'assets/media/mascotes/icone-mascote-trevo.svg' },
+  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina às 20h.', avatar: 'assets/media/mascotes/icone-mascote-pingo.svg' },
+  { titulo: 'Quiz em Direitos e serviços', descricao: 'Falta responder as perguntas que mostram os direitos da Mari.', avatar: 'assets/media/mascotes/icone-mascote-cubado.svg', destino: 'direitos.html#titulo-simulador-mari' }
 ];
 
 function resolverAvatarNotificacao(avatarInformado, titulo, descricao) {
@@ -382,8 +382,8 @@ const itensPesquisaveis = [
   ...linksMenu.map(link => ({ href: link.getAttribute('href'), rotulo: link.textContent.trim() })),
   { href: 'meu-perfil.html', rotulo: 'Meu perfil' },
   { href: 'configuracoes.html', rotulo: 'Configurações' },
-  { href: 'privacidade.html', rotulo: 'Política de Privacidade e Termos' },
-  { href: 'ficha.html', rotulo: 'Ficha da pessoa acompanhada · Maria das Dores (Mari)' }
+  { href: 'privacidade.html', rotulo: 'Privacidade e regras de uso' },
+  { href: 'ficha.html', rotulo: 'Ficha de quem recebe cuidado · Maria das Dores (Mari)' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
 const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-busca-topo], .barra-topo [data-dialogo="dialogo-busca"]');
@@ -536,9 +536,9 @@ function inicializarBuscaTopo() {
 
     const extras = [
       { href: 'medicamentos.html', rotulo: 'Medicamentos e rotina de doses', detalhe: 'Remédios, horários e porta-remédios', categoria: 'Ações rápidas', icone: 'fa-solid fa-pills', busca: 'remedio remedios medicamento medicamentos pilula comprimido dose doses horario horarios rotina tomar administracao atrasado porta remedios' },
-      { href: 'medicamentos.html?estoque=1', rotulo: 'Insumos e controle de estoque', detalhe: 'Fraldas, Metformina e reposição', categoria: 'Ações rápidas', icone: 'fa-solid fa-boxes-stacked', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
+      { href: 'medicamentos.html?estoque=1', rotulo: 'Materiais e o que tem em casa', detalhe: 'Fraldas, Metformina e reposição', categoria: 'Ações rápidas', icone: 'fa-solid fa-boxes-stacked', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
       { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços', detalhe: 'SUS, BPC/LOAS, Farmácia Popular e CRAS', categoria: 'Páginas', icone: 'fa-solid fa-circle-info', busca: 'servico servicos direito direitos beneficio beneficios sus ubs farmacia popular bpc loas inss cras caps estatuto idoso transporte gratuidade auxilio lei guia' },
-      { href: 'agenda.html', rotulo: 'Agenda, turnos e cobertura de horários', detalhe: 'Escala semanal, consultas e exames', categoria: 'Ações rápidas', icone: 'fa-regular fa-calendar', busca: 'agenda turno turnos escala cobertura cobrir horario calendario compromisso consulta exame' },
+      { href: 'agenda.html', rotulo: 'Agenda e quem cuida em cada horário', detalhe: 'Escala semanal, consultas e exames', categoria: 'Ações rápidas', icone: 'fa-regular fa-calendar', busca: 'agenda turno turnos escala cobertura cobrir horario calendario compromisso consulta exame' },
       { href: 'ficha.html', rotulo: 'Ficha de saúde, alergias e diário', detalhe: `${estado.person?.alergias || 'Dipirona'} e histórico clínico`, categoria: 'Ações rápidas', icone: 'fa-regular fa-id-card', busca: `alergia alergias dipirona ficha saude historico cirurgia trombose diario relato emergencia convenio imprimir resumo ${estado.person?.alergias || ''}` },
       { href: 'meu-perfil.html', rotulo: 'Cuidar de quem cuida e folgas', detalhe: 'Check-in emocional, horas e pedidos de folga', categoria: 'Ações rápidas', icone: 'fa-regular fa-heart', busca: 'cuidar folga descanso sobrecarga humor perfil recado' },
       { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Tema acolhedor, alto contraste e fonte', categoria: 'Páginas', icone: 'fa-solid fa-gear', busca: 'configuracao configuracoes tema acolhedor neutro contraste fonte acessibilidade som' },
@@ -551,7 +551,7 @@ function inicializarBuscaTopo() {
       .map(item => ({
         href: 'medicamentos.html?estoque=1',
         rotulo: item.nome,
-        detalhe: 'Insumo · Controle de estoque',
+        detalhe: 'Material · O que tem em casa',
         categoria: 'Medicamentos',
         icone: 'fa-solid fa-boxes-stacked',
         busca: `${item.nome} insumo estoque medicamento`
@@ -889,14 +889,14 @@ function sincronizarStatusMedicamentos() {
 
   linha.classList.toggle('cartao-status__linha--alerta', ehAlerta);
   if (ehAlerta) {
-    linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'dose pendente' : 'doses pendentes'}`;
-    linha.querySelector('small').textContent = 'Não administrada';
+    linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'remédio para dar' : 'remédios para dar'}`;
+    linha.querySelector('small').textContent = 'Não foi dado';
   } else if (grupoProximo.length) {
-    linha.querySelector('strong').textContent = 'Há medicamentos previstos';
+    linha.querySelector('strong').textContent = 'Tem remédio para dar';
     linha.querySelector('small').textContent = `Próximo horário às ${proxima.hora.padStart(3, '0')}`;
   } else {
-    linha.querySelector('strong').textContent = 'Nenhuma dose futura';
-    linha.querySelector('small').textContent = 'Veja os registros de hoje';
+    linha.querySelector('strong').textContent = 'Nenhum remédio para mais tarde';
+    linha.querySelector('small').textContent = 'Veja o que já foi anotado hoje';
   }
 }
 
@@ -949,12 +949,12 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
               || id;
             const novo = regAtual[chaveDose];
             if (novo?.estado === 'administrado') {
-              return ['Medicação administrada', `${primeiroNome} registrou ${nomeMed} (${hora}).`, 'medicamentos.html'];
+              return ['Remédio dado', `${primeiroNome} registrou ${nomeMed} (${hora}).`, 'medicamentos.html'];
             }
             if (novo?.estado === 'nao-administrado') {
-              return ['Medicação não administrada', `${primeiroNome} marcou ${nomeMed} (${hora}) como não administrada.`, 'medicamentos.html'];
+              return ['Remédio não dado', `${primeiroNome} marcou ${nomeMed} (${hora}) como não dado.`, 'medicamentos.html'];
             }
-            return ['Medicação reaberta', `${primeiroNome} desfez o registro de ${nomeMed} (${hora}).`, 'medicamentos.html'];
+            return ['Medicação reaberta', `${primeiroNome} desfez a anotação de ${nomeMed} (${hora}).`, 'medicamentos.html'];
           }
         }
       } catch {
@@ -976,9 +976,9 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
     const regras = [
       ['estoque', 'Estoque atualizado', ultimoEstoque ? `${primeiroNome} atualizou o estoque de ${ultimoEstoque}.` : `${primeiroNome} atualizou o estoque de itens.`, 'medicamentos.html', permitirMedicacao],
       ['itens', 'Itens atualizados', `${primeiroNome} atualizou a lista de medicamentos.`, 'medicamentos.html', permitirMedicacao],
-      ['turnos', 'Turno atualizado', `${primeiroNome} atualizou a cobertura de turno.`, 'agenda.html', permitirRelatos],
+      ['turnos', 'Turno atualizado', `${primeiroNome} mudou quem cuida num horário.`, 'agenda.html', permitirRelatos],
       ['events', 'Agenda atualizada', `${primeiroNome} atualizou um compromisso na agenda.`, 'agenda.html', permitirRelatos],
-      ['reports', 'Novo relato no diário', `${primeiroNome} registrou um relato no diário.`, 'ficha.html#diario', permitirRelatos],
+      ['reports', 'Novo relato no diário', `${primeiroNome} escreveu no diário.`, 'ficha.html#diario', permitirRelatos],
       ['documents', 'Documentos atualizados', `${primeiroNome} atualizou os documentos da Mari.`, 'documentos.html', true],
       ['convites', 'Rede atualizada', `${primeiroNome} atualizou os participantes da rede.`, 'pessoas.html', true],
       ['perfil', 'Perfil atualizado', `${primeiroNome} atualizou os dados do perfil.`, 'meu-perfil.html', true],

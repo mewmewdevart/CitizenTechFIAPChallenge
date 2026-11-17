@@ -697,3 +697,174 @@ html.acessibilidade--alto-contraste.tema--acolhedor [data-turnos] {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+.agenda__painel .calendario-mensal__grade > span {
+  font-size: var(--texto-interface);
+  font-weight: var(--peso-semibold);
+}
+
+.agenda__coluna-calendario {
+  --dia-sucesso-fundo: #DDF3E4;
+  --dia-sucesso: #1E6B3A;
+  --dia-foco: #1B5FA8;
+  --dia-parcial: #FFE08A;
+}
+
+html.tema--acolhedor .agenda__coluna-calendario {
+  --dia-sucesso-fundo: var(--cor-aviso-sucesso-claro);
+  --dia-sucesso: var(--cor-aviso-sucesso);
+  --dia-parcial: var(--cor-aviso-atencao-claro);
+}
+
+html.acessibilidade--alto-contraste .agenda__coluna-calendario {
+  --dia-sucesso-fundo: var(--cor-aviso-sucesso-claro);
+  --dia-sucesso: var(--cor-aviso-sucesso);
+  --dia-foco: #FFE600;
+  --dia-parcial: var(--cor-aviso-atencao-claro);
+}
+
+.agenda__painel .calendario-mensal__dias {
+  gap: 6px;
+}
+
+.agenda__painel .calendario-mensal__dias button,
+.agenda__amostra {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 60px;
+  padding: 6px 2px;
+  border: 2px solid transparent;
+  border-radius: var(--raio-sm);
+  background: var(--cor-superficie);
+  color: var(--cor-texto-principal);
+  font-size: var(--texto-titulo-cartao);
+  font-weight: var(--peso-semibold);
+  line-height: 1;
+}
+
+.agenda__painel .calendario-mensal__dias button:hover {
+  border-color: var(--cor-borda-controle);
+}
+
+.agenda__painel .calendario-mensal__indicadores {
+  position: static;
+  display: contents;
+  font-size: 0;
+}
+
+.calendario-mensal__simbolo {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+
+.calendario-mensal__selo-consulta {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--cor-superficie);
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  box-sizing: content-box;
+}
+
+.agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--sem-ninguem,
+.agenda__amostra.calendario-mensal__dia--sem-ninguem {
+  border-color: var(--cor-aviso-alerta-escuro);
+  background: repeating-linear-gradient(135deg, var(--cor-aviso-alerta-claro) 0 6px, var(--cor-superficie) 6px 10px);
+  color: var(--cor-aviso-alerta-escuro);
+}
+
+.agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--parcial,
+.agenda__amostra.calendario-mensal__dia--parcial {
+  border-color: var(--cor-aviso-atencao-escuro);
+  border-style: dashed;
+  background: linear-gradient(to top, var(--dia-parcial) 50%, var(--cor-superficie) 50%);
+  color: var(--cor-aviso-atencao-escuro);
+}
+
+.agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--coberto,
+.agenda__amostra.calendario-mensal__dia--coberto {
+  border-color: transparent;
+  background: var(--dia-sucesso-fundo);
+  color: var(--cor-texto-principal);
+}
+
+.calendario-mensal__dia--coberto .calendario-mensal__simbolo {
+  color: var(--dia-sucesso);
+}
+
+.agenda__painel .calendario-mensal__dias button[aria-pressed="true"],
+.agenda__amostra--selecionado {
+  border: 3px solid var(--cor-texto-principal);
+  font-weight: var(--peso-negrito);
+}
+
+.agenda__painel .calendario-mensal__dias button[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top-color: var(--cor-texto-principal);
+  transform: translateX(-50%);
+}
+
+.agenda__painel .calendario-mensal__dias button:focus-visible {
+  z-index: 1;
+  outline: 4px solid var(--dia-foco);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--cor-superficie);
+}
+
+.agenda__legenda {
+  gap: var(--espaco-sm);
+}
+
+.agenda__legenda p {
+  font-size: var(--texto-interface);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.agenda__amostra {
+  flex: none;
+  width: 48px;
+  min-height: 48px;
+  padding: 4px 2px;
+  font-size: var(--texto-interface);
+}
+
+.agenda__amostra.calendario-mensal__dia--consulta {
+  border-color: var(--cor-borda-sutil);
+}
+
+@media (max-width: 600px) {
+  .agenda__painel .calendario-mensal__dias {
+    gap: 4px;
+  }
+
+  .agenda__painel .calendario-mensal__dias button {
+    min-height: 54px;
+  }
+
+  .calendario-mensal__simbolo svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--consulta:not(.calendario-mensal__dia--sem-ninguem, .calendario-mensal__dia--parcial, .calendario-mensal__dia--coberto, [aria-pressed="true"]) {
+  border-color: var(--cor-borda-controle);
+}
+
+html.acessibilidade--alto-contraste .calendario-mensal__selo-consulta {
+  background: #7CC4FF;
+}

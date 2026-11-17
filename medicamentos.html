@@ -63,15 +63,16 @@
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/nucleo-cuidado.js" defer></script>
+  <script src="assets/js/porta-remedios.js" defer></script>
   <script src="assets/js/medicamentos.js" defer></script>
 </head>
 
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
@@ -80,13 +81,13 @@
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
           aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
         <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
@@ -94,7 +95,7 @@
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -103,8 +104,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -113,7 +114,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -144,27 +145,27 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
+      <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html" aria-current="page"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
       <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -172,22 +173,22 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="medicamentos">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
-      Medicamentos e insumos</nav>
+    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+      Remédios e materiais</nav>
     <header class="apoio__cabecalho">
       <div>
-        <h1>Medicamentos e insumos</h1>
-        <p>Confira a rotina da Mari, registre administrações e acompanhe o estoque</p>
+        <h1>Remédios e materiais</h1>
+        <p>Veja os remédios da Mari, marque o que foi dado e confira o que tem em casa</p>
       </div>
       <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-item"><i
-          class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar item</button>
+          class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar remédio ou material</button>
     </header>
 
     <section class="faixa-alerta" data-alerta-medicamentos aria-labelledby="titulo-alergia">
       <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span>
       <div class="faixa-alerta__texto">
         <strong id="titulo-alergia">Alergia à dipirona</strong>
-        <span>Não administrar. Em caso de dor, consultar o responsável antes.</span>
+        <span>Não dar. Se ela sentir dor, fale antes com o responsável.</span>
       </div>
     </section>
 
@@ -203,7 +204,7 @@
       </div>
     </section>
 
-    <div class="meds__abas" role="tablist" aria-label="Seções de medicamentos e insumos">
+    <div class="meds__abas" role="tablist" aria-label="Remédios e materiais">
       <button type="button" role="tab" id="aba-medicamentos-dia" aria-selected="true"
         aria-controls="painel-medicamentos-dia">Rotina e horários</button>
       <button type="button" role="tab" id="aba-estoque" aria-selected="false" aria-controls="painel-estoque"
@@ -213,32 +214,38 @@
     <section class="apoio__painel" id="painel-medicamentos-dia" role="tabpanel" aria-labelledby="aba-medicamentos-dia">
       <div class="painel__cartao-cabecalho">
         <h2 id="titulo-rotina">Rotina de hoje · Terça-feira, 10 de novembro</h2>
-        <a class="botao botao--terciario botao--pequeno" href="home.html#titulo-porta-remedios">Ver porta-remédios</a>
       </div>
       <div class="rotina__painel">
         <div class="rotina__pote" aria-hidden="true" data-rotina-pote></div>
         <p class="rotina__contagem"><strong data-rotina-contagem></strong><small>Doses de hoje</small></p>
-        <ul class="rotina__doses" data-rotina-doses></ul>
+        <section class="porta-remedios porta-remedios--medicamentos" aria-labelledby="titulo-porta-remedios">
+          <div class="porta-remedios__cabecalho">
+            <h3 id="titulo-porta-remedios">Porta-remédios de hoje</h3>
+            <small data-porta-remedios-resumo></small>
+          </div>
+          <div class="porta-remedios__trilho" tabindex="0" aria-label="Compartimentos do porta-remédios por horário"
+            data-porta-remedios-trilho></div>
+          <div class="porta-remedios__horas" role="group" aria-label="Ir para o horário" data-porta-remedios-horas></div>
+        </section>
       </div>
 
-      <h3 class="painel__subtitulo">Próxima administração</h3>
+      <h3 class="painel__subtitulo">Próximos remédios</h3>
       <div class="painel__bloco" data-proxima-administracao></div>
 
-      <h3 class="painel__subtitulo" id="registros-de-hoje">Registros de hoje</h3>
+      <h3 class="painel__subtitulo" id="registros-de-hoje">Anotações de hoje</h3>
       <div class="itens-cadastrados__controles" data-registros-controles>
         <div class="documentos__busca">
-          <label for="pesquisa-registros">Buscar registros do dia</label>
+          <label for="pesquisa-registros">Buscar anotações do dia</label>
           <div class="documentos__campo-busca">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            <input id="pesquisa-registros" type="search" placeholder="Nome do medicamento ou horário" data-registros-busca>
+            <input id="pesquisa-registros" type="search" placeholder="Nome do remédio ou horário" data-registros-busca>
           </div>
         </div>
-        <div class="filtros" role="group" aria-label="Filtrar registros por situação">
+        <div class="filtros" role="group" aria-label="Mostrar só">
           <button type="button" class="filtros__opcao" data-registros-filtro="Todos" aria-pressed="true">Todos</button>
           <button type="button" class="filtros__opcao" data-registros-filtro="administrado"
-            aria-pressed="false">Administrados</button>
-          <button type="button" class="filtros__opcao" data-registros-filtro="nao-administrado" aria-pressed="false">Não
-            administrados</button>
+            aria-pressed="false">Já dados</button>
+          <button type="button" class="filtros__opcao" data-registros-filtro="nao-administrado" aria-pressed="false">Não dados</button>
         </div>
       </div>
       <ul class="painel__lista painel__bloco" data-registros-dia></ul>
@@ -248,13 +255,13 @@
 
     <div class="meds__painel-estoque" id="painel-estoque" role="tabpanel" aria-labelledby="aba-estoque" hidden>
       <section class="apoio__painel" aria-labelledby="titulo-itens">
-        <h2 id="titulo-itens">Itens cadastrados</h2>
+        <h2 id="titulo-itens">Remédios e materiais</h2>
         <div class="itens-cadastrados__controles" data-itens-controles>
           <div class="documentos__busca">
-            <label for="pesquisa-itens">Pesquisar itens</label>
+            <label for="pesquisa-itens">Buscar itens</label>
             <div class="documentos__campo-busca">
               <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              <input id="pesquisa-itens" type="search" placeholder="Nome do medicamento ou insumo" data-itens-busca>
+              <input id="pesquisa-itens" type="search" placeholder="Nome do remédio ou material" data-itens-busca>
             </div>
           </div>
           <div class="filtros" role="group" aria-label="Filtrar itens por tipo">
@@ -262,7 +269,7 @@
             <button type="button" class="filtros__opcao" data-itens-filtro="Medicamento"
               aria-pressed="false">Medicamentos</button>
             <button type="button" class="filtros__opcao" data-itens-filtro="Insumo"
-              aria-pressed="false">Insumos</button>
+              aria-pressed="false">Materiais</button>
           </div>
         </div>
         <ul class="painel__lista" data-itens-cadastrados></ul>
@@ -271,11 +278,41 @@
       </section>
     </div>
 
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhe-pote" aria-labelledby="titulo-detalhe-pote">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-detalhe-pote" data-pote-titulo>Detalhes do medicamento</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
+      </div>
+      <p class="dialogo-mvp__contexto" data-pote-contexto></p>
+      <div class="painel__item dialogo-mvp__item-pote" data-pote-resumo-estado>
+        <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" data-pote-avatar>
+        <span class="painel__texto">
+          <strong data-pote-estado-titulo></strong>
+          <span data-pote-estado-detalhe></span>
+        </span>
+        <span class="selo" data-pote-estado-selo></span>
+      </div>
+      <form class="formulario-mvp" data-formulario-mvp="registrar-pote">
+        <label>Hora que deu<input type="time" name="horario" value="11:58" required></label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+          <a class="botao botao--secundario" href="medicamentos.html" data-pote-link-medicamentos>Ver em
+            Medicamentos</a>
+          <button type="submit" class="botao botao--primario">Marcar como dado</button>
+        </div>
+      </form>
+      <div class="dialogo-mvp__acoes" data-pote-acoes-registrado hidden>
+        <button type="button" class="botao botao--perigo" data-pote-desfazer hidden>Desfazer</button>
+        <a class="botao botao--secundario" href="medicamentos.html" data-pote-link-medicamentos>Ver em Medicamentos</a>
+        <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
+      </div>
+    </dialog>
     <dialog class="dialogo-mvp" id="dialogo-registrar-administracao" aria-labelledby="titulo-registrar-administracao">
       <div class="dialogo-mvp__cabecalho">
         <div class="dialogo-mvp__titulo-com-icone">
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
-          <h2 id="titulo-registrar-administracao" data-dose-titulo>Registrar administração</h2>
+          <h2 id="titulo-registrar-administracao" data-dose-titulo>Marcar como dado</h2>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -286,21 +323,21 @@
         <span data-dose-estado-anterior-detalhe></span>
       </div>
       <div class="dialogo-mvp__secao">
-        <p class="dialogo-mvp__secao-titulo">Quem registra</p>
+        <p class="dialogo-mvp__secao-titulo">Quem está marcando</p>
         <div class="dialogo-mvp__linha-info">
           <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
             aria-hidden="true" data-usuario-avatar>
-          <span data-usuario-registro>Zé da Manga (Zé) · Administrador</span>
+          <span data-usuario-registro>Zé da Manga (Zé) · Organiza a rede</span>
         </div>
       </div>
       <div class="dialogo-mvp__escolhas">
         <div class="dialogo-mvp__escolha">
-          <span><strong>Administrada</strong><small>Informe o horário em que foi administrada.</small></span>
+          <span><strong>Foi dado</strong><small>Diga a hora em que deu.</small></span>
           <button type="button" class="botao botao--secundario"
             data-etapa-administracao="dialogo-confirmar-administracao">Selecionar</button>
         </div>
         <div class="dialogo-mvp__escolha">
-          <span><strong>Não Administrada</strong><small>Registre o ocorrido e informe o motivo se souber.</small></span>
+          <span><strong>Não foi dado</strong><small>Conte o que aconteceu e o motivo, se souber.</small></span>
           <button type="button" class="botao botao--secundario"
             data-etapa-administracao="dialogo-nao-administrada">Selecionar</button>
         </div>
@@ -314,7 +351,7 @@
       <div class="dialogo-mvp__cabecalho">
         <div class="dialogo-mvp__titulo-com-icone">
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
-          <h2 id="titulo-confirmar-administracao">Confirmar administração</h2>
+          <h2 id="titulo-confirmar-administracao">Confirmar que foi dado</h2>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -325,9 +362,9 @@
         <span data-dose-estado-anterior-detalhe></span>
       </div>
       <form class="formulario-mvp" data-formulario-mvp="administrada">
-        <label>Horário da administração<input type="time" name="horario" value="12:05" required></label>
+        <label>Hora que deu<input type="time" name="horario" value="12:05" required></label>
         <div class="dialogo-mvp__secao">
-          <p class="dialogo-mvp__secao-titulo">Registrado por</p>
+          <p class="dialogo-mvp__secao-titulo">Marcado por</p>
           <div class="dialogo-mvp__linha-info">
             <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
               aria-hidden="true" data-usuario-avatar>
@@ -336,7 +373,7 @@
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-voltar-administracao>Voltar</button>
-          <button type="submit" class="botao botao--primario">Salvar registro</button>
+          <button type="submit" class="botao botao--primario">Salvar</button>
         </div>
       </form>
     </dialog>
@@ -345,7 +382,7 @@
       <div class="dialogo-mvp__cabecalho">
         <div class="dialogo-mvp__titulo-com-icone">
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
-          <h2 id="titulo-nao-administrada">Registrar como não administrada</h2>
+          <h2 id="titulo-nao-administrada">Marcar que não foi dado</h2>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -354,7 +391,7 @@
       <form class="formulario-mvp" data-formulario-mvp="nao-administrada">
         <label>Motivo (opcional)<input type="text" name="motivo" placeholder="Descreva o ocorrido, se souber."></label>
         <div class="dialogo-mvp__secao">
-          <p class="dialogo-mvp__secao-titulo" data-registro-hora-atual>Registro às 12h10</p>
+          <p class="dialogo-mvp__secao-titulo" data-registro-hora-atual>Anotado às 12h10</p>
           <div class="dialogo-mvp__linha-info">
             <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
               aria-hidden="true" data-usuario-avatar>
@@ -363,7 +400,7 @@
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-voltar-administracao>Voltar</button>
-          <button type="submit" class="botao botao--primario">Salvar registro</button>
+          <button type="submit" class="botao botao--primario">Salvar</button>
         </div>
       </form>
     </dialog>
@@ -373,7 +410,7 @@
       <div class="dialogo-mvp__cabecalho">
         <div class="dialogo-mvp__titulo-com-icone">
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
-          <h2 id="titulo-administracao-registrada" data-registro-titulo>Administração registrada - Metformina</h2>
+          <h2 id="titulo-administracao-registrada" data-registro-titulo>Remédio dado - Metformina</h2>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -403,28 +440,28 @@
 
     <dialog class="dialogo-mvp" id="dialogo-adicionar-item" aria-labelledby="titulo-adicionar-item">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-adicionar-item" data-titulo-dialogo-item>Adicionar item</h2>
+        <h2 id="titulo-adicionar-item" data-titulo-dialogo-item>Adicionar remédio ou material</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Informe os dados conforme a receita médica ou embalagem.</p>
+      <p>Copie da receita ou da caixa do remédio.</p>
       <form class="formulario-mvp" data-formulario-mvp="item">
         <input type="hidden" name="nomeOriginal" value="">
         <label>Tipo
           <select name="tipo">
             <option value="Medicamento">Medicamento</option>
-            <option value="Insumo">Insumo</option>
+            <option value="Insumo">Material (fralda, luva, gaze…)</option>
           </select>
         </label>
-        <label>Nome do item<input type="text" name="nome" placeholder="Metformina" required></label>
-        <label>Apresentação e dose prescrita<input type="text" name="dose" placeholder="Copiar da receita"></label>
+        <label>Nome<input type="text" name="nome" placeholder="Metformina" required></label>
+        <label>Dose da receita (ex.: 1 comprimido de 850 mg)<input type="text" name="dose" placeholder="Copiar da receita"></label>
         <div class="formulario-mvp__grade">
-          <label>Horário previsto<select name="horario" data-select-horario></select></label>
-          <label>Estoque inicial<input type="number" name="estoque" min="0" placeholder="4 unidades"></label>
+          <label>Horário<select name="horario" data-select-horario></select></label>
+          <label>Quantos tem em casa<input type="number" name="estoque" min="0" placeholder="4 unidades"></label>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Salvar item</button>
+          <button type="submit" class="botao botao--primario">Salvar</button>
         </div>
       </form>
     </dialog>
@@ -435,15 +472,15 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p data-estoque-contexto>Maria das Dores (Mari) · Estoque atual: 4 unidades. O registro guarda a autoria e a data.
+      <p data-estoque-contexto>Maria das Dores (Mari) · Tem 4 unidades em casa. Fica anotado quem mudou e quando.
       </p>
       <form class="formulario-mvp" data-formulario-mvp="estoque">
         <input type="hidden" name="item">
-        <label>Quantidade adicionada<input type="number" name="quantidade" min="1" value="10" required></label>
-        <label>Observação<input type="text" name="observacao" value="Reposição para a rotina da Mari"></label>
+        <label>Quantos chegaram<input type="number" name="quantidade" min="1" value="10" required></label>
+        <label>Anotação<input type="text" name="observacao" value="Compra para os remédios da Mari"></label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Salvar estoque</button>
+          <button type="submit" class="botao botao--primario">Salvar</button>
         </div>
       </form>
     </dialog>

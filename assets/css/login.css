@@ -320,3 +320,252 @@ html.acessibilidade--alto-contraste .login__social-icone--google {
     border-top: var(--borda-padrao);
   }
 }
+.login__ilustracao[data-mascotes] {
+  overflow: visible;
+}
+
+.mascote {
+  transform-box: view-box;
+  transition: transform 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mascotes--olhando-form .mascote {
+  transform: skewX(-7deg);
+}
+
+.mascotes--olhando-form .mascote--2,
+.mascotes--olhando-form .mascote--4,
+.mascotes--olhando-form .mascote--6 {
+  transform: skewX(-9deg);
+}
+
+.mascotes--olhos-fechados .mascote {
+  transform: skewX(4deg) scaleY(0.97);
+}
+
+.mascotes--digitando .mascote {
+  transition-duration: 120ms;
+  translate: 0 -2px;
+}
+
+.mascotes--digitando .mascote--2,
+.mascotes--digitando .mascote--5 {
+  translate: 0 -3px;
+}
+
+.mascote-olho__fechado,
+.mascote-boca--o,
+.mascote-boca--sorriso {
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.mascote-boca--normal {
+  transition: opacity 140ms ease;
+}
+
+.mascote-olho__aberto {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+
+.mascote-olho__pupila {
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mascote-bochecha {
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.mascotes--olhos-fechados .mascote-olho__fechado,
+.mascotes--piscando .mascote-olho__fechado {
+  opacity: 1;
+}
+
+.mascotes--olhos-fechados .mascote-olho__aberto,
+.mascotes--piscando .mascote-olho__aberto {
+  opacity: 0;
+  transform: scaleY(0.1);
+}
+
+.mascotes--olhos-fechados .mascote-bochecha,
+.mascotes--comemorando .mascote-bochecha {
+  opacity: 0.55;
+}
+
+.mascotes--animados .mascote-boca--normal,
+.mascotes--comemorando .mascote-boca--normal,
+.mascotes--surpresos .mascote-boca--normal {
+  opacity: 0;
+}
+
+.mascotes--animados:not(.mascotes--surpresos) .mascote-boca--sorriso,
+.mascotes--comemorando .mascote-boca--sorriso {
+  opacity: 1;
+}
+
+.mascotes--surpresos .mascote-boca--o {
+  opacity: 1;
+}
+
+.mascotes--surpresos .mascote-olho__aberto {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+.mascotes--surpresos .mascote-olho__fechado,
+.mascotes--surpresos .mascote-bochecha {
+  opacity: 0;
+}
+
+.mascotes--animados .mascote {
+  translate: 0 -2px;
+}
+
+.mascotes--surpresos .mascote {
+  animation: mascote-susto 420ms ease-in-out;
+}
+
+.mascotes--comemorando .mascote {
+  animation: mascote-pulo 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mascotes--comemorando .mascote--2,
+.mascotes--comemorando .mascote--4,
+.mascotes--comemorando .mascote--6 {
+  animation-delay: 80ms;
+}
+
+@keyframes mascote-susto {
+  0%, 100% { translate: 0 0; }
+  20% { translate: -2px -3px; }
+  40% { translate: 2px -3px; }
+  60% { translate: -1.5px -1px; }
+  80% { translate: 1.5px 0; }
+}
+
+@keyframes mascote-pulo {
+  0%, 100% { translate: 0 0; }
+  45% { translate: 0 -9px; }
+  70% { translate: 0 1px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascote,
+  .mascote-olho__fechado,
+  .mascote-olho__aberto,
+  .mascote-olho__pupila,
+  .mascote-bochecha,
+  .mascote-boca--normal,
+  .mascote-boca--o,
+  .mascote-boca--sorriso {
+    transition: none;
+    animation: none !important;
+  }
+
+  .mascotes--olhando-form .mascote,
+  .mascotes--olhando-form .mascote--2,
+  .mascotes--olhando-form .mascote--4,
+  .mascotes--olhando-form .mascote--6,
+  .mascotes--olhos-fechados .mascote {
+    transform: none;
+  }
+
+  .mascotes--digitando .mascote,
+  .mascotes--animados .mascote {
+    translate: none;
+  }
+}
+
+.login__ver-senha {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--raio-sm);
+  background: transparent;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+}
+
+.login__ver-senha:hover {
+  color: var(--cor-texto-principal);
+  background: color-mix(in srgb, var(--cor-texto-principal) 8%, transparent);
+}
+
+.login__ver-senha:focus-visible {
+  outline: var(--anel-foco);
+  outline-offset: 2px;
+}
+
+.login__icone-olho[hidden] {
+  display: none;
+}
+
+.mascotes--desviando .mascote {
+  transform: skewX(10deg) scaleY(0.96);
+}
+
+.mascotes--desviando .mascote--2,
+.mascotes--desviando .mascote--4,
+.mascotes--desviando .mascote--6 {
+  transform: skewX(13deg) scaleY(0.95);
+}
+
+.mascote-olho {
+  transition: translate 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mascotes--desviando .mascote-olho,
+.mascotes--desviando .mascote-bochecha,
+.mascotes--desviando .mascote-boca {
+  translate: -2.5px 0.5px;
+}
+
+.mascotes--desviando .mascote-boca--normal {
+  opacity: 0;
+}
+
+.mascotes--desviando .mascote-boca--o {
+  opacity: 1;
+  scale: 0.6;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.mascotes--espiando .mascote--2 .mascote-olho__fechado {
+  opacity: 0;
+}
+
+.mascotes--espiando .mascote--2 .mascote-olho__aberto {
+  opacity: 1;
+  transform: none;
+}
+
+.mascotes--espiando .mascote--2 .mascote-olho__pupila {
+  transform: translate(1.1px, 0.4px);
+}
+
+.mascotes--espiando .mascote--2 .mascote-olho,
+.mascotes--espiando .mascote--2 .mascote-boca {
+  translate: 1.5px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascotes--desviando .mascote,
+  .mascotes--desviando .mascote--2,
+  .mascotes--desviando .mascote--4,
+  .mascotes--desviando .mascote--6 {
+    transform: none;
+  }
+
+  .mascote-olho {
+    transition: none;
+  }
+}

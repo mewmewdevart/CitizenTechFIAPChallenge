@@ -68,9 +68,9 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
@@ -79,13 +79,13 @@
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
           aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
         <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
@@ -93,7 +93,7 @@
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -102,8 +102,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -112,7 +112,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -143,28 +143,28 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
+      <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html" aria-current="page"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e
         serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
       <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -172,21 +172,20 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="direitos">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
       Direitos e serviços</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Direitos e serviços</h1>
-        <p>Encontre serviços do SUS, benefícios e canais de orientação.</p>
+        <p>Veja ajudas do governo, serviços do SUS e onde pedir orientação.</p>
       </div>
     </header>
 
     <div class="apoio__aviso" role="status">
       <i class="fa-solid fa-triangle-exclamation apoio__aviso-icone" aria-hidden="true"></i>
       <div>
-        <strong>Guia em expansão</strong>
-        <p>Você já pode verificar os direitos da Mari, localizar serviços públicos na sua cidade e consultar as fontes
-          oficiais abaixo.</p>
+        <strong>Guia em construção</strong>
+        <p>Você já pode ver os direitos da Mari, achar serviços públicos na sua cidade e conferir as fontes oficiais abaixo.</p>
       </div>
     </div>
 
@@ -194,13 +193,12 @@
       <div class="direitos-simulador__etapa direitos-simulador__inicial" data-etapa="inicial">
         <div class="direitos-banner__conteudo">
           <div class="direitos-simulador__inicial-etiquetas">
-            <span class="selo selo--atencao">Verificação pendente</span>
+            <span class="selo selo--atencao">Ainda não feito</span>
             <span class="selo selo--info">Maria das Dores</span>
             <span class="selo selo--info" data-simulador-idade-selo>79 anos</span>
           </div>
           <h2 id="titulo-simulador-mari">Veja quais serviços e benefícios podem apoiar a Mari</h2>
-          <p class="direitos-banner__descricao">Responda a 7 perguntas rápidas sobre a rotina, renda, saúde e cadastro
-            dela para descobrir quais benefícios e serviços do SUS/INSS podem se encaixar melhor.</p>
+          <p class="direitos-banner__descricao">Responda 7 perguntas rápidas sobre o dia a dia, o dinheiro, a saúde e o cadastro dela. No final, você vê quais ajudas do governo e serviços do SUS ela pode ter.</p>
           <div class="direitos-simulador__acoes">
             <a class="botao direitos-banner__cta" href="#localidade-servicos"><i class="fa-solid fa-location-dot"
                 aria-hidden="true"></i> Encontrar serviços perto de mim</a>
@@ -241,7 +239,7 @@
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="1" hidden>
-            <h3 id="pergunta-renda" tabindex="-1">Qual é a renda por pessoa da casa?</h3>
+            <h3 id="pergunta-renda" tabindex="-1">Quanto dá por pessoa da casa, por mês?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-renda"
               data-simulador-grupo="renda">
               <button type="button" data-simulador-valor="ate-um-quarto" aria-pressed="false">Até 1/4 do salário
@@ -257,64 +255,59 @@
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="2" hidden>
-            <h3 id="pergunta-aposentadoria" tabindex="-1">Recebe aposentadoria por incapacidade (invalidez)?</h3>
+            <h3 id="pergunta-aposentadoria" tabindex="-1">Ela recebe aposentadoria por invalidez?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-aposentadoria"
               data-simulador-grupo="aposentadoriaIncapacidade">
               <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim</button>
               <button type="button" data-simulador-valor="nao" aria-pressed="false">Não</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">O acréscimo de 25% no INSS é exclusivo dessa modalidade.</p>
+            <p class="direitos-simulador__nota">Só quem tem esse tipo de aposentadoria pode receber 25% a mais do INSS.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="3" hidden>
-            <h3 id="pergunta-assistencia" tabindex="-1">Precisa de ajuda permanente no dia a dia?</h3>
+            <h3 id="pergunta-assistencia" tabindex="-1">Ela precisa de ajuda o tempo todo no dia a dia?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-assistencia"
               data-simulador-grupo="assistencia">
-              <button type="button" data-simulador-valor="integral" aria-pressed="false">Sim, tempo integral</button>
-              <button type="button" data-simulador-valor="parcial" aria-pressed="false">Parcialmente</button>
+              <button type="button" data-simulador-valor="integral" aria-pressed="false">Sim, o tempo todo</button>
+              <button type="button" data-simulador-valor="parcial" aria-pressed="false">Às vezes</button>
               <button type="button" data-simulador-valor="nao" aria-pressed="false">Não</button>
             </div>
-            <p class="direitos-simulador__nota">Ajuda para banho, alimentação, medicação ou locomoção.</p>
+            <p class="direitos-simulador__nota">Ajuda para tomar banho, comer, tomar remédio ou andar.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="4" hidden>
-            <h3 id="pergunta-cadunico" tabindex="-1">Já tem Cadastro Único (CadÚnico)?</h3>
+            <h3 id="pergunta-cadunico" tabindex="-1">Ela já tem o Cadastro Único (CadÚnico)?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-cadunico"
               data-simulador-grupo="cadunico">
               <button type="button" data-simulador-valor="nao" aria-pressed="false">Não tem</button>
-              <button type="button" data-simulador-valor="antigo" aria-pressed="false">Mais de 2 anos</button>
-              <button type="button" data-simulador-valor="em-dia" aria-pressed="false">Em dia</button>
+              <button type="button" data-simulador-valor="antigo" aria-pressed="false">Tem, mas faz mais de 2 anos</button>
+              <button type="button" data-simulador-valor="em-dia" aria-pressed="false">Tem e está em dia</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">Obrigatório para BPC e para a Tarifa Social de energia elétrica.</p>
+            <p class="direitos-simulador__nota">Sem esse cadastro não dá para pedir o BPC nem o desconto na conta de luz.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="5" hidden>
-            <h3 id="pergunta-saude" tabindex="-1">Usa medicamentos de alto custo ou precisa de reabilitação?</h3>
+            <h3 id="pergunta-saude" tabindex="-1">Ela usa remédio caro ou precisa de fisioterapia?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-saude"
               data-simulador-grupo="saudeEspecializada">
-              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, alto custo ou
-                reabilitação</button>
-              <button type="button" data-simulador-valor="basico" aria-pressed="false">Só medicamentos comuns
-                (UBS/Farmácia)</button>
+              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, remédio caro ou fisioterapia</button>
+              <button type="button" data-simulador-valor="basico" aria-pressed="false">Só remédios comuns (posto ou farmácia)</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">Inclui medicamentos do CEAF, fisioterapia, órteses, próteses e meios
-              auxiliares no SUS.</p>
+            <p class="direitos-simulador__nota">O SUS pode dar remédios caros, fisioterapia, cadeira de rodas, andador e outros aparelhos.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="6" hidden>
-            <h3 id="pergunta-tfd" tabindex="-1">Precisa se deslocar para outra cidade para tratamento pelo SUS?</h3>
+            <h3 id="pergunta-tfd" tabindex="-1">Ela precisa ir para outra cidade para se tratar pelo SUS?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-tfd"
               data-simulador-grupo="tratamentoFora">
-              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, faz tratamento fora</button>
-              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não, atende na própria
-                cidade</button>
+              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, se trata em outra cidade</button>
+              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não, se trata na própria cidade</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">O TFD pode ajudar com transporte e diárias quando o tratamento não
-              existe no município.</p>
+            <p class="direitos-simulador__nota">Se o tratamento não existe na sua cidade, o SUS pode ajudar com a viagem e a estadia (TFD).</p>
           </article>
         </div>
 
@@ -330,7 +323,7 @@
 
       <div class="direitos-simulador__etapa" data-etapa="resultado" aria-live="polite" hidden>
         <div class="direitos-resumo__cabecalho">
-          <span class="selo selo--info">Resultado estimado · Maria das Dores (Mari)</span>
+          <span class="selo selo--info">Resultado aproximado · Maria das Dores (Mari)</span>
           <h2 data-simulador-titulo tabindex="-1"></h2>
           <p class="direitos-simulador__nota">Triagem informativa. A concessão e os critérios devem ser confirmados nos
             canais oficiais.</p>
@@ -338,7 +331,7 @@
         </div>
         <ul class="direitos-simulador__resultados" data-simulador-resultados></ul>
         <div class="direitos-simulador__acoes">
-          <button type="button" class="botao botao--terciario" data-simulador-refazer>Refazer perguntas</button>
+          <button type="button" class="botao botao--terciario" data-simulador-refazer>Responder de novo</button>
           <button type="button" class="botao botao--secundario" data-simulador-copiar><i class="fa-regular fa-copy"
               aria-hidden="true"></i> Copiar resultado</button>
           <a class="botao botao--primario"
@@ -350,10 +343,9 @@
 
     <section class="apoio__painel" id="localidade-servicos" aria-labelledby="titulo-localidade" data-localidade-painel>
       <div class="direitos-resumo__cabecalho">
-        <span class="selo selo--info">Dados públicos · IBGE e ViaCEP</span>
+        <span class="selo selo--info">Dados públicos (IBGE e ViaCEP)</span>
         <h2 id="titulo-localidade">Serviços na sua cidade</h2>
-        <p class="direitos-simulador__nota">Informe o CEP ou selecione estado e município para localizar UBS, CRAS e
-          Farmácia Popular próximos da família.</p>
+        <p class="direitos-simulador__nota">Digite o CEP ou escolha o estado e a cidade para achar posto de saúde, CRAS e Farmácia Popular perto da família.</p>
       </div>
 
       <form class="direitos-localidade__form formulario-mvp" data-localidade-form novalidate>
@@ -367,16 +359,16 @@
         </div>
 
         <div class="direitos-localidade__campo">
-          <label for="campo-uf">Estado (UF)</label>
+          <label for="campo-uf">Estado</label>
           <select id="campo-uf" data-localidade-uf>
             <option value="">Carregando estados...</option>
           </select>
         </div>
 
         <div class="direitos-localidade__campo">
-          <label for="campo-municipio">Município</label>
+          <label for="campo-municipio">Cidade</label>
           <select id="campo-municipio" data-localidade-municipio disabled>
-            <option value="">Selecione o estado primeiro</option>
+            <option value="">Escolha o estado primeiro</option>
           </select>
         </div>
       </form>
@@ -386,7 +378,7 @@
       <div class="direitos-localidade__resultado" data-localidade-resultado hidden aria-live="polite">
         <div class="direitos-localidade__cabecalho">
           <div class="direitos-localidade__etiquetas">
-            <span class="selo selo--sucesso">Localidade identificada</span>
+            <span class="selo selo--sucesso">Cidade encontrada</span>
             <span class="selo selo--neutro" data-localidade-ibge></span>
           </div>
           <strong data-localidade-nome></strong>
@@ -396,8 +388,8 @@
           <article class="direitos-localidade__item">
             <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-hospital"></i></span>
             <div class="direitos-localidade__item-texto">
-              <h3>UBS na região</h3>
-              <p data-localidade-ubs-desc>Encontre Unidades Básicas de Saúde para acompanhamento e encaminhamentos.</p>
+              <h3>Postos de saúde (UBS) perto</h3>
+              <p data-localidade-ubs-desc>Postos de saúde para consultas e encaminhamentos.</p>
             </div>
             <a class="botao botao--secundario botao--pequeno" target="_blank" rel="noopener noreferrer"
               data-localidade-link-ubs>Ver no mapa</a>
@@ -407,7 +399,7 @@
             <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-people-roof"></i></span>
             <div class="direitos-localidade__item-texto">
               <h3>CRAS e CadÚnico</h3>
-              <p data-localidade-cras-desc>Localize o CRAS do município para fazer ou atualizar o Cadastro Único e BPC.
+              <p data-localidade-cras-desc>Ache o CRAS da sua cidade para fazer ou atualizar o Cadastro Único e pedir o BPC.
               </p>
             </div>
             <a class="botao botao--secundario botao--pequeno" target="_blank" rel="noopener noreferrer"
@@ -418,31 +410,29 @@
             <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
             <div class="direitos-localidade__item-texto">
               <h3>Farmácia Popular</h3>
-              <p>Consulte as farmácias credenciadas no painel oficial do Ministério da Saúde.</p>
+              <p>Veja as farmácias que participam no site oficial do Ministério da Saúde.</p>
             </div>
             <a class="botao botao--secundario botao--pequeno"
               href="https://www.gov.br/saude/pt-br/composicao/sectics/farmacia-popular/painel-endereco-das-farmacias"
               target="_blank" rel="noopener noreferrer"
-              aria-label="Consultar painel oficial de endereços da Farmácia Popular (abre em nova aba)">Ver painel</a>
+              aria-label="Ver as farmácias da Farmácia Popular no site oficial (abre em outra aba)">Ver farmácias</a>
           </article>
 
           <article class="direitos-localidade__item">
             <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-phone-volume"></i></span>
             <div class="direitos-localidade__item-texto">
-              <h3>Ouvidoria do SUS · 136</h3>
-              <p>Canal gratuito para pedir orientação e registrar solicitações ou reclamações sobre o SUS.</p>
+              <h3>Dúvidas e reclamações do SUS · 136</h3>
+              <p>Ligação de graça para tirar dúvidas, fazer pedidos ou reclamar do SUS.</p>
             </div>
             <a class="botao botao--secundario botao--pequeno"
               href="https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvsus" target="_blank"
-              rel="noopener noreferrer" aria-label="Abrir canal oficial da Ouvidoria do SUS (abre em nova aba)">Acessar
-              OuvSUS</a>
+              rel="noopener noreferrer" aria-label="Abrir o site oficial da Ouvidoria do SUS (abre em outra aba)">Abrir site da Ouvidoria</a>
           </article>
         </div>
       </div>
     </section>
 
-    <p class="apoio__rodape">Fontes oficiais consultadas em novembro de 2026. A oferta e o encaminhamento de serviços
-      podem variar por município. Consulte a prefeitura da sua região.</p>
+    <p class="apoio__rodape">Fontes oficiais vistas em novembro de 2026. O que existe e como pedir pode mudar de cidade para cidade. Confirme na prefeitura.</p>
     <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO Principal -->
-  <title>Mutirão | Ficha da pessoa acompanhada</title>
+  <title>Mutirão | Ficha de quem recebe cuidado</title>
   <meta name="description"
     content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
   <meta name="robots" content="index, follow" />
@@ -19,13 +19,13 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:site_name" content="Mutirão" />
-  <meta property="og:title" content="Mutirão | Ficha da pessoa acompanhada" />
+  <meta property="og:title" content="Mutirão | Ficha de quem recebe cuidado" />
   <meta property="og:description"
     content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Mutirão | Ficha da pessoa acompanhada" />
+  <meta name="twitter:title" content="Mutirão | Ficha de quem recebe cuidado" />
   <meta name="twitter:description"
     content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
 
@@ -68,9 +68,9 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
@@ -79,20 +79,20 @@
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
           aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
         <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
             </div>
           </header>
           <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -101,8 +101,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -111,7 +111,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -142,27 +142,27 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
+      <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
       <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -170,12 +170,12 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina ficha" id="conteudo" data-pagina-mvp="ficha">
-    <nav class="ficha__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+    <nav class="ficha__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
       Maria das Dores (Mari)</nav>
     <header class="ficha__cabecalho">
       <div>
-        <h1>Ficha da pessoa acompanhada</h1>
-        <p>Consulte e atualize os dados da Mari para compartilhar com a família, cuidadores e equipe de saúde.</p>
+        <h1>Ficha de quem recebe cuidado</h1>
+        <p>Veja e atualize os dados da Mari para mostrar à família, aos cuidadores e aos médicos.</p>
       </div>
       <div class="ficha__acoes">
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-editar-ficha"><i
@@ -185,23 +185,21 @@
           Compartilhar
           resumo</button>
         <button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao"><i
-            class="fa-solid fa-print" aria-hidden="true"></i> Prévia
-          de
-          impressão</button>
+            class="fa-solid fa-print" aria-hidden="true"></i> Ver antes de imprimir</button>
       </div>
     </header>
     <section class="cartao ficha__identidade">
       <div class="ficha__retrato"><img src="assets/media/fotos/foto-perfil-maria.png" alt="Maria das Dores"><img
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="ficha__mascote"></div>
-      <div class="ficha__pessoa"><span>Pessoa acompanhada</span>
+      <div class="ficha__pessoa"><span>Quem recebe cuidado</span>
         <h2 data-pessoa-nome>Maria das Dores (Mari)</h2>
-        <p data-pessoa-nascimento>79 anos · 18 de maio de 1947</p><small>Dados fictícios</small>
+        <p data-pessoa-nascimento>79 anos · 18 de maio de 1947</p><small>Dados de exemplo</small>
       </div>
       <div class="ficha__aviso-alergia" data-aviso-alergia><img class="ficha__alerta-mascote"
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt=""><strong><i
             class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo>Alergia à
             dipirona</span></strong>
-        <p data-aviso-alergia-texto>Não administrar. Em caso de dúvida, consultar o responsável antes.</p>
+        <p data-aviso-alergia-texto>Não dar. Se tiver dúvida, fale antes com o responsável.</p>
       </div>
     </section>
     <section class="cartao ficha__cartao ficha__ultimo-relato" aria-labelledby="titulo-resumo-ultimo-relato"
@@ -217,18 +215,18 @@
         <h2>Informações de saúde</h2>
         <dl>
           <div>
-            <dt>Alergias registradas</dt>
+            <dt>Alergias</dt>
             <dd data-pessoa-campo="alergias"><span class="ficha__etiqueta ficha__etiqueta--alerta">Dipirona</span></dd>
           </div>
           <div>
-            <dt>Condições de saúde registradas</dt>
+            <dt>Doenças e condições</dt>
             <dd data-pessoa-campo="condicoes"><span class="ficha__etiqueta">Epilepsia</span>
               <span class="ficha__etiqueta">Diabetes tipo 2</span> <span class="ficha__etiqueta">Asma</span> <span
-                class="ficha__etiqueta">Hipertensão arterial</span>
+                class="ficha__etiqueta">Pressão alta</span>
             </dd>
           </div>
           <div>
-            <dt>Medicamentos de uso diário</dt>
+            <dt>Remédios de todo dia</dt>
             <dd data-pessoa-campo="medicamentos"><span
                 class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
                 08h</span> <span
@@ -236,7 +234,7 @@
                 20h</span></dd>
           </div>
           <div>
-            <dt>Cirurgias e histórico de saúde</dt>
+            <dt>Cirurgias e problemas de saúde que já teve</dt>
             <dd data-pessoa-campo="historicoSaude">Cirurgia na perna esquerda (2021) · Placa e parafusos após
               fratura.<br>Histórico de trombose venosa
               profunda (2022).</dd>
@@ -249,16 +247,16 @@
         </div>
         <dl data-consultas-resumo>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
-            <dt>Hoje · Consulta na UBS às 14h</dt>
-            <dd>Ana da Silva (Aninha) acompanha · 1 anexo</dd>
+            <dt>Hoje · Consulta no posto às 14h</dt>
+            <dd>Ana da Silva (Aninha) vai junto · 1 arquivo</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
             <dt>Consulta agendada · 18 de nov. de 2026</dt>
-            <dd>Geriatria · 14h · Ana da Silva (Aninha) acompanha</dd>
+            <dd>Geriatra (médico de idosos) · 14h · Ana da Silva (Aninha) vai junto</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-exame.svg">
             <dt>Exame agendado · 21 de nov. de 2026</dt>
-            <dd>Hemoglobina glicada · 08h · Coleta na UBS do bairro</dd>
+            <dd>Hemoglobina glicada (exame do diabetes) · 08h · Coleta no posto do bairro</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
             <dt>Exame cadastrado · 4 de nov. de 2026</dt>
@@ -317,23 +315,23 @@
         </dl>
       </section>
       <section class="cartao ficha__cartao ficha__cartao--rede">
-        <h2>Rede de apoio</h2>
+        <h2>Família e contatos</h2>
         <dl>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-espeto.svg">
-            <dt>Contato principal</dt>
+            <dt>Ligar primeiro para</dt>
             <dd data-pessoa-campo="referencia">Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-pingo.svg">
-            <dt>Contato secundário</dt>
+            <dt>Se não atender, ligar para</dt>
             <dd data-pessoa-campo="alternativo">Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193</dd>
           </div>
           <div>
-            <dt>Necessidade de acompanhamento</dt>
+            <dt>Precisa de alguém junto</dt>
             <dd><span class="ficha__etiqueta" data-pessoa-campo="cobertura">24 horas por
                 dia</span></dd>
           </div>
           <div>
-            <dt>Preferências</dt>
+            <dt>Do que ela gosta</dt>
             <dd data-pessoa-campo="preferencias">Prefere consultas à tarde e gosta de conferir a agenda com a família.
             </dd>
           </div>
@@ -343,10 +341,9 @@
     <section class="cartao ficha__cartao" id="diario">
       <div class="ficha__diario-cabecalho">
         <h2>Diário de turno</h2>
-        <p>Acompanhe os registros de cada turno: como a Mari passou, observações e recados para quem assume o próximo
-          horário.</p>
+        <p>Veja o que cada pessoa anotou no seu turno: como a Mari passou, observações e recados para quem vem depois.</p>
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-relato"><i class="fa-solid fa-plus"
-            aria-hidden="true"></i> Registrar relato</button>
+            aria-hidden="true"></i> Anotar como foi</button>
       </div>
       <div class="ficha__grade ficha__diario">
         <div>
@@ -363,9 +360,9 @@
             </div>
           </div>
           <div class="ficha__legenda-calendario">
-            <p><span class="ficha__legenda-selecionado" aria-hidden="true">□</span> Dia selecionado</p>
-            <p><span class="ficha__legenda-sucesso" aria-hidden="true">✓</span> Todos os turnos com relato</p>
-            <p><span class="ficha__legenda-atencao" aria-hidden="true">•</span> Parte dos turnos com relato</p>
+            <p><span class="ficha__legenda-selecionado" aria-hidden="true">□</span> Dia escolhido</p>
+            <p><span class="ficha__legenda-sucesso" aria-hidden="true">✓</span> Todos os turnos com anotação</p>
+            <p><span class="ficha__legenda-atencao" aria-hidden="true">•</span> Alguns turnos com anotação</p>
           </div>
         </div>
         <div class="ficha__relatos" data-relatos></div>
@@ -382,13 +379,12 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Escolha quais informações da ficha deseja enviar para a equipe de saúde ou familiares.</p>
+      <p>Escolha o que da ficha você quer mandar para os médicos ou para a família.</p>
       <fieldset class="dialogo-mvp__opcoes">
-        <legend>Incluir no resumo</legend><label><input type="checkbox" value="Compromissos e exames" checked> Consultas e
+        <legend>O que vai no resumo</legend><label><input type="checkbox" value="Compromissos e exames" checked> Consultas e
           exames</label><label><input type="checkbox" value="Informações de saúde"> Informações de
-          saúde</label><label><input type="checkbox" value="Medicamentos de uso diário"> Medicamentos de uso
-          diário</label>
-      </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Prévia da mensagem<textarea data-previa-compartilhar
+          saúde</label><label><input type="checkbox" value="Remédios de todo dia"> Remédios de todo dia</label>
+      </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Como a mensagem vai ficar<textarea data-previa-compartilhar
           readonly rows="6"></textarea></label>
       <p class="dialogo-mvp__retorno" data-retorno-compartilhar role="status" aria-live="polite"></p>
       <div class="dialogo-mvp__acoes"><button class="botao botao--secundario" type="button" data-compartilhar="copy"><i
@@ -403,19 +399,18 @@
     </dialog>
     <dialog class="dialogo-mvp dialogo-mvp--impressao" id="dialogo-impressao" aria-labelledby="titulo-impressao">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-impressao">Prévia de impressão</h2>
+        <h2 id="titulo-impressao">Ver antes de imprimir</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <fieldset class="impressao__opcoes">
-        <legend>Dados incluídos na impressão</legend>
+        <legend>O que vai na impressão</legend>
         <div class="impressao__opcoes-grade">
           <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Identidade e
-            alergias <span class="impressao__badge-fixo">Fixo</span></label>
-          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Medicamentos
-            diários <span class="impressao__badge-fixo">Fixo</span></label>
+            alergias <span class="impressao__badge-fixo">Sempre vai</span></label>
+          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Remédios de todo dia <span class="impressao__badge-fixo">Sempre vai</span></label>
           <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Contato de
-            referência <span class="impressao__badge-fixo">Fixo</span></label>
+            referência <span class="impressao__badge-fixo">Sempre vai</span></label>
           <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="condicoes" /> Condições
             de saúde</label>
           <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="historico" /> Cirurgias e
@@ -426,8 +421,7 @@
             Convênio</label>
           <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="alternativo" /> Contato
             alternativo</label>
-          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Preferências de
-            cuidado</label>
+          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Do que ela gosta</label>
         </div>
       </fieldset>
       <article class="dialogo-mvp__impressao folha-impressao">
@@ -480,7 +474,7 @@
               class="editar-ficha__foto-previa" data-foto-previa />
             <div class="editar-ficha__foto-info">
               <strong>Foto de perfil</strong>
-              <small>Opcional · JPG ou PNG</small>
+              <small>Opcional · foto JPG ou PNG</small>
             </div>
             <input type="file" accept="image/jpeg,image/png" hidden data-input-foto />
             <div class="editar-ficha__foto-acoes">
@@ -570,7 +564,7 @@
           <h3 id="secao-saude" class="editar-ficha__subtitulo">Informações de saúde</h3>
           <div class="editar-ficha__grade">
             <div>
-              <span class="editar-ficha__rotulo-campo">Alergias registradas</span>
+              <span class="editar-ficha__rotulo-campo">Alergias</span>
               <input type="hidden" name="alergias" value="Dipirona" data-input-etiquetas="alergias" />
               <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="alergias">
                 <span class="ficha__etiqueta ficha__etiqueta--alerta">Dipirona <button type="button"
@@ -580,8 +574,8 @@
               </div>
             </div>
             <div>
-              <span class="editar-ficha__rotulo-campo">Condições de saúde registradas</span>
-              <input type="hidden" name="condicoes" value="Epilepsia, Diabetes tipo 2, Asma, Hipertensão arterial"
+              <span class="editar-ficha__rotulo-campo">Doenças e condições</span>
+              <input type="hidden" name="condicoes" value="Epilepsia, Diabetes tipo 2, Asma, Pressão alta"
                 data-input-etiquetas="condicoes" />
               <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="condicoes">
                 <span class="ficha__etiqueta">Epilepsia <button type="button" class="editar-ficha__remover-etiqueta"
@@ -591,17 +585,17 @@
                       class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
                 <span class="ficha__etiqueta">Asma <button type="button" class="editar-ficha__remover-etiqueta"
                     aria-label="Remover Asma"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
-                <span class="ficha__etiqueta">Hipertensão arterial <button type="button"
-                    class="editar-ficha__remover-etiqueta" aria-label="Remover Hipertensão arterial"><i
+                <span class="ficha__etiqueta">Pressão alta <button type="button"
+                    class="editar-ficha__remover-etiqueta" aria-label="Remover Pressão alta"><i
                       class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
                 <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar condição de saúde" />
               </div>
             </div>
             <p class="editar-ficha__campo--largo">A lista de uso diário é atualizada pela rotina de <a href="medicamentos.html">Medicamentos</a>.</p>
             <div class="editar-ficha__campo--largo">
-              <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e histórico de saúde</span>
+              <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e problemas de saúde que já teve</span>
               <input type="hidden" name="historicoSaude"
-                value="Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.&lt;br&gt;Histórico de trombose venosa profunda (2022)."
+                value="Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.&lt;br&gt;Já teve trombose venosa profunda, um coágulo na veia (2022)."
                 data-input-editor="historicoSaude" />
               <div class="editar-ficha__editor-rico" data-editor-rico="historicoSaude">
                 <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
@@ -620,14 +614,14 @@
                 </div>
                 <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
                   aria-labelledby="rotulo-historico-saude" data-editor-alvo="historicoSaude">Cirurgia na perna esquerda
-                  (2021) · Placa e parafusos após fratura.<br>Histórico de trombose venosa profunda (2022).</div>
+                  (2021) · Placa e parafusos após fratura.<br>Já teve trombose venosa profunda, um coágulo na veia (2022).</div>
               </div>
             </div>
           </div>
         </section>
 
         <section class="editar-ficha__secao" aria-labelledby="secao-convenio-rede">
-          <h3 id="secao-convenio-rede" class="editar-ficha__subtitulo">Convênio e rede de apoio</h3>
+          <h3 id="secao-convenio-rede" class="editar-ficha__subtitulo">Convênio e família</h3>
           <div class="editar-ficha__grade">
             <label>Plano de saúde<input type="text" name="convenio"
                 value="Convênio Vida Plena · Plano Familiar" /></label>
@@ -640,18 +634,18 @@
                 </button>
               </span>
             </label>
-            <label>Contato de referência<input type="text" name="referencia"
+            <label>Contato principal<input type="text" name="referencia"
                 value="Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186" /></label>
-            <label>Contato alternativo<input type="text" name="alternativo"
+            <label>Segundo contato<input type="text" name="alternativo"
                 value="Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193" /></label>
-            <label>Cobertura de cuidado<input type="text" name="cobertura" value="24 horas por dia" /></label>
-            <label>Preferências de cuidado<input type="text" name="preferencias"
+            <label>Precisa de alguém junto<input type="text" name="cobertura" value="24 horas por dia" /></label>
+            <label>Do que ela gosta<input type="text" name="preferencias"
                 value="Prefere consultas à tarde e gosta de conferir a agenda com a família." /></label>
           </div>
         </section>
 
         <section class="editar-ficha__secao" aria-labelledby="secao-aviso-destaque">
-          <h3 id="secao-aviso-destaque" class="editar-ficha__subtitulo">Aviso em destaque</h3>
+          <h3 id="secao-aviso-destaque" class="editar-ficha__subtitulo">Aviso importante</h3>
           <div class="editar-ficha__grade">
             <label class="editar-ficha__campo--largo">Título do aviso
               <input type="text" name="avisoTitulo" maxlength="24" value="Alergia à dipirona" />
@@ -659,7 +653,7 @@
             </label>
             <label class="editar-ficha__campo--largo">Texto do aviso
               <textarea name="avisoTexto" rows="2"
-                maxlength="70">Não administrar. Em caso de dúvida, consultar o responsável antes.</textarea>
+                maxlength="70">Não dar. Se tiver dúvida, fale antes com o responsável.</textarea>
               <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTexto">67/70 caracteres</small>
             </label>
           </div>
@@ -673,7 +667,7 @@
     </dialog>
     <dialog class="dialogo-mvp" id="dialogo-relato" aria-labelledby="titulo-relato">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-relato">Registrar relato</h2>
+        <h2 id="titulo-relato">Anotar como foi</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
@@ -681,15 +675,15 @@
         <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
         <label>Turno (opcional)
           <select name="turno">
-            <option value="">Não vincular a um turno (registro geral)</option>
+            <option value="">Sem turno (anotação geral)</option>
             <option value="Turno 00h–07h">00h–07h</option>
             <option value="Turno 07h–12h">07h–12h</option>
             <option value="Turno 13h–19h">13h–19h</option>
             <option value="Turno 19h–24h" selected>19h–24h</option>
           </select>
         </label>
-        <label>Relato do turno
-          <textarea name="relato" rows="3" placeholder="Como a Mari passou, alimentação, humor ou intercorrências..."
+        <label>Como foi o turno
+          <textarea name="relato" rows="3" placeholder="Como a Mari passou, como comeu, como estava o humor, se aconteceu algo..."
             required></textarea>
         </label>
         <label>Recado para o próximo turno (opcional)

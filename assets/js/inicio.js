@@ -29,108 +29,11 @@
   } = core;
 
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
-  const trilho = pagina.querySelector('[data-porta-remedios-trilho]');
-  const horas = pagina.querySelector('[data-porta-remedios-horas]');
-  const resumoPorta = pagina.querySelector('[data-porta-remedios-resumo]');
   const listaDias = pagina.querySelector('[data-semana]');
   const listaTurnos = pagina.querySelector('[data-turnos]');
   const faixaLacuna = pagina.querySelector('[data-inicio-lacuna]');
   const tituloLacuna = pagina.querySelector('[data-inicio-lacuna-titulo]');
 
-  const HORA_REGISTRO = '11:58';
-  const ESPERA_ANIMACAO = 900;
-  const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const aviso = document.createElement('div');
-  aviso.className = 'aviso-remedio';
-  aviso.setAttribute('role', 'status');
-  aviso.hidden = true;
-  aviso.innerHTML = `<i class="fa-solid fa-circle-check" aria-hidden="true"></i><p data-aviso-texto></p>
-    <button type="button" data-desfazer-remedio>Desfazer</button>
-    <button type="button" data-fechar-aviso aria-label="Fechar aviso"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
-  document.body.append(aviso);
-  let timerAviso = null;
-  let ultimaChave = null;
-
-  const ordenarGrupos = grupos => [...grupos.filter(grupo => !grupo.completo), ...grupos.filter(grupo => grupo.completo)];
-
-  const seloGrupo = grupo => {
-    if (grupo.situacao === 'dado') return '<span class="selo selo--sucesso"><i class="fa-solid fa-check" aria-hidden="true"></i> Dados</span>';
-    if (grupo.situacao === 'falta') return `<span class="selo selo--alerta"><i class="fa-regular fa-circle-xmark" aria-hidden="true"></i> Falta ${grupo.faltam}</span>`;
-    if (grupo.situacao === 'agora') return '<span class="selo selo--info">Agora</span>';
-    return '<span class="selo selo--neutro">Mais tarde</span>';
-  };
-
-  const rotuloPote = dose => {
-    if (dose.estado !== 'administrado') return `${dose.nome}, ${dose.hora}. Ver detalhes e registrar administração`;
-    const quem = dose.meu ? 'você' : dose.quem;
-    return `${dose.nome}, dado por ${quem} às ${dose.horario}. Ver detalhes`;
-  };
-
-  const formatarHoraCurtaPote = horario => {
-    const texto = String(horario || HORA_REGISTRO).trim();
-    return texto.includes(':') ? texto.replace(':', 'h') : texto;
-  };
-
-  const obterTextoBadgePote = (dose, grupo) => {
-    if (dose?.estado === 'administrado') {
-      return `Administrado às ${formatarHoraCurtaPote(dose.horario)}`;
-    }
-    if (dose?.estado === 'nao-administrado' || grupo?.situacao === 'falta') {
-      return 'Atrasado';
-    }
-    if (grupo?.situacao === 'agora') {
-      return 'Pendente';
-    }
-    return `Previsto · ${dose?.hora || grupo?.hora || ''}`;
-  };
-
-  const obterIconeStatusPote = (aberto, atrasado) => {
-    if (aberto) return '<i class="fa-solid fa-check" aria-hidden="true"></i>';
-    if (atrasado) return '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>';
-    return '<i class="fa-regular fa-clock" aria-hidden="true"></i>';
-  };
-
-  const montarPote = (dose, grupo) => {
-    const aberto = dose.estado === 'administrado';
-    const pendente = !aberto && (dose.estado === 'nao-administrado' || grupo.situacao === 'falta');
-    const textoBadge = obterTextoBadgePote(dose, grupo);
-    const iconeStatus = obterIconeStatusPote(aberto, pendente);
-    return `<li class="pote${pendente ? ' pote--falta' : ''}" data-aberto="${aberto}" data-chave="${escaparHtml(dose.chave)}">
-      <button type="button" class="pote__botao" aria-label="${escaparHtml(rotuloPote(dose))}">
-        <span class="pote__tampa" aria-hidden="true">
-          <span class="pote__brilho"></span>
-        </span>
-        <span class="pote__dobradica" aria-hidden="true"></span>
-        <span class="pote__bandeja" aria-hidden="true">
-          <span class="pote__fundo"></span>
-          <span class="pote__conteudo">
-            <span class="pote__status-icone" data-pote-icone>${iconeStatus}</span>
-            <span class="pote__remedio">${escaparHtml(dose.nome)}</span>
-            <span class="pote__horario-info">${escaparHtml(grupo.hora)}</span>
-            ${!aberto ? '<span class="pote__comprimidos"><span></span><span></span><span></span></span>' : ''}
-            <span class="pote__status-badge" data-pote-badge>${escaparHtml(textoBadge)}</span>
-          </span>
-        </span>
-        <span class="pote__aba" aria-hidden="true"></span>
-      </button>
-    </li>`;
-  };
-
-  const montarGrupo = grupo => {
-    const plural = grupo.itens.length === 1 ? 'remédio' : 'remédios';
-    return `<section class="porta-remedios__grupo porta-remedios__grupo--${grupo.situacao}" id="compartimento-${grupo.hora}" data-hora="${grupo.hora}" aria-label="${grupo.hora}, ${grupo.itens.length} ${plural}">
-      <div class="porta-remedios__grupo-titulo"><h3>${grupo.hora} · ${grupo.itens.length} ${plural}</h3><span data-selo-grupo>${seloGrupo(grupo)}</span></div>
-      <ul class="porta-remedios__potes">${grupo.itens.map(dose => montarPote(dose, grupo)).join('')}</ul>
-    </section>`;
-  };
-
-  const atualizarResumo = grupos => {
-    const total = grupos.reduce((soma, grupo) => soma + grupo.itens.length, 0);
-    const dados = grupos.reduce((soma, grupo) => soma + grupo.itens.length - grupo.faltam, 0);
-    resumoPorta.textContent = dados === total
-      ? `${total} de ${total} administrados · tudo certo por hoje`
-      : `${dados} de ${total} administrados · deslize para ver mais`;
-  };
 
   const atualizarAlertaEstoqueInicio = () => {
     const alerta = pagina.querySelector('[data-alerta-estoque-inicio]');
@@ -168,7 +71,7 @@
       const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
       alerta.querySelector('strong').textContent = `${baixos.length} item(ns) com estoque baixo · ${principal.nome}`;
       alerta.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
-        ? `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Previsão para ${dias} ${dias === 1 ? 'dia' : 'dias'}`
+        ? `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Dá para ${dias} ${dias === 1 ? 'dia' : 'dias'}`
         : `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} em estoque`;
     }
   };
@@ -194,14 +97,14 @@
       }
       const rotulo = bloco.querySelector('.inicio__rotulo');
       if (rotulo) {
-        rotulo.textContent = indice === 0 ? 'Próximo compromisso' : 'Compromisso agendado';
+        rotulo.textContent = indice === 0 ? 'Próximo compromisso' : 'Compromisso marcado';
       }
       bloco.querySelector('strong').textContent = item
         ? `${item.dia === HOJE ? '' : core.formatarDataCurta(item.dia) + ' · '}${item.hora.replace(':00', 'h')} · ${item.titulo}`
-        : 'Nenhum compromisso agendado';
+        : 'Nenhum compromisso marcado';
       bloco.querySelector('[data-compromisso-detalhes]').textContent = item
-        ? [item.local, item.acompanhante && `${item.acompanhante} acompanha`].filter(Boolean).join(' · ')
-        : 'Consulte a Agenda para organizar os próximos cuidados.';
+        ? [item.local, item.acompanhante && `${item.acompanhante} vai junto`].filter(Boolean).join(' · ')
+        : 'Veja a Agenda para combinar os próximos cuidados.';
       bloco.querySelector('a').href = item ? `agenda.html?dia=${encodeURIComponent(item.dia)}&compromisso=${encodeURIComponent(item.id)}` : 'agenda.html';
     };
 
@@ -231,269 +134,20 @@
     if (!titulo || !responsavel) return;
     if (bloco) bloco.hidden = false;
     if (!proximo) {
-      titulo.textContent = 'Nenhuma dose futura pendente';
+      titulo.textContent = 'Nenhum remédio para dar mais tarde';
       const temPendencias = grupos.some(grupo => !grupo.completo);
-      responsavel.textContent = temPendencias ? 'Consulte os registros de hoje.' : 'Porta-remédios completo';
+      responsavel.textContent = temPendencias ? 'Veja o que já foi anotado hoje.' : 'Porta-remédios completo';
       return;
     }
     const pendentes = proximo.itens.filter(dose => dose.estado === 'prevista');
     titulo.textContent = pendentes.length > 1
-      ? `${proximo.hora} · ${pendentes.length} medicamentos previstos (${pendentes[0].nome} + ${pendentes.length - 1})`
+      ? `${proximo.hora} · ${pendentes.length} remédios (${pendentes[0].nome} + ${pendentes.length - 1})`
       : `${proximo.hora} · ${pendentes[0].nome}`;
     const pessoaTurno = proximo.responsavel;
     responsavel.textContent = pessoaTurno
       ? `Responsável: ${pessoaTurno}`
-      : 'Sem responsável neste turno (horário sem cobertura)';
+      : 'Ninguém cuida nesse horário';
   };
-
-  const marcarHoraAtiva = hora => {
-    horas.querySelectorAll('button').forEach(botao => {
-      botao.setAttribute('aria-pressed', String(botao.dataset.irCompartimento === hora));
-    });
-  };
-
-  const renderizarPortaRemedios = () => {
-    const grupos = obterCompartimentos();
-    const ordenados = ordenarGrupos(grupos);
-    atualizarResumo(grupos);
-    atualizarProximaMedicacao(grupos);
-    trilho.innerHTML = ordenados.map(montarGrupo).join('');
-    horas.innerHTML = grupos.map(grupo => {
-      const atributos = grupo.completo ? ' data-completo' : grupo.situacao === 'falta' ? ' data-falta' : '';
-      const rotulo = grupo.completo ? ` aria-label="${grupo.hora}, todos dados"` : '';
-      return `<button type="button" data-ir-compartimento="${grupo.hora}" aria-pressed="false"${atributos}${rotulo}>${grupo.hora}</button>`;
-    }).join('');
-    trilho.scrollLeft = 0;
-    marcarHoraAtiva(ordenados[0]?.hora);
-  };
-
-  const atualizarGrupoNaTela = hora => {
-    const grupos = obterCompartimentos();
-    const grupo = grupos.find(item => item.hora === hora);
-    const secao = trilho.querySelector(`[data-hora="${hora}"]`);
-    atualizarResumo(grupos);
-    atualizarProximaMedicacao(grupos);
-    if (!grupo || !secao) return grupo;
-    secao.className = `porta-remedios__grupo porta-remedios__grupo--${grupo.situacao}`;
-    secao.querySelector('[data-selo-grupo]').innerHTML = seloGrupo(grupo);
-    return grupo;
-  };
-
-  const reposicionarGrupos = () => {
-    const mover = () => renderizarPortaRemedios();
-    if (document.startViewTransition && !reduzirMovimento.matches) document.startViewTransition(mover);
-    else mover();
-  };
-
-  const mostrarAviso = (texto, chave) => {
-    ultimaChave = chave;
-    aviso.querySelector('[data-aviso-texto]').textContent = texto;
-    aviso.querySelector('[data-desfazer-remedio]').hidden = !chave;
-    aviso.hidden = false;
-    clearTimeout(timerAviso);
-    timerAviso = setTimeout(() => { aviso.hidden = true; }, 6000);
-  };
-
-  const alternarPote = (pote, abrir, horarioInformado = HORA_REGISTRO, origemExterna = '') => {
-    const chave = pote.dataset.chave;
-    const [hora, nome] = chave.split('|');
-    const horario = horarioInformado || HORA_REGISTRO;
-    if (abrir) registrarDose(chave, { estado: 'administrado', quem: obterUsuarioAtual().nomeComApelido, horario, origemExterna });
-    else desfazerDose(chave);
-
-    const dose = obterDoses().find(item => item.chave === chave);
-    const botao = pote.querySelector('.pote__botao');
-    const iconeEl = pote.querySelector('[data-pote-icone]');
-    const badgeEl = pote.querySelector('[data-pote-badge]');
-    const grupoAtual = obterCompartimentos().find(item => item.hora === hora);
-    const atrasado = !abrir && (dose?.estado === 'nao-administrado' || grupoAtual?.situacao === 'falta');
-    if (iconeEl) {
-      iconeEl.innerHTML = obterIconeStatusPote(abrir, atrasado);
-    }
-    if (badgeEl && dose) {
-      badgeEl.textContent = obterTextoBadgePote(dose, grupoAtual);
-    }
-    const comprimidosEl = pote.querySelector('.pote__comprimidos');
-    if (!abrir && !comprimidosEl && badgeEl) {
-      const novoComprimidos = document.createElement('span');
-      novoComprimidos.className = 'pote__comprimidos';
-      novoComprimidos.innerHTML = '<span></span><span></span><span></span>';
-      badgeEl.before(novoComprimidos);
-    } else if (abrir && comprimidosEl) {
-      comprimidosEl.remove();
-    }
-    pote.dataset.aberto = String(abrir);
-    botao.setAttribute('aria-label', rotuloPote(dose));
-    if (abrir) pote.classList.remove('pote--falta');
-
-    const grupo = atualizarGrupoNaTela(hora);
-    if (!abrir && (dose?.estado === 'nao-administrado' || grupo?.situacao === 'falta')) {
-      pote.classList.add('pote--falta');
-    }
-    if (abrir) mostrarAviso(`Remédio das ${hora} dado por você às ${horario}. A família vê na hora.`, chave);
-    else mostrarAviso(`${nome} das ${hora} voltou para os pendentes.`, null);
-
-    if (abrir && grupo?.completo) {
-      const secao = trilho.querySelector(`[data-hora="${hora}"]`);
-      setTimeout(() => {
-        if (secao) secao.dataset.saindo = 'true';
-        setTimeout(reposicionarGrupos, reduzirMovimento.matches ? 0 : 300);
-      }, reduzirMovimento.matches ? 0 : ESPERA_ANIMACAO);
-    }
-  };
-
-  const dialogoDetalhePote = document.getElementById('dialogo-detalhe-pote');
-  let chavePoteEmFoco = null;
-
-  const abrirDetalhesPote = chave => {
-    const dose = obterDoses().find(item => item.chave === chave);
-    if (!dose || !dialogoDetalhePote) return;
-    chavePoteEmFoco = chave;
-    const grupo = obterCompartimentos().find(item => item.hora === dose.hora);
-    const pessoa = core.nomePessoaAcompanhada();
-
-    const tituloEl = dialogoDetalhePote.querySelector('[data-pote-titulo]');
-    const contextoEl = dialogoDetalhePote.querySelector('[data-pote-contexto]');
-    const avatarEl = dialogoDetalhePote.querySelector('[data-pote-avatar]');
-    const estadoTituloEl = dialogoDetalhePote.querySelector('[data-pote-estado-titulo]');
-    const estadoDetalheEl = dialogoDetalhePote.querySelector('[data-pote-estado-detalhe]');
-    const estadoSeloEl = dialogoDetalhePote.querySelector('[data-pote-estado-selo]');
-    const formRegistrar = dialogoDetalhePote.querySelector('[data-formulario-mvp="registrar-pote"]');
-    const acoesRegistrado = dialogoDetalhePote.querySelector('[data-pote-acoes-registrado]');
-    const botaoDesfazer = dialogoDetalhePote.querySelector('[data-pote-desfazer]');
-
-    if (tituloEl) tituloEl.textContent = `${dose.hora} · ${dose.nome}`;
-    if (contextoEl) contextoEl.textContent = `${pessoa} · Dose prevista para ${dose.hora}`;
-
-    const administrada = dose.estado === 'administrado';
-    const naoAdministrada = dose.estado === 'nao-administrado';
-    const nomePessoaRegistro = dose.meu
-      ? obterUsuarioAtual().nomeComApelido
-      : (dose.quem || grupo?.responsavel || '');
-    const pessoaRede = core.resolverPessoaRede(nomePessoaRegistro);
-
-    if (avatarEl) {
-      if (pessoaRede?.src) {
-        avatarEl.src = pessoaRede.src;
-        avatarEl.hidden = false;
-      } else {
-        avatarEl.src = 'assets/media/mascotes/icone-mascote-cubado.svg';
-        avatarEl.hidden = !nomePessoaRegistro;
-      }
-    }
-
-    if (administrada) {
-      const nomeExibido = dose.meu ? `${obterUsuarioAtual().nomeComApelido} (Você)` : (pessoaRede?.nome || dose.quem || 'Cuidador');
-      if (estadoTituloEl) estadoTituloEl.textContent = nomeExibido;
-      if (estadoDetalheEl) estadoDetalheEl.textContent = `Dose administrada${dose.horario ? ` às ${dose.horario.replace(':', 'h')}` : ''}.`;
-      if (estadoSeloEl) {
-        estadoSeloEl.className = 'selo selo--sucesso';
-        estadoSeloEl.textContent = 'Administrada';
-      }
-    } else if (naoAdministrada) {
-      const nomeExibido = pessoaRede?.nome || dose.quem || grupo?.responsavel || 'Sem responsável';
-      if (estadoTituloEl) estadoTituloEl.textContent = nomeExibido;
-      if (estadoDetalheEl) estadoDetalheEl.textContent = dose.motivo || 'Ocorrência registrada sem motivo informado.';
-      if (estadoSeloEl) {
-        estadoSeloEl.className = 'selo selo--alerta';
-        estadoSeloEl.textContent = 'Atrasado';
-      }
-    } else {
-      const nomeExibido = pessoaRede?.nome || grupo?.responsavel || 'Horário sem cobertura';
-      if (estadoTituloEl) estadoTituloEl.textContent = nomeExibido;
-      if (estadoDetalheEl) {
-        estadoDetalheEl.textContent = grupo?.responsavel
-          ? 'Responsável pelo turno · Aguardando administração.'
-          : 'Horário sem responsável definido na escala.';
-      }
-      if (estadoSeloEl) {
-        estadoSeloEl.className = 'selo selo--neutro';
-        estadoSeloEl.textContent = 'Prevista';
-      }
-    }
-
-    dialogoDetalhePote.querySelectorAll('[data-pote-link-medicamentos]').forEach(link => {
-      link.href = administrada
-        ? 'medicamentos.html#registros-de-hoje'
-        : `medicamentos.html?dose=${encodeURIComponent(dose.chave)}`;
-    });
-
-    if (formRegistrar) {
-      formRegistrar.hidden = administrada;
-      if (!administrada && formRegistrar.elements.horario) {
-        formRegistrar.elements.horario.value = HORA_REGISTRO;
-      }
-    }
-    if (acoesRegistrado) acoesRegistrado.hidden = !administrada;
-    if (botaoDesfazer) botaoDesfazer.hidden = !(administrada && dose.meu);
-
-    core.prepararOrigemEstoque(formRegistrar, dose);
-    dialogoDetalhePote.showModal();
-  };
-
-  const desfazer = chave => {
-    if (!chave) return;
-    const [hora] = chave.split('|');
-    const pote = trilho.querySelector(`.pote[data-chave="${CSS.escape(chave)}"]`);
-    const estavaCompleto = obterCompartimentos().find(grupo => grupo.hora === hora)?.completo;
-    if (estavaCompleto || !pote) {
-      desfazerDose(chave);
-      reposicionarGrupos();
-      trilho.querySelector(`.pote[data-chave="${CSS.escape(chave)}"] .pote__botao`)?.focus();
-    } else {
-      alternarPote(pote, false);
-    }
-    aviso.hidden = true;
-  };
-
-  trilho.addEventListener('click', evento => {
-    const botao = evento.target.closest('.pote__botao');
-    if (!botao) return;
-    const pote = botao.closest('.pote');
-    if (pote?.dataset.chave) abrirDetalhesPote(pote.dataset.chave);
-  });
-
-  dialogoDetalhePote?.querySelector('[data-formulario-mvp="registrar-pote"]')?.addEventListener('submit', evento => {
-    evento.preventDefault();
-    if (!chavePoteEmFoco) return;
-    const horario = evento.target.elements.horario?.value || HORA_REGISTRO;
-    const pote = trilho.querySelector(`.pote[data-chave="${CSS.escape(chavePoteEmFoco)}"]`);
-    if (pote) alternarPote(pote, true, horario, evento.target.elements.origemExterna?.value.trim() || '');
-    dialogoDetalhePote.close();
-  });
-
-  dialogoDetalhePote?.querySelector('[data-pote-desfazer]')?.addEventListener('click', () => {
-    if (!chavePoteEmFoco) return;
-    desfazer(chavePoteEmFoco);
-    dialogoDetalhePote.close();
-  });
-
-  aviso.addEventListener('click', evento => {
-    if (evento.target.closest('[data-desfazer-remedio]')) desfazer(ultimaChave);
-    if (evento.target.closest('[data-fechar-aviso]')) aviso.hidden = true;
-  });
-
-  horas.addEventListener('click', evento => {
-    const botao = evento.target.closest('[data-ir-compartimento]');
-    if (!botao) return;
-    const grupo = trilho.querySelector(`#compartimento-${botao.dataset.irCompartimento}`);
-    if (!grupo) return;
-    trilho.scrollTo({ left: grupo.offsetLeft });
-    marcarHoraAtiva(botao.dataset.irCompartimento);
-  });
-
-  let quadroRolagem = 0;
-  trilho.addEventListener('scroll', () => {
-    cancelAnimationFrame(quadroRolagem);
-    quadroRolagem = requestAnimationFrame(() => {
-      const grupos = [...trilho.querySelectorAll('.porta-remedios__grupo')];
-      const atual = grupos.reduce((maisPerto, grupo) => {
-        const distancia = Math.abs(grupo.offsetLeft - trilho.scrollLeft);
-        return distancia < maisPerto.distancia ? { grupo, distancia } : maisPerto;
-      }, { grupo: grupos[0], distancia: Infinity }).grupo;
-      if (atual) marcarHoraAtiva(atual.dataset.hora);
-    });
-  });
 
   const DIAS_SEMANA = ['2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15'];
   let diaSelecionado = HOJE;
@@ -507,13 +161,14 @@
     return `<img class="agenda__avatar" alt="" src="${escaparHtml(src)}" width="40" height="40">`;
   };
 
+  const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém' };
   const criarEtiquetaCobertura = (dia, estado) => {
     const rotulo = obterRotuloLacuna(dia, estado);
     const lacuna = rotulo !== 'Coberto';
     const parcial = rotulo === 'Parcial';
     const modificador = lacuna ? (parcial ? 'agenda__etiqueta--atencao' : 'agenda__etiqueta--alerta') : 'agenda__etiqueta--sucesso';
     const icone = lacuna ? (parcial ? 'icone-atencao.svg' : 'icone-sem-cobertura.svg') : 'icone-coberto.svg';
-    return `<span class="agenda__etiqueta ${modificador}"><img alt="" src="assets/media/icones/${icone}">${rotulo}</span>`;
+    return `<span class="agenda__etiqueta ${modificador}"><img alt="" src="assets/media/icones/${icone}">${ROTULO_COBERTURA[rotulo] || rotulo}</span>`;
   };
 
   const atualizarTurnoAtual = () => {
@@ -534,13 +189,13 @@
     if (titulo) {
       titulo.textContent = turnoAtual
         ? `${turnoAtual.horario} · ${turnoAtual.pessoa.nome}`
-        : '11h · Sem cobertura no momento';
+        : '11h · Ninguém com a Mari agora';
     }
     if (detalhe) {
       const proximaLacuna = lacunasHoje[0];
       detalhe.textContent = proximaLacuna
-        ? `Cobertura ativa agora · Próximo turno sem cobertura: ${proximaLacuna.horario}`
-        : 'Cobertura ativa agora · Todos os turnos de hoje cobertos';
+        ? `Tem alguém com a Mari agora · Próximo horário sem ninguém: ${proximaLacuna.horario}`
+        : 'Tem alguém com a Mari agora · Todos os horários de hoje têm alguém';
     }
     if (link) link.href = `agenda.html?dia=${encodeURIComponent(HOJE)}`;
   };
@@ -551,7 +206,7 @@
     const fimSemana = formatarData(DIAS_SEMANA[6], { day: 'numeric', month: 'short' });
     const tituloEscala = pagina.querySelector('[data-titulo-escala]');
     if (tituloEscala) {
-      tituloEscala.textContent = `Escala semanal · ${inicioSemana} a ${fimSemana}`;
+      tituloEscala.textContent = `Quem cuida na semana · ${inicioSemana} a ${fimSemana}`;
     }
 
     listaDias.innerHTML = DIAS_SEMANA.map(dia => `
@@ -564,10 +219,10 @@
     const linhaDescoberto = (horario, dia) => `<div class="agenda__lacuna">
       <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div>
-        <strong>${escaparHtml(horario)} · Turno sem cobertura</strong>
-        <p>A Mari precisa de acompanhamento nesse horário.</p>
+        <strong>${escaparHtml(horario)} · Horário sem ninguém</strong>
+        <p>A Mari precisa de alguém com ela nesse horário.</p>
       </div>
-      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Cobrir horário</button>
+      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Ficar nesse horário</button>
     </div>`;
 
     const renderizarTurno = (seg, dia) => {
@@ -576,7 +231,7 @@
         ${avatarMascote(seg.pessoa)}
         <div>
           <strong>${escaparHtml(seg.horario)}</strong>
-          <p>${escaparHtml(seg.pessoa.nome)} · ${ehZe ? 'Cobertura assumida por você' : 'Coberto'}</p>
+          <p>${escaparHtml(seg.pessoa.nome)} · ${ehZe ? 'Você vai ficar nesse horário' : 'Vai ficar'}</p>
         </div>
         ${ehZe && dia >= HOJE ? `
           <div class="agenda__turno-acoes">
@@ -595,7 +250,7 @@
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     faixaLacuna.hidden = !lacunasHoje.length;
     if (lacunasHoje.length) {
-      tituloLacuna.textContent = `${lacunasHoje[0].horario} · Turno sem cobertura`;
+      tituloLacuna.textContent = `${lacunasHoje[0].horario} · Horário sem ninguém`;
       const botaoCobrirLacuna = faixaLacuna.querySelector('[data-inicio-cobrir-lacuna]');
       if (botaoCobrirLacuna) {
         botaoCobrirLacuna.dataset.dia = HOJE;
@@ -629,7 +284,7 @@
       fim = Number(form.elements.fim.value);
     }
     const duracao = fim - inicio;
-    previa.textContent = `Você cobrirá das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'} no total)`;
+    previa.textContent = `Você vai ficar das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'} no total)`;
   };
 
   const atualizarPreviaNovaCobertura = (ajustarSaida = false) => {
@@ -647,7 +302,7 @@
     containerHorarios.hidden = cobrirTudo;
     if (cobrirTudo) {
       const duracao = gapFim - gapInicio;
-      previa.textContent = `Você assumirá todo o horário: das ${String(gapInicio).padStart(2, '0')}h às ${String(gapFim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).`;
+      previa.textContent = `Você vai ficar o horário todo: das ${String(gapInicio).padStart(2, '0')}h às ${String(gapFim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).`;
       return;
     }
 
@@ -663,8 +318,8 @@
     if (inicio > gapInicio) sobras.push(`${String(gapInicio).padStart(2, '0')}h–${String(inicio).padStart(2, '0')}h`);
     if (fim < gapFim) sobras.push(`${String(fim).padStart(2, '0')}h–${String(gapFim).padStart(2, '0')}h`);
 
-    previa.textContent = `Você assumirá das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).` +
-      (sobras.length ? ` Permanecerá sem cobertura: ${sobras.join(' e ')}.` : '');
+    previa.textContent = `Você vai ficar das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).` +
+      (sobras.length ? ` Vai continuar sem ninguém: ${sobras.join(' e ')}.` : '');
   };
 
   dialogoEditarCobertura?.addEventListener('change', evento => {
@@ -705,7 +360,7 @@
 
       if (dialogoEditarCobertura) {
         dialogoEditarCobertura.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário disponível para edição: ${String(limiteMinTurno).padStart(2, '0')}h às ${String(limiteMaxTurno).padStart(2, '0')}h`;
+          `${formatarDataCurta(diaTurno)} · Horário que dá para mudar: ${String(limiteMinTurno).padStart(2, '0')}h às ${String(limiteMaxTurno).padStart(2, '0')}h`;
         const form = dialogoEditarCobertura.querySelector('[data-formulario-mvp="editar-cobertura"]');
         popularOpcoesHorario(form.elements.inicio, limiteMinTurno, limiteMaxTurno - 1, atualInicio);
         popularOpcoesHorario(form.elements.fim, atualInicio + 1, limiteMaxTurno, atualFim);
@@ -717,14 +372,14 @@
 
     if (botao.hasAttribute('data-cancelar-cobertura')) {
       const confirmado = await core.confirmarAcao({
-        titulo: 'Cancelar cobertura',
-        descricao: 'Cancelar a cobertura e deixar o intervalo disponível para a rede?',
-        confirmarTexto: 'Cancelar cobertura'
+        titulo: 'Não vou mais poder ficar',
+        descricao: 'Sair desse horário e deixar ele livre para outra pessoa da família?',
+        confirmarTexto: 'Não vou mais poder ficar'
       });
       if (!confirmado) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, 0, 0));
       botao.closest('dialog')?.close();
-      anunciarStatus(elementoStatus, 'Cobertura do turno cancelada. O horário ficou disponível para a rede.');
+      anunciarStatus(elementoStatus, 'Pronto, você saiu desse horário. Ele ficou livre para outra pessoa da família.');
       renderizarEscala();
       return;
     }
@@ -753,14 +408,14 @@
           const avatar = proximo.querySelector('[data-pedido-avatar]');
           const resp = proximo.querySelector('[data-pedido-responsavel]');
           const papel = proximo.querySelector('[data-pedido-papel]');
-          if (ctx) ctx.textContent = `Otorrinolaringologia · ${pessoa}`;
+          if (ctx) ctx.textContent = `Otorrino · ${pessoa}`;
           if (avatar) avatar.src = usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
           if (resp) resp.textContent = usuarioAtual.nomeComApelido;
           if (papel) papel.textContent = `${usuarioAtual.papel} · ${usuarioAtual.vinculo || 'Neto'}`;
         }
         if (proximo.id === 'dialogo-cadastrar-consulta') {
           const ctx = proximo.querySelector('[data-consulta-contexto]');
-          if (ctx) ctx.textContent = `Otorrinolaringologia · ${pessoa}`;
+          if (ctx) ctx.textContent = `Otorrino · ${pessoa}`;
         }
         proximo.showModal();
       }
@@ -773,7 +428,7 @@
       const dialogo = document.getElementById(botao.dataset.dialogoDinamico);
       if (dialogo) {
         dialogo.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário disponível: ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
         if (dialogo.id === 'dialogo-cobrir-horario') {
           const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
           const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
@@ -820,12 +475,12 @@
     const fim = Number(form.elements.fim.value);
     const duracao = fim - inicio;
     if (!Number.isInteger(inicio) || !Number.isInteger(fim) || duracao < 1 || inicio < limiteMinTurno || fim > limiteMaxTurno) {
-      anunciarStatus(elementoStatus, 'Selecione horários dentro da janela disponível deste turno.');
+      anunciarStatus(elementoStatus, 'Escolha um horário dentro do período livre.');
       return;
     }
     atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, inicio, fim));
     form.closest('dialog')?.close();
-    anunciarStatus(elementoStatus, `Cobertura atualizada para ${formatarIntervaloTurno(inicio, duracao)}.`);
+    anunciarStatus(elementoStatus, `Seu horário agora é ${formatarIntervaloTurno(inicio, duracao)}.`);
     renderizarEscala();
   });
 
@@ -838,16 +493,16 @@
       .slice(0, 4)
       .map(evt => `${evt.titulo} (${core.formatarDataCurta ? core.formatarDataCurta(evt.dia) : evt.dia})`);
     const rotina = [
-      'Administrar medicamentos do turno',
+      'Dar os remédios do turno',
       'Acompanhar hidratação e alimentação',
-      'Retirar medicamento na UBS',
+      'Pegar remédio no posto (UBS)',
       'Conferir estoque de medicamentos',
       'Organizar documentos da consulta'
     ];
     const montarGrupoOpt = (rotulo, itens) => itens.length
       ? `<optgroup label="${escaparHtml(rotulo)}">${itens.map(item => `<option value="${escaparHtml(item)}">${escaparHtml(item)}</option>`).join('')}</optgroup>`
       : '';
-    select.innerHTML = `<option value="">Selecione uma tarefa</option>${montarGrupoOpt('Medicamentos de hoje', dosesHoje)}${montarGrupoOpt('Agenda e compromissos', compromissos)}${montarGrupoOpt('Rotina de cuidado', rotina)}`;
+    select.innerHTML = `<option value="">Escolha uma tarefa</option>${montarGrupoOpt('Medicamentos de hoje', dosesHoje)}${montarGrupoOpt('Agenda e compromissos', compromissos)}${montarGrupoOpt('Cuidado do dia a dia', rotina)}`;
   };
 
   popularTarefasRelato();
@@ -942,7 +597,7 @@
             [
               usuario.nome,
               usuario.papel,
-              `Compromisso agendado · ${tituloEvento}`,
+              `Compromisso marcado · ${tituloEvento}`,
               `Agendado para ${formatarDataCurta(diaEvento)} às ${horaEvento.replace(':00', 'h')} em ${localEvento}.`,
               ''
             ],
@@ -960,7 +615,7 @@
         titulo: 'Compromisso salvo na Agenda',
         contexto: `${pessoa} · Agenda de cuidado`,
         resumo: `${tituloEvento} · ${formatarDataCurta(diaEvento)} às ${horaEvento.replace(':00', 'h')}`,
-        detalhe: `Registro por ${usuario.nomeComApelido} · ${espelharFicha ? 'Disponível na Agenda e na Ficha.' : 'Disponível na Agenda.'}`,
+        detalhe: `Anotado por ${usuario.nomeComApelido} · ${espelharFicha ? 'Disponível na Agenda e na Ficha.' : 'Disponível na Agenda.'}`,
         href: `agenda.html?dia=${encodeURIComponent(diaEvento)}&compromisso=${encodeURIComponent(novoEvento.id)}`,
         rotuloLink: 'Ver na Agenda'
       });
@@ -969,7 +624,7 @@
 
     const relato = (campos.relato || '').trim();
     if (!relato) {
-      anunciarStatus(elementoStatus, 'Descreva o relato do turno antes de salvar.');
+      anunciarStatus(elementoStatus, 'Escreva como foi o turno antes de salvar.');
       return;
     }
 
@@ -983,7 +638,7 @@
           [
             usuario.nome,
             cabecalhoPapel,
-            campos.tarefa ? `Tarefa relacionada · ${campos.tarefa}` : 'Registro de cuidado',
+            campos.tarefa ? `Tarefa relacionada · ${campos.tarefa}` : 'Anotação do turno',
             relato,
             (campos.recado || '').trim()
           ],
@@ -997,12 +652,12 @@
     form.closest('dialog')?.close();
     atualizarPassagemCuidado();
     abrirConfirmacao({
-      titulo: 'Relato registrado',
+      titulo: 'Anotação salva',
       contexto: `${pessoa} · Diário de turno`,
-      resumo: turno || 'Registro geral (sem turno)',
-      detalhe: `Registro por ${usuario.nomeComApelido} · Disponível na ficha da ${pessoa}.`,
+      resumo: turno || 'Anotação geral (sem turno)',
+      detalhe: `Anotado por ${usuario.nomeComApelido} · Fica na ficha da ${pessoa}.`,
       href: 'ficha.html#diario',
-      rotuloLink: 'Ver diário na ficha'
+      rotuloLink: 'Ver na ficha'
     });
   });
 
@@ -1035,7 +690,7 @@
       if (linkVerConsulta) linkVerConsulta.hidden = true;
       if (tituloCaixa) tituloCaixa.textContent = 'Para o próximo turno';
       if (textoCaixa) {
-        textoCaixa.textContent = `Agendar consulta de otorrinolaringologia para ${core.nomePessoaAcompanhada()}. Antes de agendar, confirmar a cobertura do convênio.`;
+        textoCaixa.textContent = `Marcar consulta no otorrino (ouvido, nariz e garganta) para ${core.nomePessoaAcompanhada()}. Antes, confira se o convênio paga a consulta.`;
       }
     }
   };
@@ -1059,7 +714,7 @@
     const hora = (campos.hora || '14:00').trim();
     const local = (campos.local || 'Clínica do convênio').trim();
     const acompanhante = (campos.acompanhante || obterUsuarioAtual().nomeComApelido).trim();
-    const titulo = 'Otorrinolaringologia';
+    const titulo = 'Consulta no otorrino';
     const idEvento = `evt-${Date.now()}`;
 
     atualizarEstado(estado => ({
@@ -1130,7 +785,7 @@
       const turnoAtual = linhaTempo.find(seg => seg.tipo === 'turno' && 11 >= seg.inicio && 11 < seg.fim);
       const responsavelTurno = turnoAtual?.pessoa?.nome || 'Beatriz da Silva (Bea)';
       const horarioTurnoAtual = turnoAtual?.horario || '07h–12h';
-      contextoRelato.textContent = `Turno de ${responsavelTurno} · ${horarioTurnoAtual} · Registro por ${usuario.nomeComApelido}`;
+      contextoRelato.textContent = `Turno de ${responsavelTurno} · ${horarioTurnoAtual} · Anotado por ${usuario.nomeComApelido}`;
     }
   };
 
@@ -1174,7 +829,11 @@
     }
   };
 
-  renderizarPortaRemedios();
+  window.MutiraoPortaRemedios?.montar({
+    raiz: pagina.querySelector('.porta-remedios'),
+    dialogo: document.getElementById('dialogo-detalhe-pote'),
+    aoMudar: atualizarProximaMedicacao
+  });
   renderizarEscala();
   sincronizarRedeInicio();
   atualizarPassagemCuidado();

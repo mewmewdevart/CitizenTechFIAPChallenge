@@ -39,10 +39,10 @@
 
   const NOMES_COMPLETOS = { Aninha: 'Ana da Silva (Aninha)', Bea: 'Beatriz (Bea)' };
   const SITUACOES = {
-    dado: ['Dados', 'fa-regular fa-circle-check'],
+    dado: ['Tudo dado', 'fa-regular fa-circle-check'],
     falta: ['Falta', 'fa-solid fa-triangle-exclamation'],
     agora: ['Agora', 'fa-regular fa-clock'],
-    depois: ['Previsto', 'fa-regular fa-clock']
+    depois: ['Mais tarde', 'fa-regular fa-clock']
   };
   const INSUMOS = [{ nome: 'Fraldas', tipo: 'Insumo' }];
 
@@ -83,15 +83,15 @@
   };
 
   const descreverItem = item => {
-    if (item.tipo === 'Insumo') return `Insumo · ${item.estoque ?? 0} unidades em estoque`;
+    if (item.tipo === 'Insumo') return `Material · ${item.estoque ?? 0} em casa`;
     return `${item.tipo}${item.horarios ? ` · ${item.horarios}` : ''}`;
   };
 
   const detalharItem = item => {
-    if (item.tipo === 'Insumo') return `Insumo · ${item.estoque ?? 0} unidades em estoque.`;
+    if (item.tipo === 'Insumo') return `Material · ${item.estoque ?? 0} em casa.`;
     const doseTexto = item.dose ? ` · ${item.dose}` : '';
     const horariosTexto = item.horarios ? ` · ${item.horarios}` : '';
-    if (item.estoque === null) return `Medicamento${doseTexto}${horariosTexto}. Consulte a prescrição para conferir dose e apresentação.`;
+    if (item.estoque === null) return `Medicamento${doseTexto}${horariosTexto}. Veja a dose na receita.`;
     const dias = item.consumoDia ? Math.floor(item.estoque / item.consumoDia) : null;
     return `Medicamento${doseTexto}${horariosTexto}. Estoque: ${item.estoque} unidades${dias !== null ? `; estimativa de ${plural(dias, 'dia', 'dias')}` : ''}.`;
   };
@@ -99,30 +99,25 @@
   const descreverRegistro = dose => {
     const usuario = obterUsuarioAtual();
     const quem = dose.meu ? usuario.nomeComApelido : nomeCompleto(dose.quem);
-    if (dose.estado === 'administrado') return `Administrado às ${formatarHorario(dose.horario)} · ${quem}${dose.origemExterna ? ` · Origem externa: ${dose.origemExterna}` : ''}`;
-    return `Não administrado · ${quem} · ${dose.motivo || 'Motivo não informado'}`;
+    if (dose.estado === 'administrado') return `Dado às ${formatarHorario(dose.horario)} · ${quem}${dose.origemExterna ? ` · Origem externa: ${dose.origemExterna}` : ''}`;
+    return `Não foi dado · ${quem} · ${dose.motivo || 'Não disseram o motivo'}`;
+  };
+
+  const estadoBloco = (dose, grupo) => {
+    if (dose.estado === 'administrado') return 'dado';
+    if (dose.estado === 'nao-administrado' || grupo.situacao === 'falta') return 'falta';
+    if (grupo.situacao === 'agora') return 'agora';
+    return 'depois';
   };
 
   const desenharCompartimento = grupos => {
-    const alturaDose = 24;
-    const espaco = 5;
-    const topoDoses = 31;
-    const alturaDoses = grupos.length * alturaDose + (grupos.length - 1) * espaco;
-    const alturaInterna = alturaDoses + 8;
-    const alturaBandeja = alturaInterna + 14;
-    const doses = [...grupos].reverse().map((grupo, indice) => {
-      const estado = grupo.completo ? 'dado' : grupo.situacao;
-      const y = topoDoses + indice * (alturaDose + espaco);
-      return `<rect class="compartimento__dose compartimento__dose--${estado}" x="11" y="${y}" width="57" height="${alturaDose}" rx="6"/>`;
-    }).join('');
-    return `<svg class="compartimento" viewBox="0 0 79 ${alturaBandeja + 23}" width="79" height="${alturaBandeja + 23}" aria-hidden="true" focusable="false">
-      <rect class="compartimento__dobradica" x="11.56" y="16.5" width="55.88" height="7" rx="2.5"/>
-      <rect class="compartimento__bandeja" x="1.5" y="20.5" width="76" height="${alturaBandeja}" rx="15.5"/>
-      <rect class="compartimento__fundo" x="7.5" y="26.5" width="64" height="${alturaInterna}" rx="10.5"/>
-      ${doses}
-      <rect class="compartimento__tampa" x="8.4" y="1.5" width="62.2" height="15" rx="3.5"/>
-      <path class="compartimento__brilho" d="M12.9 5H34.44L14.9 9L12.9 5Z"/>
-    </svg>`;
+    const blocos = grupos.flatMap(grupo => grupo.itens.map(dose => `<span class="frasco-resumo__bloco frasco-resumo__bloco--${estadoBloco(dose, grupo)}"></span>`)).join('');
+    return `<div class="frasco-resumo">
+      <span class="frasco-resumo__tampa"></span>
+      <span class="frasco-resumo__dobradica"></span>
+      <span class="frasco-resumo__corpo"><span class="frasco-resumo__blocos">${blocos}</span></span>
+      <span class="frasco-resumo__aba"></span>
+    </div>`;
   };
 
   const renderizarRotina = grupos => {
@@ -131,13 +126,16 @@
 
     const administradas = doses.filter(dose => dose.estado === 'administrado').length;
     const naoAdministradas = doses.filter(dose => dose.estado === 'nao-administrado').length;
-    const previstas = doses.length - administradas - naoAdministradas;
+    const agora = grupos.filter(grupo => grupo.situacao === 'agora').flatMap(grupo => grupo.itens).filter(dose => dose.estado === 'prevista').length;
+    const previstas = doses.length - administradas - naoAdministradas - agora;
     contagem.innerHTML = [
-      administradas && plural(administradas, 'administrada', 'administradas'),
-      naoAdministradas && plural(naoAdministradas, 'não administrada', 'não administradas'),
-      previstas && plural(previstas, 'prevista', 'previstas')
-    ].filter(Boolean).join('<br>');
+      administradas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--dado"></span>${plural(administradas, 'dada', 'dadas')}</span>`,
+      naoAdministradas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--falta"></span>${plural(naoAdministradas, 'não dada', 'não dadas')}</span>`,
+      agora && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--agora"></span>${plural(agora, 'para agora', 'para agora')}</span>`,
+      previstas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--depois"></span>${plural(previstas, 'para mais tarde', 'para mais tarde')}</span>`
+    ].filter(Boolean).join('');
 
+    if (!listaDoses) return;
     listaDoses.innerHTML = grupos.map(grupo => {
       const [rotulo, icone] = SITUACOES[grupo.situacao];
       const texto = grupo.situacao === 'falta' ? `Falta ${grupo.faltam}` : rotulo;
@@ -152,13 +150,13 @@
   const renderizarProxima = grupos => {
     const grupo = grupos.find(item => !item.completo && item.momento !== 'passado');
     if (!grupo) {
-      proxima.innerHTML = '<p class="estoque__texto">Todas as doses previstas para hoje foram registradas.</p>';
+      proxima.innerHTML = '<p class="estoque__texto">Todos os remédios de hoje já foram marcados.</p>';
       return;
     }
     proxima.innerHTML = `<ul class="painel__lista">${grupo.itens.filter(dose => dose.estado === 'prevista').map(dose => `<li class="painel__item">
       <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
-      <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>Prevista para ${escaparHtml(dose.hora)} · ${escaparHtml(grupo.responsavel || 'Turno sem cobertura')}</span></span>
-      <button type="button" class="botao botao--primario" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar administração</button>
+      <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>Às ${escaparHtml(dose.hora)} · ${escaparHtml(grupo.responsavel || 'Horário sem ninguém')}</span></span>
+      <button type="button" class="botao botao--primario" data-registrar-dose="${escaparHtml(dose.chave)}">Marcar como dado</button>
     </li>`).join('')}</ul>`;
   };
 
@@ -201,11 +199,11 @@
       ? visiveis.map(dose => `<li class="painel__item${dose.estado === 'administrado' ? ' meds__registro--concluido' : ''}">
         <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
         <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
-        ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Atualizar registro</button>` : ''}
+        ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Corrigir</button>` : ''}
       </li>`).join('')
       : (filtroAtivo
-        ? '<li class="estado-vazio"><strong>Nenhum registro encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-registros>Limpar filtros</button></li>'
-        : '<li class="estado-vazio"><strong>Nenhum registro hoje</strong><p>As administrações registradas aparecem aqui.</p></li>');
+        ? '<li class="estado-vazio"><strong>Nada encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-registros>Limpar filtros</button></li>'
+        : '<li class="estado-vazio"><strong>Nada anotado hoje</strong><p>Os remédios dados aparecem aqui.</p></li>');
   };
 
   const renderizarEstoque = itens => {
@@ -222,7 +220,7 @@
         const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
         alertaEstoque.querySelector('strong').textContent = `${baixos.length} item(ns) com estoque baixo · ${principal.nome}`;
         alertaEstoque.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
-          ? `${plural(principal.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}`
+          ? `${plural(principal.estoque, 'unidade', 'unidades')} · Dá para ${plural(dias, 'dia', 'dias')}`
           : `${plural(principal.estoque, 'unidade', 'unidades')} em estoque`;
       }
     }
@@ -233,10 +231,10 @@
           return `<div class="estoque__aviso">
             <span class="selo selo--atencao"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Estoque baixo</span>
             <strong>${escaparHtml(item.nome)}</strong>
-            <small>${plural(item.estoque, 'unidade', 'unidades')}${dias !== null ? ` · Previsão para ${plural(dias, 'dia', 'dias')}` : ''}</small>
+            <small>${plural(item.estoque, 'unidade', 'unidades')}${dias !== null ? ` · Dá para ${plural(dias, 'dia', 'dias')}` : ''}</small>
           </div>`;
         }).join('')
-        : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nenhum item com previsão curta.</p></div>';
+        : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nada está acabando.</p></div>';
     }
     itemEmEstoque = baixos[0]?.chave || itens.find(item => item.estoque !== null)?.chave || 'Metformina';
   };
@@ -279,18 +277,24 @@
         <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.chave)}">Ver item</button>
       </li>`).join('')
       : (filtroAtivo
-        ? '<li class="estado-vazio"><strong>Nenhum item encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-itens>Limpar filtros</button></li>'
-        : '<li class="estado-vazio"><strong>Nenhum item cadastrado</strong><p>Use Adicionar item para cadastrar um medicamento ou insumo.</p></li>');
+        ? '<li class="estado-vazio"><strong>Nada encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-itens>Limpar filtros</button></li>'
+        : '<li class="estado-vazio"><strong>Nenhum item cadastrado</strong><p>Use Adicionar remédio ou material para cadastrar um medicamento ou insumo.</p></li>');
   };
 
-  const renderizar = () => {
-    const grupos = obterCompartimentos();
+  let portaRemedios = null;
+
+  const renderizarPainel = (grupos = obterCompartimentos()) => {
     const itens = obterItens();
     renderizarRotina(grupos);
     renderizarProxima(grupos);
     renderizarRegistros(grupos);
     renderizarEstoque(itens);
     renderizarItens(itens);
+  };
+
+  const renderizar = () => {
+    if (portaRemedios) portaRemedios.renderizar();
+    else renderizarPainel();
   };
 
   const DESCRICOES_MEDICAMENTOS = {
@@ -315,7 +319,7 @@
     if (finalidade) {
       return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, ${finalidade}.`;
     }
-    return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, conforme prescrição médica.`;
+    return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, como o médico receitou.`;
   };
 
   const prepararDialogos = dose => {
@@ -323,7 +327,7 @@
     const usuario = obterUsuarioAtual();
     const avatar = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     const horaAtual = `${dose.hora.replace('h', '').padStart(2, '0')}h10`;
-    dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Registrar administração - ${dose.nome}`;
+    dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Marcar remédio - ${dose.nome}`;
     dialogos.registrar.querySelector('[data-dose-contexto]').textContent = descreverDoseMari(dose);
     for (const dialogo of [dialogos.registrar, dialogos.confirmar, dialogos.naoAdministrada, dialogos.registrada]) {
       dialogo.querySelectorAll('[data-usuario-avatar]').forEach(img => { img.src = avatar; });
@@ -335,13 +339,13 @@
       });
     }
     const horaEl = dialogos.naoAdministrada?.querySelector('[data-registro-hora-atual]');
-    if (horaEl) horaEl.textContent = `Registro às ${horaAtual}`;
+    if (horaEl) horaEl.textContent = `Anotado às ${horaAtual}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
       dialogo.querySelector('[data-dose-previsto]').textContent = descreverDoseMari(dose);
     }
     const estoqueAtual = obterEstoque(dose.itemId);
     const temEstadoAnterior = dose.estado === 'nao-administrado';
-    const resumoAnterior = [dose.motivo, dose.quem && `registrado por ${dose.quem}`].filter(Boolean).join(' · ');
+    const resumoAnterior = [dose.motivo, dose.quem && `anotado por ${dose.quem}`].filter(Boolean).join(' · ');
     const efeitoSaldo = estoqueAtual !== null
       ? ` e desconta 1 unidade do estoque (saldo atual: ${estoqueAtual} → novo saldo: ${Math.max(0, estoqueAtual - 1)})`
       : '';
@@ -350,9 +354,9 @@
       if (!caixaAnterior) continue;
       caixaAnterior.hidden = !temEstadoAnterior;
       if (temEstadoAnterior) {
-        caixaAnterior.querySelector('[data-dose-estado-anterior-titulo]').textContent = 'Registro anterior: Não administrada';
+        caixaAnterior.querySelector('[data-dose-estado-anterior-titulo]').textContent = 'Antes: não foi dado';
         caixaAnterior.querySelector('[data-dose-estado-anterior-detalhe]').textContent =
-          `${resumoAnterior ? `${resumoAnterior}. ` : ''}Registrar como administrada substitui o estado anterior desta dose (sem criar uma segunda dose)${efeitoSaldo}.`;
+          `${resumoAnterior ? `${resumoAnterior}. ` : ''}Marcar como dado troca o que estava anotado antes (não conta uma dose a mais)${efeitoSaldo}.`;
       }
     }
     dialogos.confirmar.querySelector('[name="horario"]').value = `${dose.hora.replace('h', '').padStart(2, '0')}:05`;
@@ -373,13 +377,13 @@
     const administrada = estado === 'administrado';
     const usuario = obterUsuarioAtual();
     if (administrada && dose.estado !== 'administrado' && obterEstoque(dose.itemId) === 0 && !origemExterna) {
-      anunciarStatus(elementoStatus, 'Estoque zerado. Confira e adicione a reposição antes de registrar a administração.');
+      anunciarStatus(elementoStatus, 'Acabou o remédio em casa. Adicione a nova caixa antes de marcar como dado.');
       abrirEstoque(dose.itemId);
       return;
     }
     const diario = administrada
-      ? `${usuario.nomeComApelido}: Registro de administração de ${dose.nome} (${dose.hora}) às ${formatarHorario(detalhe)}.${origemExterna ? ` Origem externa: ${origemExterna}` : ''}`
-      : `Dose de ${dose.nome} das ${dose.hora} não administrada. Registro por ${usuario.nomeComApelido}${detalhe ? ` · ${detalhe}` : ''}.`;
+      ? `${usuario.nomeComApelido} deu ${dose.nome} (${dose.hora}) às ${formatarHorario(detalhe)}.${origemExterna ? ` Origem externa: ${origemExterna}` : ''}`
+      : `A dose de ${dose.nome} das ${dose.hora} não foi dada. Anotado por ${usuario.nomeComApelido}${detalhe ? ` · ${detalhe}` : ''}.`;
 
     atualizarEstado(estadoAtual => ({
       ...estadoAtual,
@@ -395,11 +399,11 @@
       }
     }));
 
-    dialogos.registrada.querySelector('[data-registro-titulo]').textContent = `${administrada ? 'Administração registrada' : 'Ocorrência registrada'} - ${dose.nome}`;
-    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${dose.nome} · Dose prevista para as ${dose.hora} na rotina da Mari.`;
+    dialogos.registrada.querySelector('[data-registro-titulo]').textContent = `${administrada ? 'Remédio dado' : 'Anotado: remédio não dado'} - ${dose.nome}`;
+    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${dose.nome} · Remédio das ${dose.hora} na rotina da Mari.`;
     dialogos.registrada.querySelector('[data-registro-agenda]').textContent = administrada
-      ? `${dose.hora} · Administrada às ${formatarHorario(detalhe)} · ${usuario.nomeComApelido}`
-      : `${dose.hora} · Não administrada · Registro por ${usuario.nomeComApelido}`;
+      ? `${dose.hora} · Dado às ${formatarHorario(detalhe)} · ${usuario.nomeComApelido}`
+      : `${dose.hora} · Não foi dado · Anotado por ${usuario.nomeComApelido}`;
     dialogos.registrada.querySelector('[data-registro-diario]').textContent = diario;
     dialogos.registrada.showModal();
     doseEmFoco = null;
@@ -412,7 +416,7 @@
     itemEmEstoque = item.chave;
     nomeEstoque = item.nome;
     dialogos.estoque.querySelector('[data-estoque-titulo]').textContent = `Adicionar ao estoque de ${item.nome.toLocaleLowerCase('pt-BR')}`;
-    dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `Maria das Dores (Mari) · Estoque atual: ${plural(item.estoque ?? 0, 'unidade', 'unidades')}. A quantidade será somada ao estoque atual.`;
+    dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `Maria das Dores (Mari) · Tem em casa: ${plural(item.estoque ?? 0, 'unidade', 'unidades')}. Essa quantidade vai somar com o que já tem em casa.`;
     dialogos.estoque.querySelector('[name="item"]').value = item.nome;
     dialogos.estoque.showModal();
   };
@@ -446,7 +450,7 @@
       secaoEstoque.hidden = !temEstoque;
       if (temEstoque) {
         const dias = item.consumoDia ? Math.floor(item.estoque / item.consumoDia) : null;
-        estoqueEl.textContent = `${plural(item.estoque, 'unidade', 'unidades')} em estoque${dias !== null ? ` · Previsão para ${plural(dias, 'dia', 'dias')}` : ''}`;
+        estoqueEl.textContent = `${plural(item.estoque, 'unidade', 'unidades')} em estoque${dias !== null ? ` · Dá para ${plural(dias, 'dia', 'dias')}` : ''}`;
       }
     }
     if (secaoOrientacao && orientacaoEl) {
@@ -455,8 +459,8 @@
       if (!ehInsumo) {
         const finalidade = DESCRICOES_MEDICAMENTOS[item.nome];
         orientacaoEl.textContent = finalidade
-          ? `Indicado ${finalidade}. Consulte a prescrição para conferir dose e apresentação.`
-          : 'Consulte a prescrição para conferir dose e apresentação.';
+          ? `Indicado ${finalidade}. Veja a dose na receita.`
+          : 'Confira a dose na receita.';
       }
     }
     dialogos.detalhe.showModal();
@@ -584,7 +588,7 @@
         form.elements.nomeOriginal.value = '';
         popularSelectHorarioItem('08');
       }
-      if (titulo) titulo.textContent = 'Adicionar item';
+      if (titulo) titulo.textContent = 'Adicionar remédio ou material';
     }
     if (botao.hasAttribute('data-editar-item')) {
       abrirEdicaoItem(itemEmFoco);
@@ -728,10 +732,16 @@
   const alergias = pessoa.alergias?.trim();
   if (alerta) {
     alerta.hidden = !alergias && !pessoa.avisoTitulo && !pessoa.avisoTexto;
-    alerta.querySelector('strong').textContent = pessoa.avisoTitulo || (alergias ? `Alergia registrada: ${alergias}` : 'Atenção no cuidado');
-    alerta.querySelector('.faixa-alerta__texto > span').textContent = pessoa.avisoTexto || 'Confira as orientações na Ficha.';
+    alerta.querySelector('strong').textContent = pessoa.avisoTitulo || (alergias ? `Tem alergia a: ${alergias}` : 'Cuidado importante');
+    alerta.querySelector('.faixa-alerta__texto > span').textContent = pessoa.avisoTexto || 'Leia o que fazer na Ficha.';
   }
-  renderizar();
+  portaRemedios = window.MutiraoPortaRemedios?.montar({
+    raiz: pagina.querySelector('.porta-remedios'),
+    dialogo: document.getElementById('dialogo-detalhe-pote'),
+    aoMudar: renderizarPainel,
+    linkMedicamentos: false
+  }) || null;
+  if (!portaRemedios) renderizarPainel();
   const doseInicial = new URLSearchParams(location.search).get('dose');
   if (doseInicial) {
     const url = new URL(location.href);
