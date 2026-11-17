@@ -147,6 +147,14 @@ html.tema--acolhedor .avatar {
   background: var(--cor-neutra-clara-01);
   border-radius: var(--raio-lg);
   padding: var(--espaco-md);
+  
+}
+
+html:not(.tema--acolhedor) .inicio__resumo .painel__bloco {
+  background: transparent;
+  border-top: var(--borda-padrao);
+  border-radius: 0;
+  padding-inline: 0;
 }
 
 .inicio__rotulo {
@@ -1088,7 +1096,7 @@ html.tema--acolhedor .dose {
   min-height: 96px;
   margin-right: 48px;
   padding: 18px 32px 18px 22px;
-  background: transparent url('../media/recado-fundo-perfil.svg') center / 100% 100% no-repeat;
+  background: transparent url('../media/fundos/recado-fundo-perfil.svg') center / 100% 100% no-repeat;
   color: var(--cor-primaria);
 }
 

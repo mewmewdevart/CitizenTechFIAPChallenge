@@ -357,24 +357,6 @@
   font-weight: var(--peso-semibold);
 }
 
-.dialogo-mvp__dados {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--espaco-md) var(--espaco-lg);
-  padding: var(--espaco-lg);
-  border-radius: var(--raio-lg);
-  background: var(--cor-fundo-pagina);
-}
-
-.dialogo-mvp .dialogo-mvp__dados > div {
-  padding: 0;
-  border: 0;
-}
-
-.dialogo-mvp__dados dt {
-  font-size: var(--texto-legenda);
-}
-
 .formulario-mvp__grade {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -625,7 +607,6 @@
     font-size: var(--texto-titulo-secao);
   }
 
-  .dialogo-mvp__dados,
   .formulario-mvp__grade {
     grid-template-columns: minmax(0, 1fr);
   }

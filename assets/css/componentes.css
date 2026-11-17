@@ -81,6 +81,12 @@
   border-color: var(--cor-aviso-alerta-escuro);
 }
 
+.contexto-demonstracao {
+  margin-block: var(--espaco-xs);
+  color: var(--cor-texto-secundario);
+  font-size: var(--texto-legenda);
+}
+
 .estado-vazio {
   display: grid;
   gap: var(--espaco-xs);
