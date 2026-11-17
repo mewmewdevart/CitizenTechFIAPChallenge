@@ -195,6 +195,17 @@
       </div>
     </section>
 
+    <section class="faixa-alerta faixa-alerta--atencao" data-alerta-estoque-inicio hidden aria-labelledby="titulo-alerta-estoque-inicio">
+      <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-regular fa-clock"></i></span>
+      <div class="faixa-alerta__texto">
+        <strong id="titulo-alerta-estoque-inicio">Estoque baixo</strong>
+        <span></span>
+      </div>
+      <div class="faixa-alerta__acoes">
+        <a class="botao botao--secundario" href="medicamentos.html?estoque=1">Adicionar ao estoque</a>
+      </div>
+    </section>
+
     <section class="apoio__painel inicio__resumo" aria-labelledby="titulo-pessoa">
       <div class="painel__item">
         <img class="avatar avatar--medio" src="assets/media/fotos/foto-perfil-maria.png" alt="">
@@ -306,65 +317,82 @@
 
     <dialog class="dialogo-mvp" id="dialogo-registrar-cuidado" aria-labelledby="titulo-registrar-cuidado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-registrar-cuidado">Registrar cuidado</h2>
-      </div>
-      <p data-contexto-relato-inicio>Maria das Dores (Mari) · Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por
-        Zé da Manga (Zé)</p>
-      <form class="formulario-mvp" data-formulario-mvp="relato">
-        <div class="formulario-mvp__campo-editor">
-          <span id="rotulo-relato-inicio" class="editar-ficha__rotulo-campo">Relato do turno</span>
-          <input type="hidden" name="relato" value="" data-input-editor="relatoInicio" />
-          <div class="editar-ficha__editor-rico" data-editor-rico="relatoInicio">
-            <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold" aria-pressed="false"
-                aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
-                aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
-                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
-                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
-                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i class="fa-solid fa-list-ol"
-                  aria-hidden="true"></i></button>
-            </div>
-            <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
-              aria-required="true" aria-labelledby="rotulo-relato-inicio" data-editor-alvo="relatoInicio"></div>
-          </div>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-clipboard"></i></span>
+          <h2 id="titulo-registrar-cuidado">Registrar cuidado</h2>
         </div>
-        <label>Tarefa relacionada · opcional
-          <select name="tarefa">
-            <option value="">Selecione uma tarefa</option>
-            <option>Retirar medicamento na UBS</option>
-            <option>08h · Metformina</option>
-            <option>20h · Metformina</option>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p>Maria das Dores (Mari) · Diário de turno</p>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Contexto do registro</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-relato-avatar>
+          <span data-contexto-relato-inicio>Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por Zé da Manga (Zé)</span>
+        </div>
+      </div>
+      <form class="formulario-mvp" data-formulario-mvp="relato">
+        <label>Onde registrar
+          <select name="destino" data-destino-cuidado>
+            <option value="ficha" selected>Diário de turno (Ficha da Mari)</option>
+            <option value="agenda">Compromisso ou lembrete (Agenda)</option>
           </select>
         </label>
-        <div class="formulario-mvp__campo-editor">
-          <span id="rotulo-recado-inicio" class="editar-ficha__rotulo-campo">Recado para o próximo turno ·
-            opcional</span>
-          <input type="hidden" name="recado" value="" data-input-editor="recadoInicio" />
-          <div class="editar-ficha__editor-rico" data-editor-rico="recadoInicio">
-            <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold" aria-pressed="false"
-                aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
-                aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
-                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
-                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
-                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i class="fa-solid fa-list-ol"
-                  aria-hidden="true"></i></button>
-            </div>
-            <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
-              aria-labelledby="rotulo-recado-inicio" data-editor-alvo="recadoInicio"></div>
+        <div class="formulario-mvp" data-bloco-cuidado="ficha">
+          <label>Vincular a um turno (opcional)
+            <select name="turno">
+              <option value="">Não vincular a um turno (registro geral)</option>
+              <option value="Turno 00h–07h">00h–07h</option>
+              <option value="Turno 07h–12h" selected>07h–12h (turno atual)</option>
+              <option value="Turno 13h–19h">13h–19h</option>
+              <option value="Turno 19h–24h">19h–24h</option>
+            </select>
+          </label>
+          <label>Relato do turno
+            <textarea name="relato" rows="3" placeholder="Como a Mari passou, alimentação, humor ou intercorrências..." required></textarea>
+          </label>
+          <label>Tarefa relacionada (opcional)
+            <select name="tarefa" data-select-tarefas-relato>
+              <option value="">Selecione uma tarefa</option>
+              <optgroup label="Rotina de cuidado">
+                <option>Administrar medicamentos do turno</option>
+                <option>Acompanhar hidratação e alimentação</option>
+                <option>Retirar medicamento na UBS</option>
+                <option>Conferir estoque de medicamentos</option>
+                <option>Organizar documentos da consulta</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Recado para o próximo turno (opcional)
+            <textarea name="recado" rows="2" placeholder="Orientações ou lembretes para quem assume o próximo turno"></textarea>
+          </label>
+        </div>
+        <div class="formulario-mvp" data-bloco-cuidado="agenda" hidden>
+          <label>Título do compromisso ou lembrete
+            <input type="text" name="tituloEvento" placeholder="Ex.: Retorno cardiologista, Exame de sangue">
+          </label>
+          <div class="formulario-mvp__grade">
+            <label>Data<input type="date" name="diaEvento" value="2026-11-10"></label>
+            <label>Horário<input type="time" name="horaEvento" value="14:00"></label>
           </div>
+          <label>Local
+            <input type="text" name="localEvento" placeholder="Ex.: UBS do bairro, Casa, Clínica">
+          </label>
+          <label>Quem acompanha
+            <select name="acompanhanteEvento">
+              <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
+              <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
+              <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
+              <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+            </select>
+          </label>
+          <label class="dialogo-mvp__opcao-inline">
+            <input type="checkbox" name="espelharFicha"> Registrar também um resumo no Diário da Ficha
+          </label>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Salvar relato</button>
+          <button type="submit" class="botao botao--primario" data-submit-cuidado>Salvar relato</button>
         </div>
       </form>
     </dialog>
@@ -418,6 +446,7 @@
       aria-labelledby="titulo-relato-registrado">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-relato-registrado">Relato registrado</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-relato-registrado-contexto>Maria das Dores (Mari) · Diário de turno</p>
       <div class="dialogo-mvp__secao">
@@ -431,7 +460,7 @@
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <a class="botao botao--primario" href="ficha.html#diario">Ver diário na ficha</a>
+        <a class="botao botao--primario" href="ficha.html#diario" data-relato-registrado-link>Ver diário na ficha</a>
       </div>
     </dialog>
 
@@ -439,6 +468,7 @@
       aria-labelledby="titulo-horario-expirado">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-horario-expirado">Horário expirado</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-horario-expirado-contexto>Maria das Dores (Mari) · Terça, 10 nov. · 12h–13h</p>
       <div class="dialogo-mvp__aviso-caixa">
@@ -455,6 +485,7 @@
       aria-labelledby="titulo-passagem-cuidado">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-passagem-cuidado">Passagem de cuidado</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <div class="dialogo-mvp__linha-info">
         <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" aria-hidden="true">
@@ -481,6 +512,7 @@
       aria-labelledby="titulo-pedido-andamento">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-pedido-andamento">Pedido em andamento</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-pedido-contexto>Otorrinolaringologia · Maria das Dores (Mari)</p>
       <div class="dialogo-mvp__secao">
@@ -511,6 +543,7 @@
     <dialog class="dialogo-mvp" id="dialogo-cadastrar-consulta" aria-labelledby="titulo-cadastrar-consulta">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-cadastrar-consulta">Cadastrar consulta</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-consulta-contexto>Otorrinolaringologia · Maria das Dores (Mari)</p>
       <form class="formulario-mvp" data-formulario-mvp="consulta-passagem">
@@ -539,6 +572,7 @@
       aria-labelledby="titulo-consulta-agendada">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-consulta-agendada">Consulta adicionada à agenda</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <div class="dialogo-mvp__linha-info">
         <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
@@ -561,9 +595,13 @@
               aria-hidden="true"></i></button></form>
       </div>
       <p class="dialogo-mvp__contexto" data-pote-contexto></p>
-      <div class="dialogo-mvp__aviso-caixa" data-pote-resumo-estado>
-        <strong data-pote-estado-titulo></strong>
-        <span data-pote-estado-detalhe></span>
+      <div class="painel__item dialogo-mvp__item-pote" data-pote-resumo-estado>
+        <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" data-pote-avatar>
+        <span class="painel__texto">
+          <strong data-pote-estado-titulo></strong>
+          <span data-pote-estado-detalhe></span>
+        </span>
+        <span class="selo" data-pote-estado-selo></span>
       </div>
       <form class="formulario-mvp" data-formulario-mvp="registrar-pote">
         <label>Horário da administração<input type="time" name="horario" value="11:58" required></label>

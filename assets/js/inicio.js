@@ -66,26 +66,53 @@
     return `${dose.nome}, dado por ${quem} às ${dose.horario}. Ver detalhes`;
   };
 
+  const formatarHoraCurtaPote = horario => {
+    const texto = String(horario || HORA_REGISTRO).trim();
+    return texto.includes(':') ? texto.replace(':', 'h') : texto;
+  };
+
+  const obterTextoBadgePote = (dose, grupo) => {
+    if (dose?.estado === 'administrado') {
+      return `Administrado às ${formatarHoraCurtaPote(dose.horario)}`;
+    }
+    if (dose?.estado === 'nao-administrado' || grupo?.situacao === 'falta') {
+      return 'Atrasado';
+    }
+    if (grupo?.situacao === 'agora') {
+      return 'Pendente';
+    }
+    return `Previsto · ${dose?.hora || grupo?.hora || ''}`;
+  };
+
+  const obterIconeStatusPote = (aberto, atrasado) => {
+    if (aberto) return '<i class="fa-solid fa-check" aria-hidden="true"></i>';
+    if (atrasado) return '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>';
+    return '<i class="fa-regular fa-clock" aria-hidden="true"></i>';
+  };
+
   const montarPote = (dose, grupo) => {
     const aberto = dose.estado === 'administrado';
-    const quem = dose.meu ? 'Você' : dose.quem;
-    return `<li class="pote${grupo.situacao === 'falta' && !aberto ? ' pote--falta' : ''}" data-aberto="${aberto}" data-chave="${escaparHtml(dose.chave)}">
-      <button type="button" class="pote__botao" aria-pressed="${aberto}" aria-label="${escaparHtml(rotuloPote(dose))}">
-        <span class="pote__dobradica" aria-hidden="true"></span>
-        <span class="pote__bandeja" aria-hidden="true"><span class="pote__fundo"></span></span>
-        <span class="pote__aberto" aria-hidden="true">
-          <span class="pote__check"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          <span class="pote__remedio">${escaparHtml(dose.nome)}</span>
-          <span class="pote__quem" data-pote-quem>${escaparHtml(quem || 'Você')}, ${escaparHtml(dose.horario || HORA_REGISTRO)}</span>
-        </span>
+    const pendente = !aberto && (dose.estado === 'nao-administrado' || grupo.situacao === 'falta');
+    const textoBadge = obterTextoBadgePote(dose, grupo);
+    const iconeStatus = obterIconeStatusPote(aberto, pendente);
+    return `<li class="pote${pendente ? ' pote--falta' : ''}" data-aberto="${aberto}" data-chave="${escaparHtml(dose.chave)}">
+      <button type="button" class="pote__botao" aria-label="${escaparHtml(rotuloPote(dose))}">
         <span class="pote__tampa" aria-hidden="true">
           <span class="pote__brilho"></span>
-          <span class="pote__comprimidos"><span></span><span></span><span></span></span>
-          <span class="pote__fechado"><span class="pote__horario">${escaparHtml(grupo.hora)}</span><span class="pote__remedio">${escaparHtml(dose.nome)}</span></span>
+        </span>
+        <span class="pote__dobradica" aria-hidden="true"></span>
+        <span class="pote__bandeja" aria-hidden="true">
+          <span class="pote__fundo"></span>
+          <span class="pote__conteudo">
+            <span class="pote__status-icone" data-pote-icone>${iconeStatus}</span>
+            <span class="pote__remedio">${escaparHtml(dose.nome)}</span>
+            <span class="pote__horario-info">${escaparHtml(grupo.hora)}</span>
+            ${!aberto ? '<span class="pote__comprimidos"><span></span><span></span><span></span></span>' : ''}
+            <span class="pote__status-badge" data-pote-badge>${escaparHtml(textoBadge)}</span>
+          </span>
         </span>
         <span class="pote__aba" aria-hidden="true"></span>
       </button>
-      <span class="pote__nome">${escaparHtml(dose.nome)}</span>
     </li>`;
   };
 
@@ -104,6 +131,37 @@
       ? `${total} de ${total} administrados · tudo certo por hoje`
       : `${dados} de ${total} administrados · deslize para ver mais`;
   };
+
+  const atualizarAlertaEstoqueInicio = () => {
+    const alerta = pagina.querySelector('[data-alerta-estoque-inicio]');
+    if (!alerta || !core.obterEstoque) return;
+    const estado = obterEstado();
+    const doses = obterDoses(estado);
+    const contagemPorItem = new Map();
+    doses.forEach(dose => {
+      const atual = contagemPorItem.get(dose.itemId) || { nome: dose.nome, consumoDia: 0 };
+      atual.consumoDia += 1;
+      contagemPorItem.set(dose.itemId, atual);
+    });
+    const baixos = [];
+    for (const [id, info] of contagemPorItem.entries()) {
+      const estoque = core.obterEstoque(id, estado);
+      if (estoque !== null && info.consumoDia && estoque / info.consumoDia <= 3) {
+        baixos.push({ nome: info.nome, estoque, consumoDia: info.consumoDia });
+      }
+    }
+    alerta.hidden = !baixos.length;
+    if (baixos.length) {
+      const principal = baixos[0];
+      const dias = Math.floor(principal.estoque / principal.consumoDia);
+      alerta.querySelector('strong').textContent = `Estoque baixo · ${principal.nome}`;
+      alerta.querySelector('.faixa-alerta__texto > span').textContent =
+        `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Previsão para ${dias} ${dias === 1 ? 'dia' : 'dias'}`;
+    }
+  };
+
+  atualizarAlertaEstoqueInicio();
+  window.addEventListener('mutirao:cuidado-atualizado', atualizarAlertaEstoqueInicio);
 
   const atualizarProximoCompromisso = () => {
     const modelo = pagina.querySelector('[data-proximo-compromisso]');
@@ -230,18 +288,33 @@
 
     const dose = obterDoses().find(item => item.chave === chave);
     const botao = pote.querySelector('.pote__botao');
-    const quemEl = pote.querySelector('[data-pote-quem]');
-    if (quemEl && dose) {
-      const quem = dose.meu ? 'Você' : dose.quem;
-      quemEl.textContent = `${quem || 'Você'}, ${dose.horario || horario}`;
+    const iconeEl = pote.querySelector('[data-pote-icone]');
+    const badgeEl = pote.querySelector('[data-pote-badge]');
+    const grupoAtual = obterCompartimentos().find(item => item.hora === hora);
+    const atrasado = !abrir && (dose?.estado === 'nao-administrado' || grupoAtual?.situacao === 'falta');
+    if (iconeEl) {
+      iconeEl.innerHTML = obterIconeStatusPote(abrir, atrasado);
+    }
+    if (badgeEl && dose) {
+      badgeEl.textContent = obterTextoBadgePote(dose, grupoAtual);
+    }
+    const comprimidosEl = pote.querySelector('.pote__comprimidos');
+    if (!abrir && !comprimidosEl && badgeEl) {
+      const novoComprimidos = document.createElement('span');
+      novoComprimidos.className = 'pote__comprimidos';
+      novoComprimidos.innerHTML = '<span></span><span></span><span></span>';
+      badgeEl.before(novoComprimidos);
+    } else if (abrir && comprimidosEl) {
+      comprimidosEl.remove();
     }
     pote.dataset.aberto = String(abrir);
-    botao.setAttribute('aria-pressed', String(abrir));
     botao.setAttribute('aria-label', rotuloPote(dose));
     if (abrir) pote.classList.remove('pote--falta');
 
     const grupo = atualizarGrupoNaTela(hora);
-    if (!abrir && grupo?.situacao === 'falta') pote.classList.add('pote--falta');
+    if (!abrir && (dose?.estado === 'nao-administrado' || grupo?.situacao === 'falta')) {
+      pote.classList.add('pote--falta');
+    }
     if (abrir) mostrarAviso(`Remédio das ${hora} dado por você às ${horario}. A família vê na hora.`, chave);
     else mostrarAviso(`${nome} das ${hora} voltou para os pendentes.`, null);
 
@@ -266,8 +339,10 @@
 
     const tituloEl = dialogoDetalhePote.querySelector('[data-pote-titulo]');
     const contextoEl = dialogoDetalhePote.querySelector('[data-pote-contexto]');
+    const avatarEl = dialogoDetalhePote.querySelector('[data-pote-avatar]');
     const estadoTituloEl = dialogoDetalhePote.querySelector('[data-pote-estado-titulo]');
     const estadoDetalheEl = dialogoDetalhePote.querySelector('[data-pote-estado-detalhe]');
+    const estadoSeloEl = dialogoDetalhePote.querySelector('[data-pote-estado-selo]');
     const formRegistrar = dialogoDetalhePote.querySelector('[data-formulario-mvp="registrar-pote"]');
     const acoesRegistrado = dialogoDetalhePote.querySelector('[data-pote-acoes-registrado]');
     const botaoDesfazer = dialogoDetalhePote.querySelector('[data-pote-desfazer]');
@@ -277,20 +352,48 @@
 
     const administrada = dose.estado === 'administrado';
     const naoAdministrada = dose.estado === 'nao-administrado';
+    const nomePessoaRegistro = dose.meu
+      ? obterUsuarioAtual().nomeComApelido
+      : (dose.quem || grupo?.responsavel || '');
+    const pessoaRede = core.resolverPessoaRede(nomePessoaRegistro);
+
+    if (avatarEl) {
+      if (pessoaRede?.src) {
+        avatarEl.src = pessoaRede.src;
+        avatarEl.hidden = false;
+      } else {
+        avatarEl.src = 'assets/media/mascotes/icone-mascote-cubado.svg';
+        avatarEl.hidden = !nomePessoaRegistro;
+      }
+    }
 
     if (administrada) {
-      const quem = dose.meu ? 'você' : (dose.quem || 'cuidador');
-      if (estadoTituloEl) estadoTituloEl.textContent = 'Dose administrada';
-      if (estadoDetalheEl) estadoDetalheEl.textContent = `Registrada por ${quem}${dose.horario ? ` às ${dose.horario}` : ''}.`;
+      const nomeExibido = dose.meu ? `${obterUsuarioAtual().nomeComApelido} (Você)` : (pessoaRede?.nome || dose.quem || 'Cuidador');
+      if (estadoTituloEl) estadoTituloEl.textContent = nomeExibido;
+      if (estadoDetalheEl) estadoDetalheEl.textContent = `Dose administrada${dose.horario ? ` às ${dose.horario.replace(':', 'h')}` : ''}.`;
+      if (estadoSeloEl) {
+        estadoSeloEl.className = 'selo selo--sucesso';
+        estadoSeloEl.textContent = 'Administrada';
+      }
     } else if (naoAdministrada) {
-      if (estadoTituloEl) estadoTituloEl.textContent = 'Dose não administrada';
-      if (estadoDetalheEl) estadoDetalheEl.textContent = [dose.motivo, dose.quem && `Registro por ${dose.quem}`].filter(Boolean).join(' · ') || 'Ocorrência registrada.';
+      const nomeExibido = pessoaRede?.nome || dose.quem || grupo?.responsavel || 'Sem responsável';
+      if (estadoTituloEl) estadoTituloEl.textContent = nomeExibido;
+      if (estadoDetalheEl) estadoDetalheEl.textContent = dose.motivo || 'Ocorrência registrada sem motivo informado.';
+      if (estadoSeloEl) {
+        estadoSeloEl.className = 'selo selo--alerta';
+        estadoSeloEl.textContent = 'Atrasado';
+      }
     } else {
-      if (estadoTituloEl) estadoTituloEl.textContent = 'Aguardando administração';
+      const nomeExibido = pessoaRede?.nome || grupo?.responsavel || 'Horário sem cobertura';
+      if (estadoTituloEl) estadoTituloEl.textContent = nomeExibido;
       if (estadoDetalheEl) {
         estadoDetalheEl.textContent = grupo?.responsavel
-          ? `Responsável pelo turno: ${grupo.responsavel}.`
+          ? 'Responsável pelo turno · Aguardando administração.'
           : 'Horário sem responsável definido na escala.';
+      }
+      if (estadoSeloEl) {
+        estadoSeloEl.className = 'selo selo--neutro';
+        estadoSeloEl.textContent = 'Prevista';
       }
     }
 
@@ -705,27 +808,160 @@
     renderizarEscala();
   });
 
-  const editoresRicos = core.inicializarEditoresRicos(pagina);
+  const popularTarefasRelato = () => {
+    const select = pagina.querySelector('[data-select-tarefas-relato]');
+    if (!select) return;
+    const estado = obterEstado();
+    const dosesHoje = obterDoses().slice(0, 6).map(dose => `${dose.hora} · ${dose.nome}`);
+    const compromissos = (core.obterCompromissos ? core.obterCompromissos(estado) : [])
+      .slice(0, 4)
+      .map(evt => `${evt.titulo} (${core.formatarDataCurta ? core.formatarDataCurta(evt.dia) : evt.dia})`);
+    const rotina = [
+      'Administrar medicamentos do turno',
+      'Acompanhar hidratação e alimentação',
+      'Retirar medicamento na UBS',
+      'Conferir estoque de medicamentos',
+      'Organizar documentos da consulta'
+    ];
+    const montarGrupoOpt = (rotulo, itens) => itens.length
+      ? `<optgroup label="${escaparHtml(rotulo)}">${itens.map(item => `<option value="${escaparHtml(item)}">${escaparHtml(item)}</option>`).join('')}</optgroup>`
+      : '';
+    select.innerHTML = `<option value="">Selecione uma tarefa</option>${montarGrupoOpt('Medicamentos de hoje', dosesHoje)}${montarGrupoOpt('Agenda e compromissos', compromissos)}${montarGrupoOpt('Rotina de cuidado', rotina)}`;
+  };
 
-  pagina.querySelector('[data-formulario-mvp="relato"]')?.addEventListener('submit', evento => {
+  popularTarefasRelato();
+
+  const formRelatoInicio = pagina.querySelector('[data-formulario-mvp="relato"]');
+  const selectDestinoCuidado = formRelatoInicio?.querySelector('[data-destino-cuidado]');
+  const blocoCuidadoFicha = formRelatoInicio?.querySelector('[data-bloco-cuidado="ficha"]');
+  const blocoCuidadoAgenda = formRelatoInicio?.querySelector('[data-bloco-cuidado="agenda"]');
+  const botaoSubmitCuidado = formRelatoInicio?.querySelector('[data-submit-cuidado]');
+
+  const alternarDestinoCuidado = () => {
+    const destino = selectDestinoCuidado?.value || 'ficha';
+    const ehAgenda = destino === 'agenda';
+    if (blocoCuidadoFicha) blocoCuidadoFicha.hidden = ehAgenda;
+    if (blocoCuidadoAgenda) blocoCuidadoAgenda.hidden = !ehAgenda;
+    const relatoEl = formRelatoInicio?.elements.relato;
+    const tituloEventoEl = formRelatoInicio?.elements.tituloEvento;
+    const diaEventoEl = formRelatoInicio?.elements.diaEvento;
+    const horaEventoEl = formRelatoInicio?.elements.horaEvento;
+    const localEventoEl = formRelatoInicio?.elements.localEvento;
+    if (relatoEl) relatoEl.required = !ehAgenda;
+    if (tituloEventoEl) tituloEventoEl.required = ehAgenda;
+    if (diaEventoEl) diaEventoEl.required = ehAgenda;
+    if (horaEventoEl) horaEventoEl.required = ehAgenda;
+    if (localEventoEl) localEventoEl.required = ehAgenda;
+    if (botaoSubmitCuidado) {
+      botaoSubmitCuidado.textContent = ehAgenda ? 'Salvar na Agenda' : 'Salvar na Ficha';
+    }
+  };
+
+  selectDestinoCuidado?.addEventListener('change', alternarDestinoCuidado);
+  alternarDestinoCuidado();
+
+  formRelatoInicio?.addEventListener('submit', evento => {
     evento.preventDefault();
     const form = evento.target;
-    editoresRicos.sincronizarTodos(form);
     const campos = Object.fromEntries(new FormData(form));
+    const destino = campos.destino || 'ficha';
+    const usuario = obterUsuarioAtual();
+    const pessoa = core.nomePessoaAcompanhada();
+
+    const abrirConfirmacao = ({ titulo, contexto, resumo, detalhe, href, rotuloLink }) => {
+      const dialogoRelatoRegistrado = document.getElementById('dialogo-relato-registrado');
+      if (dialogoRelatoRegistrado) {
+        const tituloEl = dialogoRelatoRegistrado.querySelector('#titulo-relato-registrado');
+        const contextoEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-contexto]');
+        const turnoEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-turno]');
+        const avatarEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-avatar]');
+        const detalheEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-detalhe]');
+        const linkEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-link]');
+        if (tituloEl) tituloEl.textContent = titulo;
+        if (contextoEl) contextoEl.textContent = contexto;
+        if (turnoEl) turnoEl.textContent = resumo;
+        if (avatarEl) avatarEl.src = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
+        if (detalheEl) detalheEl.textContent = detalhe;
+        if (linkEl) {
+          linkEl.href = href;
+          linkEl.textContent = rotuloLink;
+        }
+        dialogoRelatoRegistrado.showModal();
+      } else {
+        anunciarStatus(elementoStatus, `${titulo}.`);
+      }
+    };
+
+    if (destino === 'agenda') {
+      const tituloEvento = (campos.tituloEvento || '').trim();
+      const localEvento = (campos.localEvento || '').trim();
+      const diaEvento = campos.diaEvento;
+      const horaEvento = campos.horaEvento;
+      const acompanhante = (campos.acompanhanteEvento || usuario.nomeComApelido).trim();
+      if (!tituloEvento || !localEvento || !diaEvento || !horaEvento) {
+        anunciarStatus(elementoStatus, 'Preencha título, data, horário e local do compromisso.');
+        return;
+      }
+      const novoEvento = {
+        id: `evt-${Date.now()}`,
+        titulo: tituloEvento,
+        dia: diaEvento,
+        hora: horaEvento,
+        local: localEvento,
+        acompanhante,
+        criadoPor: usuario.nomeComApelido
+      };
+      const espelharFicha = Boolean(form.elements.espelharFicha?.checked);
+      atualizarEstado(estado => ({
+        ...estado,
+        events: [...(estado.events || []), novoEvento],
+        reports: espelharFicha ? {
+          ...estado.reports,
+          [HOJE]: [
+            [
+              usuario.nome,
+              usuario.papel,
+              `Compromisso agendado · ${tituloEvento}`,
+              `Agendado para ${formatarDataCurta(diaEvento)} às ${horaEvento.replace(':00', 'h')} em ${localEvento}.`,
+              ''
+            ],
+            ...(estado.reports?.[HOJE] || [])
+          ]
+        } : estado.reports
+      }));
+      form.reset();
+      alternarDestinoCuidado();
+      form.closest('dialog')?.close();
+      atualizarProximoCompromisso();
+      popularTarefasRelato();
+      if (espelharFicha) atualizarPassagemCuidado();
+      abrirConfirmacao({
+        titulo: 'Compromisso salvo na Agenda',
+        contexto: `${pessoa} · Agenda de cuidado`,
+        resumo: `${tituloEvento} · ${formatarDataCurta(diaEvento)} às ${horaEvento.replace(':00', 'h')}`,
+        detalhe: `Registro por ${usuario.nomeComApelido} · ${espelharFicha ? 'Disponível na Agenda e na Ficha.' : 'Disponível na Agenda.'}`,
+        href: `agenda.html?dia=${encodeURIComponent(diaEvento)}&compromisso=${encodeURIComponent(novoEvento.id)}`,
+        rotuloLink: 'Ver na Agenda'
+      });
+      return;
+    }
+
     const relato = (campos.relato || '').trim();
     if (!relato) {
       anunciarStatus(elementoStatus, 'Descreva o relato do turno antes de salvar.');
       return;
     }
 
+    const turno = (campos.turno || '').trim();
+    const cabecalhoPapel = turno ? `${usuario.papel} · ${turno}` : usuario.papel;
     atualizarEstado(estado => ({
       ...estado,
       reports: {
         ...estado.reports,
         [HOJE]: [
           [
-            obterUsuarioAtual().nome,
-            `${obterUsuarioAtual().papel} · Registro do turno 07h–12h`,
+            usuario.nome,
+            cabecalhoPapel,
             campos.tarefa ? `Tarefa relacionada · ${campos.tarefa}` : 'Registro de cuidado',
             relato,
             (campos.recado || '').trim()
@@ -736,23 +972,17 @@
     }));
 
     form.reset();
-    editoresRicos.limparTodos(form);
+    alternarDestinoCuidado();
     form.closest('dialog')?.close();
     atualizarPassagemCuidado();
-    const dialogoRelatoRegistrado = document.getElementById('dialogo-relato-registrado');
-    if (dialogoRelatoRegistrado) {
-      const usuarioAtual = obterUsuarioAtual();
-      const pessoa = core.nomePessoaAcompanhada();
-      const contextoEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-contexto]');
-      const avatarEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-avatar]');
-      const detalheEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-detalhe]');
-      if (contextoEl) contextoEl.textContent = `${pessoa} · Diário de turno`;
-      if (avatarEl) avatarEl.src = usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
-      if (detalheEl) detalheEl.textContent = `Registro por ${usuarioAtual.nomeComApelido} · Disponível na ficha da ${pessoa}.`;
-      dialogoRelatoRegistrado.showModal();
-    } else {
-      anunciarStatus(elementoStatus, 'Relato salvo no diário de turno da Mari.');
-    }
+    abrirConfirmacao({
+      titulo: 'Relato registrado',
+      contexto: `${pessoa} · Diário de turno`,
+      resumo: turno || 'Registro geral (sem turno)',
+      detalhe: `Registro por ${usuario.nomeComApelido} · Disponível na ficha da ${pessoa}.`,
+      href: 'ficha.html#diario',
+      rotuloLink: 'Ver diário na ficha'
+    });
   });
 
   const sincronizarDialogoPassagem = () => {
@@ -872,12 +1102,14 @@
     }
 
     const contextoRelato = pagina.querySelector('[data-contexto-relato-inicio]');
+    const avatarRelato = pagina.querySelector('[data-relato-avatar]');
+    if (avatarRelato) avatarRelato.src = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     if (contextoRelato) {
       const linhaTempo = construirLinhaDoTempoDia(HOJE, obterEstado());
       const turnoAtual = linhaTempo.find(seg => seg.tipo === 'turno' && 11 >= seg.inicio && 11 < seg.fim);
       const responsavelTurno = turnoAtual?.pessoa?.nome || 'Beatriz da Silva (Bea)';
       const horarioTurnoAtual = turnoAtual?.horario || '07h–12h';
-      contextoRelato.textContent = `Maria das Dores (Mari) · Turno de ${responsavelTurno} · ${horarioTurnoAtual} · Registro por ${usuario.nomeComApelido}`;
+      contextoRelato.textContent = `Turno de ${responsavelTurno} · ${horarioTurnoAtual} · Registro por ${usuario.nomeComApelido}`;
     }
   };
 
