@@ -156,8 +156,8 @@
     if (!salvarPreferenciasSessao()) return;
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
-    window.MutiraoNotificacoes.registrar('Configurações atualizadas', 'Preferências salvas para esta sessão.', 'configuracoes.html');
-    mostrarStatus('Configurações salvas com sucesso!', 'sucesso');
+    window.MutiraoNotificacoes.registrar('Configurações atualizadas', 'Suas escolhas foram salvas.', 'configuracoes.html');
+    mostrarStatus('Ajustes salvos!', 'sucesso');
   });
 
   const limparCookiesSessao = () => {
@@ -198,7 +198,7 @@
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
     renderizarLembretes?.();
-    mostrarStatus('Preferências e dados da sessão restaurados para o estado inicial.', 'sucesso');
+    mostrarStatus('Tudo voltou ao começo.', 'sucesso');
   });
 
   botaoAcessibilidade?.addEventListener('click', () => {
@@ -206,15 +206,15 @@
     if (gatilho) {
       gatilho.click();
     } else {
-      mostrarStatus('Não foi possível abrir o painel de acessibilidade.', 'erro');
+      mostrarStatus('Não deu para abrir os ajustes de leitura.', 'erro');
     }
   });
 
   const core = window.MutiraoCuidado;
   const CANAIS_SIMULADOS = {
     'app-email': 'Aplicativo e e-mail',
-    app: 'Somente no aplicativo',
-    email: 'Somente por e-mail'
+    app: 'Só no aplicativo',
+    email: 'Só por e-mail'
   };
   const formatarQuandoLembrete = valor => {
     const match = String(valor || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
@@ -226,7 +226,7 @@
   simulacao.innerHTML = `<div class="configuracoes__bloco-cabecalho">
     <h3>Testar lembretes</h3>
   </div>
-  <p class="configuracoes__texto-apoio">Avance o horário do cenário para executar os lembretes nesta sessão. Os canais são simulados; nenhum e-mail é enviado.</p>
+  <p class="configuracoes__texto-apoio">Avance o horário para ver os lembretes chegando. É só um teste: nenhum e-mail é enviado.</p>
   <div class="configuracoes__simulacao-controles">
     <label>Avançar até
       <input type="datetime-local" data-horario-lembretes>
@@ -240,7 +240,7 @@
     const lista = core.obterEstado().lembretesExecutados || [];
     simulacao.querySelector('ul').innerHTML = lista.length
       ? lista.map(item => `<li><strong>${core.escaparHtml(item.texto)}</strong><small>${core.escaparHtml(formatarQuandoLembrete(item.quando))} · Canal simulado: ${core.escaparHtml(CANAIS_SIMULADOS[item.canal] || item.canal)}</small></li>`).join('')
-      : '<li class="configuracoes__historico-vazio">Nenhum lembrete executado nesta sessão.</li>';
+      : '<li class="configuracoes__historico-vazio">Nenhum lembrete enviado ainda.</li>';
   };
   simulacao.querySelector('button').addEventListener('click', () => {
     try {
@@ -255,18 +255,18 @@
     const canal = formulario.querySelector('#config-canal-notificacao')?.selectedOptions?.[0]?.textContent || 'Aplicativo e e-mail';
     const antecedencia = selectAntecedencia?.selectedOptions?.[0]?.textContent || '30 minutos';
     const resumo = [
-      'Mutirão — Resumo de Configurações',
-      'Pessoa acompanhada: Maria das Dores (Mari)',
+      'Mutirão — Resumo dos ajustes',
+      'Quem recebe cuidado: Maria das Dores (Mari)',
       'Perfil: Zé da Manga · Neto (Administrador)',
-      `Canal de alertas: ${canal}`,
-      `Antecedência de medicação: ${toggleMedicacao?.checked ? antecedencia : 'Desativado'}`
+      `Onde recebe os avisos: ${canal}`,
+      `Lembrete do remédio: ${toggleMedicacao?.checked ? antecedencia : 'Desativado'}`
     ].join('\n');
 
     try {
       await navigator.clipboard.writeText(resumo);
-      mostrarStatus('Resumo das configurações copiado para a área de transferência.', 'sucesso');
+      mostrarStatus('Resumo copiado. Agora é só colar.', 'sucesso');
     } catch {
-      mostrarStatus('Não foi possível copiar automaticamente neste navegador.', 'erro');
+      mostrarStatus('Não deu para copiar sozinho neste navegador.', 'erro');
     }
   });
 

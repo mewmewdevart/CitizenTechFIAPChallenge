@@ -15,7 +15,7 @@
 
   const PARTICIPANTES = [
     { nome: 'Zé da Manga (Zé)', vinculo: 'Neto', papel: 'Administrador', situacao: 'Você', avatar: 'icone-mascote-cubado.svg', perfil: 'meu-perfil.html' },
-    { nome: 'Ana da Silva (Aninha)', vinculo: 'Filha · Contato de referência', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-espeto.svg' },
+    { nome: 'Ana da Silva (Aninha)', vinculo: 'Filha · Contato principal', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-espeto.svg' },
     { nome: 'Beatriz da Silva (Bea)', vinculo: 'Cuidadora', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-trevo.svg' },
     { nome: 'Paulo da Silva (Paul)', vinculo: 'Neto', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-pingo.svg' }
   ];

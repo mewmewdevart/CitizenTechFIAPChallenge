@@ -70,9 +70,9 @@
 <body>
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
   <header class="barra-topo">
-    <button id="alternar-menu" class="botao-icone" aria-label="Alternar menu lateral" aria-controls="barra-lateral"
+    <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-    <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
+    <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
@@ -81,13 +81,13 @@
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
           aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
-        <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
+        <summary class="botao-icone botao-icone--notificacao" aria-label="Avisos (3 novos)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
         <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
-              <h2 id="titulo-alertas">Notificações</h2>
+              <h2 id="titulo-alertas">Avisos</h2>
 
             </div>
           </header>
@@ -95,7 +95,7 @@
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
-                  <h3>Horário sem cobertura</h3>
+                  <h3>Horário sem ninguém</h3>
                   <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
@@ -104,8 +104,8 @@
             <li class="notificacao">
               <a class="notificacao__link" href="ficha.html#diario">
                 <div>
-                  <h3>Pedido para agendar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para agendar otorrinolaringologia.</p>
+                  <h3>Pedido para marcar consulta</h3>
+                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -114,7 +114,7 @@
               <a class="notificacao__link" href="medicamentos.html">
                 <div>
                   <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina prevista para 20h.</p>
+                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
               </a>
@@ -145,27 +145,27 @@
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
-      <p>Rotina de cuidado</p>
+      <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-      <p>Recursos de apoio</p>
+      <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
     <section class="cartao-status" aria-labelledby="titulo-status">
-      <h2 id="titulo-status">Status do cuidado</h2>
-      <h3>Turno atual</h3>
+      <h2 id="titulo-status">Como está o cuidado</h2>
+      <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
       <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não administrada</small></span></div>
+            Metformina</strong><small>Não foi dado</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
@@ -173,12 +173,12 @@
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="meu-perfil">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
       Meu perfil</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Meu perfil</h1>
-        <p>Consulte seus dados, acompanhe recados da família e cuide do seu bem-estar na rede da Mari.</p>
+        <p>Veja seus dados, leia os recados da família e cuide de você também.</p>
       </div>
       <div class="painel__acoes">
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-editar-perfil"><i
@@ -201,16 +201,16 @@
           hidden>
       </div>
       <div class="perfil__pessoa">
-        <span>Pessoa acompanhante · Administrador da rede</span>
+        <span>Cuida da Mari · Organiza a rede</span>
         <h2 id="titulo-perfil" data-perfil-nome>Zé da Manga (Zé)</h2>
         <p>Rede de Maria das Dores (Mari)</p>
-        <small>Dados fictícios</small>
+        <small>Dados de exemplo</small>
       </div>
       <div class="perfil__recado">
         <img class="perfil__recado-mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
         <strong><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> <span data-perfil-recado-titulo>Prefiro
             mensagens</span></strong>
-        <p data-perfil-recado-texto>Para combinar trocas de turno, me mande uma mensagem antes de ligar.</p>
+        <p data-perfil-recado-texto>Para trocar de horário comigo, mande mensagem antes de ligar.</p>
       </div>
     </section>
 
@@ -283,7 +283,7 @@
           <button type="button" class="botao botao--primario painel__acao-larga" data-dialogo="dialogo-pedir-folga"><i
               class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
           <div class="cuidar__pedidos-folga" data-pedidos-folga hidden>
-            <h3 class="cuidar__rotulo">Pedidos de folga registrados</h3>
+            <h3 class="cuidar__rotulo">Pedidos de folga</h3>
             <ul class="painel__lista" data-pedidos-folga-lista></ul>
           </div>
           <label class="interruptor">
@@ -382,8 +382,7 @@
       <div class="dialogo-mvp__cabecalho">
         <div>
           <h2 id="titulo-editar-perfil">Editar meu perfil</h2>
-          <p id="subtitulo-editar-perfil" class="dialogo-mvp__subtitulo">Zé da Manga (Zé) · Apenas você edita seus dados
-            pessoais.</p>
+          <p id="subtitulo-editar-perfil" class="dialogo-mvp__subtitulo">Zé da Manga (Zé) · Só você pode mudar seus dados.</p>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -396,7 +395,7 @@
               class="editar-ficha__foto-previa" data-foto-previa />
             <div class="editar-ficha__foto-info">
               <strong>Foto de perfil</strong>
-              <small>Opcional · JPG ou PNG</small>
+              <small>Opcional · foto JPG ou PNG</small>
             </div>
             <input type="file" accept="image/jpeg,image/png" hidden data-input-foto />
             <div class="editar-ficha__foto-acoes">
@@ -483,7 +482,7 @@
             </label>
             <label class="editar-ficha__campo--largo">Texto do recado
               <textarea name="recadoTexto" rows="2"
-                maxlength="70">Para combinar trocas de turno, me mande uma mensagem antes de ligar.</textarea>
+                maxlength="70">Para trocar de horário comigo, mande mensagem antes de ligar.</textarea>
               <small class="formulario-mvp__ajuda" data-contador="recadoTexto">68/70 caracteres</small>
             </label>
           </div>
@@ -498,11 +497,11 @@
 
     <dialog class="dialogo-mvp" id="dialogo-recado" aria-labelledby="titulo-recado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-recado">Registrar um recado</h2>
+        <h2 id="titulo-recado">Escrever um recado</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>O recado fica registrado nesta demonstração e não é enviado ao destinatário.</p>
+      <p>Nesta demonstração, o recado fica salvo aqui e não é enviado.</p>
       <form class="formulario-mvp" data-formulario-mvp="recado">
         <fieldset class="escolhas">
           <legend>Para quem</legend>
@@ -537,20 +536,20 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Registre o turno para o qual você precisa de apoio. Nesta demonstração, o pedido fica nesta aba.</p>
+      <p>Escolha o turno em que você precisa de ajuda. Nesta demonstração, o pedido fica salvo aqui.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga">
         <fieldset class="dialogo-mvp__opcoes" data-opcoes-folga><legend>Qual turno você quer passar?</legend></fieldset>
         <label>Recado (opcional)<textarea name="recado"
             rows="3">Preciso descansar esta semana. Alguém consegue ficar?</textarea></label>
         <div class="cuidar__retorno">
           <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-          <p><strong>Você não precisa explicar</strong><span>Você pode registrar o pedido sem informar o motivo.</span>
+          <p><strong>Você não precisa explicar</strong><span>Você não precisa dizer o motivo.</span>
           </p>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario"><i class="fa-regular fa-paper-plane"
-              aria-hidden="true"></i> Registrar pedido</button>
+              aria-hidden="true"></i> Enviar pedido</button>
         </div>
       </form>
     </dialog>

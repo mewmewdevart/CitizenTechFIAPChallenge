@@ -84,7 +84,7 @@
     if (inputForm) {
       inputForm.value = info.visivelForm ? (rascunhoSensivel[chave] ?? valorReal) : obterValorMascarado(chave);
       inputForm.readOnly = !info.visivelForm;
-      inputForm.title = info.visivelForm ? '' : `Clique no ícone para revelar e editar ${info.rotulo}`;
+      inputForm.title = info.visivelForm ? '' : `Clique no ícone para ver e mudar ${info.rotulo}`;
     }
     const botaoForm = formulario?.querySelector(`.editar-ficha__botao-oculto[data-alternar-oculto="${chave}"]`);
     atualizarBotaoOculto(botaoForm, info.visivelForm, info.rotulo);
@@ -112,7 +112,7 @@
         const classe = completo ? 'calendario-mensal__indicador--sucesso' : 'calendario-mensal__indicador--atencao';
         return {
           indicadores: simbolo ? [`<span class="${classe}">${simbolo}</span>`] : [],
-          sufixoRotulo: completo ? ', relatos completos' : parcial ? ', com relatos' : ''
+          sufixoRotulo: completo ? ', todos com anotação' : parcial ? ', com anotações' : ''
         };
       }
     });
@@ -135,7 +135,7 @@
       .sort((a, b) => b.localeCompare(a));
 
     if (!diasComRelato.length) {
-      container.innerHTML = '<p class="ficha__texto-suave">Nenhum relato registrado no diário ainda.</p>';
+      container.innerHTML = '<p class="ficha__texto-suave">Nada anotado no diário ainda.</p>';
       return;
     }
 
@@ -164,8 +164,8 @@
 
     const itens = obterRelatosDia(diaSelecionado);
     const resumo = itens.length
-      ? `<p class="ficha__relatos-resumo">${itens.length >= 4 ? 'Todos os turnos com relato · ' : 'Relatos parciais · '}${itens.length} ${itens.length === 1 ? 'turno registrado' : 'turnos registrados'}</p>`
-      : '<p class="ficha__relatos-resumo">Nenhum relato nesta data.</p>';
+      ? `<p class="ficha__relatos-resumo">${itens.length >= 4 ? 'Todos os turnos com anotação · ' : 'Algumas anotações · '}${itens.length} ${itens.length === 1 ? 'turno anotado' : 'turnos anotados'}</p>`
+      : '<p class="ficha__relatos-resumo">Ninguém anotou nada neste dia.</p>';
 
     containerRelatos.innerHTML = `${resumo}<h3>${formatarDataCurta(diaSelecionado, true)}</h3>${itens.map(([nome, papel, contexto, relato, proximo]) => {
       const avatar = nome.startsWith('Ana')
@@ -230,7 +230,7 @@
   };
 
   const AVISO_TITULO_PADRAO = 'Alergia à dipirona';
-  const AVISO_TEXTO_PADRAO = 'Não administrar. Em caso de dúvida, consultar o responsável antes.';
+  const AVISO_TEXTO_PADRAO = 'Não dar. Se tiver dúvida, fale antes com o responsável.';
 
   const atualizarAvisoAlergia = person => {
     const aviso = pagina.querySelector('[data-aviso-alergia]');
@@ -336,11 +336,11 @@
     const blocoAlergia = alergias
       ? `<div class="folha-impressao__alerta">
           <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à ${escaparHtml(alergias.toLowerCase())}</strong>
-          <p>Não administrar. Em caso de dúvida, consultar o responsável antes.</p>
+          <p>Não dar. Se tiver dúvida, fale antes com o responsável.</p>
         </div>`
       : `<div class="folha-impressao__cartao">
-          <h4>Alergias registradas</h4>
-          <p>Nenhuma alergia registrada até o momento.</p>
+          <h4>Alergias</h4>
+          <p>Nenhuma alergia anotada.</p>
         </div>`;
 
     const medicamentosLista = core.obterResumoMedicamentos().join(', ')
@@ -349,7 +349,7 @@
       .filter(Boolean);
     const medicamentosHtml = medicamentosLista.length
       ? `<ul class="folha-impressao__lista">${medicamentosLista.map(item => `<li>${escaparHtml(item)}</li>`).join('')}</ul>`
-      : '<p>Nenhum medicamento registrado</p>';
+      : '<p>Nenhum remédio anotado</p>';
 
     const incluirCondicoes = opcaoImpressaoAtiva('condicoes');
     const incluirHistorico = opcaoImpressaoAtiva('historico');
@@ -360,13 +360,13 @@
 
     const cartaoCondicoes = incluirCondicoes
       ? `<section class="folha-impressao__cartao">
-          <h4>Condições de saúde registradas</h4>
+          <h4>Doenças e condições</h4>
           <p>${escaparHtml(person.condicoes || 'Nenhuma registrada')}</p>
         </section>`
       : '';
 
     const cartaoMedicamentos = `<section class="folha-impressao__cartao">
-      <h4>Medicamentos de uso diário</h4>
+      <h4>Remédios de todo dia</h4>
       ${medicamentosHtml}
     </section>`;
 
@@ -396,7 +396,7 @@
 
     const secaoPreferencias = incluirPreferencias && person.preferencias
       ? `<section class="folha-impressao__secao">
-          <h4>Preferências de cuidado</h4>
+          <h4>Do que ela gosta</h4>
           <p>${escaparHtml(person.preferencias)}</p>
         </section>`
       : '';
@@ -411,9 +411,9 @@
       ${secaoEventos}
       ${secaoPreferencias}
       <section class="folha-impressao__cartao">
-        <h4>Contato de referência</h4>
+        <h4>Contato principal</h4>
         <p>${escaparHtml(person.referencia || 'Não informado')}</p>
-        ${incluirAlternativo && person.alternativo ? `<p>Contato alternativo: ${escaparHtml(person.alternativo)}</p>` : ''}
+        ${incluirAlternativo && person.alternativo ? `<p>Segundo contato: ${escaparHtml(person.alternativo)}</p>` : ''}
         ${incluirConvenio && person.convenio ? `<p class="folha-impressao__convenio">Convênio: ${escaparHtml(person.convenio)}</p>` : ''}
       </section>
     `;
@@ -727,17 +727,17 @@
     const arquivo = evento.target.files?.[0];
     if (!arquivo) return;
     if (!['image/jpeg', 'image/png'].includes(arquivo.type)) {
-      registrarStatus('Selecione uma imagem em formato JPG ou PNG.');
+      registrarStatus('Escolha uma foto JPG ou PNG.');
       evento.target.value = '';
       return;
     }
     if (arquivo.size > 2 * 1024 * 1024) {
-      registrarStatus('A imagem deve ter no máximo 2 MB.');
+      registrarStatus('A foto é grande demais. Use uma de até 2 MB.');
       evento.target.value = '';
       return;
     }
     const leitor = new FileReader();
-    leitor.onerror = () => registrarStatus('Não foi possível ler a imagem selecionada.');
+    leitor.onerror = () => registrarStatus('Não deu para abrir essa foto.');
     leitor.onload = () => {
       const previa = pagina.querySelector('[data-foto-previa]');
       const formulario = previa?.closest('form');
@@ -810,7 +810,7 @@
     if (tipoFormulario === 'relato') {
       const textoRelato = (campos.relato || '').trim();
       if (!textoRelato) {
-        registrarStatus('Descreva o relato do turno antes de salvar.');
+        registrarStatus('Escreva como foi o turno antes de salvar.');
         return;
       }
       const turno = (campos.turno || '').trim();
@@ -829,7 +829,7 @@
       diaSelecionado = campos.dia;
       anoAtual = Number(diaSelecionado.slice(0, 4));
       mesAtual = Number(diaSelecionado.slice(5, 7)) - 1;
-      mensagem = 'Relato salvo no Diário de turno.';
+      mensagem = 'Anotação salva no Diário de turno.';
     }
 
     formulario.closest('dialog')?.close();
@@ -856,7 +856,7 @@
             `Alergias: ${person.alergias || 'Nenhuma registrada'}`,
             `Condições: ${person.condicoes || 'Nenhuma registrada'}`
           ].join('\n'),
-          'Medicamentos de uso diário': () => core.obterResumoMedicamentos().join('; ') || 'Nenhum registrado.'
+          'Remédios de todo dia': () => core.obterResumoMedicamentos().join('; ') || 'Nenhum registrado.'
         };
       }
     }

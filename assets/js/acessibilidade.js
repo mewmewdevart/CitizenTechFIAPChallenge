@@ -106,14 +106,14 @@
         type="button"
         id="acessibilidade-botao"
         class="acessibilidade__botao-flutuante"
-        aria-label="Recursos assistivos: abrir Central de Acessibilidade"
+        aria-label="Ajustes de leitura: abrir Ajustes de leitura"
         aria-haspopup="dialog"
         aria-expanded="false"
         aria-controls="acessibilidade-painel"
-        title="Recursos assistivos"
+        title="Ajustes de leitura"
       >
         <i class="fa-solid fa-person acessibilidade__icone-flutuante" aria-hidden="true"></i>
-        <span class="acessibilidade__rotulo-flutuante" aria-hidden="true">Recursos assistivos</span>
+        <span class="acessibilidade__rotulo-flutuante" aria-hidden="true">Ajustes de leitura</span>
       </button>
 
       <div id="acessibilidade-fundo" class="acessibilidade__fundo" hidden></div>
@@ -133,15 +133,15 @@
               <i class="fa-solid fa-person"></i>
             </span>
             <div>
-              <h2 id="acessibilidade-titulo" class="acessibilidade__titulo">Central de Acessibilidade</h2>
-              <p id="acessibilidade-subtitulo" class="acessibilidade__subtitulo">Personalize a leitura e a navegação do Mutirão</p>
+              <h2 id="acessibilidade-titulo" class="acessibilidade__titulo">Ajustes de leitura</h2>
+              <p id="acessibilidade-subtitulo" class="acessibilidade__subtitulo">Deixe o Mutirão mais fácil de ler e usar</p>
             </div>
           </div>
           <button
             type="button"
             id="acessibilidade-fechar"
             class="acessibilidade__fechar"
-            aria-label="Fechar Central de Acessibilidade"
+            aria-label="Fechar Ajustes de leitura"
           >
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
@@ -150,7 +150,7 @@
         <div class="acessibilidade__corpo">
           <div class="acessibilidade__cartao-controle">
             <span id="acessibilidade-rotulo-fonte" class="acessibilidade__rotulo-controle">Tamanho do texto</span>
-            <span class="acessibilidade__descricao-controle">Aumente ou diminua as fontes da página</span>
+            <span class="acessibilidade__descricao-controle">Deixe as letras maiores ou menores</span>
             <div class="acessibilidade__contador" role="group" aria-labelledby="acessibilidade-rotulo-fonte">
               <button
                 type="button"
@@ -177,7 +177,7 @@
           >
             <span class="acessibilidade__interruptor-info">
               <span class="acessibilidade__rotulo-controle">Alto contraste</span>
-              <span class="acessibilidade__descricao-controle">Cores com maior contraste para leitura</span>
+              <span class="acessibilidade__descricao-controle">Cores mais fortes para ler melhor</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -193,7 +193,7 @@
           >
             <span class="acessibilidade__interruptor-info">
               <span class="acessibilidade__rotulo-controle">Destacar links</span>
-              <span class="acessibilidade__descricao-controle">Sublinhar links para facilitar a identificação</span>
+              <span class="acessibilidade__descricao-controle">Sublinhar os links para achar mais fácil</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -209,7 +209,7 @@
           >
             <span class="acessibilidade__interruptor-info">
               <span class="acessibilidade__rotulo-controle">Reduzir animações</span>
-              <span class="acessibilidade__descricao-controle">Desativar movimentos e transições</span>
+              <span class="acessibilidade__descricao-controle">Tirar os movimentos da tela</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -224,8 +224,8 @@
             data-preferencia="espacamentoTexto"
           >
             <span class="acessibilidade__interruptor-info">
-              <span class="acessibilidade__rotulo-controle">Espaçamento do texto</span>
-              <span class="acessibilidade__descricao-controle">Aumentar o espaço entre as linhas</span>
+              <span class="acessibilidade__rotulo-controle">Espaço entre linhas</span>
+              <span class="acessibilidade__descricao-controle">Mais espaço entre as linhas</span>
             </span>
             <span class="acessibilidade__interruptor-trilho" aria-hidden="true">
               <span class="acessibilidade__interruptor-pino"></span>
@@ -233,7 +233,7 @@
           </button>
 
           <div class="acessibilidade__cartao-controle">
-            <span id="acessibilidade-rotulo-tema" class="acessibilidade__rotulo-controle">Tema da aplicação</span>
+            <span id="acessibilidade-rotulo-tema" class="acessibilidade__rotulo-controle">Aparência</span>
             <span class="acessibilidade__descricao-controle">Escolha a aparência visual das telas</span>
             <div class="acessibilidade__temas" role="group" aria-labelledby="acessibilidade-rotulo-tema">
               <button type="button" class="acessibilidade__botao-tema" data-tema="neutro" aria-pressed="true">
@@ -249,7 +249,7 @@
         <footer class="acessibilidade__rodape">
           <button type="button" id="acessibilidade-restaurar" class="botao botao--secundario acessibilidade__botao-restaurar">
             <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
-            Restaurar padrões
+            Voltar ao padrão
           </button>
         </footer>
 
@@ -378,7 +378,7 @@
       altoContraste: 'Alto contraste',
       destacarLinks: 'Destacar links',
       reduzirAnimacoes: 'Reduzir animações',
-      espacamentoTexto: 'Espaçamento do texto'
+      espacamentoTexto: 'Espaço entre linhas'
     };
 
     for (const interruptor of interruptores) {
@@ -402,7 +402,7 @@
     aplicarTema(obterTemaSalvo());
 
     botaoRestaurar.addEventListener('click', () => {
-      atualizarEstado({ ...PADROES }, 'Preferências de acessibilidade restauradas para o padrão');
+      atualizarEstado({ ...PADROES }, 'Ajustes de leitura voltaram ao padrão');
       definirTema('neutro');
     });
 

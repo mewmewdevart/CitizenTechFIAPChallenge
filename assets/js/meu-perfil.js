@@ -64,7 +64,7 @@
   const CPF_MASCARADO = '***.***.***-00';
   const CPF_EXEMPLO = '123.456.789-00';
   const RECADO_TITULO_PADRAO = 'Prefiro mensagens';
-  const RECADO_TEXTO_PADRAO = 'Para combinar trocas de turno, me mande uma mensagem antes de ligar.';
+  const RECADO_TEXTO_PADRAO = 'Para trocar de horário comigo, mande mensagem antes de ligar.';
 
   const mascararCpf = valor => {
     const digitos = String(valor || '').replace(/\D/g, '');
@@ -178,7 +178,7 @@
     container.innerHTML = `<ul class="painel__lista">${[...enviados].reverse().map(item => `
       <li class="painel__item">
         <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-paper-plane"></i></span>
-        <span class="painel__texto"><strong>Recado registrado para ${escaparHtml(item.para)}</strong><span>${escaparHtml(item.texto)}</span></span>
+        <span class="painel__texto"><strong>Recado salvo para ${escaparHtml(item.para)}</strong><span>${escaparHtml(item.texto)}</span></span>
       </li>
     `).join('')}</ul>`;
   };
@@ -276,7 +276,7 @@
     const nomeValido = /\.(jpe?g|png)$/i.test(arquivo.name);
     if (!tipoValido && !nomeValido) {
       evento.target.value = '';
-      anunciarStatus(elementoStatus, 'Envie apenas fotos no formato PNG ou JPG.');
+      anunciarStatus(elementoStatus, 'Envie uma foto em PNG ou JPG.');
       return;
     }
     const leitor = new FileReader();
@@ -300,7 +300,7 @@
     }));
     dialogoRecado.close();
     renderizarRecadosEnviados();
-    anunciarStatus(elementoStatus, `Recado registrado para ${para}.`);
+    anunciarStatus(elementoStatus, `Recado salvo para ${para}.`);
   });
 
   pagina.querySelector('[data-formulario-mvp="folga"]')?.addEventListener('submit', evento => {
@@ -311,7 +311,7 @@
     const [dia, inicioTexto, fimTexto] = valor.split('|');
     const inicio = Number(inicioTexto), fim = Number(fimTexto);
     if ((obterEstado().pedidosFolga || []).some(item => item.status === 'Pendente' && item.dia === dia && item.inicio === inicio && item.fim === fim)) {
-      anunciarStatus(elementoStatus, 'Já existe um pedido pendente para este turno.'); return;
+      anunciarStatus(elementoStatus, 'Você já pediu folga para este turno.'); return;
     }
     const turno = `${formatarDataCurta(dia)} · ${core.formatarIntervaloTurno(inicio, fim - inicio)}`;
     const recado = form.elements.recado.value.trim();
@@ -323,7 +323,7 @@
     form.reset();
     form.closest('dialog')?.close();
     renderizarPedidosFolga();
-    anunciarStatus(elementoStatus, `Pedido de folga registrado nesta demonstração: ${turno}.`);
+    anunciarStatus(elementoStatus, `Pedido de folga salvo nesta demonstração: ${turno}.`);
   });
 
   const SEMANA_ATUAL = ['2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15'];
@@ -339,9 +339,9 @@
         <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
         <span class="painel__texto">
           <strong>${escaparHtml(item.turno)}</strong>
-          <span>${escaparHtml([item.data ? `Registrado em ${item.data}` : 'Registrado nesta sessão', item.recado].filter(Boolean).join(' · '))}</span>
+          <span>${escaparHtml([item.data ? `Registrado em ${item.data}` : 'Salvo nesta aba', item.recado].filter(Boolean).join(' · '))}</span>
         </span>
-        <div class="painel__acoes"><span class="selo selo--info">${escaparHtml(item.status || 'Pedido antigo sem vínculo de turno')}</span>
+        <div class="painel__acoes"><span class="selo selo--info">${escaparHtml(item.status || 'Pedido antigo sem turno')}</span>
         ${item.status === 'Pendente' ? `<label>Substituto na simulação<select data-substituto-folga="${escaparHtml(item.id)}">${core.obterParticipantesRede().filter(p => p.nome !== obterUsuarioAtual().nomeComApelido && core.pessoaDisponivel(p.nome, item.dia, item.inicio, item.fim)).map(p => `<option value="${escaparHtml(p.nome)}">${escaparHtml(p.nome)}</option>`).join('')}</select></label><button type="button" class="botao botao--secundario" data-decidir-folga="Aceita" data-id="${escaparHtml(item.id)}">Simular aceite e transferir</button><button type="button" class="botao botao--secundario" data-decidir-folga="Recusada" data-id="${escaparHtml(item.id)}">Simular recusa</button><button type="button" class="botao botao--secundario" data-decidir-folga="Cancelada" data-id="${escaparHtml(item.id)}">Cancelar pedido</button>` : item.responsavel ? `<span>Responsável: ${escaparHtml(item.responsavel)}</span>` : ''}</div>
       </li>
     `).join('');

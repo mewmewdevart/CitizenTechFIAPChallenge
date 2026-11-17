@@ -74,9 +74,9 @@
         convenio: 'Convênio Vida Plena · Plano Familiar (fictício)',
         carteira: '4128 9910 3304 2048',
         alergias: 'Dipirona',
-        condicoes: 'Epilepsia, Diabetes tipo 2, Asma, Hipertensão arterial',
+        condicoes: 'Epilepsia, Diabetes tipo 2, Asma, Pressão alta',
         medicamentos: 'Losartana · 08h, Metformina · 08h e 20h',
-        historicoSaude: 'Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Histórico de trombose venosa profunda (2022).',
+        historicoSaude: 'Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Já teve trombose venosa profunda, um coágulo na veia (2022).',
         referencia: 'Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186',
         alternativo: 'Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193',
         cobertura: '24 horas por dia',
@@ -98,7 +98,7 @@
           id: 'evt-ubs-10',
           dia: HOJE,
           hora: '14:00',
-          titulo: 'Consulta na UBS',
+          titulo: 'Consulta no posto (UBS)',
           local: 'UBS do bairro',
           acompanhante: 'Ana da Silva (Aninha)',
           preparacao: [
@@ -111,7 +111,7 @@
           dia: '2026-11-18',
           hora: '14:00',
           titulo: 'Geriatria',
-          local: 'Consultório de Geriatria',
+          local: 'Consultório do geriatra (médico de idosos)',
           acompanhante: 'Ana da Silva (Aninha)'
         },
         {
@@ -129,7 +129,7 @@
         {
           id: 'tarefa-ontem-06-08',
           dia: '2026-11-09',
-          titulo: '06h e 08h · Medicações da manhã administradas',
+          titulo: '06h e 08h · Remédios da manhã dados',
           descricao: 'Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h',
           icone: 'bi bi-capsule',
           concluida: true,
@@ -139,8 +139,8 @@
         {
           id: 'tarefa-ontem-otorrino',
           dia: '2026-11-09',
-          titulo: '08h10 · Passagem registrada: agendar otorrino',
-          descricao: 'Verificar cobertura do Convênio Vida Plena antes de marcar · Beatriz da Silva (Bea)',
+          titulo: '08h10 · Recado: marcar consulta no otorrino',
+          descricao: 'Ver se o Convênio Vida Plena paga antes de marcar · Beatriz da Silva (Bea)',
           icone: 'icone-receita.svg',
           concluida: true,
           href: 'home.html#passagem-cuidado',
@@ -160,7 +160,7 @@
           id: 'tarefa-ontem-20h-docs',
           dia: '2026-11-09',
           titulo: '20h · Metformina e separação de documentos',
-          descricao: 'Administrada por Zé da Manga (Zé) · RG e carteirinha separados para a UBS · Turno 19h–24h',
+          descricao: 'Zé da Manga (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h',
           icone: 'bi bi-capsule',
           concluida: true,
           href: 'documentos.html',
@@ -169,8 +169,8 @@
         {
           id: 'tarefa-ubs-retirada',
           dia: HOJE,
-          titulo: 'Retirar medicamento na UBS',
-          descricao: 'Após a consulta · Ana da Silva (Aninha) · Receita vinculada',
+          titulo: 'Pegar remédio no posto (UBS)',
+          descricao: 'Depois da consulta · Ana da Silva (Aninha) · Receita salva',
           icone: 'icone-receita.svg',
           concluida: false,
           dialogo: 'dialogo-tarefa-ubs'
@@ -179,31 +179,31 @@
           id: 'tarefa-metformina-08',
           dia: HOJE,
           titulo: '08h · Metformina',
-          descricao: 'Não administrada · Ocorrência registrada por Bea',
+          descricao: 'Não foi dado · Bea anotou',
           icone: 'bi bi-capsule',
           concluida: false,
           href: 'medicamentos.html',
-          rotuloAcao: 'Registrar administração'
+          rotuloAcao: 'Marcar como dado'
         },
         {
           id: 'tarefa-metformina-20',
           dia: HOJE,
           titulo: '20h · Metformina',
-          descricao: 'Prevista para 20h · Turno de Zé da Manga (Zé)',
+          descricao: 'Às 20h · Turno de Zé da Manga (Zé)',
           icone: 'bi bi-capsule',
           concluida: false,
           href: 'medicamentos.html',
-          rotuloAcao: 'Registrar administração'
+          rotuloAcao: 'Marcar como dado'
         },
         {
           id: 'tarefa-hoje-jejum-06',
           dia: HOJE,
-          titulo: '06h · Medicações em jejum administradas',
-          descricao: '3 doses administradas por Aninha (06h10 e 06h12) · Turno de Ana da Silva (Aninha)',
+          titulo: '06h · Remédios em jejum dados',
+          descricao: 'Aninha deu 3 remédios (06h10 e 06h12) · Turno de Ana da Silva (Aninha)',
           icone: 'bi bi-capsule',
           concluida: true,
           href: 'medicamentos.html#registros-de-hoje',
-          rotuloAcao: 'Ver registros'
+          rotuloAcao: 'Ver anotações'
         }
       ],
       reports: {
@@ -211,13 +211,13 @@
           [
             'Beatriz da Silva (Bea)',
             'Cuidadora · Turno 07h–12h',
-            'Tarefa relacionada · Retirar medicamento na UBS · Ocorrência · Metformina das 08h não administrada',
-            'Confirmei a consulta das 14h. A metformina das 08h não foi administrada e o motivo não foi informado.',
-            'A agendar consulta com otorrinolaringologista. Antes de agendar, confirme se o convênio cobre a consulta.'
+            'Tarefa relacionada · Pegar remédio no posto (UBS) · Ocorrência · Metformina das 08h não foi dada',
+            'Confirmei a consulta das 14h. A metformina das 8h não foi dada, e ninguém disse por quê.',
+            'Falta marcar a consulta no otorrino (ouvido, nariz e garganta). Antes, confira se o convênio paga.'
           ],
           [
             'Ana da Silva (Aninha)',
-            'Filha · Contato de referência · Turno 00h–07h',
+            'Filha · Contato principal · Turno 00h–07h',
             'Tarefa relacionada · Levar a pasta da consulta',
             'Separei os documentos e deixei a pasta na bolsa azul.',
             'Levar a pasta para a consulta das 14h.'
@@ -227,44 +227,44 @@
           [
             'Zé da Manga',
             'Administrador · Turno 19h–24h',
-            'Tarefa relacionada · Conferir medicações da noite',
-            'Maria jantou sopa de legumes e tomou a metformina das 20h sem intercorrências. Foi dormir por volta das 22h30.',
+            'Tarefa relacionada · Conferir os remédios da noite',
+            'Maria jantou sopa de legumes e tomou a metformina das 20h sem problemas. Foi dormir por volta das 22h30.',
             'Deixei o RG e a carteirinha do convênio separados em cima da cômoda para a consulta de amanhã.'
           ],
           [
             'Paulo da Silva (Paul)',
-            'Neto · Contato alternativo · Turno 13h–19h',
-            'Tarefa relacionada · Combinar retorno da consulta de terça',
-            'Fizemos uma caminhada leve no quintal à tarde e mantivemos boa hidratação. Sem queixas de dor.',
+            'Neto · Segundo contato · Turno 13h–19h',
+            'Tarefa relacionada · Combinar a volta da consulta de terça',
+            'Fizemos uma caminhada leve no quintal à tarde e ela bebeu bastante água. Não reclamou de dor.',
             'Confirmado que busco a Maria e a Ana na UBS amanhã após a consulta das 14h.'
           ],
           [
             'Beatriz da Silva (Bea)',
             'Cuidadora · Turno 07h–13h',
-            'Tarefa relacionada · Administrar medicamentos da manhã',
-            'Café da manhã completo. Losartana e metformina das 08h administradas corretamente; pressão arterial estável (12x8).',
+            'Tarefa relacionada · Dar os remédios da manhã',
+            'Tomou todo o café da manhã. Losartana e metformina das 08h dadas certinho; pressão boa (12x8).',
             'Lembrar de oferecer água ao longo da tarde.'
           ],
           [
             'Ana da Silva (Aninha)',
-            'Filha · Contato de referência · Turno 00h–07h',
-            'Tarefa relacionada · Acompanhar repouso noturno',
-            'Noite tranquila, dormiu sem despertares e acordou bem-disposta às 06h40.',
-            'Receita da medicação de uso contínuo ficou na pasta azul.'
+            'Filha · Contato principal · Turno 00h–07h',
+            'Tarefa relacionada · Ficar com ela à noite',
+            'Noite tranquila, dormiu direto e acordou bem às 06h40.',
+            'A receita do remédio de todo dia ficou na pasta azul.'
           ]
         ]
       },
       documents: [
         {
           id: 'doc-receita-ubs',
-          titulo: 'Receita para retirada na UBS',
+          titulo: 'Receita para pegar remédio no posto',
           categoria: 'Receita',
           dia: '2026-11-10',
           autor: 'Ana da Silva (Aninha)',
           compromissoId: 'evt-ubs-10',
-          vinculo: 'Consulta na UBS de 10 nov.',
+          vinculo: 'Consulta no posto de 10 nov.',
           localOriginal: 'Pasta azul da Mari (sala) · cópia no WhatsApp da Aninha',
-          observacoes: 'Receita para retirada de medicamento após a consulta das 14h na UBS do bairro.'
+          observacoes: 'Receita para pegar o remédio no posto do bairro, depois da consulta das 14h.'
         },
         {
           id: 'doc-hemograma',
@@ -272,9 +272,9 @@
           categoria: 'Exame',
           dia: '2026-11-04',
           autor: 'Paulo da Silva (Paul)',
-          vinculo: 'Exame cadastrado em 4 nov.',
+          vinculo: 'Exame salvo em 4 nov.',
           localOriginal: 'Pasta de exames (gaveta do quarto) · PDF com o Paul',
-          observacoes: 'Resultado completo do hemograma realizado em 4 de novembro de 2026.'
+          observacoes: 'Resultado completo do hemograma (exame de sangue) feito em 4 de novembro de 2026.'
         },
         {
           id: 'doc-ficha-atendimento',
@@ -284,7 +284,7 @@
           autor: 'Beatriz da Silva (Bea)',
           vinculo: 'Documento geral',
           localOriginal: 'Pasta azul da Mari (sala)',
-          observacoes: 'Registro de atendimento ambulatorial e orientações da equipe.'
+          observacoes: 'Papel do atendimento e o que a equipe orientou.'
         }
       ]
     };
@@ -420,7 +420,7 @@
 
   const resolverConvite = (email, aceitar) => atualizarEstado(estado => {
     const convite = (estado.convites || []).find(item => item.email === email);
-    if (!convite) throw new Error('Este convite não está mais pendente.');
+    if (!convite) throw new Error('Este convite já foi respondido.');
     const participantesExtras = [...(estado.participantesExtras || [])];
     if (aceitar && !participantesExtras.some(item => item.email === email)) {
       participantesExtras.push({ ...convite, nome: email, nomeBase: email,
@@ -834,7 +834,7 @@
 
   const resolverAtribuicao = (chave, aceitar) => atualizarEstado(estado => {
     const item = estado.atribuicoesTurno?.[chave];
-    if (!item) throw new Error('Esta atribuição não está mais pendente.');
+    if (!item) throw new Error('Este pedido já foi respondido.');
     const { inicio, fim } = extrairHorasTurno(item.horario);
     if (aceitar && (!obterLacunasDia(item.dia, estado).some(l => l.inicio <= inicio && l.fim >= fim)
       || !pessoaDisponivel(item.responsavel, item.dia, inicio, fim, estado))) {
@@ -849,7 +849,7 @@
 
   const resolverFolga = (id, status, responsavel = '') => atualizarEstado(estado => {
     const pedido = (estado.pedidosFolga || []).find(item => item.id === id);
-    if (!pedido || pedido.status !== 'Pendente') throw new Error('Pedido não está pendente.');
+    if (!pedido || pedido.status !== 'Pendente') throw new Error('Este pedido já foi respondido.');
     if (status === 'Aceita') {
       const turnoAtual = construirLinhaDoTempoDia(pedido.dia, estado).find(seg => seg.tipo === 'turno'
         && seg.pessoa.ehUsuarioAtual && seg.inicio <= pedido.inicio && seg.fim >= pedido.fim);
@@ -909,7 +909,7 @@
         const minutos = Number(preferencias.antecedenciaMedicacao || 30);
         const data = new Date(`${HOJE}T${String(parseInt(dose.hora, 10)).padStart(2, '0')}:00:00Z`);
         data.setUTCMinutes(data.getUTCMinutes() - minutos);
-        incluir(`dose-${HOJE}-${dose.chave}`, data.toISOString().slice(0, 16), `Dose prevista: ${dose.nome} · ${dose.hora}`);
+        incluir(`dose-${HOJE}-${dose.chave}`, data.toISOString().slice(0, 16), `Horário do remédio: ${dose.nome} · ${dose.hora}`);
       }
     }
     const cuidar = { pausa: true, apoio: true, agradecer: false, ...estado.cuidar?.preferencias };
@@ -978,7 +978,8 @@
       const meta = obterMetaDia(chave);
       const indicadoresHtml = (meta.indicadores || []).join('');
       const rotulo = `${formatarDataCurta(chave, true)}${meta.sufixoRotulo || ''}`;
-      conteudo += `<button type="button" data-selecionar-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="${escaparHtml(rotulo)}">${dia}${indicadoresHtml ? `<small class="calendario-mensal__indicadores" aria-hidden="true">${indicadoresHtml}</small>` : ''}</button>`;
+      const classes = (meta.classes || []).filter(Boolean).join(' ');
+      conteudo += `<button type="button"${classes ? ` class="${escaparHtml(classes)}"` : ''} data-selecionar-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="${escaparHtml(rotulo)}">${dia}${indicadoresHtml ? `<small class="calendario-mensal__indicadores" aria-hidden="true">${indicadoresHtml}</small>` : ''}</button>`;
     }
 
     gradeDias.innerHTML = conteudo;
@@ -1029,13 +1030,13 @@
         } else {
           previa.focus();
           previa.select();
-          if (retorno) retorno.textContent = 'Selecione e copie a mensagem para compartilhar.';
+          if (retorno) retorno.textContent = 'Selecione e copie a mensagem para mandar.';
         }
       } catch (erro) {
         if (erro.name === 'AbortError') return;
         previa.focus();
         previa.select();
-        if (retorno) retorno.textContent = 'Selecione e copie a mensagem manualmente.';
+        if (retorno) retorno.textContent = 'Selecione e copie a mensagem.';
       }
     });
 
@@ -1167,7 +1168,7 @@
       responsavel: 'Beatriz da Silva (Bea)',
       itens: [
         ['Losartana', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
-        ['Metformina', { estado: 'nao-administrado', quem: 'Bea', motivo: 'Motivo não informado' }],
+        ['Metformina', { estado: 'nao-administrado', quem: 'Bea', motivo: 'Não disseram o motivo' }],
         ['Hidroclorotiazida', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
         ['Cálcio + vit. D', { estado: 'administrado', quem: 'Bea', horario: '08:16' }],
         ['Ácido fólico', { estado: 'administrado', quem: 'Bea', horario: '08:16' }]
@@ -1295,7 +1296,7 @@
     if (!campo) {
       campo = document.createElement('label');
       campo.dataset.origemEstoque = '';
-      campo.textContent = 'Estoque zerado. Se a administração já ocorreu, informe a origem da unidade utilizada (não será descontada deste estoque):';
+      campo.textContent = 'Acabou o remédio em casa. Se você já deu, diga de onde veio (não vai sair do que tem em casa):';
       const input = document.createElement('textarea');
       input.name = 'origemExterna'; input.maxLength = 300; input.rows = 2;
       campo.append(input);

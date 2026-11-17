@@ -127,8 +127,8 @@
         titulo: 'Direito a acompanhante no SUS',
         icone: 'fa-solid fa-user-group',
         detalhe: idosa60
-          ? 'Garantido pelo Estatuto da Pessoa Idosa (60+) em internações ou observação hospitalar.'
-          : 'Previsto em lei para pessoas com 60 anos ou mais durante internação hospitalar.',
+          ? 'Pela lei (Estatuto da Pessoa Idosa), quem tem 60 anos ou mais pode ter alguém junto quando fica internado ou em observação no hospital.'
+          : 'Pela lei, quem tem 60 anos ou mais pode ter alguém junto durante a internação.',
         selo: idosa60 ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: idosa60 ? 'selo--sucesso' : 'selo--neutro',
         elegivel: idosa60,
@@ -136,7 +136,7 @@
         rotuloLink: 'Ler Lei nº 10.741'
       },
       {
-        titulo: 'BPC / LOAS (1 salário mínimo/mês)',
+        titulo: 'BPC (1 salário mínimo por mês)',
         icone: 'fa-solid fa-hand-holding-heart',
         detalhe: 'Consulte o INSS para confirmar idade, renda familiar, CadÚnico e acumulação com outros benefícios.',
         selo: rendaDesconhecida || respostas.aposentadoriaIncapacidade === 'nao-sei' ? 'Faltam informações' : bpcElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
@@ -146,11 +146,11 @@
         rotuloLink: 'Consultar critérios do BPC'
       },
       {
-        titulo: 'Acréscimo de 25% na aposentadoria',
+        titulo: '25% a mais na aposentadoria',
         icone: 'fa-solid fa-percent',
         detalhe: acrescimoElegivel
-          ? 'Disponível para aposentadoria por incapacidade permanente quando há necessidade de cuidador em tempo integral.'
-          : 'Exclusivo para quem recebe aposentadoria por incapacidade permanente e precisa de assistência contínua.',
+          ? 'Para quem é aposentado por invalidez e precisa de um cuidador o tempo todo.'
+          : 'Só para quem é aposentado por invalidez e precisa de ajuda o tempo todo.',
         selo: respostas.aposentadoriaIncapacidade === 'nao-sei' ? 'Faltam informações' : acrescimoElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: acrescimoElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: acrescimoElegivel,
@@ -158,7 +158,7 @@
         rotuloLink: 'Ver regras no gov.br'
       },
       {
-        titulo: 'Tarifa Social de Energia Elétrica',
+        titulo: 'Desconto na conta de luz (Tarifa Social)',
         icone: 'fa-solid fa-bolt',
         detalhe: 'Consulte a distribuidora ou o canal oficial para verificar os critérios de renda, cadastro e consumo.',
         selo: rendaDesconhecida || respostas.cadunico === 'nao-sei' ? 'Faltam informações' : tarifaElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
@@ -168,35 +168,35 @@
         rotuloLink: 'Consultar Tarifa Social na ANEEL'
       },
       {
-        titulo: 'Melhor em Casa (Atenção domiciliar do SUS)',
+        titulo: 'Melhor em Casa (o SUS atende em casa)',
         icone: 'fa-solid fa-house-medical',
         detalhe: precisaAjuda
-          ? 'Atendimento domiciliar pelo SUS conforme avaliação clínica; solicite encaminhamento na UBS ou hospital.'
-          : 'Indicado quando há restrição ao leito ou necessidade de cuidados contínuos em casa.',
+          ? 'A equipe do SUS pode atender em casa, se o médico indicar. Peça o encaminhamento no posto de saúde ou no hospital.'
+          : 'Para quem não consegue sair da cama ou precisa de cuidados todo dia em casa.',
         selo: precisaAjuda ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: precisaAjuda ? 'selo--atencao' : 'selo--neutro',
         elegivel: precisaAjuda,
         link: 'https://www.gov.br/saude/pt-br/composicao/saes/melhor-em-casa',
-        rotuloLink: 'Conhecer programa'
+        rotuloLink: 'Saber mais'
       },
       {
-        titulo: 'Medicamentos especializados (CEAF)',
+        titulo: 'Remédios caros de graça (CEAF)',
         icone: 'fa-solid fa-prescription-bottle-medical',
         detalhe: ceafElegivel
-          ? 'Atende condições previstas nos protocolos do SUS; confirme documentos e laudo na Secretaria de Saúde do estado.'
-          : 'Voltado a tratamentos contínuos de alto custo previstos nos protocolos clínicos do SUS.',
+          ? 'A doença dela pode estar na lista do SUS. Veja os papéis e o laudo na Secretaria de Saúde do estado.'
+          : 'Para tratamentos longos com remédios caros que estão na lista do SUS.',
         selo: respostas.saudeEspecializada === 'nao-sei' ? 'Faltam informações' : ceafElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: ceafElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: ceafElegivel,
         link: 'https://www.gov.br/saude/pt-br/composicao/sectics/daf/ceaf',
-        rotuloLink: 'Consultar regras CEAF'
+        rotuloLink: 'Ver as regras'
       },
       {
-        titulo: 'Reabilitação e órteses/próteses no SUS',
+        titulo: 'Fisioterapia e aparelhos no SUS',
         icone: 'fa-solid fa-wheelchair',
         detalhe: reabilitacaoElegivel
-          ? 'A rede do SUS oferece reabilitação e pode fornecer órteses, próteses e meios auxiliares após avaliação na UBS.'
-          : 'Disponível pelo SUS mediante avaliação clínica quando há necessidade de reabilitação ou apoio à mobilidade.',
+          ? 'O SUS tem fisioterapia e pode dar cadeira de rodas, andador e outros aparelhos depois de uma avaliação no posto de saúde.'
+          : 'O SUS oferece depois de uma avaliação, para quem precisa de fisioterapia ou de ajuda para andar.',
         selo: respostas.saudeEspecializada === 'nao-sei' ? 'Faltam informações' : reabilitacaoElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: reabilitacaoElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: reabilitacaoElegivel,
@@ -204,16 +204,16 @@
         rotuloLink: 'Ver rede no gov.br'
       },
       {
-        titulo: 'Tratamento Fora de Domicílio (TFD)',
+        titulo: 'Tratamento em outra cidade (TFD)',
         icone: 'fa-solid fa-van-shuttle',
         detalhe: tfdElegivel
-          ? 'Pode apoiar transporte e diárias para tratamento pelo SUS em outra cidade; consulte a Secretaria Municipal de Saúde.'
-          : 'Aplicável apenas quando o tratamento especializado pelo SUS não está disponível no município.',
+          ? 'O SUS pode ajudar com a viagem e a estadia para se tratar em outra cidade. Pergunte na Secretaria de Saúde da sua cidade.'
+          : 'Só quando o tratamento não existe na sua cidade.',
         selo: respostas.tratamentoFora === 'nao-sei' ? 'Faltam informações' : tfdElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: tfdElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: tfdElegivel,
         link: 'https://wiki.saude.gov.br/regulacao/index.php/Tratamento_Fora_do_Domic%C3%ADlio_(TFD)',
-        rotuloLink: 'Consultar regras TFD'
+        rotuloLink: 'Ver as regras'
       }
     ].sort((a, b) => Number(b.elegivel) - Number(a.elegivel));
   };
@@ -235,7 +235,7 @@
         rotuloSelecionado('renda') && `Renda: ${rotuloSelecionado('renda')}`,
         rotuloSelecionado('cadunico') && `CadÚnico: ${rotuloSelecionado('cadunico')}`
       ].filter(Boolean);
-      resumoRespostasEl.textContent = resumoPartes.length ? `Respostas consideradas · ${resumoPartes.join(' · ')}` : '';
+      resumoRespostasEl.textContent = resumoPartes.length ? `Suas respostas · ${resumoPartes.join(' · ')}` : '';
     }
     if (listaResultados) {
       listaResultados.innerHTML = itens.map(item => `
@@ -291,16 +291,16 @@
     if (evento.target.closest('[data-simulador-copiar]')) {
       const itens = calcularDireitos();
       const texto = [
-        `Mutirão · Levantamento de direitos da Mari (${idadePessoa} anos)`,
+        `Mutirão · Direitos da Mari (${idadePessoa} anos)`,
         ...itens.map(i => `• ${i.titulo} (${i.selo}): ${i.detalhe}`),
-        'Confirme os critérios no CRAS, INSS ou UBS, conforme o serviço.'
+        'Confirme as regras no CRAS, no INSS ou no posto (UBS), de acordo com o serviço.'
       ].join('\n');
 
       try {
         await navigator.clipboard.writeText(texto);
-        anunciarStatus(elementoStatus, 'Resumo dos direitos da Mari copiado para compartilhar no grupo.');
+        anunciarStatus(elementoStatus, 'Resumo copiado. Agora é só colar no grupo da família.');
       } catch {
-        anunciarStatus(elementoStatus, 'Não foi possível copiar automaticamente.');
+        anunciarStatus(elementoStatus, 'Não deu para copiar sozinho.');
       }
     }
   });
@@ -357,22 +357,22 @@
 
       const termoBase = bairro ? `${bairro} ${cidade} ${uf}` : `${cidade} ${uf}`;
       if (descUbs) {
-        descUbs.textContent = `Encontre Unidades Básicas de Saúde próximas de ${tituloLocal} para acompanhamento e encaminhamentos.`;
+        descUbs.textContent = `Postos de saúde perto de ${tituloLocal} para consultas e encaminhamentos.`;
       }
       if (linkUbs) {
         linkUbs.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`UBS ${termoBase}`)}`;
-        linkUbs.setAttribute('aria-label', `Ver UBS próximas de ${tituloLocal} no mapa (abre em nova aba)`);
+        linkUbs.setAttribute('aria-label', `Ver postos perto de ${tituloLocal} no mapa (abre em outra aba)`);
       }
       if (descCras) {
-        descCras.textContent = `Localize o CRAS de ${cidade} (${uf}) para fazer ou atualizar o Cadastro Único e solicitar o BPC.`;
+        descCras.textContent = `Ache o CRAS de ${cidade} (${uf}) para fazer ou atualizar o Cadastro Único e pedir o BPC.`;
       }
       if (linkCras) {
         linkCras.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`CRAS ${termoBase}`)}`;
-        linkCras.setAttribute('aria-label', `Ver CRAS em ${tituloLocal} no mapa (abre em nova aba)`);
+        linkCras.setAttribute('aria-label', `Ver CRAS em ${tituloLocal} no mapa (abre em outra aba)`);
       }
 
       blocoResultado.hidden = false;
-      anunciarStatus(elementoStatus, `Serviços públicos atualizados para ${tituloLocal}.`);
+      anunciarStatus(elementoStatus, `Serviços públicos de ${tituloLocal}.`);
     };
 
     let requisicaoMunicipiosId = 0;
@@ -385,24 +385,24 @@
 
       if (!uf) {
         abortControllerMunicipios = null;
-        selectMunicipio.innerHTML = '<option value="">Selecione o estado primeiro</option>';
+        selectMunicipio.innerHTML = '<option value="">Escolha o estado primeiro</option>';
         selectMunicipio.disabled = true;
         return;
       }
 
       abortControllerMunicipios = new AbortController();
       selectMunicipio.disabled = true;
-      selectMunicipio.innerHTML = '<option value="">Carregando municípios...</option>';
+      selectMunicipio.innerHTML = '<option value="">Carregando cidades...</option>';
 
       try {
         const resposta = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${encodeURIComponent(uf)}/municipios?orderBy=nome`, {
           signal: abortControllerMunicipios.signal
         });
-        if (!resposta.ok) throw new Error('Falha ao carregar municípios');
+        if (!resposta.ok) throw new Error('Não deu para carregar as cidades');
         const municipios = await resposta.json();
         if (idAtual !== requisicaoMunicipiosId) return;
 
-        selectMunicipio.innerHTML = '<option value="">Selecione o município...</option>' +
+        selectMunicipio.innerHTML = '<option value="">Escolha a cidade...</option>' +
           municipios.map(m => `<option value="${escaparHtml(String(m.id))}" data-nome="${escaparHtml(m.nome)}">${escaparHtml(m.nome)}</option>`).join('');
         selectMunicipio.disabled = false;
 
@@ -411,8 +411,8 @@
         }
       } catch (erro) {
         if (erro?.name === 'AbortError' || idAtual !== requisicaoMunicipiosId) return;
-        selectMunicipio.innerHTML = '<option value="">Não foi possível carregar</option>';
-        mostrarErroLocalidade('Não foi possível consultar a lista de municípios do IBGE no momento.');
+        selectMunicipio.innerHTML = '<option value="">Não deu para carregar</option>';
+        mostrarErroLocalidade('Não deu para buscar as cidades agora.');
       }
     };
 
@@ -420,12 +420,12 @@
       if (!selectUf) return;
       try {
         const resposta = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome');
-        if (!resposta.ok) throw new Error('Falha ao carregar estados');
+        if (!resposta.ok) throw new Error('Não deu para carregar os estados');
         const estados = await resposta.json();
-        selectUf.innerHTML = '<option value="">Selecione o estado...</option>' +
+        selectUf.innerHTML = '<option value="">Escolha o estado...</option>' +
           estados.map(e => `<option value="${escaparHtml(e.sigla)}">${escaparHtml(e.nome)} (${escaparHtml(e.sigla)})</option>`).join('');
       } catch {
-        selectUf.innerHTML = '<option value="">Indisponível no momento</option>';
+        selectUf.innerHTML = '<option value="">Fora do ar agora</option>';
       }
     };
 
@@ -462,7 +462,7 @@
       evento.preventDefault();
       const cepLimpo = (campoCep?.value || '').replace(/\D/g, '');
       if (cepLimpo.length !== 8) {
-        mostrarErroLocalidade('Informe um CEP válido com 8 dígitos para buscar.');
+        mostrarErroLocalidade('Digite um CEP com 8 números.');
         campoCep?.focus();
         return;
       }
@@ -479,11 +479,11 @@
         const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`, {
           signal: abortControllerCep.signal
         });
-        if (!resposta.ok) throw new Error('Erro na consulta do CEP');
+        if (!resposta.ok) throw new Error('Não deu para buscar o CEP');
         const dados = await resposta.json();
         if (idCep !== acaoLocalidadeId) return;
         if (dados.erro) {
-          mostrarErroLocalidade('CEP não encontrado. Confira os números ou selecione o estado e o município.');
+          mostrarErroLocalidade('Não achamos esse CEP. Confira os números ou escolha o estado e a cidade.');
           campoCep?.focus();
           return;
         }
@@ -501,7 +501,7 @@
         });
       } catch (erro) {
         if (erro?.name === 'AbortError' || idCep !== acaoLocalidadeId) return;
-        mostrarErroLocalidade('Não foi possível consultar o CEP agora. Tente selecionar o estado e o município ao lado.');
+        mostrarErroLocalidade('Não deu para buscar o CEP agora. Tente escolher o estado e a cidade ao lado.');
       } finally {
         botaoCep?.removeAttribute('aria-busy');
         if (botaoCep) botaoCep.disabled = false;

@@ -2266,3 +2266,158 @@ button.figurinha-colada:focus-visible {
 html.tema--acolhedor [data-pagina-mvp="pessoas"] [aria-labelledby="titulo-participantes"] {
   box-shadow: none;
 }
+.rotina__painel:has(.porta-remedios--medicamentos) {
+  grid-template-columns: auto minmax(120px, 0.6fr) minmax(0, 3fr);
+  align-items: stretch;
+}
+
+.rotina__painel:has(.porta-remedios--medicamentos) > .rotina__pote,
+.rotina__painel:has(.porta-remedios--medicamentos) > .rotina__contagem {
+  align-self: center;
+}
+
+.porta-remedios--medicamentos {
+  display: grid;
+  gap: var(--espaco-sm);
+  min-width: 0;
+  padding: var(--espaco-md);
+  border-radius: var(--raio-lg);
+}
+
+@media (max-width: 1100px) {
+  .rotina__painel:has(.porta-remedios--medicamentos) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .porta-remedios--medicamentos {
+    grid-column: 1 / -1;
+  }
+}
+
+.porta-remedios__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-xs) var(--espaco-md);
+}
+
+.porta-remedios__cabecalho h3 {
+  margin: 0;
+}
+
+.porta-remedios__cabecalho small {
+  color: var(--cor-texto-secundario);
+}
+
+.frasco-resumo {
+  position: relative;
+  width: 132px;
+  padding-top: 22px;
+}
+
+.frasco-resumo__tampa {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 18px;
+  border: 1.6px solid var(--pote-borda);
+  border-radius: 6px;
+  background: var(--pote-tampa);
+}
+
+.frasco-resumo__dobradica {
+  position: absolute;
+  top: 16px;
+  left: 22px;
+  right: 22px;
+  height: 6px;
+  border: 1.5px solid var(--pote-borda);
+  border-radius: 2px;
+  background: var(--pote-tampa-escura);
+}
+
+.frasco-resumo__corpo {
+  display: block;
+  padding: 6px 6px 18px;
+  border: var(--pote-espessura) solid var(--pote-borda);
+  border-radius: 18px;
+  background: var(--pote-vidro);
+}
+
+.frasco-resumo__blocos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  padding: 6px;
+  border: 1.2px solid var(--pote-fundo-borda);
+  border-radius: 12px;
+  background: var(--pote-fundo);
+}
+
+.frasco-resumo__aba {
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  width: 30px;
+  height: 7px;
+  translate: -50% 0;
+  border: 1.5px solid var(--pote-borda);
+  border-radius: 4px;
+  background: var(--pote-aba);
+}
+
+.frasco-resumo__bloco {
+  display: block;
+  aspect-ratio: 1;
+  min-width: 0;
+  border: 1.5px solid var(--pote-borda);
+  border-radius: 5px;
+  background: var(--pote-vidro);
+}
+
+.frasco-resumo__bloco--dado {
+  border-color: var(--cor-primaria);
+  background: var(--cor-primaria);
+}
+
+.frasco-resumo__bloco--falta {
+  border-color: var(--cor-aviso-alerta-escuro);
+  background: repeating-linear-gradient(135deg, var(--cor-aviso-alerta-claro) 0 3px, var(--cor-aviso-alerta-escuro) 3px 4.5px);
+}
+
+.frasco-resumo__bloco--agora {
+  border: 2px solid var(--cor-primaria);
+  background: var(--cor-secundaria-clara, var(--pote-vidro));
+}
+
+.frasco-resumo__bloco--depois {
+  border-style: dashed;
+}
+
+.rotina__contagem strong {
+  display: grid;
+  gap: 6px;
+}
+
+.rotina__legenda {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-xs);
+}
+
+.rotina__legenda .frasco-resumo__bloco {
+  width: 16px;
+  flex: none;
+}
+
+@media (max-width: 600px) {
+  .frasco-resumo {
+    width: 112px;
+  }
+
+  .rotina__pote .frasco-resumo {
+    max-width: none;
+  }
+}

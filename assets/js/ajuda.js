@@ -56,9 +56,9 @@
   const validarEmail = () => {
     if (!campoEmail) return '';
     const valor = campoEmail.value.trim();
-    if (!valor) return 'Informe seu e-mail para resposta.';
+    if (!valor) return 'Coloque seu e-mail para a gente responder.';
     if (!REGEX_EMAIL.test(valor) || !campoEmail.checkValidity()) {
-      return 'Informe um e-mail válido (ex.: nome@email.com).';
+      return 'Esse e-mail parece errado. Exemplo: nome@email.com';
     }
     return '';
   };
@@ -66,7 +66,7 @@
   const validarAssunto = () => {
     if (!campoAssunto) return '';
     const valor = campoAssunto.value.trim();
-    if (!valor) return 'Informe o assunto da mensagem.';
+    if (!valor) return 'Escreva o assunto.';
     if (valor.length < ASSUNTO_MIN) return `O assunto deve ter pelo menos ${ASSUNTO_MIN} caracteres.`;
     if (valor.length > ASSUNTO_MAX) return `O assunto deve ter no máximo ${ASSUNTO_MAX} caracteres.`;
     return '';
@@ -75,7 +75,7 @@
   const validarMensagem = () => {
     if (!campoMensagem) return '';
     const tamanho = obterTextoMensagem().length;
-    if (!tamanho) return 'Escreva a mensagem antes de enviar.';
+    if (!tamanho) return 'Escreva a mensagem antes de mandar.';
     if (tamanho < MENSAGEM_MIN) return `A mensagem deve ter pelo menos ${MENSAGEM_MIN} caracteres.`;
     if (tamanho > MENSAGEM_MAX) return `A mensagem deve ter no máximo ${MENSAGEM_MAX} caracteres.`;
     return '';
@@ -128,14 +128,14 @@
   formulario.after(historico);
   const renderizarChamados = () => {
     const e = core.escaparHtml;
-    historico.innerHTML = '<h2>Seus chamados nesta sessão</h2>' + ((core.obterEstado().chamados || []).map(item =>
-      `<article class="painel__bloco"><h3>${e(item.protocolo)} · ${e(item.assunto)}</h3><p>${e(item.mensagem)}</p><p>${e(item.email)} · ${e(item.status)}</p>${item.status === 'Aberto' ? '' /* `<button class="botao botao--secundario" type="button" data-concluir-chamado="${e(item.protocolo)}">Simular resposta e concluir</button>` */ : `<p>Resposta simulada: recebemos seu relato sobre “${e(item.assunto)}”. Ele está disponível neste histórico; nenhum atendimento externo foi realizado.</p>`}</article>`).join('') || '<p>Nenhum chamado registrado.</p>');
+    historico.innerHTML = '<h2>Suas mensagens</h2>' + ((core.obterEstado().chamados || []).map(item =>
+      `<article class="painel__bloco"><h3>${e(item.protocolo)} · ${e(item.assunto)}</h3><p>${e(item.mensagem)}</p><p>${e(item.email)} · ${e(item.status)}</p>${item.status === 'Aberto' ? '' /* `<button class="botao botao--secundario" type="button" data-concluir-chamado="${e(item.protocolo)}">Simular resposta e concluir</button>` */ : `<p>Resposta simulada: recebemos seu relato sobre “${e(item.assunto)}”. Ele está disponível neste histórico; nenhum atendimento externo foi realizado.</p>`}</article>`).join('') || '<p>Nenhuma mensagem enviada.</p>');
   };
   historico.addEventListener('click', evento => {
     const botao = evento.target.closest('[data-concluir-chamado]');
     if (!botao) return;
     core.atualizarEstado(estado => ({ ...estado, chamados: estado.chamados.map(item => item.protocolo === botao.dataset.concluirChamado ? { ...item, status: 'Concluído na simulação' } : item) }));
-    renderizarChamados(); mostrarStatus('Resposta simulada registrada no histórico.');
+    renderizarChamados(); mostrarStatus('Resposta de teste salva no histórico.');
     historico.tabIndex = -1; historico.focus();
   });
   renderizarChamados();
@@ -175,7 +175,7 @@
     aplicarErroCampo(campoMensagem, erroMensagemEl, '');
     atualizarContadorMensagem();
 
-    window.MutiraoNotificacoes.registrar('Mensagem de demonstração registrada', 'Formulário de Ajuda concluído somente nesta aba.', 'ajuda.html#formulario-ajuda');
-    mostrarStatus(`Chamado ${protocolo} registrado no histórico desta sessão. Nenhum e-mail foi enviado.`, 'sucesso');
+    window.MutiraoNotificacoes.registrar('Mensagem de teste enviada', 'Formulário de Ajuda concluído somente nesta aba.', 'ajuda.html#formulario-ajuda');
+    mostrarStatus(`Chamado ${protocolo} salvo no histórico. Nenhum e-mail foi enviado.`, 'sucesso');
   });
 })();
