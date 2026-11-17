@@ -179,9 +179,20 @@
       </div>
     </section>
 
-    <div class="meds__abas" role="tablist" aria-label="Seções de medicamentos">
-      <button type="button" role="tab" id="aba-medicamentos-dia" aria-selected="true" aria-controls="painel-medicamentos-dia">Medicamentos do dia</button>
-      <button type="button" role="tab" id="aba-estoque" aria-selected="false" aria-controls="painel-estoque" tabindex="-1">Estoque</button>
+    <section class="faixa-alerta faixa-alerta--atencao" data-alerta-estoque hidden aria-labelledby="titulo-alerta-estoque">
+      <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-regular fa-clock"></i></span>
+      <div class="faixa-alerta__texto">
+        <strong id="titulo-alerta-estoque">Estoque baixo</strong>
+        <span></span>
+      </div>
+      <div class="faixa-alerta__acoes">
+        <button type="button" class="botao botao--secundario" data-abrir-estoque>Adicionar ao estoque</button>
+      </div>
+    </section>
+
+    <div class="meds__abas" role="tablist" aria-label="Seções de medicamentos e insumos">
+      <button type="button" role="tab" id="aba-medicamentos-dia" aria-selected="true" aria-controls="painel-medicamentos-dia">Rotina e horários</button>
+      <button type="button" role="tab" id="aba-estoque" aria-selected="false" aria-controls="painel-estoque" tabindex="-1">Itens e estoque</button>
     </div>
 
     <section class="apoio__painel" id="painel-medicamentos-dia" role="tabpanel" aria-labelledby="aba-medicamentos-dia">
@@ -201,7 +212,6 @@
       <h3 class="painel__subtitulo" id="registros-de-hoje">Registros de hoje</h3>
       <div class="itens-cadastrados__controles" data-registros-controles>
         <div class="documentos__busca">
-          <label for="pesquisa-registros">Pesquisar registros</label>
           <div class="documentos__campo-busca">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
             <input id="pesquisa-registros" type="search" placeholder="Nome do medicamento ou horário" data-registros-busca>
@@ -218,13 +228,6 @@
     </section>
 
     <div class="meds__painel-estoque" id="painel-estoque" role="tabpanel" aria-labelledby="aba-estoque" hidden>
-      <section class="apoio__painel" aria-labelledby="titulo-avisos-estoque">
-        <div class="painel__cartao-cabecalho">
-          <h2 id="titulo-avisos-estoque">Avisos de estoque</h2>
-          <button type="button" class="botao botao--secundario botao--pequeno" data-abrir-estoque>Adicionar ao estoque</button>
-        </div>
-        <div data-estoque-avisos></div>
-      </section>
       <section class="apoio__painel" aria-labelledby="titulo-itens">
         <h2 id="titulo-itens">Itens cadastrados</h2>
         <div class="itens-cadastrados__controles" data-itens-controles>
@@ -252,6 +255,7 @@
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
           <h2 id="titulo-registrar-administracao" data-dose-titulo>Registrar administração</h2>
         </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-dose-contexto></p>
       <div class="dialogo-mvp__aviso-caixa" data-dose-estado-anterior hidden>
@@ -286,6 +290,7 @@
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
           <h2 id="titulo-confirmar-administracao">Confirmar administração</h2>
         </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-dose-previsto></p>
       <div class="dialogo-mvp__aviso-caixa" data-dose-estado-anterior hidden>
@@ -314,10 +319,11 @@
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
           <h2 id="titulo-nao-administrada">Registrar como não administrada</h2>
         </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-dose-previsto></p>
       <form class="formulario-mvp" data-formulario-mvp="nao-administrada">
-        <label>Motivo · opcional<input type="text" name="motivo" placeholder="Descreva o ocorrido, se souber."></label>
+        <label>Motivo (opcional)<input type="text" name="motivo" placeholder="Descreva o ocorrido, se souber."></label>
         <div class="dialogo-mvp__secao">
           <p class="dialogo-mvp__secao-titulo" data-registro-hora-atual>Registro às 12h10</p>
           <div class="dialogo-mvp__linha-info">
@@ -338,6 +344,7 @@
           <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
           <h2 id="titulo-administracao-registrada" data-registro-titulo>Administração registrada - Metformina</h2>
         </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-registro-contexto></p>
       <div class="dialogo-mvp__secao">
@@ -390,6 +397,7 @@
     <dialog class="dialogo-mvp" id="dialogo-atualizar-estoque" aria-labelledby="titulo-atualizar-estoque">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-atualizar-estoque" data-estoque-titulo>Adicionar ao estoque de metformina</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-estoque-contexto>Maria das Dores (Mari) · Estoque atual: 4 unidades. O registro guarda a autoria e a data.</p>
       <form class="formulario-mvp" data-formulario-mvp="estoque">
@@ -405,11 +413,35 @@
 
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhe-item" aria-labelledby="titulo-detalhe-item">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-detalhe-item" data-detalhe-titulo>Item</h2>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true" data-detalhe-icone><i class="bi bi-capsule"></i></span>
+          <h2 id="titulo-detalhe-item" data-detalhe-titulo>Item</h2>
+        </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-detalhe-pessoa>Maria das Dores (Mari)</p>
-      <p data-detalhe-resumo></p>
-      <div class="dialogo-mvp__acoes">
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Informações do item</p>
+        <div class="dialogo-mvp__linha-info">
+          <span class="dialogo-mvp__icone dialogo-mvp__icone--sm" aria-hidden="true"><i class="fa-regular fa-clock"></i></span>
+          <span data-detalhe-resumo></span>
+        </div>
+      </div>
+      <div class="dialogo-mvp__secao" data-detalhe-secao-estoque hidden>
+        <p class="dialogo-mvp__secao-titulo">Estoque</p>
+        <div class="dialogo-mvp__linha-info">
+          <span class="dialogo-mvp__icone dialogo-mvp__icone--sm" aria-hidden="true"><i class="fa-solid fa-boxes-stacked"></i></span>
+          <span data-detalhe-estoque></span>
+        </div>
+      </div>
+      <div class="dialogo-mvp__secao" data-detalhe-secao-orientacao>
+        <p class="dialogo-mvp__secao-titulo">Orientação</p>
+        <div class="dialogo-mvp__linha-info">
+          <span class="dialogo-mvp__icone dialogo-mvp__icone--sm" aria-hidden="true"><i class="fa-solid fa-file-medical"></i></span>
+          <span data-detalhe-orientacao></span>
+        </div>
+      </div>
+      <div class="dialogo-mvp__acoes dialogo-mvp__acoes--iguais">
         <button type="button" class="botao botao--perigo" data-excluir-item>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-item>Editar</button>
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>

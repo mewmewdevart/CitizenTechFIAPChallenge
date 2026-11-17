@@ -202,11 +202,23 @@
         <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
         ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Atualizar registro</button>` : ''}
       </li>`).join('')
-      : '<li class="estado-vazio"><strong>Nenhum registro encontrado</strong><p>Tente outro filtro ou termo de busca.</p></li>';
+      : (filtroAtivo
+        ? '<li class="estado-vazio"><strong>Nenhum registro encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-registros>Limpar filtros</button></li>'
+        : '<li class="estado-vazio"><strong>Nenhum registro hoje</strong><p>As administrações registradas aparecem aqui.</p></li>');
   };
 
   const renderizarEstoque = itens => {
     const baixos = itens.filter(item => item.tipo === 'Medicamento' && item.estoque !== null && item.consumoDia && item.estoque / item.consumoDia <= 3);
+    const alertaEstoque = pagina.querySelector('[data-alerta-estoque]');
+    if (alertaEstoque) {
+      alertaEstoque.hidden = !baixos.length;
+      if (baixos.length) {
+        const principal = baixos[0];
+        const dias = Math.floor(principal.estoque / principal.consumoDia);
+        alertaEstoque.querySelector('strong').textContent = `Estoque baixo · ${principal.nome}`;
+        alertaEstoque.querySelector('.faixa-alerta__texto > span').textContent = `${plural(principal.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}`;
+      }
+    }
     if (avisosEstoque) {
       avisosEstoque.innerHTML = baixos.length
         ? baixos.map(item => {
@@ -259,7 +271,9 @@
         <span class="painel__texto"><strong>${escaparHtml(item.nome)}</strong><span>${escaparHtml(descreverItem(item))}</span></span>
         <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.chave)}">Ver item</button>
       </li>`).join('')
-      : '<li class="estado-vazio"><strong>Nenhum item encontrado</strong><p>Tente outro filtro ou termo de busca.</p></li>';
+      : (filtroAtivo
+        ? '<li class="estado-vazio"><strong>Nenhum item encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-itens>Limpar filtros</button></li>'
+        : '<li class="estado-vazio"><strong>Nenhum item cadastrado</strong><p>Use Adicionar item para cadastrar um medicamento ou insumo.</p></li>');
   };
 
   const renderizar = () => {
@@ -395,11 +409,44 @@
     const item = obterItens().find(atual => atual.nome === nome || atual.chave === nome);
     if (!item) return;
     itemEmFoco = item;
+    const iconeEl = dialogos.detalhe.querySelector('[data-detalhe-icone]');
+    if (iconeEl) {
+      iconeEl.innerHTML = item.tipo === 'Insumo'
+        ? '<i class="fa-solid fa-box-open" aria-hidden="true"></i>'
+        : '<i class="bi bi-capsule" aria-hidden="true"></i>';
+    }
     dialogos.detalhe.querySelector('[data-detalhe-titulo]').textContent = item.nome;
     const pessoaEl = dialogos.detalhe.querySelector('[data-detalhe-pessoa]');
     const resumoEl = dialogos.detalhe.querySelector('[data-detalhe-resumo]');
-    if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
-    if (resumoEl) resumoEl.textContent = detalharItem(item);
+    const secaoEstoque = dialogos.detalhe.querySelector('[data-detalhe-secao-estoque]');
+    const estoqueEl = dialogos.detalhe.querySelector('[data-detalhe-estoque]');
+    const secaoOrientacao = dialogos.detalhe.querySelector('[data-detalhe-secao-orientacao]');
+    const orientacaoEl = dialogos.detalhe.querySelector('[data-detalhe-orientacao]');
+
+    if (pessoaEl) pessoaEl.textContent = `${core.nomePessoaAcompanhada()} · ${item.tipo}`;
+    if (resumoEl) {
+      resumoEl.textContent = item.tipo === 'Insumo'
+        ? 'Item de apoio e reposição contínua'
+        : `${item.horarios ? `Horários: ${item.horarios}` : 'Sem horário fixo'}${item.dose ? ` · ${item.dose}` : ''}`;
+    }
+    if (secaoEstoque && estoqueEl) {
+      const temEstoque = item.estoque !== null && item.estoque !== undefined;
+      secaoEstoque.hidden = !temEstoque;
+      if (temEstoque) {
+        const dias = item.consumoDia ? Math.floor(item.estoque / item.consumoDia) : null;
+        estoqueEl.textContent = `${plural(item.estoque, 'unidade', 'unidades')} em estoque${dias !== null ? ` · Previsão para ${plural(dias, 'dia', 'dias')}` : ''}`;
+      }
+    }
+    if (secaoOrientacao && orientacaoEl) {
+      const ehInsumo = item.tipo === 'Insumo';
+      secaoOrientacao.hidden = ehInsumo;
+      if (!ehInsumo) {
+        const finalidade = DESCRICOES_MEDICAMENTOS[item.nome];
+        orientacaoEl.textContent = finalidade
+          ? `Indicado ${finalidade}. Consulte a prescrição para conferir dose e apresentação.`
+          : 'Consulte a prescrição para conferir dose e apresentação.';
+      }
+    }
     dialogos.detalhe.showModal();
   };
 
@@ -473,6 +520,20 @@
 
     if (botao.matches('.meds__abas [role="tab"]')) {
       ativarAba(botao);
+      return;
+    }
+    if (botao.hasAttribute('data-limpar-filtros-registros')) {
+      termoRegistros = '';
+      if (buscaRegistros) buscaRegistros.value = '';
+      controlesRegistros?.querySelector('[data-registros-filtro="Todos"]')?.click();
+      buscaRegistros?.focus();
+      return;
+    }
+    if (botao.hasAttribute('data-limpar-filtros-itens')) {
+      termoItens = '';
+      if (buscaItens) buscaItens.value = '';
+      controlesItens?.querySelector('[data-itens-filtro="Todos"]')?.click();
+      buscaItens?.focus();
       return;
     }
     if (botao.hasAttribute('data-fechar-dialogo')) {
@@ -659,5 +720,10 @@
     url.searchParams.delete('dose');
     history.replaceState(null, '', url);
     abrirRegistro(doseInicial);
+  } else if (new URLSearchParams(location.search).get('estoque')) {
+    const url = new URL(location.href);
+    url.searchParams.delete('estoque');
+    history.replaceState(null, '', url);
+    abrirEstoque(itemEmEstoque);
   }
 })();
