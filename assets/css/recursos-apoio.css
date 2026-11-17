@@ -4,9 +4,10 @@ body.menu-fechado .conteudo-pagina.apoio {
   min-width: 0;
 }
 
-body .conteudo-pagina.apoio:has([data-pagina-mvp="documentos"]),
-body.menu-fechado .conteudo-pagina.apoio:has([data-pagina-mvp="documentos"]) {
-  max-width: 980px;
+body .conteudo-pagina.apoio[data-pagina-mvp="documentos"],
+body.menu-fechado .conteudo-pagina.apoio[data-pagina-mvp="documentos"] {
+  width: 100%;
+  max-width: none;
 }
 
 body .conteudo-pagina.apoio.privacidade,

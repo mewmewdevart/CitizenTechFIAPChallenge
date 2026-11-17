@@ -1,9 +1,4 @@
 /* Ajuda: composição alinhada ao Design System e tokens do Mutirão. */
-.conteudo-pagina.apoio.ajuda {
-  width: 100%;
-  max-width: 100%;
-}
-
 .ajuda__duvidas,
 .ajuda__grupo {
   display: grid;
@@ -36,19 +31,6 @@
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
   background: var(--cor-superficie);
-}
-
-html.acessibilidade--alto-contraste .ajuda__grupo {
-  gap: var(--espaco-md);
-}
-
-html.acessibilidade--alto-contraste .ajuda__grupo h3 {
-  margin-bottom: 0;
-}
-
-html.acessibilidade--alto-contraste .ajuda__grupo .ajuda__pergunta {
-  border: var(--borda-padrao);
-  border-radius: var(--raio-xl);
 }
 
 html.tema--acolhedor .ajuda__contato {
