@@ -274,6 +274,10 @@
           </div>
           <button type="button" class="botao botao--primario painel__acao-larga" data-dialogo="dialogo-pedir-folga"><i
               class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
+          <div class="cuidar__pedidos-folga" data-pedidos-folga hidden>
+            <h3 class="cuidar__rotulo">Pedidos de folga registrados</h3>
+            <ul class="painel__lista" data-pedidos-folga-lista></ul>
+          </div>
           <label class="interruptor">
             <input type="checkbox" role="switch" data-cuidar-preferencia="avisarFamilia">
             <span class="painel__texto"><strong>Simular aviso à família ao marcar “sobrecarregado”</strong><span
@@ -286,9 +290,9 @@
             <h2 id="titulo-sua-semana">Sua semana</h2>
             <small>9 a 15 de novembro</small>
           </div>
-          <p class="semana__total"><strong>25 horas</strong><span>em 5 noites, das 19h às 24h</span></p>
+          <p class="semana__total" data-semana-total><strong>25 horas</strong><span>em 5 noites, das 19h às 24h</span></p>
           <h3 class="cuidar__rotulo">Horas de cada um na semana</h3>
-          <ul class="horas">
+          <ul class="horas" data-horas-semana>
             <li><img class="avatar" src="assets/media/mascotes/icone-mascote-espeto.svg" alt="">
               <p><strong>Aninha</strong> 42 h · 6 madrugadas</p><span class="horas__barra horas__barra--alerta"
                 style="--horas: 100%"><span></span></span>
@@ -306,13 +310,13 @@
                 style="--horas: 43%"><span></span></span>
             </li>
           </ul>
-          <div class="cuidar__alerta">
-            <strong>A Aninha fez 6 madrugadas seguidas.</strong>
-            <p>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
+          <div class="cuidar__alerta" data-cuidar-alerta>
+            <strong data-cuidar-alerta-titulo>A Aninha fez 6 madrugadas seguidas.</strong>
+            <p data-cuidar-alerta-texto>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
             <div class="cuidar__acoes">
-              <button type="button" class="botao botao--secundario" data-abrir-recado="Aninha"><i
+              <button type="button" class="botao botao--secundario" data-abrir-recado="Aninha" data-cuidar-alerta-recado><i
                   class="fa-regular fa-message" aria-hidden="true"></i> Mandar um recado</button>
-              <a class="botao botao--secundario" href="agenda.html"><i class="fa-regular fa-calendar"
+              <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i class="fa-regular fa-calendar"
                   aria-hidden="true"></i> Ficar numa madrugada</a>
             </div>
           </div>

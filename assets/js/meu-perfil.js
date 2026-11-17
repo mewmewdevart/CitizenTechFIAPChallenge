@@ -3,7 +3,16 @@
   const core = window.MutiraoCuidado;
   if (!pagina || !core) return;
 
-  const { HOJE, obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
+  const {
+    HOJE,
+    obterEstado,
+    atualizarEstado,
+    obterUsuarioAtual,
+    construirLinhaDoTempoDia,
+    formatarDataCurta,
+    escaparHtml,
+    anunciarStatus
+  } = core;
 
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const grupoHumor = pagina.querySelector('[data-cuidar-humor]');
@@ -298,13 +307,128 @@
     evento.preventDefault();
     const form = evento.target;
     const turno = form.elements.turno.value;
+    const recado = form.elements.recado.value.trim();
+    const data = formatarDataCurta(HOJE);
     atualizarEstado(estado => ({
       ...estado,
-      pedidosFolga: [...(estado.pedidosFolga || []), { turno, recado: form.elements.recado.value.trim() }]
+      pedidosFolga: [...(estado.pedidosFolga || []), { turno, recado, data, criadoEm: new Date().toISOString() }]
     }));
+    form.reset();
     form.closest('dialog')?.close();
+    renderizarPedidosFolga();
     anunciarStatus(elementoStatus, `Pedido de folga registrado nesta demonstração: ${turno}.`);
   });
+
+  const SEMANA_ATUAL = ['2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15'];
+
+  const renderizarPedidosFolga = () => {
+    const bloco = pagina.querySelector('[data-pedidos-folga]');
+    const lista = pagina.querySelector('[data-pedidos-folga-lista]');
+    if (!bloco || !lista) return;
+    const pedidos = [...(obterEstado().pedidosFolga || [])].reverse();
+    bloco.hidden = pedidos.length === 0;
+    lista.innerHTML = pedidos.map(item => `
+      <li class="painel__item">
+        <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
+        <span class="painel__texto">
+          <strong>${escaparHtml(item.turno)}</strong>
+          <span>${escaparHtml([item.data ? `Registrado em ${item.data}` : 'Registrado nesta sessão', item.recado].filter(Boolean).join(' · '))}</span>
+        </span>
+        <span class="selo selo--info">Simulado</span>
+      </li>
+    `).join('');
+  };
+
+  const renderizarSemanaCuidar = () => {
+    const estado = obterEstado();
+    const usuario = obterUsuarioAtual(estado);
+    const resumoPorPessoa = new Map();
+
+    for (const dia of SEMANA_ATUAL) {
+      for (const seg of construirLinhaDoTempoDia(dia, estado)) {
+        if (seg.tipo !== 'turno' || !seg.pessoa) continue;
+        const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga');
+        const chave = ehZe ? 'ze' : seg.pessoa.nome;
+        const atual = resumoPorPessoa.get(chave) || {
+          chave,
+          nome: ehZe ? 'Você' : (seg.pessoa.apelido || seg.pessoa.nome),
+          nomeCompleto: seg.pessoa.nome,
+          ehZe,
+          papel: seg.pessoa.papel || '',
+          avatar: ehZe
+            ? (usuario.foto || usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg')
+            : (seg.pessoa.foto || `assets/media/mascotes/${seg.pessoa.avatar || 'icone-mascote-cubado.svg'}`),
+          horas: 0,
+          turnos: 0,
+          madrugadas: 0,
+          noites: 0,
+          tardes: 0,
+          diasMadrugada: []
+        };
+        const duracao = Math.max(0, seg.fim - seg.inicio);
+        atual.horas += duracao;
+        atual.turnos += 1;
+        if (seg.inicio === 0) {
+          atual.madrugadas += 1;
+          atual.diasMadrugada.push(dia);
+        } else if (seg.inicio >= 19) {
+          atual.noites += 1;
+        } else if (seg.inicio >= 12) {
+          atual.tardes += 1;
+        }
+        resumoPorPessoa.set(chave, atual);
+      }
+    }
+
+    const listaPessoas = [...resumoPorPessoa.values()].sort((a, b) => b.horas - a.horas);
+    const maxHoras = Math.max(1, ...listaPessoas.map(p => p.horas));
+    const dadosZe = resumoPorPessoa.get('ze');
+
+    const totalEl = pagina.querySelector('[data-semana-total]');
+    if (totalEl && dadosZe) {
+      const rotuloTurno = dadosZe.noites === dadosZe.turnos
+        ? `${dadosZe.noites} ${dadosZe.noites === 1 ? 'noite' : 'noites'}`
+        : `${dadosZe.turnos} ${dadosZe.turnos === 1 ? 'turno' : 'turnos'}`;
+      totalEl.innerHTML = `<strong>${dadosZe.horas} horas</strong><span>em ${rotuloTurno} na escala desta semana</span>`;
+    }
+
+    const listaHorasEl = pagina.querySelector('[data-horas-semana]');
+    if (listaHorasEl) {
+      listaHorasEl.innerHTML = listaPessoas.map(p => {
+        const detalhe = p.madrugadas >= 4
+          ? `${p.madrugadas} madrugadas`
+          : p.papel === 'Cuidadora'
+            ? 'contratada'
+            : p.noites > 0
+              ? `${p.noites} ${p.noites === 1 ? 'noite' : 'noites'}`
+              : `${p.tardes || p.turnos} ${(p.tardes || p.turnos) === 1 ? 'turno' : 'turnos'}`;
+        const titulo = p.papel === 'Cuidadora' ? `${p.nome} · cuidadora` : p.nome;
+        const pct = Math.round((p.horas / maxHoras) * 100);
+        const alertaBarra = p.madrugadas >= 5 ? ' horas__barra--alerta' : '';
+        return `<li><img class="avatar" src="${escaparHtml(p.avatar)}" alt="">
+          <p><strong>${escaparHtml(titulo)}</strong> ${p.horas} h · ${escaparHtml(detalhe)}</p>
+          <span class="horas__barra${alertaBarra}" style="--horas: ${pct}%"><span></span></span>
+        </li>`;
+      }).join('');
+    }
+
+    const alertaEl = pagina.querySelector('[data-cuidar-alerta]');
+    const sobrecarregada = listaPessoas.find(p => !p.ehZe && p.madrugadas >= 4);
+    if (alertaEl) {
+      alertaEl.hidden = !sobrecarregada;
+      if (sobrecarregada) {
+        const tituloAlerta = alertaEl.querySelector('[data-cuidar-alerta-titulo]');
+        const botaoRecado = alertaEl.querySelector('[data-cuidar-alerta-recado]');
+        const linkMadrugada = alertaEl.querySelector('[data-link-madrugada]');
+        const diaAlvo = sobrecarregada.diasMadrugada.find(d => d >= HOJE) || sobrecarregada.diasMadrugada[0] || HOJE;
+        if (tituloAlerta) {
+          tituloAlerta.textContent = `${sobrecarregada.nome} fez ${sobrecarregada.madrugadas} madrugadas na semana.`;
+        }
+        if (botaoRecado) botaoRecado.dataset.abrirRecado = sobrecarregada.nome;
+        if (linkMadrugada) linkMadrugada.href = `agenda.html?dia=${encodeURIComponent(diaAlvo)}#escala`;
+      }
+    }
+  };
 
   formPerfil?.addEventListener('input', evento => {
     if (evento.target.name === 'recadoTitulo' || evento.target.name === 'recadoTexto') {
@@ -350,5 +474,7 @@
     anunciarStatus(elementoStatus, 'Alterações salvas.');
   });
 
+  renderizarPedidosFolga();
+  renderizarSemanaCuidar();
   iniciar();
 })();
