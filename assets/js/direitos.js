@@ -31,7 +31,8 @@
 
   const idadePessoa = calcularIdade(obterEstado().person?.nascimento);
   selosIdade.forEach(selo => {
-    selo.textContent = `${idadePessoa} anos`;
+    const comOrigem = selo.textContent.includes('(da ficha)');
+    selo.textContent = comOrigem ? `${idadePessoa} anos (da ficha)` : `${idadePessoa} anos`;
   });
 
   const respostas = {
@@ -233,6 +234,20 @@
     const qtdElegiveis = itens.filter(i => i.elegivel).length;
     if (tituloResultado) {
       tituloResultado.textContent = `A Mari pode ter acesso a ${qtdElegiveis} de ${itens.length} direitos e serviços avaliados`;
+    }
+    const resumoRespostasEl = pagina.querySelector('[data-simulador-resumo-respostas]');
+    if (resumoRespostasEl) {
+      const rotuloSelecionado = grupo => {
+        const valor = respostas[grupo];
+        const botao = valor && pagina.querySelector(`[data-simulador-grupo="${grupo}"] [data-simulador-valor="${valor}"]`);
+        return botao ? botao.textContent.replace(/\s+/g, ' ').trim() : '';
+      };
+      const resumoPartes = [
+        rotuloSelecionado('moradia') && `Moradia: ${rotuloSelecionado('moradia')}`,
+        rotuloSelecionado('renda') && `Renda: ${rotuloSelecionado('renda')}`,
+        rotuloSelecionado('cadunico') && `CadÚnico: ${rotuloSelecionado('cadunico')}`
+      ].filter(Boolean);
+      resumoRespostasEl.textContent = resumoPartes.length ? `Respostas consideradas · ${resumoPartes.join(' · ')}` : '';
     }
     if (listaResultados) {
       listaResultados.innerHTML = itens.map(item => `

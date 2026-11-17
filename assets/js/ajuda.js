@@ -15,10 +15,8 @@
   const erroEmailEl = formulario.querySelector('#ajuda-email-erro');
   const campoAssunto = formulario.querySelector('#ajuda-assunto');
   const erroAssuntoEl = formulario.querySelector('#ajuda-assunto-erro');
-  const editor = formulario.querySelector('[data-editor-rico]');
-  const areaEditor = editor?.querySelector('[data-editor-alvo]');
+  const campoMensagem = formulario.querySelector('#ajuda-mensagem');
   const erroMensagemEl = formulario.querySelector('#ajuda-mensagem-erro');
-  const inputEditor = formulario.querySelector('[data-input-editor]');
   const contadorMensagem = formulario.querySelector('#ajuda-mensagem-contador');
   const listaNotificacoes = document.querySelector('.menu-notificacoes__lista');
   const botaoNotificacoes = document.querySelector('.botao-icone--notificacao');
@@ -80,52 +78,13 @@
     }
   };
 
-  const obterTextoMensagem = () => (areaEditor?.textContent || '').replace(/\s+/g, ' ').trim();
+  const obterTextoMensagem = () => (campoMensagem?.value || '').replace(/\s+/g, ' ').trim();
 
   const atualizarContadorMensagem = () => {
-    if (!contadorMensagem || !areaEditor) return;
+    if (!contadorMensagem || !campoMensagem) return;
     const tamanho = obterTextoMensagem().length;
     contadorMensagem.textContent = `${tamanho} / ${MENSAGEM_MAX} caracteres (mínimo ${MENSAGEM_MIN})`;
     contadorMensagem.classList.toggle('ajuda__contador--erro', tamanho > MENSAGEM_MAX);
-  };
-
-  const sanitizarHtmlEditor = html => {
-    const template = document.createElement('template');
-    template.innerHTML = String(html ?? '');
-    const tagsPermitidas = new Set(['B', 'STRONG', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV']);
-
-    const limparNo = no => {
-      [...no.childNodes].forEach(filho => {
-        if (filho.nodeType !== Node.ELEMENT_NODE) return;
-        if (!tagsPermitidas.has(filho.tagName)) {
-          filho.replaceWith(document.createTextNode(filho.textContent || ''));
-          return;
-        }
-        [...filho.attributes].forEach(attr => filho.removeAttribute(attr.name));
-        limparNo(filho);
-      });
-    };
-
-    limparNo(template.content);
-    if (!(template.content.textContent || '').trim() && !template.content.querySelector('li')) {
-      return '';
-    }
-    return template.innerHTML.trim();
-  };
-
-  const sincronizarEditorRico = () => {
-    if (!editor || !areaEditor) return;
-    if (inputEditor) {
-      inputEditor.value = sanitizarHtmlEditor(areaEditor.innerHTML);
-    }
-    editor.querySelectorAll('[data-comando-editor]').forEach(botao => {
-      try {
-        botao.setAttribute('aria-pressed', String(document.queryCommandState(botao.dataset.comandoEditor)));
-      } catch {
-        botao.setAttribute('aria-pressed', 'false');
-      }
-    });
-    atualizarContadorMensagem();
   };
 
   const validarEmail = () => {
@@ -148,7 +107,7 @@
   };
 
   const validarMensagem = () => {
-    if (!areaEditor) return '';
+    if (!campoMensagem) return '';
     const tamanho = obterTextoMensagem().length;
     if (!tamanho) return 'Escreva a mensagem antes de enviar.';
     if (tamanho < MENSAGEM_MIN) return `A mensagem deve ter pelo menos ${MENSAGEM_MIN} caracteres.`;
@@ -179,39 +138,15 @@
     aplicarErroCampo(campoAssunto, erroAssuntoEl, validarAssunto());
   });
 
-  if (editor && areaEditor) {
-    editor.addEventListener('mousedown', evento => {
-      if (evento.target.closest('[data-comando-editor]')) {
-        evento.preventDefault();
-      }
+  if (campoMensagem) {
+    campoMensagem.addEventListener('input', () => {
+      campoMensagem.setCustomValidity('');
+      atualizarContadorMensagem();
+      aplicarErroCampo(campoMensagem, erroMensagemEl, validarMensagem());
     });
 
-    editor.addEventListener('click', evento => {
-      const botao = evento.target.closest('[data-comando-editor]');
-      if (!botao) return;
-      areaEditor.focus();
-      document.execCommand(botao.dataset.comandoEditor, false, null);
-      sincronizarEditorRico();
-      aplicarErroCampo(areaEditor, erroMensagemEl, validarMensagem());
-    });
-
-    document.addEventListener('selectionchange', () => {
-      if (document.activeElement === areaEditor || areaEditor.contains(document.activeElement)) {
-        sincronizarEditorRico();
-      }
-    });
-
-    ['input', 'keyup', 'mouseup'].forEach(tipoEvento => {
-      areaEditor.addEventListener(tipoEvento, () => {
-        sincronizarEditorRico();
-        if (tipoEvento === 'input') {
-          aplicarErroCampo(areaEditor, erroMensagemEl, validarMensagem());
-        }
-      });
-    });
-
-    areaEditor.addEventListener('blur', () => {
-      aplicarErroCampo(areaEditor, erroMensagemEl, validarMensagem());
+    campoMensagem.addEventListener('blur', () => {
+      aplicarErroCampo(campoMensagem, erroMensagemEl, validarMensagem());
     });
 
     atualizarContadorMensagem();
@@ -219,7 +154,6 @@
 
   formulario.addEventListener('submit', evento => {
     evento.preventDefault();
-    sincronizarEditorRico();
 
     const erroEmail = validarEmail();
     const erroAssunto = validarAssunto();
@@ -227,12 +161,12 @@
 
     aplicarErroCampo(campoEmail, erroEmailEl, erroEmail);
     aplicarErroCampo(campoAssunto, erroAssuntoEl, erroAssunto);
-    aplicarErroCampo(areaEditor, erroMensagemEl, erroMensagem);
+    aplicarErroCampo(campoMensagem, erroMensagemEl, erroMensagem);
 
     const primeiroErro = [
       [campoEmail, erroEmail],
       [campoAssunto, erroAssunto],
-      [areaEditor, erroMensagem]
+      [campoMensagem, erroMensagem]
     ].find(([, msg]) => Boolean(msg));
 
     if (primeiroErro) {
@@ -248,11 +182,8 @@
     formulario.reset();
     aplicarErroCampo(campoEmail, erroEmailEl, '');
     aplicarErroCampo(campoAssunto, erroAssuntoEl, '');
-    if (areaEditor) {
-      areaEditor.innerHTML = '';
-      aplicarErroCampo(areaEditor, erroMensagemEl, '');
-      sincronizarEditorRico();
-    }
+    aplicarErroCampo(campoMensagem, erroMensagemEl, '');
+    atualizarContadorMensagem();
 
     adicionarNotificacao(
       'E-mail enviado com sucesso',

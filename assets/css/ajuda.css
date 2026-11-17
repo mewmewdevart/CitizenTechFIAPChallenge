@@ -1,6 +1,5 @@
 /* Ajuda: composição alinhada ao Design System e tokens do Mutirão. */
 .conteudo-pagina.apoio.ajuda {
-  padding-bottom: 0;
   max-width: 820px;
 }
 
@@ -164,7 +163,7 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__grupo .a
   gap: 6px;
 }
 
-.ajuda__formulario input[aria-invalid="true"] {
+.ajuda__formulario :is(input, textarea)[aria-invalid="true"] {
   border-color: var(--cor-aviso-alerta-escuro);
 }
 
