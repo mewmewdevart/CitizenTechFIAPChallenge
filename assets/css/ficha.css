@@ -326,14 +326,6 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia::after {
   margin-top: 4px;
 }
 
-.ficha__cartao--saude .ficha__etiqueta--medicamento {
-  display: table;
-}
-
-.ficha__cartao--saude .ficha__etiqueta--medicamento+.ficha__etiqueta--medicamento {
-  margin-top: var(--espaco-sm);
-}
-
 .ficha__secao-cabecalho {
   display: flex;
   align-items: center;

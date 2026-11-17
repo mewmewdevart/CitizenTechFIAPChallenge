@@ -65,7 +65,8 @@
     const nomes = [...new Set(doses.map(dose => dose.itemId))];
     const medicamentos = nomes.map(nome => {
       const horarios = doses.filter(dose => dose.itemId === nome).map(dose => dose.hora);
-      return { chave: nome, nome, tipo: 'Medicamento', horarios: juntarHorarios(horarios), consumoDia: horarios.length };
+      const cadastro = estado.itensExtras?.find(item => (item.chave || item.nome) === nome) || {};
+      return { chave: nome, nome, tipo: 'Medicamento', ...cadastro, horarios: juntarHorarios(horarios), consumoDia: horarios.length };
     });
     const insumos = INSUMOS.map(item => ({ ...item, chave: item.nome }));
     const extras = (estado.itensExtras || [])
@@ -98,7 +99,7 @@
   const descreverRegistro = dose => {
     const usuario = obterUsuarioAtual();
     const quem = dose.meu ? usuario.nomeComApelido : nomeCompleto(dose.quem);
-    if (dose.estado === 'administrado') return `Administrado às ${formatarHorario(dose.horario)} · ${quem}`;
+    if (dose.estado === 'administrado') return `Administrado às ${formatarHorario(dose.horario)} · ${quem}${dose.origemExterna ? ` · Origem externa: ${dose.origemExterna}` : ''}`;
     return `Não administrado · ${quem} · ${dose.motivo || 'Motivo não informado'}`;
   };
 
@@ -211,15 +212,15 @@
     const baixos = itens.filter(item => {
       if (item.estoque === null || item.estoque === undefined) return false;
       if (item.tipo === 'Medicamento' && item.consumoDia) return item.estoque / item.consumoDia <= 3;
-      return item.tipo === 'Insumo' && item.estoque <= 5;
-    });
+      return item.estoque === 0 || (item.tipo === 'Insumo' && item.estoque <= 5);
+    }).sort((a, b) => a.estoque - b.estoque);
     const alertaEstoque = pagina.querySelector('[data-alerta-estoque]');
     if (alertaEstoque) {
       alertaEstoque.hidden = !baixos.length;
       if (baixos.length) {
         const principal = baixos[0];
         const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
-        alertaEstoque.querySelector('strong').textContent = `Estoque baixo · ${principal.nome}`;
+        alertaEstoque.querySelector('strong').textContent = `${baixos.length} item(ns) com estoque baixo · ${principal.nome}`;
         alertaEstoque.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
           ? `${plural(principal.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}`
           : `${plural(principal.estoque, 'unidade', 'unidades')} em estoque`;
@@ -228,11 +229,11 @@
     if (avisosEstoque) {
       avisosEstoque.innerHTML = baixos.length
         ? baixos.map(item => {
-          const dias = Math.floor(item.estoque / item.consumoDia);
+          const dias = item.consumoDia ? Math.floor(item.estoque / item.consumoDia) : null;
           return `<div class="estoque__aviso">
             <span class="selo selo--atencao"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Estoque baixo</span>
             <strong>${escaparHtml(item.nome)}</strong>
-            <small>${plural(item.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}</small>
+            <small>${plural(item.estoque, 'unidade', 'unidades')}${dias !== null ? ` · Previsão para ${plural(dias, 'dia', 'dias')}` : ''}</small>
           </div>`;
         }).join('')
         : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nenhum item com previsão curta.</p></div>';
@@ -362,24 +363,29 @@
     if (!dose) return;
     doseEmFoco = dose;
     prepararDialogos(dose);
+    core.prepararOrigemEstoque(dialogos.confirmar.querySelector('form[data-formulario-mvp]'), dose);
     dialogos.registrar.showModal();
   };
 
-  const concluirRegistro = (estado, detalhe) => {
+  const concluirRegistro = (estado, detalhe, origemExterna = '') => {
     if (!doseEmFoco) return;
     const dose = doseEmFoco;
     const administrada = estado === 'administrado';
     const usuario = obterUsuarioAtual();
-    registrarDose(dose.chave, administrada
-      ? { estado, quem: usuario.nomeComApelido, horario: detalhe }
-      : { estado, quem: usuario.nomeComApelido, motivo: detalhe });
-
+    if (administrada && dose.estado !== 'administrado' && obterEstoque(dose.itemId) === 0 && !origemExterna) {
+      anunciarStatus(elementoStatus, 'Estoque zerado. Confira e adicione a reposição antes de registrar a administração.');
+      abrirEstoque(dose.itemId);
+      return;
+    }
     const diario = administrada
-      ? `${usuario.nomeComApelido}: Registro de administração de ${dose.nome} (${dose.hora}) às ${formatarHorario(detalhe)}.`
+      ? `${usuario.nomeComApelido}: Registro de administração de ${dose.nome} (${dose.hora}) às ${formatarHorario(detalhe)}.${origemExterna ? ` Origem externa: ${origemExterna}` : ''}`
       : `Dose de ${dose.nome} das ${dose.hora} não administrada. Registro por ${usuario.nomeComApelido}${detalhe ? ` · ${detalhe}` : ''}.`;
 
     atualizarEstado(estadoAtual => ({
       ...estadoAtual,
+      registrosDose: { ...estadoAtual.registrosDose, [dose.chave]: administrada
+        ? { estado, quem: usuario.nomeComApelido, horario: detalhe, origemExterna }
+        : { estado, quem: usuario.nomeComApelido, motivo: detalhe } },
       reports: {
         ...estadoAtual.reports,
         [HOJE]: [
@@ -551,6 +557,12 @@
       return;
     }
     if (botao.dataset.etapaAdministracao) {
+      if (botao.dataset.etapaAdministracao === 'dialogo-confirmar-administracao' && core.obterPreferencias().confirmarDose === false && obterEstoque(doseEmFoco.itemId) !== 0) {
+        const agora = new Date();
+        concluirRegistro('administrado', `${String(agora.getHours()).padStart(2, '0')}:${String(agora.getMinutes()).padStart(2, '0')}`);
+        dialogos.registrar.close();
+        return;
+      }
       dialogos.registrar.close();
       document.getElementById(botao.dataset.etapaAdministracao)?.showModal();
       return;
@@ -598,16 +610,16 @@
 
   pagina.querySelector('[data-formulario-mvp="administrada"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
+    concluirRegistro('administrado', evento.target.elements.horario.value, evento.target.elements.origemExterna?.value.trim() || '');
     evento.target.closest('dialog')?.close();
-    concluirRegistro('administrado', evento.target.elements.horario.value || '12:05');
   });
 
   pagina.querySelector('[data-formulario-mvp="nao-administrada"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
     const motivo = evento.target.elements.motivo.value.trim();
+    concluirRegistro('nao-administrado', motivo);
     evento.target.reset();
     evento.target.closest('dialog')?.close();
-    concluirRegistro('nao-administrado', motivo);
   });
 
   pagina.querySelector('[data-formulario-mvp="estoque"]')?.addEventListener('submit', evento => {

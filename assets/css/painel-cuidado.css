@@ -124,7 +124,8 @@ html.tema--acolhedor .avatar {
   border: 2px solid var(--cor-borda-sutil);
 }
 
-[data-pagina-mvp="medicamentos"] .faixa-alerta__icone {
+[data-pagina-mvp="medicamentos"] .faixa-alerta__icone,
+[data-alerta-estoque-inicio] .faixa-alerta__icone {
   border: 0;
   background: color-mix(in srgb, currentColor 12%, transparent);
 }
@@ -638,7 +639,7 @@ html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
   }
 }
 
-@media (width < 1024px) {
+@media (width < 1150px) {
   .aviso-remedio {
     left: var(--espaco-md);
     right: var(--espaco-md);
@@ -780,7 +781,8 @@ html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
   width: 100%;
 }
 
-.meds__abas {
+.meds__abas,
+.perfil__abas {
   display: inline-flex;
   flex-wrap: wrap;
   justify-self: start;
@@ -791,7 +793,8 @@ html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
   border-radius: var(--raio-lg);
 }
 
-.meds__abas [role="tab"] {
+.meds__abas [role="tab"],
+.perfil__abas [role="tab"] {
   min-height: 38px;
   padding: 6px var(--espaco-lg);
   border: 0;
@@ -804,17 +807,20 @@ html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
   cursor: pointer;
 }
 
-.meds__abas [role="tab"][aria-selected="true"] {
+.meds__abas [role="tab"][aria-selected="true"],
+.perfil__abas [role="tab"][aria-selected="true"] {
   background: var(--cor-primaria);
   color: var(--cor-neutra-clara-02);
 }
 
-.meds__painel-estoque {
+.meds__painel-estoque,
+.perfil__painel {
   display: grid;
   gap: var(--gap-dashboard);
 }
 
-.meds__painel-estoque[hidden] {
+.meds__painel-estoque[hidden],
+.perfil__painel[hidden] {
   display: none;
 }
 
@@ -1303,10 +1309,15 @@ html.acessibilidade--alto-contraste .perfil__recado::after {
   display: grid;
   gap: var(--espaco-xs);
   padding: var(--espaco-lg);
-  border: var(--espessura-borda) solid var(--cor-aviso-atencao-escuro);
+  border: 0;
   border-radius: var(--raio-xl);
   background: var(--cor-aviso-atencao-claro);
   box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor .cuidar__faixa,
+html.acessibilidade--alto-contraste .cuidar__faixa {
+  border: var(--espessura-borda) solid var(--cor-aviso-atencao-escuro);
 }
 
 .cuidar__rotulo {
@@ -1434,9 +1445,14 @@ html.acessibilidade--alto-contraste .perfil__recado::after {
   display: flex;
   gap: var(--espaco-sm);
   padding: var(--espaco-md);
-  border: 1px solid var(--cor-aviso-info-escuro);
+  border: 0;
   border-radius: var(--raio-lg);
   background: var(--cor-aviso-info-claro);
+}
+
+html.tema--acolhedor .cuidar__retorno,
+html.acessibilidade--alto-contraste .cuidar__retorno {
+  border: var(--espessura-borda) solid var(--cor-aviso-info-escuro);
 }
 
 .cuidar__retorno i {
@@ -1464,12 +1480,12 @@ html.acessibilidade--alto-contraste .perfil__recado::after {
   appearance: none;
   flex: none;
   position: relative;
-  width: 44px;
+  width: 46px;
   height: 26px;
   margin: 0;
-  border: var(--espessura-borda) solid var(--cor-borda-controle);
-  border-radius: var(--raio-pill);
-  background: var(--cor-neutra-clara-04);
+  border: 0;
+  border-radius: var(--raio-sm);
+  background: var(--cor-neutra-media);
   cursor: pointer;
   transition: background-color var(--transicao-padrao);
 }
@@ -1477,23 +1493,27 @@ html.acessibilidade--alto-contraste .perfil__recado::after {
 .interruptor input::after {
   content: "";
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--cor-borda-controle);
-  transition: translate var(--transicao-padrao);
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: var(--cor-switch-thumb);
+  transition: transform var(--transicao-padrao);
 }
 
 .interruptor input:checked {
   background: var(--cor-primaria);
-  border-color: var(--cor-primaria);
 }
 
 .interruptor input:checked::after {
-  translate: 18px 0;
+  transform: translateX(20px);
   background: var(--cor-switch-thumb);
+}
+
+.interruptor input:focus-visible {
+  outline: var(--anel-foco);
+  outline-offset: 2px;
 }
 
 .bilhetes {
@@ -1610,9 +1630,14 @@ html.acessibilidade--alto-contraste .perfil__recado::after {
   display: grid;
   gap: var(--espaco-sm);
   padding: var(--espaco-md);
-  border: 1px solid var(--cor-aviso-alerta-escuro);
+  border: 0;
   border-radius: var(--raio-lg);
   background: var(--cor-aviso-alerta-claro);
+}
+
+html.tema--acolhedor .cuidar__alerta,
+html.acessibilidade--alto-contraste .cuidar__alerta {
+  border: var(--espessura-borda) solid var(--cor-aviso-alerta-escuro);
 }
 
 .cuidar__alerta strong {
@@ -2195,7 +2220,7 @@ button.figurinha-colada:focus-visible {
   flex-wrap: wrap;
 }
 
-@media (width < 1024px) {
+@media (width < 1150px) {
   .porta-remedios__horas button {
     min-height: var(--tamanho-alvo-toque);
     min-width: var(--tamanho-alvo-toque);

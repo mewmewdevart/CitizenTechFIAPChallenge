@@ -560,7 +560,7 @@
   color: var(--cor-texto-principal);
 }
 
-@media (width < 1024px) {
+@media (width < 1150px) {
   [data-mvp-status] {
     bottom: calc(var(--altura-barra-inferior-mobile) + env(safe-area-inset-bottom) + var(--espaco-md));
     left: var(--espaco-md);
@@ -666,4 +666,18 @@
     border-radius: 0;
     padding: 12mm 10mm;
   }
+}
+/* Ações dos fluxos existentes: reflow sem deslocar leitura e navegação. */
+[data-pagina-mvp] .painel__acoes { flex-wrap: wrap; gap: var(--espaco-sm, .5rem); }
+[data-pagina-mvp] .painel__item > .painel__acoes { min-width: 0; max-width: 100%; }
+[data-pagina-mvp] .painel__item details { max-width: 100%; overflow-wrap: anywhere; }
+[data-pagina-mvp] .painel__texto { min-width: 0; overflow-wrap: anywhere; }
+[data-contexto-documentos] { margin-block: var(--espaco-md, 1rem); }
+[data-origem-estoque] { max-width: 100%; }
+[data-origem-estoque] textarea { box-sizing: border-box; width: 100%; }
+[data-historico-lembretes] { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  [data-pagina-mvp] .painel__item > .painel__acoes { width: 100%; }
+  [data-pagina-mvp] .painel__acoes select { max-width: 100%; }
+  [data-pagina-mvp] .painel__acoes .botao { white-space: normal; }
 }

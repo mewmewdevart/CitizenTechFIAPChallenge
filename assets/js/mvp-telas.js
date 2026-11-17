@@ -41,6 +41,12 @@
     }
   };
 
+  const rascunhoSensivel = {};
+
+  if (core.obterPreferencias().sigiloDados === false) {
+    Object.values(camposSensiveis).forEach(info => { info.visivelFicha = true; });
+  }
+
   const obterValorRealSensivel = chave => obterEstado().person?.[chave] || '';
 
   const obterValorMascarado = chave => {
@@ -76,7 +82,7 @@
     const formulario = pagina.querySelector('[data-formulario-mvp="ficha"]');
     const inputForm = formulario?.elements?.[chave];
     if (inputForm) {
-      inputForm.value = info.visivelForm ? valorReal : obterValorMascarado(chave);
+      inputForm.value = info.visivelForm ? (rascunhoSensivel[chave] ?? valorReal) : obterValorMascarado(chave);
       inputForm.readOnly = !info.visivelForm;
       inputForm.title = info.visivelForm ? '' : `Clique no ícone para revelar e editar ${info.rotulo}`;
     }
@@ -267,7 +273,7 @@
   const serializarFormularioFicha = () => {
     if (!formularioFicha) return '';
     editoresRicos.sincronizarTodos(formularioFicha);
-    const dados = [...new FormData(formularioFicha).entries()].map(([k, v]) => [k, String(v)]);
+    const dados = [...new FormData(formularioFicha).entries()].map(([k, v]) => [k, k in camposSensiveis && !camposSensiveis[k].visivelForm ? (rascunhoSensivel[k] ?? obterValorRealSensivel(k)) : String(v)]);
     const previaFoto = formularioFicha.querySelector('[data-foto-previa]');
     dados.push(['__fotoRemovida', previaFoto?.dataset.fotoRemovida || '']);
     dados.push(['__fotoAtualizada', previaFoto?.dataset.fotoAtualizada || '']);
@@ -337,7 +343,7 @@
           <p>Nenhuma alergia registrada até o momento.</p>
         </div>`;
 
-    const medicamentosLista = String(person.medicamentos || '')
+    const medicamentosLista = core.obterResumoMedicamentos().join(', ')
       .split(',')
       .map(item => item.trim())
       .filter(Boolean);
@@ -518,7 +524,7 @@
           });
         }
       } else if (chave === 'medicamentos') {
-        const itens = String(valor || '').split(',').map(item => item.trim()).filter(Boolean);
+        const itens = core.obterResumoMedicamentos();
         no.innerHTML = itens.length
           ? itens.map(item => `<span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">${escaparHtml(item)}</span>`).join(' ')
           : 'Nenhum registrado';
@@ -584,6 +590,7 @@
   document.querySelector('[data-dialogo="dialogo-editar-ficha"]')?.addEventListener('click', () => {
     Object.keys(camposSensiveis).forEach(chave => {
       camposSensiveis[chave].visivelForm = false;
+      delete rascunhoSensivel[chave];
     });
     renderizarPessoa();
   });
@@ -591,6 +598,7 @@
   dialogoEditarFicha?.addEventListener('close', () => {
     Object.keys(camposSensiveis).forEach(chave => {
       camposSensiveis[chave].visivelForm = false;
+      delete rascunhoSensivel[chave];
     });
     renderizarPessoa();
   });
@@ -625,19 +633,14 @@
         if (botao.closest('#dialogo-editar-ficha')) {
           const inputForm = botao.closest('form')?.elements?.[chave];
           if (info.visivelForm && inputForm) {
-            const valorAtual = inputForm.value.trim();
-            if (valorAtual) {
-              atualizarEstado(estado => ({
-                ...estado,
-                person: { ...estado.person, [chave]: valorAtual }
-              }));
-            }
+            rascunhoSensivel[chave] = inputForm.value.trim();
           }
           info.visivelForm = !info.visivelForm;
         } else {
           info.visivelFicha = !info.visivelFicha;
         }
         sincronizarCampoSensivel(chave);
+        atualizarBotaoSalvarFicha();
       }
     }
 
@@ -773,8 +776,9 @@
     if (tipoFormulario === 'ficha') {
       const estadoAnterior = obterEstado().person;
       Object.keys(camposSensiveis).forEach(chave => {
-        const valorInformado = (campos[chave] || '').trim();
-        if (valorInformado && valorInformado !== obterValorMascarado(chave)) {
+        const valorInformado = camposSensiveis[chave].visivelForm
+          ? (campos[chave] || '').trim() : (rascunhoSensivel[chave] ?? estadoAnterior[chave] ?? '');
+        if (valorInformado !== obterValorMascarado(chave)) {
           campos[chave] = valorInformado;
         } else {
           campos[chave] = estadoAnterior[chave] || '';
@@ -852,7 +856,7 @@
             `Alergias: ${person.alergias || 'Nenhuma registrada'}`,
             `Condições: ${person.condicoes || 'Nenhuma registrada'}`
           ].join('\n'),
-          'Medicamentos de uso diário': () => person.medicamentos || 'Nenhum registrado.'
+          'Medicamentos de uso diário': () => core.obterResumoMedicamentos().join('; ') || 'Nenhum registrado.'
         };
       }
     }

@@ -186,6 +186,13 @@
       </div>
     </header>
 
+    <div class="perfil__abas" role="tablist" aria-label="Áreas do perfil">
+      <button type="button" role="tab" id="aba-perfil-dados" data-area-perfil="dados" aria-selected="true"
+        aria-controls="perfil-dados">Meu perfil</button>
+      <button type="button" role="tab" id="aba-perfil-cuidar" data-area-perfil="cuidar" aria-selected="false"
+        aria-controls="perfil-cuidar" tabindex="-1">Cuidar de quem cuida</button>
+    </div>
+    <div id="perfil-dados" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-dados">
     <section class="apoio__painel perfil__identidade" aria-labelledby="titulo-perfil">
       <div class="perfil__retrato">
         <img class="avatar avatar--grande" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="Zé da Manga"
@@ -248,6 +255,8 @@
       <div class="painel__bloco" data-recados-enviados hidden></div>
     </section>
 
+    </div>
+    <div id="perfil-cuidar" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-cuidar" hidden>
     <section class="cuidar__faixa" aria-labelledby="titulo-cuidar">
       <span class="cuidar__rotulo">Cuidar de quem cuida</span>
       <h2 id="titulo-cuidar">Quem cuida também precisa de cuidado. Este espaço é seu.</h2>
@@ -367,6 +376,7 @@
       </div>
     </div>
 
+    </div>
     <dialog class="dialogo-mvp dialogo-mvp--largo" id="dialogo-editar-perfil" aria-labelledby="titulo-editar-perfil"
       aria-describedby="subtitulo-editar-perfil">
       <div class="dialogo-mvp__cabecalho">
@@ -529,15 +539,7 @@
       </div>
       <p>Registre o turno para o qual você precisa de apoio. Nesta demonstração, o pedido fica nesta aba.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga">
-        <fieldset class="dialogo-mvp__opcoes">
-          <legend>Qual turno você quer passar?</legend>
-          <label><input type="radio" name="turno" value="Quinta, 12/11 · 19h às 24h" checked> <span><strong>Quinta,
-                12/11 · 19h às 24h</strong><br><small>Paul e Aninha estão livres</small></span></label>
-          <label><input type="radio" name="turno" value="Sexta, 13/11 · 19h às 24h"> <span><strong>Sexta, 13/11 · 19h às
-                24h</strong><br><small>Ninguém livre ainda</small></span></label>
-          <label><input type="radio" name="turno" value="Sábado, 14/11 · 19h às 24h"> <span><strong>Sábado, 14/11 · 19h
-                às 24h</strong><br><small>Paul está livre</small></span></label>
-        </fieldset>
+        <fieldset class="dialogo-mvp__opcoes" data-opcoes-folga><legend>Qual turno você quer passar?</legend></fieldset>
         <label>Recado (opcional)<textarea name="recado"
             rows="3">Preciso descansar esta semana. Alguém consegue ficar?</textarea></label>
         <div class="cuidar__retorno">

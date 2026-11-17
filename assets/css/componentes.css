@@ -116,6 +116,10 @@ button:disabled,
   background: var(--cor-fundo-pagina);
 }
 
+.painel__bloco[hidden] {
+  display: none;
+}
+
 .painel__bloco .painel__item {
   padding: var(--espaco-md) 0;
 }

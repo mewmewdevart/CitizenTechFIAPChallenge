@@ -306,12 +306,19 @@
   pagina.querySelector('[data-formulario-mvp="folga"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
     const form = evento.target;
-    const turno = form.elements.turno.value;
+    const valor = form.querySelector('[name="turno"]:checked')?.value;
+    if (!valor) { anunciarStatus(elementoStatus, 'Não há turno seu disponível para este pedido.'); return; }
+    const [dia, inicioTexto, fimTexto] = valor.split('|');
+    const inicio = Number(inicioTexto), fim = Number(fimTexto);
+    if ((obterEstado().pedidosFolga || []).some(item => item.status === 'Pendente' && item.dia === dia && item.inicio === inicio && item.fim === fim)) {
+      anunciarStatus(elementoStatus, 'Já existe um pedido pendente para este turno.'); return;
+    }
+    const turno = `${formatarDataCurta(dia)} · ${core.formatarIntervaloTurno(inicio, fim - inicio)}`;
     const recado = form.elements.recado.value.trim();
     const data = formatarDataCurta(HOJE);
     atualizarEstado(estado => ({
       ...estado,
-      pedidosFolga: [...(estado.pedidosFolga || []), { turno, recado, data, criadoEm: new Date().toISOString() }]
+      pedidosFolga: [...(estado.pedidosFolga || []), { id: `folga-${Date.now()}`, dia, inicio, fim, turno, recado, data, status: 'Pendente', criadoEm: new Date().toISOString() }]
     }));
     form.reset();
     form.closest('dialog')?.close();
@@ -334,10 +341,32 @@
           <strong>${escaparHtml(item.turno)}</strong>
           <span>${escaparHtml([item.data ? `Registrado em ${item.data}` : 'Registrado nesta sessão', item.recado].filter(Boolean).join(' · '))}</span>
         </span>
-        <span class="selo selo--info">Simulado</span>
+        <div class="painel__acoes"><span class="selo selo--info">${escaparHtml(item.status || 'Pedido antigo sem vínculo de turno')}</span>
+        ${item.status === 'Pendente' ? `<label>Substituto na simulação<select data-substituto-folga="${escaparHtml(item.id)}">${core.obterParticipantesRede().filter(p => p.nome !== obterUsuarioAtual().nomeComApelido && core.pessoaDisponivel(p.nome, item.dia, item.inicio, item.fim)).map(p => `<option value="${escaparHtml(p.nome)}">${escaparHtml(p.nome)}</option>`).join('')}</select></label><button type="button" class="botao botao--secundario" data-decidir-folga="Aceita" data-id="${escaparHtml(item.id)}">Simular aceite e transferir</button><button type="button" class="botao botao--secundario" data-decidir-folga="Recusada" data-id="${escaparHtml(item.id)}">Simular recusa</button><button type="button" class="botao botao--secundario" data-decidir-folga="Cancelada" data-id="${escaparHtml(item.id)}">Cancelar pedido</button>` : item.responsavel ? `<span>Responsável: ${escaparHtml(item.responsavel)}</span>` : ''}</div>
       </li>
     `).join('');
   };
+
+  pagina.addEventListener('click', evento => {
+    const botao = evento.target.closest('[data-decidir-folga]');
+    if (!botao) return;
+    const id = botao.dataset.id;
+    const select = [...pagina.querySelectorAll('[data-substituto-folga]')].find(el => el.dataset.substitutoFolga === id);
+    try {
+      core.resolverFolga(id, botao.dataset.decidirFolga, select?.value || '');
+      renderizarPedidosFolga(); renderizarSemanaCuidar();
+      anunciarStatus(elementoStatus, 'Pedido atualizado. Confira a responsabilidade na Agenda.');
+    } catch (erro) { anunciarStatus(elementoStatus, erro.message); }
+  });
+
+  document.querySelector('[data-dialogo="dialogo-pedir-folga"]')?.addEventListener('click', () => {
+    const turnos = SEMANA_ATUAL.filter(dia => dia >= HOJE).flatMap(dia => construirLinhaDoTempoDia(dia)
+      .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
+      .map(seg => ({ ...seg, dia })));
+    const opcoes = pagina.querySelector('[data-opcoes-folga]');
+    opcoes.innerHTML = '<legend>Qual turno você quer passar?</legend>' + (turnos.map((seg, i) =>
+      `<label><input type="radio" name="turno" required ${i === 0 ? 'checked' : ''} value="${seg.dia}|${seg.inicio}|${seg.fim}"> ${escaparHtml(formatarDataCurta(seg.dia))} · ${core.formatarIntervaloTurno(seg.inicio, seg.fim - seg.inicio)}</label>`).join('') || '<p>Você não possui turnos futuros nesta semana.</p>');
+  });
 
   const renderizarSemanaCuidar = () => {
     const estado = obterEstado();
@@ -472,6 +501,45 @@
     renderizarPerfil();
     window.dispatchEvent(new CustomEvent('mutirao:perfil-atualizado'));
     anunciarStatus(elementoStatus, 'Alterações salvas.');
+  });
+
+  const abasPerfil = [...pagina.querySelectorAll('.perfil__abas [role="tab"]')];
+  const paineisPerfil = [...pagina.querySelectorAll('.perfil__painel[role="tabpanel"]')];
+
+  const ativarAbaPerfil = aba => {
+    const painelId = aba.getAttribute('aria-controls');
+    const cuidar = aba.dataset.areaPerfil === 'cuidar';
+    for (const item of abasPerfil) {
+      const ativa = item === aba;
+      item.setAttribute('aria-selected', String(ativa));
+      item.tabIndex = ativa ? 0 : -1;
+    }
+    for (const painel of paineisPerfil) {
+      painel.hidden = painel.id !== painelId;
+    }
+    const editar = pagina.querySelector('[data-dialogo="dialogo-editar-perfil"]');
+    if (editar) editar.hidden = cuidar;
+  };
+
+  abasPerfil.forEach((aba, indice) => {
+    aba.addEventListener('click', () => ativarAbaPerfil(aba));
+    aba.addEventListener('keydown', evento => {
+      let proximo = null;
+      if (evento.key === 'ArrowRight' || evento.key === 'ArrowDown') {
+        proximo = abasPerfil[(indice + 1) % abasPerfil.length];
+      } else if (evento.key === 'ArrowLeft' || evento.key === 'ArrowUp') {
+        proximo = abasPerfil[(indice - 1 + abasPerfil.length) % abasPerfil.length];
+      } else if (evento.key === 'Home') {
+        proximo = abasPerfil[0];
+      } else if (evento.key === 'End') {
+        proximo = abasPerfil[abasPerfil.length - 1];
+      }
+      if (proximo) {
+        evento.preventDefault();
+        ativarAbaPerfil(proximo);
+        proximo.focus();
+      }
+    });
   });
 
   renderizarPedidosFolga();
