@@ -230,12 +230,6 @@ function inicializarBuscaTopo() {
   campo.setAttribute('aria-label', 'Encontrar no menu');
   campo.setAttribute('autocomplete', 'off');
 
-  const botaoFechar = document.createElement('button');
-  botaoFechar.type = 'button';
-  botaoFechar.className = 'botao-icone busca-topo__fechar';
-  botaoFechar.setAttribute('aria-label', 'Fechar pesquisa');
-  botaoFechar.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
-
   const painel = document.createElement('div');
   painel.id = 'busca-topo-painel';
   painel.className = 'busca-topo__painel';
@@ -251,7 +245,7 @@ function inicializarBuscaTopo() {
 
   painel.append(status, lista);
   gatilhoBuscaTopo.replaceWith(container);
-  container.append(gatilhoBuscaTopo, campo, botaoFechar, painel);
+  container.append(gatilhoBuscaTopo, campo, painel);
 
   function renderizarResultados() {
     const termo = campo.value.trim().toLocaleLowerCase('pt-BR');
@@ -288,11 +282,6 @@ function inicializarBuscaTopo() {
   gatilhoBuscaTopo.addEventListener('click', () => {
     const aberta = !container.classList.contains('busca-topo--aberta');
     definirBuscaAberta(aberta);
-  });
-
-  botaoFechar.addEventListener('click', () => {
-    definirBuscaAberta(false);
-    gatilhoBuscaTopo.focus();
   });
 
   campo.addEventListener('input', renderizarResultados);
