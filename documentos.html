@@ -192,6 +192,7 @@
     <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-adicionar-documento" data-titulo-dialogo-documento>Cadastrar referência de documento</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p>Relacione o documento ao atendimento para manter o histórico organizado.</p>
       <form class="formulario-mvp" data-formulario-mvp="documento" novalidate>
@@ -225,7 +226,7 @@
         <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
         <label>Nome do arquivo (opcional)
           <input type="text" name="nomeArquivo" maxlength="255" aria-describedby="ajuda-arquivo-documento">
-          <small id="ajuda-arquivo-documento">Somente o nome é salvo. O arquivo fica com você.</small>
+          <small id="ajuda-arquivo-documento">Somente o nome é salvo para essa demonstração. O arquivo fica com você.</small>
         </label>
         <p class="formulario-mvp__erro" data-erro-documento role="alert"></p>
         <div class="dialogo-mvp__acoes">
@@ -237,14 +238,17 @@
 
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhes-documento" aria-labelledby="titulo-detalhes-documento">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-detalhes-documento">Detalhes do documento</h2>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true" data-detalhes-icone><i class="fa-regular fa-file-lines"></i></span>
+          <h2 id="titulo-detalhes-documento">Detalhes do documento</h2>
+        </div>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-detalhes-pessoa>Maria das Dores (Mari)</p>
-      <div class="dialogo-mvp__detalhe-texto" data-detalhes-documento></div>
-      <div class="dialogo-mvp__acoes">
+      <div class="dialogo-mvp__secao" data-detalhes-documento></div>
+      <div class="dialogo-mvp__acoes dialogo-mvp__acoes--iguais">
         <button type="button" class="botao botao--perigo" data-excluir-documento>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-documento>Editar</button>
-        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar aos documentos</button>
         <a class="botao botao--primario" href="agenda.html" data-ver-atendimento hidden>Ver atendimento</a>
       </div>
     </dialog>

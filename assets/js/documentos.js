@@ -147,25 +147,45 @@
     if (!doc || !dialogoDetalhes || !bloco) return;
 
     documentoEmFocoId = doc.id;
+    const iconesDoc = {
+      Receita: 'fa-solid fa-file-medical',
+      Exame: 'fa-solid fa-vial',
+      Documento: 'fa-regular fa-file-lines'
+    };
+    const iconeEl = dialogoDetalhes.querySelector('[data-detalhes-icone]');
+    if (iconeEl) {
+      iconeEl.innerHTML = `<i class="${iconesDoc[doc.categoria] || 'fa-regular fa-file-lines'}" aria-hidden="true"></i>`;
+    }
     dialogoDetalhes.querySelector('#titulo-detalhes-documento').textContent = doc.titulo;
-    const pessoaEl = dialogoDetalhes.querySelector('[data-detalhes-pessoa]');
-    if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
     const dataTexto = doc.dia ? formatarDataCurta(doc.dia, true) : 'Data não informada';
-    const adicionada = doc.categoria === 'Receita' ? 'Adicionada' : 'Adicionado';
+    const pessoaEl = dialogoDetalhes.querySelector('[data-detalhes-pessoa]');
+    if (pessoaEl) pessoaEl.textContent = `${core.nomePessoaAcompanhada()} · ${doc.categoria} · ${dataTexto}`;
+    const adicionada = doc.categoria === 'Receita' ? 'Adicionada por' : 'Adicionado por';
     const compromisso = doc.compromissoId
       ? (core.obterCompromissos ? core.obterCompromissos() : (obterEstado().events || [])).find(e => e.id === doc.compromissoId)
       : null;
-    const garantirPontoFinal = texto => (/[.!?…]$/.test(texto) ? texto : `${texto}.`);
-    const linhas = [
-      `${doc.categoria} · ${dataTexto}`,
-      `${adicionada} por ${doc.autor || 'Não informado'}.`,
-      doc.localOriginal ? garantirPontoFinal(`Onde encontrar o original: ${doc.localOriginal}`) : '',
-      compromisso ? garantirPontoFinal(`Atendimento vinculado: ${formatarDataCurta(compromisso.dia)} · ${compromisso.hora.replace(':00', 'h')} · ${compromisso.titulo}`) : '',
-      doc.vinculo ? garantirPontoFinal(`Anotação: ${doc.vinculo}`) : '',
-      doc.observacoes ? doc.observacoes : '',
-      doc.nomeArquivo ? `Nome do arquivo: ${doc.nomeArquivo}` : ''
-    ].filter(Boolean);
-    bloco.innerHTML = linhas.map(linha => `<span>${escaparHtml(linha)}</span>`).join('');
+
+    const secao = (titulo, icone, texto) => texto ? `<div class="dialogo-mvp__secao">
+      <p class="dialogo-mvp__secao-titulo">${escaparHtml(titulo)}</p>
+      <div class="dialogo-mvp__linha-info">
+        <span class="dialogo-mvp__icone dialogo-mvp__icone--sm" aria-hidden="true"><i class="${icone}"></i></span>
+        <span>${escaparHtml(texto)}</span>
+      </div>
+    </div>` : '';
+
+    const textoAtendimento = compromisso
+      ? `${formatarDataCurta(compromisso.dia)} · ${compromisso.hora.replace(':00', 'h')} · ${compromisso.titulo}`
+      : (doc.vinculo || '');
+    const textoObservacoes = [doc.observacoes, doc.nomeArquivo ? `Arquivo: ${doc.nomeArquivo}` : '']
+      .filter(Boolean)
+      .join(' · ');
+
+    bloco.innerHTML = [
+      secao(adicionada, 'fa-regular fa-user', doc.autor || 'Não informado'),
+      secao('Onde encontrar o original', 'fa-regular fa-folder-open', doc.localOriginal),
+      secao('Atendimento vinculado', 'fa-regular fa-calendar', textoAtendimento),
+      secao('Observações', 'fa-regular fa-note-sticky', textoObservacoes)
+    ].filter(Boolean).join('');
     const botaoAtendimento = dialogoDetalhes.querySelector('[data-ver-atendimento]');
     if (botaoAtendimento) {
       if (compromisso) {

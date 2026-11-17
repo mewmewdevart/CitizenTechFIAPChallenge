@@ -208,26 +208,18 @@
           ? 'icone-exame.svg'
           : 'icone-consulta.svg';
         return `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/${icone}">
-          <dt><a href="agenda.html?dia=${escaparHtml(item.dia)}&compromisso=${encodeURIComponent(item.id)}">${escaparHtml(tituloDia)}</a></dt>
+          <dt><a class="ficha__linha-acao" href="agenda.html?dia=${escaparHtml(item.dia)}&compromisso=${encodeURIComponent(item.id)}">${escaparHtml(tituloDia)}</a></dt>
           <dd>${escaparHtml(subtitulo)}</dd>
         </div>`;
       }).join('');
 
       const exame = exames[0];
       const ultimoExame = exame ? `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
-        <dt>Último exame cadastrado</dt>
-        <dd><a href="${detalheExame(exame)}">Ver referência · ${escaparHtml(exame.titulo)} (${escaparHtml(formatarData(exame.dia, { day: 'numeric', month: 'short' }))})</a></dd>
+        <dt><a class="ficha__linha-acao" href="${detalheExame(exame)}">Último exame cadastrado · ${escaparHtml(exame.titulo)} (${escaparHtml(formatarData(exame.dia, { day: 'numeric', month: 'short' }))})</a></dt>
+        <dd>Ver referência em Documentos</dd>
       </div>` : '';
 
       listaResumo.innerHTML = itensHtml + ultimoExame || '<div><dt>Nenhum compromisso ou exame cadastrado</dt></div>';
-    }
-
-    const listaExames = pagina.querySelector('[data-lista-exames]');
-    if (listaExames) {
-      listaExames.innerHTML = [
-        ...eventos.map(item => `<p><a href="agenda.html?dia=${escaparHtml(item.dia)}&compromisso=${encodeURIComponent(item.id)}">${escaparHtml(formatarData(item.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</a></p>`),
-        ...exames.map(doc => `<p><a href="${detalheExame(doc)}">${escaparHtml(formatarData(doc.dia, { day: 'numeric', month: 'short' }))} · Ver referência · ${escaparHtml(doc.titulo)} (Documentos)</a></p>`)
-      ].join('') || '<p>Nenhum compromisso ou exame cadastrado.</p>';
     }
   };
 
@@ -817,14 +809,15 @@
         registrarStatus('Descreva o relato do turno antes de salvar.');
         return;
       }
-      const turno = campos.turno || 'Turno 19h–24h';
+      const turno = (campos.turno || '').trim();
       const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Manga', papel: 'Administrador' };
+      const cabecalhoPapel = turno ? `${usuario.papel} · ${turno}` : usuario.papel;
       atualizarEstado(estado => ({
         ...estado,
         reports: {
           ...estado.reports,
           [campos.dia]: [
-            [usuario.nome, `${usuario.papel} · ${turno}`, '', textoRelato, (campos.recado || '').trim()],
+            [usuario.nome, cabecalhoPapel, '', textoRelato, (campos.recado || '').trim()],
             ...(estado.reports[campos.dia] || [])
           ]
         }
