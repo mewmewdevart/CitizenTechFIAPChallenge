@@ -270,12 +270,13 @@
                 </select>
               </label>
               <label for="config-canal-notificacao">
-                Canal preferido
+                Canal preferido na demonstração
                 <select id="config-canal-notificacao" name="canalNotificacao">
                   <option value="app-email" selected>Aplicativo e e-mail</option>
                   <option value="app">Somente no aplicativo</option>
                   <option value="email">Somente por e-mail</option>
                 </select>
+                <small>Preferência salva localmente para esta demonstração; nenhum e-mail ou notificação real é enviado.</small>
               </label>
             </div>
           </div>
@@ -435,10 +436,13 @@
             <div class="configuracoes__bloco-cabecalho">
               <h3>Desvincular conta</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Como administrador atual, você precisa garantir que outro familiar
-              assumiu a gestão em Pessoas da rede antes de concluir sua saída.</p>
+            <p class="configuracoes__texto-apoio">Como administrador atual, você precisa transferir a administração para outro familiar antes de sair da rede.</p>
+            <div class="dialogo-mvp__aviso-caixa" role="note">
+              <strong>Ação indisponível nesta demonstração</strong>
+              <span>A transferência de administração não está disponível neste protótipo, portanto não é possível concluir a saída da rede por aqui.</span>
+            </div>
             <div class="configuracoes__acoes-linha">
-              <button type="button" class="botao botao--perigo" data-abrir-sair-rede>
+              <button type="button" class="botao botao--perigo" data-abrir-sair-rede disabled aria-disabled="true">
                 <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair da rede da Mari
               </button>
             </div>

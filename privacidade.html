@@ -177,19 +177,30 @@
     <div class="apoio__aviso" role="status">
       <i class="fa-solid fa-shield-halved apoio__aviso-icone" aria-hidden="true"></i>
       <div>
-        <strong>Compromisso com a LGPD (Lei nº 13.709/2018)</strong>
-        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People. Não coletamos, vendemos ou compartilhamos dados pessoais ou de saúde com terceiros para fins comerciais.</p>
+        <strong>Use dados fictícios neste protótipo</strong>
+        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People. Esta versão roda localmente no navegador, sem servidor próprio para cadastro ou compartilhamento real: não informe CPF, Cartão SUS, exames ou dados sensíveis verdadeiros.</p>
       </div>
     </div>
 
+    <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-resumo">
+      <div class="privacidade__cabecalho-card">
+        <h2 id="titulo-privacidade-resumo"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Onde cada informação fica</h2>
+      </div>
+      <ul class="privacidade__lista">
+        <li><strong>Fica nesta aba (sessão e memória):</strong> alterações simuladas na ficha, agenda, medicamentos, referências de documentos, perfil, convites e respostas do questionário permanecem apenas no navegador e somem ao encerrar a sessão.</li>
+        <li><strong>Permanece no navegador entre visitas:</strong> apenas preferências de acessibilidade (fonte, contraste, espaçamento) e o tema visual escolhido (neutro ou acolhedor).</li>
+        <li><strong>Abre ou consulta um serviço externo:</strong> a busca por CEP/cidade em <a href="direitos.html">Direitos e serviços</a> consulta as APIs públicas do ViaCEP e IBGE, e o assistente virtual (<code>ponto-bot</code>) é carregado externamente quando utilizado.</li>
+      </ul>
+    </section>
+
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-dados">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos e tratados</h2>
+        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos e papéis na demonstração</h2>
       </div>
-      <p>As informações exibidas na rotina de cuidado (turnos, medicações, documentos e ficha da pessoa acompanhada) destinam-se exclusivamente à organização familiar e apoio ao cuidador.</p>
+      <p>As informações exibidas na rotina de cuidado (turnos, medicações, referências de documentos e ficha da pessoa acompanhada) representam um cenário fictício de organização familiar.</p>
       <ul class="privacidade__lista">
-        <li><strong>Dados de saúde e documentos:</strong> informações como CPF, Cartão SUS e histórico clínico devem ser acessadas apenas por integrantes autorizados da rede de cuidado.</li>
-        <li><strong>Formulário de Ajuda:</strong> orientamos que nenhuma mensagem inserida na demonstração de Ajuda inclua diagnósticos, exames ou números de documentos pessoais.</li>
+        <li><strong>Papéis simulados localmente:</strong> os papéis exibidos na rede (como Administrador e Participante) demonstram como a divisão de acesso funciona no produto, mas todos os dados desta versão ficam apenas na sua sessão local.</li>
+        <li><strong>Formulário de Ajuda:</strong> não inclua diagnósticos, exames ou números de documentos pessoais na demonstração de Ajuda.</li>
       </ul>
     </section>
 
@@ -228,15 +239,15 @@
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-contato">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-contato"><i class="fa-regular fa-envelope" aria-hidden="true"></i> 5. Dúvidas ou solicitações</h2>
+        <h2 id="titulo-privacidade-contato"><i class="fa-regular fa-envelope" aria-hidden="true"></i> 5. Controle dos dados e limitações do protótipo</h2>
       </div>
-      <p>Caso tenha dúvidas sobre esta Política de Privacidade ou precise de apoio para ajustar suas preferências, fale com nossa equipe pela Central de Ajuda ou revise suas permissões em Configurações.</p>
+      <p>O formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a> é apenas uma simulação de interface e <strong>não envia nem processa solicitações reais de privacidade</strong>. Como os dados da rotina ficam apenas no seu navegador, basta fechar a aba para encerrar a sessão ou restaurar os padrões em Configurações.</p>
       <div class="privacidade__acoes">
-        <a class="botao botao--primario" href="ajuda.html#formulario-ajuda">
-          <i class="fa-regular fa-comment-dots" aria-hidden="true"></i> Abrir o formulário de demonstração da Ajuda
-        </a>
-        <a class="botao botao--secundario" href="configuracoes.html">
+        <a class="botao botao--primario" href="configuracoes.html">
           <i class="fa-solid fa-sliders" aria-hidden="true"></i> Gerenciar configurações
+        </a>
+        <a class="botao botao--secundario" href="ajuda.html">
+          <i class="fa-regular fa-circle-question" aria-hidden="true"></i> Ver guia de Ajuda
         </a>
       </div>
     </section>
