@@ -247,7 +247,7 @@
     const filtrados = itens.filter(item => {
       const bateTipo = filtroTipoItens === 'Todos' || item.tipo === filtroTipoItens;
       const termo = termoItens.trim().toLocaleLowerCase('pt-BR');
-      const bateTexto = !termo || `${item.nome} ${item.uso || ''}`.toLocaleLowerCase('pt-BR').includes(termo);
+      const bateTexto = !termo || `${item.nome} ${item.dose || ''} ${item.tipo || ''}`.toLocaleLowerCase('pt-BR').includes(termo);
       return bateTipo && bateTexto;
     });
 
@@ -419,6 +419,26 @@
       painel.hidden = painel.id !== painelId;
     }
   };
+
+  abas.forEach((aba, indice) => {
+    aba.addEventListener('keydown', evento => {
+      let proximo = null;
+      if (evento.key === 'ArrowRight' || evento.key === 'ArrowDown') {
+        proximo = abas[(indice + 1) % abas.length];
+      } else if (evento.key === 'ArrowLeft' || evento.key === 'ArrowUp') {
+        proximo = abas[(indice - 1 + abas.length) % abas.length];
+      } else if (evento.key === 'Home') {
+        proximo = abas[0];
+      } else if (evento.key === 'End') {
+        proximo = abas[abas.length - 1];
+      }
+      if (proximo) {
+        evento.preventDefault();
+        ativarAba(proximo);
+        proximo.focus();
+      }
+    });
+  });
 
   pagina.addEventListener('click', evento => {
     const botao = evento.target.closest('button');

@@ -267,8 +267,8 @@
 
   const obterUsuarioAtual = (estado = estadoAtual) => {
     const perfil = estado?.perfilUsuario || {};
-    const nome = (perfil.nome || 'Zé da Manga').trim();
-    const apelido = (perfil.apelido || '').trim();
+    const nome = (perfil.nome ?? 'Zé da Manga').trim() || 'Zé da Manga';
+    const apelido = (perfil.apelido ?? 'Zé').trim();
     const nomeComApelido = apelido ? `${nome} (${apelido})` : nome;
     const mascote = perfil.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     const foto = perfil.foto || '';
@@ -391,7 +391,7 @@
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
     const escala = obterEscalaDia(dia);
     const usuario = obterUsuarioAtual(estado);
-    const pessoaUsuario = { nome: usuario.nome, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
+    const pessoaUsuario = { nome: usuario.nomeComApelido, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
     const segmentos = [];
 
     for (const item of escala) {
@@ -695,9 +695,48 @@
 
   const chaveDose = (hora, nome) => `${hora}|${nome}`;
 
+  const normalizarHoraPorta = hora => {
+    const num = parseInt(String(hora || ''), 10);
+    return Number.isFinite(num) ? `${num}h` : '';
+  };
+
+  const obterGruposPortaRemedios = (estado = estadoAtual) => {
+    const grupos = PORTA_REMEDIOS.map(g => ({
+      ...g,
+      itens: g.itens.map(item => [...item])
+    }));
+    const excluidos = new Set(estado.itensExcluidos || []);
+    const usuario = obterUsuarioAtual(estado);
+
+    for (const extra of estado.itensExtras || []) {
+      if (extra?.tipo !== 'Medicamento' || !extra.horarios || excluidos.has(extra.chave || extra.nome)) continue;
+      const hora = normalizarHoraPorta(extra.horarios);
+      if (!hora) continue;
+      let grupo = grupos.find(g => g.hora === hora);
+      if (!grupo) {
+        const horaNum = parseInt(hora, 10);
+        grupo = {
+          hora,
+          momento: horaNum < 12 ? 'passado' : horaNum === 12 ? 'agora' : 'depois',
+          responsavel: usuario.nomeComApelido,
+          itens: []
+        };
+        grupos.push(grupo);
+      }
+      if (!grupo.itens.some(([nome]) => nome === extra.nome)) {
+        grupo.itens.push([extra.nome]);
+      }
+    }
+
+    return grupos
+      .map(g => ({ ...g, itens: g.itens.filter(([nome]) => !excluidos.has(nome)) }))
+      .filter(g => g.itens.length > 0)
+      .sort((a, b) => parseInt(a.hora, 10) - parseInt(b.hora, 10));
+  };
+
   const obterDoses = (estado = estadoAtual) => {
     const registros = estado.registrosDose || {};
-    return PORTA_REMEDIOS.flatMap(grupo => grupo.itens.map(([nome, base]) => {
+    return obterGruposPortaRemedios(estado).flatMap(grupo => grupo.itens.map(([nome, base]) => {
       const chave = chaveDose(grupo.hora, nome);
       const meu = registros[chave];
       const registro = meu || base || { estado: 'prevista' };
@@ -719,7 +758,7 @@
   const obterCompartimentos = (estado = estadoAtual) => {
     const doses = obterDoses(estado);
     const usuario = obterUsuarioAtual(estado);
-    return PORTA_REMEDIOS.map(grupo => {
+    return obterGruposPortaRemedios(estado).map(grupo => {
       const responsavel = grupo.responsavel === 'Zé da Manga (Zé)' ? usuario.nomeComApelido : grupo.responsavel;
       const itens = doses.filter(dose => dose.hora === grupo.hora);
       const faltam = itens.filter(dose => dose.estado !== 'administrado').length;

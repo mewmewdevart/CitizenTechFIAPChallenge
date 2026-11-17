@@ -82,18 +82,6 @@
   line-height: 1.45;
 }
 
-.painel__bloco {
-  display: grid;
-  gap: var(--espaco-sm);
-  padding: 0 var(--espaco-md);
-  border-radius: var(--raio-lg);
-  background: var(--cor-fundo-pagina);
-}
-
-.painel__bloco .painel__item {
-  padding: var(--espaco-md) 0;
-}
-
 .painel__icone {
   flex: none;
   display: grid;
@@ -132,64 +120,9 @@ html.tema--acolhedor .avatar {
   border: 2px solid var(--cor-borda-sutil);
 }
 
-.faixa-alerta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--espaco-md);
-  min-height: 68px;
-  padding: var(--espaco-md) var(--espaco-lg);
-  border: 0;
-  border-radius: var(--raio-xl);
-  background: var(--cor-aviso-alerta-claro);
-  color: var(--cor-aviso-alerta-escuro);
-}
-
-.faixa-alerta__icone {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 2px dashed currentColor;
-  border-radius: 50%;
-  font-size: 1.125rem;
-}
-
 [data-pagina-mvp="medicamentos"] .faixa-alerta__icone {
   border: 0;
   background: color-mix(in srgb, currentColor 12%, transparent);
-}
-
-.faixa-alerta__texto {
-  flex: 1 1 260px;
-  display: grid;
-  gap: 2px;
-}
-
-.faixa-alerta__texto strong {
-  font-size: var(--texto-interface);
-  font-weight: var(--peso-semibold);
-}
-
-.faixa-alerta__texto span {
-  font-size: var(--texto-legenda);
-}
-
-.faixa-alerta__acoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espaco-sm);
-}
-
-.faixa-alerta--linha {
-  border-radius: var(--raio-lg);
-  padding: var(--espaco-sm) var(--espaco-md);
-}
-
-.faixa-alerta--linha .faixa-alerta__icone {
-  width: 36px;
-  height: 36px;
 }
 
 .inicio__data {
@@ -591,6 +524,7 @@ html.tema--acolhedor .aviso-remedio {
 html.acessibilidade--alto-contraste .aviso-remedio {
   border: 2px solid #FFFFFF;
   background: #000000;
+  color: #FFFFFF;
 }
 
 @keyframes aviso-remedio-entrar {
@@ -1228,7 +1162,7 @@ html.tema--acolhedor .dose {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 406px;
+  width: min(406px, 100%);
   min-height: 96px;
   margin-right: 48px;
   padding: 18px 32px 18px 22px;
@@ -1693,45 +1627,7 @@ html.acessibilidade--alto-contraste .perfil__recado {
     width: 100%;
   }
 
-  .meds__abas {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-self: start;
-  gap: var(--espaco-xs);
-  padding: var(--espaco-xs);
-  background: var(--cor-superficie);
-  border: var(--borda-padrao);
-  border-radius: var(--raio-lg);
-}
-
-.meds__abas [role="tab"] {
-  min-height: 38px;
-  padding: 6px var(--espaco-lg);
-  border: 0;
-  border-radius: var(--raio-sm);
-  background: transparent;
-  color: var(--cor-texto-secundario);
-  font: inherit;
-  font-size: var(--texto-interface);
-  font-weight: var(--peso-semibold);
-  cursor: pointer;
-}
-
-.meds__abas [role="tab"][aria-selected="true"] {
-  background: var(--cor-primaria);
-  color: var(--cor-neutra-clara-02);
-}
-
-.meds__painel-estoque {
-  display: grid;
-  gap: var(--gap-dashboard);
-}
-
-.meds__painel-estoque[hidden] {
-  display: none;
-}
-
-.rotina__painel {
+  .rotina__painel {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
@@ -1894,11 +1790,8 @@ html.acessibilidade--alto-contraste .pote__fechado {
   font-size: var(--texto-legenda);
 }
 
-html:not(.acessibilidade--alto-contraste) .mural {
-  --fonte-manuscrita: "Gochi Hand", "Onest", cursive;
-}
-
 html.tema--acolhedor:not(.acessibilidade--alto-contraste) .mural {
+  --fonte-manuscrita: "Gochi Hand", "Onest", cursive;
   --cor-mural: #D9D9D9;
   --cor-postit-manteiga: #FFF6C8;
   --cor-postit-branco: #FFFFFF;

@@ -74,7 +74,7 @@
     <span class="barra-topo__rotulo-pessoa">Pessoa acompanhada:</span>
     <details class="seletor-pessoa">
       <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante">Maria das Dores (Mari)</div>
+      <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
@@ -83,8 +83,7 @@
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
         </summary>
-        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas"
-          aria-describedby="alerts-subtitle">
+        <section class="painel-flutuante menu-notificacoes__painel" aria-labelledby="titulo-alertas">
           <header class="menu-notificacoes__cabecalho">
             <div>
               <h2 id="titulo-alertas">Notificações</h2>
@@ -219,6 +218,13 @@
     </section>
 
     <div class="meds__painel-estoque" id="painel-estoque" role="tabpanel" aria-labelledby="aba-estoque" hidden>
+      <section class="apoio__painel" aria-labelledby="titulo-avisos-estoque">
+        <div class="painel__cartao-cabecalho">
+          <h2 id="titulo-avisos-estoque">Avisos de estoque</h2>
+          <button type="button" class="botao botao--secundario botao--pequeno" data-abrir-estoque>Atualizar estoque</button>
+        </div>
+        <div data-estoque-avisos></div>
+      </section>
       <section class="apoio__painel" aria-labelledby="titulo-itens">
         <h2 id="titulo-itens">Itens cadastrados</h2>
         <div class="itens-cadastrados__controles" data-itens-controles hidden>
@@ -321,7 +327,7 @@
         <h2 id="titulo-adicionar-item" data-titulo-dialogo-item>Adicionar item</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <p>Cadastre a rotina conforme a prescrição da Mari. Os dados abaixo são exemplos do protótipo.</p>
+      <p>Informe os dados conforme a receita médica ou embalagem.</p>
       <form class="formulario-mvp" data-formulario-mvp="item">
         <input type="hidden" name="nomeOriginal" value="">
         <label>Tipo
