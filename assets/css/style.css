@@ -458,7 +458,7 @@ html.tema--acolhedor #barra-lateral nav a:is(:hover, :active, [aria-current="pag
   font-variant-numeric: tabular-nums;
 }
 
-.cartao-status__linha + .cartao-status__linha {
+.cartao-status__linha+.cartao-status__linha {
   margin-top: var(--espaco-sm);
 }
 
@@ -467,7 +467,7 @@ html.tema--acolhedor #barra-lateral nav a:is(:hover, :active, [aria-current="pag
   height: 30px;
 }
 
-.cartao-status__linha > i {
+.cartao-status__linha>i {
   flex: none;
   display: grid;
   place-items: center;
@@ -788,6 +788,7 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
 }
 
 @media (width < 1024px) {
+
   .barra-topo,
   .conteudo-pagina {
     transition: none;
@@ -923,7 +924,7 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
   }
 
   #barra-lateral nav:first-of-type p:first-child,
-  #barra-lateral :is(a[href="index.html"], a[href="agenda.html"], a[href="medicamentos.html"]) {
+  #barra-lateral :is(a[href="home.html"], a[href="agenda.html"], a[href="medicamentos.html"]) {
     display: none;
   }
 

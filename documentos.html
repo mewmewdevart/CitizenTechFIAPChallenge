@@ -76,8 +76,8 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -89,7 +89,7 @@
 
             </div>
           </header>
-                    <ul class="menu-notificacoes__lista">
+          <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
@@ -124,12 +124,16 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
+    <a class="barra-lateral__marca" href="home.html">
       <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
@@ -140,7 +144,7 @@
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
@@ -152,23 +156,32 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Status do cuidado</h2>
       <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="documentos">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Documentos</nav>
+    <nav class="apoio__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+      Documentos</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Documentos</h1>
-        <p>Consulte referências de receitas, exames e outros documentos do cuidado da Mari. Use dados fictícios nesta demonstração.</p>
+        <p>Consulte referências de receitas, exames e outros documentos do cuidado da Mari. Use dados fictícios nesta
+          demonstração.</p>
       </div>
-      <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-documento"><i class="fa-solid fa-plus" aria-hidden="true"></i> Cadastrar referência</button>
+      <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-documento"><i
+          class="fa-solid fa-plus" aria-hidden="true"></i> Cadastrar referência</button>
     </header>
 
     <section class="apoio__painel" aria-labelledby="titulo-arquivos">
@@ -182,9 +195,11 @@
       </div>
       <div class="filtros" role="group" aria-label="Filtrar por categoria">
         <button type="button" class="filtros__opcao" data-documentos-filtro="Todos" aria-pressed="true">Todos</button>
-        <button type="button" class="filtros__opcao" data-documentos-filtro="Receita" aria-pressed="false">Receitas</button>
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Receita"
+          aria-pressed="false">Receitas</button>
         <button type="button" class="filtros__opcao" data-documentos-filtro="Exame" aria-pressed="false">Exames</button>
-        <button type="button" class="filtros__opcao" data-documentos-filtro="Documento" aria-pressed="false">Outros documentos</button>
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Documento" aria-pressed="false">Outros
+          documentos</button>
       </div>
       <div class="documentos__lista" data-documentos-lista></div>
     </section>
@@ -192,7 +207,8 @@
     <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-adicionar-documento" data-titulo-dialogo-documento>Cadastrar referência de documento</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <p>Relacione o documento ao atendimento para manter o histórico organizado.</p>
       <form class="formulario-mvp" data-formulario-mvp="documento" novalidate>
@@ -216,17 +232,21 @@
             </select>
           </label>
         </div>
-        <label>Onde encontrar o original<input type="text" name="localOriginal" placeholder="Ex.: Pasta azul na sala ou WhatsApp da Aninha"></label>
+        <label>Onde encontrar o original<input type="text" name="localOriginal"
+            placeholder="Ex.: Pasta azul na sala ou WhatsApp da Aninha"></label>
         <label>Compromisso associado na Agenda (opcional)
           <select name="compromissoId">
             <option value="">Nenhum compromisso vinculado</option>
           </select>
         </label>
-        <label>Anotação ou assunto (opcional)<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
-        <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
+        <label>Anotação ou assunto (opcional)<input type="text" name="vinculo"
+            placeholder="Ex.: Consulta na UBS de 10 nov."></label>
+        <label>Observações<textarea name="observacoes" rows="3"
+            placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
         <label>Nome do arquivo (opcional)
           <input type="text" name="nomeArquivo" maxlength="255" aria-describedby="ajuda-arquivo-documento">
-          <small id="ajuda-arquivo-documento">Somente o nome é salvo para essa demonstração. O arquivo fica com você.</small>
+          <small id="ajuda-arquivo-documento">Somente o nome é salvo para essa demonstração. O arquivo fica com
+            você.</small>
         </label>
         <p class="formulario-mvp__erro" data-erro-documento role="alert"></p>
         <div class="dialogo-mvp__acoes">
@@ -236,13 +256,16 @@
       </form>
     </dialog>
 
-    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhes-documento" aria-labelledby="titulo-detalhes-documento">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhes-documento"
+      aria-labelledby="titulo-detalhes-documento">
       <div class="dialogo-mvp__cabecalho">
         <div class="dialogo-mvp__titulo-com-icone">
-          <span class="dialogo-mvp__icone" aria-hidden="true" data-detalhes-icone><i class="fa-regular fa-file-lines"></i></span>
+          <span class="dialogo-mvp__icone" aria-hidden="true" data-detalhes-icone><i
+              class="fa-regular fa-file-lines"></i></span>
           <h2 id="titulo-detalhes-documento">Detalhes do documento</h2>
         </div>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <p data-detalhes-pessoa>Maria das Dores (Mari)</p>
       <div class="dialogo-mvp__secao" data-detalhes-documento></div>
@@ -256,11 +279,11 @@
     <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
-        aria-hidden="true"></i>Mais</button>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
 </body>
 

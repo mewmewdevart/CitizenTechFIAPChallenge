@@ -78,8 +78,8 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -129,12 +129,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html" aria-current="page"><i class="fa-regular fa-user"
               aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
+    <a class="barra-lateral__marca" href="home.html">
       <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
@@ -145,7 +146,7 @@
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
@@ -169,11 +170,11 @@
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="meu-perfil">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
-        aria-hidden="true">›</span> Meu perfil</nav>
+    <nav class="apoio__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+      Meu perfil</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Meu perfil</h1>
@@ -288,7 +289,8 @@
             <h2 id="titulo-sua-semana">Sua semana</h2>
             <small>9 a 15 de novembro</small>
           </div>
-          <p class="semana__total" data-semana-total><strong>25 horas</strong><span>em 5 noites, das 19h às 24h</span></p>
+          <p class="semana__total" data-semana-total><strong>25 horas</strong><span>em 5 noites, das 19h às 24h</span>
+          </p>
           <h3 class="cuidar__rotulo">Horas de cada um na semana</h3>
           <ul class="horas" data-horas-semana>
             <li><img class="avatar" src="assets/media/mascotes/icone-mascote-espeto.svg" alt="">
@@ -312,10 +314,11 @@
             <strong data-cuidar-alerta-titulo>A Aninha fez 6 madrugadas seguidas.</strong>
             <p data-cuidar-alerta-texto>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
             <div class="cuidar__acoes">
-              <button type="button" class="botao botao--secundario" data-abrir-recado="Aninha" data-cuidar-alerta-recado><i
-                  class="fa-regular fa-message" aria-hidden="true"></i> Mandar um recado</button>
-              <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i class="fa-regular fa-calendar"
-                  aria-hidden="true"></i> Ficar numa madrugada</a>
+              <button type="button" class="botao botao--secundario" data-abrir-recado="Aninha"
+                data-cuidar-alerta-recado><i class="fa-regular fa-message" aria-hidden="true"></i> Mandar um
+                recado</button>
+              <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i
+                  class="fa-regular fa-calendar" aria-hidden="true"></i> Ficar numa madrugada</a>
             </div>
           </div>
         </section>
@@ -372,7 +375,8 @@
           <p id="subtitulo-editar-perfil" class="dialogo-mvp__subtitulo">Zé da Manga (Zé) · Apenas você edita seus dados
             pessoais.</p>
         </div>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <form class="formulario-mvp editar-ficha" data-formulario-mvp="perfil">
         <section class="editar-ficha__secao" aria-labelledby="secao-perfil-foto">
@@ -520,7 +524,8 @@
     <dialog class="dialogo-mvp" id="dialogo-pedir-folga" aria-labelledby="titulo-pedir-folga">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-pedir-folga">Pedir uma folga</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
+              aria-hidden="true"></i></button></form>
       </div>
       <p>Registre o turno para o qual você precisa de apoio. Nesta demonstração, o pedido fica nesta aba.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga">
@@ -537,7 +542,8 @@
             rows="3">Preciso descansar esta semana. Alguém consegue ficar?</textarea></label>
         <div class="cuidar__retorno">
           <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-          <p><strong>Você não precisa explicar</strong><span>Você pode registrar o pedido sem informar o motivo.</span></p>
+          <p><strong>Você não precisa explicar</strong><span>Você pode registrar o pedido sem informar o motivo.</span>
+          </p>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
@@ -566,7 +572,7 @@
     <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i

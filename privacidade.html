@@ -75,8 +75,8 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -122,12 +122,16 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
+            perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
+              aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
+    <a class="barra-lateral__marca" href="home.html">
       <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
@@ -138,7 +142,7 @@
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
@@ -149,19 +153,26 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Status do cuidado</h2>
       <h3>Turno atual</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
+      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
+          alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
+    <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
+        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
+          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
+          aria-hidden="true"></i>Ajuda</a><button type="button"
+        class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
 
   <main class="conteudo-pagina apoio privacidade" id="conteudo">
     <nav class="apoio__trilha" aria-label="Localização">
-      <a href="index.html">Início</a> <span aria-hidden="true">›</span> <a href="configuracoes.html">Configurações</a> <span aria-hidden="true">›</span> <span aria-current="page">Privacidade e Termos</span>
+      <a href="home.html">Início</a> <span aria-hidden="true">›</span> <a href="configuracoes.html">Configurações</a>
+      <span aria-hidden="true">›</span> <span aria-current="page">Privacidade e Termos</span>
     </nav>
 
     <header class="apoio__cabecalho">
@@ -178,70 +189,108 @@
       <i class="fa-solid fa-shield-halved apoio__aviso-icone" aria-hidden="true"></i>
       <div>
         <strong>Use dados fictícios neste protótipo</strong>
-        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People. Esta versão roda localmente no navegador, sem servidor próprio para cadastro ou compartilhamento real: não informe CPF, Cartão SUS, exames ou dados sensíveis verdadeiros.</p>
+        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People. Esta versão roda
+          localmente no navegador, sem servidor próprio para cadastro ou compartilhamento real: não informe CPF, Cartão
+          SUS, exames ou dados sensíveis verdadeiros.</p>
       </div>
     </div>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-resumo">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-resumo"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Onde cada informação fica</h2>
+        <h2 id="titulo-privacidade-resumo"><i class="fa-solid fa-layer-group" aria-hidden="true"></i> Onde cada
+          informação fica</h2>
       </div>
       <ul class="privacidade__lista">
-        <li><strong>Fica nesta aba (sessão e memória):</strong> alterações simuladas na ficha, agenda, medicamentos, referências de documentos, perfil, convites e respostas do questionário permanecem apenas no navegador e somem ao encerrar a sessão.</li>
-        <li><strong>Permanece no navegador entre visitas:</strong> apenas preferências de acessibilidade (fonte, contraste, espaçamento) e o tema visual escolhido (neutro ou acolhedor).</li>
-        <li><strong>Abre ou consulta um serviço externo:</strong> a busca por CEP/cidade em <a href="direitos.html">Direitos e serviços</a> consulta as APIs públicas do ViaCEP e IBGE; já o componente do assistente virtual (<code>ponto-bot</code>) é carregado automaticamente nas páginas, e mensagens só são enviadas se você interagir com ele.</li>
+        <li><strong>Fica nesta aba (sessão e memória):</strong> alterações simuladas na ficha, agenda, medicamentos,
+          referências de documentos, perfil, convites e respostas do questionário permanecem apenas no navegador e somem
+          ao encerrar a sessão.</li>
+        <li><strong>Permanece no navegador entre visitas:</strong> apenas preferências de acessibilidade (fonte,
+          contraste, espaçamento) e o tema visual escolhido (neutro ou acolhedor).</li>
+        <li><strong>Abre ou consulta um serviço externo:</strong> a busca por CEP/cidade em <a
+            href="direitos.html">Direitos e serviços</a> consulta as APIs públicas do ViaCEP e IBGE; já o componente do
+          assistente virtual (<code>ponto-bot</code>) é carregado automaticamente nas páginas, e mensagens só são
+          enviadas se você interagir com ele.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-dados">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos e papéis na demonstração</h2>
+        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos e
+          papéis na demonstração</h2>
       </div>
-      <p>As informações exibidas na rotina de cuidado (turnos, medicações, referências de documentos e ficha da pessoa acompanhada) representam um cenário fictício de organização familiar.</p>
+      <p>As informações exibidas na rotina de cuidado (turnos, medicações, referências de documentos e ficha da pessoa
+        acompanhada) representam um cenário fictício de organização familiar.</p>
       <ul class="privacidade__lista">
-        <li><strong>Papéis simulados localmente:</strong> os papéis exibidos na rede (como Administrador e Participante) demonstram como a divisão de acesso funciona no produto, mas todos os dados desta versão ficam apenas na sua sessão local.</li>
-        <li><strong>Formulário de Ajuda:</strong> não inclua diagnósticos, exames ou números de documentos pessoais na demonstração de Ajuda.</li>
+        <li><strong>Papéis simulados localmente:</strong> os papéis exibidos na rede (como Administrador e Participante)
+          demonstram como a divisão de acesso funciona no produto, mas todos os dados desta versão ficam apenas na sua
+          sessão local.</li>
+        <li><strong>Formulário de Ajuda:</strong> não inclua diagnósticos, exames ou números de documentos pessoais na
+          demonstração de Ajuda.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-storage">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-storage"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> 2. Armazenamento local no navegador</h2>
+        <h2 id="titulo-privacidade-storage"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> 2. Armazenamento
+          local no navegador</h2>
       </div>
-      <p>O Mutirão não utiliza cookies de publicidade ou rastreamento comportamental. O armazenamento no seu dispositivo ocorre apenas para melhorar a experiência de uso:</p>
+      <p>O Mutirão não utiliza cookies de publicidade ou rastreamento comportamental. O armazenamento no seu dispositivo
+        ocorre apenas para melhorar a experiência de uso:</p>
       <ul class="privacidade__lista">
-        <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas preferências assistivas (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave <code>mutirao-acessibilidade-preferencias</code> e o tema visual escolhido (neutro ou acolhedor) na chave <code>mutirao-tema</code>.</li>
-        <li><strong>Estado da sessão (<code>sessionStorage</code>):</strong> guarda se o menu lateral está aberto ou recolhido (<code>mutirao-menu-aberto</code>), avisos locais de Ajuda e Configurações, preferências de configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha, agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v1</code>), permanecendo apenas no seu navegador até o encerramento da sessão.</li>
-        <li><strong>Dados em memória:</strong> as respostas do questionário ficam em memória. O formulário de Ajuda simula o registro e não envia nem armazena o conteúdo da mensagem.</li>
+        <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas preferências assistivas
+          (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave
+          <code>mutirao-acessibilidade-preferencias</code> e o tema visual escolhido (neutro ou acolhedor) na chave
+          <code>mutirao-tema</code>.</li>
+        <li><strong>Estado da sessão (<code>sessionStorage</code>):</strong> guarda se o menu lateral está aberto ou
+          recolhido (<code>mutirao-menu-aberto</code>), avisos locais de Ajuda e Configurações, preferências de
+          configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha,
+          agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v1</code>), permanecendo apenas
+          no seu navegador até o encerramento da sessão.</li>
+        <li><strong>Dados em memória:</strong> as respostas do questionário ficam em memória. O formulário de Ajuda
+          simula o registro e não envia nem armazena o conteúdo da mensagem.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-apis">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas e serviços externos</h2>
+        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas e serviços
+          externos</h2>
       </div>
       <p>O Mutirão utiliza recursos externos apenas em funcionalidades específicas de apoio:</p>
       <ul class="privacidade__lista">
-        <li><strong>Localização de serviços públicos (ViaCEP e IBGE):</strong> na página <a href="direitos.html">Direitos e serviços</a>, caso você opte por buscar unidades por CEP ou cidade/UF, o navegador realiza requisições diretas às APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong> para identificar o município e exibir links oficiais do SUS, CRAS e Farmácia Popular.</li>
-        <li><strong>Assistente virtual (<code>ponto-bot</code>):</strong> todas as páginas carregam o componente de atendimento automático hospedado em <code>mutirao-pontobot-frontend.vercel.app</code>. O envio de mensagens ao assistente é opcional; evite informar dados pessoais sensíveis ou documentos no chat.</li>
+        <li><strong>Localização de serviços públicos (ViaCEP e IBGE):</strong> na página <a
+            href="direitos.html">Direitos e serviços</a>, caso você opte por buscar unidades por CEP ou cidade/UF, o
+          navegador realiza requisições diretas às APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong>
+          para identificar o município e exibir links oficiais do SUS, CRAS e Farmácia Popular.</li>
+        <li><strong>Assistente virtual (<code>ponto-bot</code>):</strong> todas as páginas carregam o componente de
+          atendimento automático hospedado em <code>mutirao-pontobot-frontend.vercel.app</code>. O envio de mensagens ao
+          assistente é opcional; evite informar dados pessoais sensíveis ou documentos no chat.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-termos-uso">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-termos-uso"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> 4. Termos de uso e caráter informativo</h2>
+        <h2 id="titulo-termos-uso"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> 4. Termos de uso e
+          caráter informativo</h2>
       </div>
       <ul class="privacidade__lista">
-        <li><strong>Orientação sobre benefícios e saúde:</strong> os resultados do verificador de direitos e lembretes de medicação têm caráter exclusivamente informativo e de apoio à rotina, não substituindo avaliação médica nem atendimento oficial do SUS, INSS ou CRAS.</li>
-        <li><strong>Responsabilidade da rede:</strong> administradores da rede de cuidado devem zelar pela atualização de contatos, alergias e permissões de acesso antes de convidar novos integrantes.</li>
+        <li><strong>Orientação sobre benefícios e saúde:</strong> os resultados do verificador de direitos e lembretes
+          de medicação têm caráter exclusivamente informativo e de apoio à rotina, não substituindo avaliação médica nem
+          atendimento oficial do SUS, INSS ou CRAS.</li>
+        <li><strong>Responsabilidade da rede:</strong> administradores da rede de cuidado devem zelar pela atualização
+          de contatos, alergias e permissões de acesso antes de convidar novos integrantes.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-contato">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-contato"><i class="fa-regular fa-envelope" aria-hidden="true"></i> 5. Controle dos dados e limitações do protótipo</h2>
+        <h2 id="titulo-privacidade-contato"><i class="fa-regular fa-envelope" aria-hidden="true"></i> 5. Controle dos
+          dados e limitações do protótipo</h2>
       </div>
-      <p>O formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a> é apenas uma simulação de interface e <strong>não envia nem processa solicitações reais de privacidade</strong>. Como os dados da rotina ficam apenas no seu navegador, basta fechar a aba para encerrar a sessão; a opção “Restaurar preferências desta tela” em Configurações redefine apenas as escolhas daquele formulário.</p>
+      <p>O formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a> é apenas uma simulação de interface e
+        <strong>não envia nem processa solicitações reais de privacidade</strong>. Como os dados da rotina ficam apenas
+        no seu navegador, basta fechar a aba para encerrar a sessão; a opção “Restaurar preferências desta tela” em
+        Configurações redefine apenas as escolhas daquele formulário.</p>
       <div class="privacidade__acoes">
         <a class="botao botao--primario" href="configuracoes.html">
           <i class="fa-solid fa-sliders" aria-hidden="true"></i> Gerenciar configurações
@@ -254,11 +303,11 @@
   </main>
 
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
-    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i class="fa-solid fa-bars"
-        aria-hidden="true"></i>Mais</button>
+    <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
+        class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
 </body>
 

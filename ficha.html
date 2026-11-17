@@ -76,8 +76,8 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -126,12 +126,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
+    <a class="barra-lateral__marca" href="home.html">
       <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
@@ -142,7 +143,7 @@
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
@@ -166,11 +167,10 @@
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina ficha" id="conteudo" data-pagina-mvp="ficha">
-    <nav class="ficha__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
-        aria-hidden="true">›</span>
+    <nav class="ficha__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
       Maria das Dores (Mari)</nav>
     <header class="ficha__cabecalho">
       <div>
@@ -180,8 +180,8 @@
       <div class="ficha__acoes">
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-editar-ficha"><i
             class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar ficha</button>
-        <button type="button" class="botao botao--secundario"
-          data-dialogo="dialogo-compartilhar-resumo"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+        <button type="button" class="botao botao--secundario" data-dialogo="dialogo-compartilhar-resumo"><i
+            class="fa-solid fa-share-nodes" aria-hidden="true"></i>
           Compartilhar
           resumo</button>
         <button type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao"><i
@@ -204,7 +204,8 @@
         <p data-aviso-alergia-texto>Não administrar. Em caso de dúvida, consultar o responsável antes.</p>
       </div>
     </section>
-    <section class="cartao ficha__cartao ficha__ultimo-relato" aria-labelledby="titulo-resumo-ultimo-relato" data-resumo-ultimo-relato>
+    <section class="cartao ficha__cartao ficha__ultimo-relato" aria-labelledby="titulo-resumo-ultimo-relato"
+      data-resumo-ultimo-relato>
       <div class="ficha__secao-cabecalho">
         <h2 id="titulo-resumo-ultimo-relato">Último relato do diário</h2>
         <a class="botao botao--secundario" href="#diario">Ver histórico completo</a>
@@ -222,8 +223,7 @@
           <div>
             <dt>Condições de saúde registradas</dt>
             <dd data-pessoa-campo="condicoes"><span class="ficha__etiqueta">Epilepsia</span>
-              <span class="ficha__etiqueta">Diabetes tipo 2</span> <span
-                class="ficha__etiqueta">Asma</span> <span
+              <span class="ficha__etiqueta">Diabetes tipo 2</span> <span class="ficha__etiqueta">Asma</span> <span
                 class="ficha__etiqueta">Hipertensão arterial</span>
             </dd>
           </div>
@@ -395,8 +395,9 @@
             class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button><button class="botao botao--secundario"
           type="button" data-compartilhar="whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
           WhatsApp</button><button class="botao botao--secundario" type="button" data-compartilhar="email"><i
-            class="fa-regular fa-envelope" aria-hidden="true"></i> Abrir no e-mail</button><button class="botao botao--primario"
-          type="button" data-compartilhar="native"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+            class="fa-regular fa-envelope" aria-hidden="true"></i> Abrir no e-mail</button><button
+          class="botao botao--primario" type="button" data-compartilhar="native"><i class="fa-solid fa-share-nodes"
+            aria-hidden="true"></i>
           Compartilhar</button></div>
       <p role="status" data-status-compartilhar></p>
     </dialog>
@@ -583,15 +584,13 @@
               <input type="hidden" name="condicoes" value="Epilepsia, Diabetes tipo 2, Asma, Hipertensão arterial"
                 data-input-etiquetas="condicoes" />
               <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="condicoes">
-                <span class="ficha__etiqueta">Epilepsia <button type="button"
-                    class="editar-ficha__remover-etiqueta" aria-label="Remover Epilepsia"><i class="fa-solid fa-xmark"
-                      aria-hidden="true"></i></button></span>
+                <span class="ficha__etiqueta">Epilepsia <button type="button" class="editar-ficha__remover-etiqueta"
+                    aria-label="Remover Epilepsia"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
                 <span class="ficha__etiqueta">Diabetes tipo 2 <button type="button"
                     class="editar-ficha__remover-etiqueta" aria-label="Remover Diabetes tipo 2"><i
                       class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
-                <span class="ficha__etiqueta">Asma <button type="button"
-                    class="editar-ficha__remover-etiqueta" aria-label="Remover Asma"><i class="fa-solid fa-xmark"
-                      aria-hidden="true"></i></button></span>
+                <span class="ficha__etiqueta">Asma <button type="button" class="editar-ficha__remover-etiqueta"
+                    aria-label="Remover Asma"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
                 <span class="ficha__etiqueta">Hipertensão arterial <button type="button"
                     class="editar-ficha__remover-etiqueta" aria-label="Remover Hipertensão arterial"><i
                       class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
@@ -660,7 +659,8 @@
               <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTitulo">18/24 caracteres</small>
             </label>
             <label class="editar-ficha__campo--largo">Texto do aviso
-              <textarea name="avisoTexto" rows="2" maxlength="70">Não administrar. Em caso de dúvida, consultar o responsável antes.</textarea>
+              <textarea name="avisoTexto" rows="2"
+                maxlength="70">Não administrar. Em caso de dúvida, consultar o responsável antes.</textarea>
               <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTexto">67/70 caracteres</small>
             </label>
           </div>
@@ -680,7 +680,7 @@
       </div>
       <form class="formulario-mvp" data-formulario-mvp="relato">
         <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
-        <label>Turno  (opcional)
+        <label>Turno (opcional)
           <select name="turno">
             <option value="">Não vincular a um turno (registro geral)</option>
             <option value="Turno 00h–07h">00h–07h</option>
@@ -690,10 +690,12 @@
           </select>
         </label>
         <label>Relato do turno
-          <textarea name="relato" rows="3" placeholder="Como a Mari passou, alimentação, humor ou intercorrências..." required></textarea>
+          <textarea name="relato" rows="3" placeholder="Como a Mari passou, alimentação, humor ou intercorrências..."
+            required></textarea>
         </label>
         <label>Recado para o próximo turno (opcional)
-          <textarea name="recado" rows="2" placeholder="Orientações ou lembretes para quem assume o próximo turno"></textarea>
+          <textarea name="recado" rows="2"
+            placeholder="Orientações ou lembretes para quem assume o próximo turno"></textarea>
         </label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
@@ -704,7 +706,7 @@
     <p role="status" class="ficha__status-geral" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i

@@ -55,7 +55,7 @@ const CHAVE_MENU_STORAGE = 'mutirao-menu-aberto';
 let gatilhoMenu = alternarMenu;
 
 function obterNomePagina(href) {
-  return new URL(href, location.href).pathname.split('/').pop() || 'index.html';
+  return new URL(href, location.href).pathname.split('/').pop() || 'home.html';
 }
 
 function obterEstadoInicialMenuDesktop() {
@@ -82,7 +82,7 @@ function definirMenu(aberto, persistir = false) {
 }
 
 function atualizarPaginaAtual() {
-  const paginaAtual = location.pathname.split('/').pop() || 'index.html';
+  const paginaAtual = location.pathname.split('/').pop() || 'home.html';
   for (const link of [...linksMenu, ...atalhosInferiores]) {
     if (obterNomePagina(link.href) === paginaAtual) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
@@ -154,7 +154,7 @@ function tocarSomNotificacao() {
   if (!preferenciaAtiva('notificacoesSom', true)) return;
   try {
     somNotificacao.currentTime = 0;
-    somNotificacao.play().catch(() => {});
+    somNotificacao.play().catch(() => { });
   } catch {
     // Ignora caso o navegador bloqueie áudio antes de interação.
   }
@@ -209,7 +209,7 @@ function renderizarNotificacoes() {
     if (!lida) item.dataset.naoLida = 'true';
     const link = document.createElement('a');
     link.className = 'notificacao__link';
-    link.href = destino || 'index.html';
+    link.href = destino || 'home.html';
     const img = document.createElement('img');
     img.className = 'notificacao__avatar';
     img.src = resolverAvatarNotificacao(avatar, titulo, descricao);
@@ -308,15 +308,15 @@ const criarDialogoSair = () => {
   dialogo.setAttribute('aria-labelledby', 'titulo-sair-conta');
   dialogo.innerHTML = `
     <div class="dialogo-mvp__cabecalho">
-      <h2 id="titulo-sair-conta">Voltar ao Início?</h2>
+      <h2 id="titulo-sair-conta">Sair da conta?</h2>
       <button type="button" class="botao-icone" data-cancelar-saida aria-label="Fechar">
-        <i class="ti ti-x" aria-hidden="true"></i>
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
       </button>
     </div>
-    <p>As alterações da demonstração continuam disponíveis nesta aba.</p>
+    <p>Você voltará para a tela de entrada. As alterações da demonstração continuam salvas nesta aba.</p>
     <div class="dialogo-mvp__acoes">
       <button type="button" class="botao botao--secundario" data-cancelar-saida>Cancelar</button>
-      <button type="button" class="botao botao--perigo" data-confirmar-saida>Voltar ao Início</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-saida>Sair</button>
     </div>
   `;
   dialogo.addEventListener('click', evento => {

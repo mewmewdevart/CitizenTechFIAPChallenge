@@ -76,8 +76,8 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -89,7 +89,7 @@
 
             </div>
           </header>
-                    <ul class="menu-notificacoes__lista">
+          <ul class="menu-notificacoes__lista">
             <li class="notificacao notificacao--alerta">
               <a class="notificacao__link" href="agenda.html">
                 <div>
@@ -127,12 +127,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
+    <a class="barra-lateral__marca" href="home.html">
       <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
@@ -143,7 +144,7 @@
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
@@ -159,7 +160,8 @@
           alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a
@@ -167,11 +169,11 @@
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="direitos">
-    <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
-        aria-hidden="true">›</span> Direitos e serviços</nav>
+    <nav class="apoio__trilha" aria-label="Localização"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+      Direitos e serviços</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Direitos e serviços</h1>
@@ -200,15 +202,17 @@
           <p class="direitos-banner__descricao">Responda a 7 perguntas rápidas sobre a rotina, renda, saúde e cadastro
             dela para descobrir quais benefícios e serviços do SUS/INSS podem se encaixar melhor.</p>
           <div class="direitos-simulador__acoes">
-            <a class="botao direitos-banner__cta" href="#localidade-servicos"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Encontrar serviços perto de mim</a>
-            <button type="button" class="botao direitos-banner__secundario" data-simulador-iniciar>Consultar possíveis benefícios <i
-                class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <a class="botao direitos-banner__cta" href="#localidade-servicos"><i class="fa-solid fa-location-dot"
+                aria-hidden="true"></i> Encontrar serviços perto de mim</a>
+            <button type="button" class="botao direitos-banner__secundario" data-simulador-iniciar>Consultar possíveis
+              benefícios <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </div>
         <div class="direitos-banner__arte" aria-hidden="true">
           <picture>
             <source srcset="assets/media/ilustracoes/idosa-cuidadores-mascotes.webp" type="image/webp" />
-            <img src="assets/media/ilustracoes/idosa-cuidadores-mascotes.png" alt="" width="840" height="672" loading="lazy" />
+            <img src="assets/media/ilustracoes/idosa-cuidadores-mascotes.png" alt="" width="840" height="672"
+              loading="lazy" />
           </picture>
         </div>
       </div>
@@ -240,12 +244,16 @@
             <h3 id="pergunta-renda" tabindex="-1">Qual é a renda por pessoa da casa?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-renda"
               data-simulador-grupo="renda">
-              <button type="button" data-simulador-valor="ate-um-quarto" aria-pressed="false">Até 1/4 do salário mínimo</button>
-              <button type="button" data-simulador-valor="ate-meio" aria-pressed="false">Acima de 1/4 e até 1/2 do salário mínimo</button>
-              <button type="button" data-simulador-valor="acima-meio" aria-pressed="false">Acima de 1/2 do salário mínimo</button>
+              <button type="button" data-simulador-valor="ate-um-quarto" aria-pressed="false">Até 1/4 do salário
+                mínimo</button>
+              <button type="button" data-simulador-valor="ate-meio" aria-pressed="false">Acima de 1/4 e até 1/2 do
+                salário mínimo</button>
+              <button type="button" data-simulador-valor="acima-meio" aria-pressed="false">Acima de 1/2 do salário
+                mínimo</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">Selecione a faixa aproximada. A composição da família e a renda são verificadas pelo órgão responsável.</p>
+            <p class="direitos-simulador__nota">Selecione a faixa aproximada. A composição da família e a renda são
+              verificadas pelo órgão responsável.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="2" hidden>
@@ -286,11 +294,14 @@
             <h3 id="pergunta-saude" tabindex="-1">Usa medicamentos de alto custo ou precisa de reabilitação?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-saude"
               data-simulador-grupo="saudeEspecializada">
-              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, alto custo ou reabilitação</button>
-              <button type="button" data-simulador-valor="basico" aria-pressed="false">Só medicamentos comuns (UBS/Farmácia)</button>
+              <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, alto custo ou
+                reabilitação</button>
+              <button type="button" data-simulador-valor="basico" aria-pressed="false">Só medicamentos comuns
+                (UBS/Farmácia)</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">Inclui medicamentos do CEAF, fisioterapia, órteses, próteses e meios auxiliares no SUS.</p>
+            <p class="direitos-simulador__nota">Inclui medicamentos do CEAF, fisioterapia, órteses, próteses e meios
+              auxiliares no SUS.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="6" hidden>
@@ -298,10 +309,12 @@
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-tfd"
               data-simulador-grupo="tratamentoFora">
               <button type="button" data-simulador-valor="sim" aria-pressed="false">Sim, faz tratamento fora</button>
-              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não, atende na própria cidade</button>
+              <button type="button" data-simulador-valor="nao" aria-pressed="false">Não, atende na própria
+                cidade</button>
               <button type="button" data-simulador-valor="nao-sei" aria-pressed="false">Não sei</button>
             </div>
-            <p class="direitos-simulador__nota">O TFD pode ajudar com transporte e diárias quando o tratamento não existe no município.</p>
+            <p class="direitos-simulador__nota">O TFD pode ajudar com transporte e diárias quando o tratamento não
+              existe no município.</p>
           </article>
         </div>
 
@@ -310,7 +323,8 @@
               class="fa-solid fa-arrow-left" aria-hidden="true"></i> <span>Voltar ao início</span></button>
           <button type="button" class="botao botao--primario" data-simulador-proximo disabled>Próxima pergunta <i
               class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-          <button type="submit" class="botao botao--primario" data-simulador-concluir hidden disabled>Ver resultado da triagem <i class="fa-solid fa-check" aria-hidden="true"></i></button>
+          <button type="submit" class="botao botao--primario" data-simulador-concluir hidden disabled>Ver resultado da
+            triagem <i class="fa-solid fa-check" aria-hidden="true"></i></button>
         </div>
       </form>
 
@@ -318,7 +332,8 @@
         <div class="direitos-resumo__cabecalho">
           <span class="selo selo--info">Resultado estimado · Maria das Dores (Mari)</span>
           <h2 data-simulador-titulo tabindex="-1"></h2>
-        <p class="direitos-simulador__nota">Triagem informativa. A concessão e os critérios devem ser confirmados nos canais oficiais.</p>
+          <p class="direitos-simulador__nota">Triagem informativa. A concessão e os critérios devem ser confirmados nos
+            canais oficiais.</p>
           <p class="direitos-simulador__nota" data-simulador-resumo-respostas></p>
         </div>
         <ul class="direitos-simulador__resultados" data-simulador-resultados></ul>
@@ -392,7 +407,8 @@
             <span class="apoio__icone" aria-hidden="true"><i class="fa-solid fa-people-roof"></i></span>
             <div class="direitos-localidade__item-texto">
               <h3>CRAS e CadÚnico</h3>
-              <p data-localidade-cras-desc>Localize o CRAS do município para fazer ou atualizar o Cadastro Único e BPC.</p>
+              <p data-localidade-cras-desc>Localize o CRAS do município para fazer ou atualizar o Cadastro Único e BPC.
+              </p>
             </div>
             <a class="botao botao--secundario botao--pequeno" target="_blank" rel="noopener noreferrer"
               data-localidade-link-cras>Ver no mapa</a>
@@ -417,9 +433,9 @@
               <p>Canal gratuito para pedir orientação e registrar solicitações ou reclamações sobre o SUS.</p>
             </div>
             <a class="botao botao--secundario botao--pequeno"
-              href="https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvsus"
-              target="_blank" rel="noopener noreferrer"
-              aria-label="Abrir canal oficial da Ouvidoria do SUS (abre em nova aba)">Acessar OuvSUS</a>
+              href="https://www.gov.br/saude/pt-br/canais-de-atendimento/ouvsus" target="_blank"
+              rel="noopener noreferrer" aria-label="Abrir canal oficial da Ouvidoria do SUS (abre em nova aba)">Acessar
+              OuvSUS</a>
           </article>
         </div>
       </div>
@@ -430,7 +446,7 @@
     <p role="status" data-mvp-status></p>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i

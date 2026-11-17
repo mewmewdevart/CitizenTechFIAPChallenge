@@ -77,8 +77,8 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
-          class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
+          aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
           <i class="fa-regular fa-bell" aria-hidden="true"></i>
@@ -128,12 +128,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html" aria-current="page"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button>
+        </div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
-    <a class="barra-lateral__marca" href="index.html">
+    <a class="barra-lateral__marca" href="home.html">
       <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
@@ -144,7 +145,7 @@
     </a>
     <nav aria-label="Menu principal">
       <p>Rotina de cuidado</p>
-      <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+      <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
       <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
       <p>Recursos de apoio</p>
@@ -168,11 +169,11 @@
           class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i
           class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio configuracoes" id="conteudo">
     <nav class="apoio__trilha" aria-label="Localização">
-      <a href="index.html">Início</a> <span aria-hidden="true">›</span> <span aria-current="page">Configurações</span>
+      <a href="home.html">Início</a> <span aria-hidden="true">›</span> <span aria-current="page">Configurações</span>
     </nav>
 
     <header class="apoio__cabecalho">
@@ -286,7 +287,8 @@
                   <option value="app">Somente no aplicativo</option>
                   <option value="email">Somente por e-mail</option>
                 </select>
-                <small>Preferência salva localmente para esta demonstração; nenhum e-mail ou notificação real é enviado.</small>
+                <small>Preferência salva localmente para esta demonstração; nenhum e-mail ou notificação real é
+                  enviado.</small>
               </label>
             </div>
           </div>
@@ -446,10 +448,12 @@
             <div class="configuracoes__bloco-cabecalho">
               <h3>Desvincular conta</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Como administrador atual, você precisa transferir a administração para outro familiar antes de sair da rede.</p>
+            <p class="configuracoes__texto-apoio">Como administrador atual, você precisa transferir a administração para
+              outro familiar antes de sair da rede.</p>
             <div class="dialogo-mvp__aviso-caixa" role="note">
               <strong>Ação indisponível nesta demonstração</strong>
-              <span>A transferência de administração não está disponível neste protótipo, portanto não é possível concluir a saída da rede por aqui.</span>
+              <span>A transferência de administração não está disponível neste protótipo, portanto não é possível
+                concluir a saída da rede por aqui.</span>
             </div>
             <div class="configuracoes__acoes-linha">
               <button type="button" class="botao botao--perigo" data-abrir-sair-rede disabled aria-disabled="true">
@@ -460,9 +464,11 @@
         </section>
 
         <div class="configuracoes__rodape">
-          <p>Clique em “Salvar alterações” para aplicar suas preferências nesta sessão ou restaure apenas as escolhas desta tela.</p>
+          <p>Clique em “Salvar alterações” para aplicar suas preferências nesta sessão ou restaure apenas as escolhas
+            desta tela.</p>
           <div class="configuracoes__rodape-botoes">
-            <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar preferências desta tela</button>
+            <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar preferências desta
+              tela</button>
             <button type="submit" class="botao botao--primario">Salvar alterações</button>
           </div>
         </div>
@@ -487,7 +493,7 @@
     </div>
   </dialog>
   <nav class="barra-inferior" aria-label="Atalhos principais">
-    <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
+    <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
     <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i

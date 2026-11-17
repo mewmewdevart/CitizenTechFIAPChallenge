@@ -143,7 +143,7 @@
           descricao: 'Verificar cobertura do Convênio Vida Plena antes de marcar · Beatriz da Silva (Bea)',
           icone: 'icone-receita.svg',
           concluida: true,
-          href: 'index.html#passagem-cuidado',
+          href: 'home.html#passagem-cuidado',
           rotuloAcao: 'Ver passagem'
         },
         {
@@ -461,7 +461,7 @@
 
   const inicializarEditoresRicos = raiz => {
     if (!raiz) {
-      return { sincronizarTodos: () => {}, limparTodos: () => {} };
+      return { sincronizarTodos: () => { }, limparTodos: () => { } };
     }
 
     const sincronizarEditor = editor => {
@@ -1101,8 +1101,10 @@
       let grupo = grupos.find(item => item.hora === hora);
       if (!grupo) {
         const horaNum = parseInt(hora, 10);
-        grupo = { hora, momento: horaNum < 12 ? 'passado' : horaNum === 12 ? 'agora' : 'depois',
-          responsavel: usuario.nomeComApelido, itens: [] };
+        grupo = {
+          hora, momento: horaNum < 12 ? 'passado' : horaNum === 12 ? 'agora' : 'depois',
+          responsavel: usuario.nomeComApelido, itens: []
+        };
         grupos.push(grupo);
       }
       if (!grupo.itens.some(([chave]) => chave === id)) grupo.itens.push([id]);
@@ -1182,13 +1184,17 @@
   const reporEstoque = (id, quantidade, observacao = '') => {
     if (!Number.isInteger(quantidade) || quantidade < 1) return estadoAtual;
     return atualizarEstado(estado => {
-      const anotacao = { quantidade, autor: obterUsuarioAtual(estado).nomeComApelido,
-        dia: HOJE, observacao: observacao.trim() };
+      const anotacao = {
+        quantidade, autor: obterUsuarioAtual(estado).nomeComApelido,
+        dia: HOJE, observacao: observacao.trim()
+      };
       return {
         ...estado,
         estoqueBase: definirSaldoEstoque(estado, id, (obterEstoque(id, estado) ?? 0) + quantidade),
-        reposicoesEstoque: { ...estado.reposicoesEstoque,
-          [id]: [anotacao, ...(estado.reposicoesEstoque?.[id] || [])] }
+        reposicoesEstoque: {
+          ...estado.reposicoesEstoque,
+          [id]: [anotacao, ...(estado.reposicoesEstoque?.[id] || [])]
+        }
       };
     });
   };

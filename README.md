@@ -31,7 +31,7 @@ A proposta centraliza essas informações em um único espaço compartilhado, fa
 
 ## 📁 Estrutura do Projeto
 
-O painel é uma aplicação multipágina em HTML, CSS e JavaScript. `index.html` abre o Início. As outras páginas ficam na raiz, e os estilos, scripts e imagens ficam em `assets/`.
+O painel é uma aplicação multipágina em HTML, CSS e JavaScript. `home.html` abre o Início. As outras páginas ficam na raiz, e os estilos, scripts e imagens ficam em `assets/`.
 
 O cenário de demonstração usa 10 de novembro de 2026 como referência. Registros de cuidado e preferências da sessão ficam na aba atual. Convites e mensagens da Ajuda são simulados, e Documentos cadastra referências sem guardar anexos.
 
@@ -41,7 +41,7 @@ CitizenTechFIAPChallenge/
 │   ├── css/       # Estilos compartilhados e por seção
 │   ├── js/        # Scripts e interações da página
 │   └── media/     # Logos, ícones e imagens
-├── index.html     # Página principal
+├── home.html     # Página principal
 └── README.md      # Visão geral e instruções do projeto
 ```
 
@@ -63,7 +63,7 @@ CitizenTechFIAPChallenge/
    cd CitizenTechFIAPChallenge
    ```
 
-2. Abra o `index.html` no navegador. Se estiver usando o VS Code, você também pode abrir o arquivo com a extensão **Live Server**.
+2. Abra o `home.html` no navegador. Se estiver usando o VS Code, você também pode abrir o arquivo com a extensão **Live Server**.
 
 ## 👥 Integrantes — Grupo Ctrl + People
 
