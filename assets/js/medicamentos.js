@@ -157,7 +157,7 @@
     proxima.innerHTML = `<ul class="painel__lista">${grupo.itens.filter(dose => dose.estado === 'prevista').map(dose => `<li class="painel__item">
       <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
       <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>Prevista para ${escaparHtml(dose.hora)} · ${escaparHtml(grupo.responsavel || 'Turno sem cobertura')}</span></span>
-      <button type="button" class="botao botao--secundario" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar administração</button>
+      <button type="button" class="botao botao--primario" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar administração</button>
     </li>`).join('')}</ul>`;
   };
 
@@ -169,7 +169,10 @@
   let mostrarTodosRegistros = false;
 
   const renderizarRegistros = grupos => {
-    const registradas = grupos.flatMap(grupo => grupo.itens).filter(dose => dose.estado !== 'prevista').reverse();
+    const registradas = grupos.flatMap(grupo => grupo.itens)
+      .filter(dose => dose.estado !== 'prevista')
+      .reverse()
+      .sort((a, b) => Number(a.estado === 'administrado') - Number(b.estado === 'administrado'));
     const filtrados = registradas.filter(dose => {
       const bateEstado = filtroEstadoRegistros === 'Todos' || dose.estado === filtroEstadoRegistros;
       const termo = core.normalizarBusca(termoRegistros);
@@ -194,10 +197,10 @@
     }
 
     listaRegistros.innerHTML = visiveis.length
-      ? visiveis.map(dose => `<li class="painel__item">
+      ? visiveis.map(dose => `<li class="painel__item${dose.estado === 'administrado' ? ' meds__registro--concluido' : ''}">
         <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
         <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
-        ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar agora</button>` : ''}
+        ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Atualizar registro</button>` : ''}
       </li>`).join('')
       : '<li class="estado-vazio"><strong>Nenhum registro encontrado</strong><p>Tente outro filtro ou termo de busca.</p></li>';
   };
@@ -314,6 +317,22 @@
     if (horaEl) horaEl.textContent = `Registro às ${horaAtual}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
       dialogo.querySelector('[data-dose-previsto]').textContent = descreverDoseMari(dose);
+    }
+    const estoqueAtual = obterEstoque(dose.itemId);
+    const temEstadoAnterior = dose.estado === 'nao-administrado';
+    const resumoAnterior = [dose.motivo, dose.quem && `registrado por ${dose.quem}`].filter(Boolean).join(' · ');
+    const efeitoSaldo = estoqueAtual !== null
+      ? ` e desconta 1 unidade do estoque (saldo atual: ${estoqueAtual} → novo saldo: ${Math.max(0, estoqueAtual - 1)})`
+      : '';
+    for (const dialogo of [dialogos.registrar, dialogos.confirmar]) {
+      const caixaAnterior = dialogo?.querySelector('[data-dose-estado-anterior]');
+      if (!caixaAnterior) continue;
+      caixaAnterior.hidden = !temEstadoAnterior;
+      if (temEstadoAnterior) {
+        caixaAnterior.querySelector('[data-dose-estado-anterior-titulo]').textContent = 'Registro anterior: Não administrada';
+        caixaAnterior.querySelector('[data-dose-estado-anterior-detalhe]').textContent =
+          `${resumoAnterior ? `${resumoAnterior}. ` : ''}Registrar como administrada substitui o estado anterior desta dose (sem criar uma segunda dose)${efeitoSaldo}.`;
+      }
     }
     dialogos.confirmar.querySelector('[name="horario"]').value = `${dose.hora.replace('h', '').padStart(2, '0')}:05`;
   };
