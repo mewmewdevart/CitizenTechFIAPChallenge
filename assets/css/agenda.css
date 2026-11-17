@@ -33,7 +33,7 @@ body.menu-fechado .conteudo-pagina.agenda {
   gap: var(--espaco-md) var(--espaco-lg);
 }
 
-.agenda__cabecalho > div:first-child {
+.agenda__cabecalho>div:first-child {
   flex: 1 1 380px;
   min-width: 0;
 }
@@ -115,7 +115,7 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
   padding: var(--espaco-md);
 }
 
-.agenda__painel > h2 {
+.agenda__painel>h2 {
   font-size: var(--texto-titulo-cartao);
   line-height: 1.4;
   font-weight: var(--peso-semibold);
@@ -217,13 +217,13 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
   display: none;
 }
 
-.agenda__tarefas > .agenda__lacuna {
+.agenda__tarefas>.agenda__lacuna {
   margin: 0 calc(var(--espaco-lg) * -1) var(--espaco-md);
   padding: var(--espaco-md) var(--espaco-lg);
   border-radius: 0;
 }
 
-.agenda__lacuna > div {
+.agenda__lacuna>div {
   flex: 1;
   min-width: 0;
 }
@@ -256,9 +256,13 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
   gap: var(--espaco-md);
   align-items: flex-start;
   min-width: 0;
+
+  background: var(--cor-neutra-clara-01);
+  border-radius: var(--raio-lg);
+  padding: var(--espaco-md);
 }
 
-.agenda__tarefa > div {
+.agenda__tarefa>div {
   flex: 1;
   min-width: 0;
 }
@@ -278,7 +282,13 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
   height: 40px;
   flex: none;
   background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
   border-radius: var(--raio-sm);
+}
+
+.agenda__tarefa-icone i {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .agenda__avatar {
@@ -294,7 +304,7 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 .agenda__preparacao {
-  margin: var(--espaco-sm) 0 var(--espaco-sm) 52px;
+  margin: var(--espaco-sm) 0 0;
 }
 
 .agenda__preparacao strong {
@@ -308,9 +318,9 @@ html.tema--acolhedor .agenda__avatar {
   color: var(--cor-texto-secundario);
 }
 
-[data-tarefas-diarias] > .agenda__tarefa + .agenda__tarefa,
-.agenda__tarefas-concluidas > .agenda__tarefa + .agenda__tarefa,
-.agenda__evento + .agenda__evento {
+[data-tarefas-diarias]>.agenda__tarefa+.agenda__tarefa,
+.agenda__tarefas-concluidas>.agenda__tarefa+.agenda__tarefa,
+.agenda__evento+.agenda__evento {
   margin-top: var(--espaco-md);
 }
 
@@ -327,7 +337,7 @@ html.tema--acolhedor .agenda__avatar {
   color: var(--cor-texto-secundario);
 }
 
-[data-eventos] + [data-tarefas-diarias]:not([hidden]) {
+[data-eventos]+[data-tarefas-diarias]:not([hidden]) {
   margin-top: var(--espaco-md);
 }
 
@@ -363,8 +373,8 @@ html.tema--acolhedor .agenda__avatar {
   text-align: left;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: var(--borda-controle);
-  border-radius: var(--raio-md);
+border: var(--borda-padrao);
+    border-radius: var(--raio-xl);
   cursor: pointer;
 }
 
@@ -433,7 +443,7 @@ html.tema--acolhedor .agenda__avatar {
   gap: var(--espaco-sm);
 }
 
-.agenda__detalhes-lista > div {
+.agenda__detalhes-lista>div {
   padding: var(--espaco-sm) 0;
   border-bottom: var(--borda-padrao);
 }
@@ -489,7 +499,7 @@ html.tema--acolhedor .agenda__avatar {
   border-bottom: 0;
 }
 
-.agenda__turno > div:not(.agenda__turno-acoes) {
+.agenda__turno>div:not(.agenda__turno-acoes) {
   flex: 1;
   min-width: 0;
 }
@@ -499,14 +509,14 @@ html.tema--acolhedor .agenda__avatar {
   flex: none;
 }
 
-.agenda__descobertos > h2 {
+.agenda__descobertos>h2 {
   font-size: var(--texto-interface);
   padding: 0;
   border: 0;
   margin-bottom: var(--espaco-xs);
 }
 
-.agenda__descobertos > p {
+.agenda__descobertos>p {
   font-size: var(--texto-legenda);
   color: var(--cor-texto-secundario);
   margin-bottom: var(--espaco-sm);
@@ -533,7 +543,7 @@ html.tema--acolhedor .agenda__avatar {
   padding-bottom: 0;
 }
 
-.agenda__link-lacuna > span:first-child {
+.agenda__link-lacuna>span:first-child {
   font-size: var(--texto-legenda);
   font-weight: var(--peso-semibold);
 }
@@ -569,18 +579,20 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 @media (max-width: 1280px) {
+
   .agenda__tarefa,
   .agenda__lacuna {
     flex-wrap: wrap;
   }
 
-  .agenda__tarefa > .botao,
-  .agenda__lacuna > .botao {
+  .agenda__tarefa>.botao,
+  .agenda__lacuna>.botao {
     margin-left: 52px;
   }
 }
 
 @media (max-width: 900px) {
+
   .agenda__visao-geral,
   .agenda__inferior {
     grid-template-columns: minmax(0, 1fr);
@@ -602,7 +614,7 @@ html.tema--acolhedor .agenda__avatar {
     padding: var(--espaco-md);
   }
 
-  .agenda__tarefas > .agenda__lacuna {
+  .agenda__tarefas>.agenda__lacuna {
     margin: 0 calc(var(--espaco-md) * -1) var(--espaco-md);
     padding: var(--espaco-md);
   }
@@ -617,6 +629,7 @@ html.tema--acolhedor .agenda__avatar {
 }
 
 @media (max-width: 600px) {
+
   .agenda__acoes,
   .agenda__turno .agenda__turno-acoes {
     width: 100%;
@@ -638,15 +651,11 @@ html.tema--acolhedor .agenda__avatar {
     text-align: center;
   }
 
-  .agenda__tarefa > .botao,
-  .agenda__lacuna > .botao,
+  .agenda__tarefa>.botao,
+  .agenda__lacuna>.botao,
   .agenda__turno .botao,
-  .dialogo-mvp > .botao {
+  .dialogo-mvp>.botao {
     width: 100%;
-    margin-left: 0;
-  }
-
-  .agenda__preparacao {
     margin-left: 0;
   }
 }
@@ -656,4 +665,3 @@ html.tema--acolhedor .agenda__avatar {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-

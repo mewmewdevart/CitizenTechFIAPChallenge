@@ -129,9 +129,19 @@
       return;
     }
 
+    const renderizarIconeTarefa = icone => {
+      if (icone === 'icone-medicamento.svg') {
+        return '<i class="bi bi-capsule" aria-hidden="true"></i>';
+      }
+      if (icone.startsWith('bi ') || icone.startsWith('fa-')) {
+        return `<i class="${escaparHtml(icone)}" aria-hidden="true"></i>`;
+      }
+      return `<img src="assets/media/icones/${escaparHtml(icone)}" alt="" width="20" height="20">`;
+    };
+
     const renderizarItemTarefa = tarefa => `
       <div class="agenda__tarefa ${tarefa.concluida ? 'agenda__tarefa--concluida' : ''}">
-        <span class="agenda__tarefa-icone"><img src="assets/media/icones/${escaparHtml(tarefa.icone)}" alt="" width="20" height="20"></span>
+        <span class="agenda__tarefa-icone">${renderizarIconeTarefa(tarefa.icone)}</span>
         <div>
           <strong>${escaparHtml(tarefa.titulo)}</strong>
           <p>${escaparHtml(tarefa.descricao)}</p>
@@ -166,15 +176,15 @@
           <div>
             <strong>${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</strong>
             <p>${escaparHtml([item.local, item.acompanhante].filter(Boolean).join(' · '))}</p>
+            ${Array.isArray(item.preparacao) && item.preparacao.length ? `
+              <div class="agenda__preparacao">
+                <strong>Preparação e transporte</strong>
+                ${item.preparacao.map(linha => `<p>${escaparHtml(linha)}</p>`).join('')}
+              </div>
+            ` : ''}
           </div>
           <button class="botao botao--secundario" type="button" data-ver-compromisso="${escaparHtml(item.id)}">Ver compromisso</button>
         </div>
-        ${Array.isArray(item.preparacao) && item.preparacao.length ? `
-          <div class="agenda__preparacao">
-            <strong>Preparação e transporte</strong>
-            ${item.preparacao.map(linha => `<p>${escaparHtml(linha)}</p>`).join('')}
-          </div>
-        ` : ''}
       </article>
     `).join('') || '<p class="agenda__vazio">Nenhum compromisso nesta data.</p>';
 
