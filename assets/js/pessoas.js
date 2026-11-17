@@ -32,7 +32,7 @@
       ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
       : pessoa.pendente
         ? `<button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}" aria-label="Cancelar convite para ${escaparHtml(pessoa.nome)}">Cancelar convite</button>`
-        : '<span class="selo selo--sucesso">Ativo na rede</span>';
+        : '<button type="button" class="botao botao--secundario" disabled>Ver perfil</button>';
     const situacao = pessoa.pendente
       ? `<span class="selo selo--atencao">${escaparHtml(pessoa.situacao)}</span>`
       : pessoa.perfil

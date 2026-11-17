@@ -133,6 +133,11 @@
   color: var(--cor-aviso-alerta-escuro);
 }
 
+.faixa-alerta--atencao {
+  background: var(--cor-aviso-atencao-claro);
+  color: var(--cor-aviso-atencao-escuro);
+}
+
 .faixa-alerta__icone {
   flex: none;
   display: grid;

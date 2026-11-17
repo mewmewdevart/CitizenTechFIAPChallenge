@@ -244,7 +244,7 @@
 }
 
 .dialogo-mvp--compacto {
-  --largura-dialogo: 520px;
+  --largura-dialogo: 560px;
 }
 
 .dialogo-mvp h2 {
@@ -345,8 +345,8 @@
 }
 
 .dialogo-mvp .dialogo-mvp__contexto {
-  padding: var(--espaco-md);
-  border-radius: var(--raio-lg);
+  padding: 14px var(--espaco-lg);
+  border-radius: 10px;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie-suave);
 }
@@ -380,7 +380,7 @@
 }
 
 .dialogo-mvp--compacto> :where(:not(:first-child)) {
-  margin-top: var(--espaco-md);
+  margin-top: var(--espaco-lg);
 }
 
 .dialogo-mvp>.dialogo-mvp__cabecalho+ :is(p, .dialogo-mvp__subtitulo) {
@@ -397,6 +397,21 @@
   display: grid;
   gap: var(--espaco-xs);
   font-weight: var(--peso-semibold);
+}
+
+.formulario-mvp label.dialogo-mvp__opcao-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+  font-weight: var(--peso-regular);
+  cursor: pointer;
+}
+
+.formulario-mvp label.dialogo-mvp__opcao-inline input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  accent-color: var(--cor-primaria);
 }
 
 .dialogo-mvp__rotulo-compartilhar textarea {
@@ -460,7 +475,7 @@
 
 .dialogo-mvp__acoes--iguais {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: var(--espaco-md);
 }
 
