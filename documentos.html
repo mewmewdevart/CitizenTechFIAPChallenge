@@ -155,7 +155,7 @@
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
@@ -180,11 +180,11 @@
           <input id="pesquisa-documentos" type="search" placeholder="Nome do arquivo ou assunto" data-documentos-busca>
         </div>
       </div>
-      <div class="documentos__filtros" role="group" aria-label="Filtrar por categoria">
-        <button type="button" class="documentos__filtro" data-documentos-filtro="Todos" aria-pressed="true">Todos</button>
-        <button type="button" class="documentos__filtro" data-documentos-filtro="Receita" aria-pressed="false">Receitas</button>
-        <button type="button" class="documentos__filtro" data-documentos-filtro="Exame" aria-pressed="false">Exames</button>
-        <button type="button" class="documentos__filtro" data-documentos-filtro="Documento" aria-pressed="false">Documentos</button>
+      <div class="filtros" role="group" aria-label="Filtrar por categoria">
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Todos" aria-pressed="true">Todos</button>
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Receita" aria-pressed="false">Receitas</button>
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Exame" aria-pressed="false">Exames</button>
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Documento" aria-pressed="false">Documentos</button>
       </div>
       <div class="documentos__lista" data-documentos-lista></div>
     </section>
@@ -245,6 +245,15 @@
     </dialog>
 
     <p role="status" data-mvp-status></p>
+    <dialog id="dialogo-arquivo-invalido" class="dialogo-mvp dialogo-mvp--compacto" aria-labelledby="titulo-arquivo-invalido">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-arquivo-invalido">Não foi possível adicionar o arquivo</h2>
+      </div>
+      <p>Escolha um PDF, JPG ou PNG de até 10 MB. Os outros campos continuam preenchidos.</p>
+      <form method="dialog" class="dialogo-mvp__acoes">
+        <button class="botao botao--primario" autofocus>Voltar e corrigir</button>
+      </form>
+    </dialog>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>

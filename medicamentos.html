@@ -155,7 +155,7 @@
       <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg" alt=""><span><strong>Beatriz
             (Bea)</strong><small>07h–12h</small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta"><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
+      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule" aria-hidden="true"></i><span><strong>08h ·
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
@@ -171,7 +171,7 @@
       <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-item"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar item</button>
     </header>
 
-    <section class="faixa-alerta" aria-labelledby="titulo-alergia">
+    <section class="faixa-alerta" data-alerta-medicamentos aria-labelledby="titulo-alergia">
       <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></span>
       <div class="faixa-alerta__texto">
         <strong id="titulo-alergia">Alergia à dipirona</strong>
@@ -198,8 +198,8 @@
       <h3 class="painel__subtitulo">Próxima administração</h3>
       <div class="painel__bloco" data-proxima-administracao></div>
 
-      <h3 class="painel__subtitulo">Registros de hoje</h3>
-      <div class="itens-cadastrados__controles" data-registros-controles hidden>
+      <h3 class="painel__subtitulo" id="registros-de-hoje">Registros de hoje</h3>
+      <div class="itens-cadastrados__controles" data-registros-controles>
         <div class="documentos__busca">
           <label for="pesquisa-registros">Pesquisar registros</label>
           <div class="documentos__campo-busca">
@@ -207,10 +207,10 @@
             <input id="pesquisa-registros" type="search" placeholder="Nome do medicamento ou horário" data-registros-busca>
           </div>
         </div>
-        <div class="documentos__filtros" role="group" aria-label="Filtrar registros por situação">
-          <button type="button" class="documentos__filtro" data-registros-filtro="Todos" aria-pressed="true">Todos</button>
-          <button type="button" class="documentos__filtro" data-registros-filtro="administrado" aria-pressed="false">Administrados</button>
-          <button type="button" class="documentos__filtro" data-registros-filtro="nao-administrado" aria-pressed="false">Não administrados</button>
+        <div class="filtros" role="group" aria-label="Filtrar registros por situação">
+          <button type="button" class="filtros__opcao" data-registros-filtro="Todos" aria-pressed="true">Todos</button>
+          <button type="button" class="filtros__opcao" data-registros-filtro="administrado" aria-pressed="false">Administrados</button>
+          <button type="button" class="filtros__opcao" data-registros-filtro="nao-administrado" aria-pressed="false">Não administrados</button>
         </div>
       </div>
       <ul class="painel__lista painel__bloco" data-registros-dia></ul>
@@ -227,7 +227,7 @@
       </section>
       <section class="apoio__painel" aria-labelledby="titulo-itens">
         <h2 id="titulo-itens">Itens cadastrados</h2>
-        <div class="itens-cadastrados__controles" data-itens-controles hidden>
+        <div class="itens-cadastrados__controles" data-itens-controles>
           <div class="documentos__busca">
             <label for="pesquisa-itens">Pesquisar itens</label>
             <div class="documentos__campo-busca">
@@ -235,10 +235,10 @@
               <input id="pesquisa-itens" type="search" placeholder="Nome do medicamento ou insumo" data-itens-busca>
             </div>
           </div>
-          <div class="documentos__filtros" role="group" aria-label="Filtrar itens por tipo">
-            <button type="button" class="documentos__filtro" data-itens-filtro="Todos" aria-pressed="true">Todos</button>
-            <button type="button" class="documentos__filtro" data-itens-filtro="Medicamento" aria-pressed="false">Medicamentos</button>
-            <button type="button" class="documentos__filtro" data-itens-filtro="Insumo" aria-pressed="false">Insumos</button>
+          <div class="filtros" role="group" aria-label="Filtrar itens por tipo">
+            <button type="button" class="filtros__opcao" data-itens-filtro="Todos" aria-pressed="true">Todos</button>
+            <button type="button" class="filtros__opcao" data-itens-filtro="Medicamento" aria-pressed="false">Medicamentos</button>
+            <button type="button" class="filtros__opcao" data-itens-filtro="Insumo" aria-pressed="false">Insumos</button>
           </div>
         </div>
         <ul class="painel__lista" data-itens-cadastrados></ul>
