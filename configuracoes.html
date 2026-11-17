@@ -300,6 +300,7 @@
               <h2>Rede de cuidado da Mari</h2>
               <p>Regras de colaboração para familiares e cuidadores vinculados à ficha.</p>
             </div>
+            <span class="selo selo--neutro">Administrador: Zé</span>
           </div>
 
           <div class="configuracoes__bloco">
@@ -331,8 +332,8 @@
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-sigilo">Ocultar dados sensíveis para convidados</strong>
-                  <span>Restringe CPF, cartão SUS e contato de emergência apenas aos administradores.</span>
+                  <strong id="rotulo-config-sigilo">Ocultar dados sensíveis ao abrir a ficha</strong>
+                  <span>Ajusta a visibilidade inicial de CPF, RG e carteirinha. Use apenas dados fictícios.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-sigilo">
                   <input type="checkbox" id="config-sigilo-dados" name="sigiloDados" checked />
@@ -344,14 +345,24 @@
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Atalhos da rede</h3>
+              <h3>Acesso rápido da rede</h3>
             </div>
-            <div class="configuracoes__acoes-linha">
-              <a class="botao botao--secundario botao--pequeno" href="pessoas.html">
-                <i class="fa-solid fa-user-group" aria-hidden="true"></i> Gerenciar pessoas da rede
+            <div class="configuracoes__grade-cards">
+              <a class="configuracoes__card-link" href="pessoas.html">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-solid fa-user-group"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Pessoas da rede</strong>
+                  <small>Veja participantes ativos, convites e papéis.</small>
+                </span>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
               </a>
-              <a class="botao botao--secundario botao--pequeno" href="ficha.html">
-                <i class="fa-regular fa-id-card" aria-hidden="true"></i> Abrir ficha da Mari
+              <a class="configuracoes__card-link" href="ficha.html">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-regular fa-id-card"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Ficha de saúde da Mari</strong>
+                  <small>Confira alergias, medicamentos e contatos.</small>
+                </span>
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
               </a>
             </div>
           </div>
@@ -369,29 +380,35 @@
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Central de Acessibilidade</h3>
+              <h3>Tema visual</h3>
             </div>
-            <p class="configuracoes__texto-apoio">As preferências assistivas são mantidas automaticamente neste
-              dispositivo para garantir conforto contínuo de leitura em todas as telas.</p>
-            <div class="configuracoes__acoes-linha">
-              <button type="button" class="botao botao--secundario" data-abrir-acessibilidade>
-                <i class="fa-solid fa-sliders" aria-hidden="true"></i> Abrir Central de Acessibilidade
+            <p class="configuracoes__texto-apoio">Escolha a identidade visual do Mutirão. A estrutura e as funções permanecem iguais nos dois temas.</p>
+            <div class="configuracoes__grade-cards" role="group" aria-label="Tema da aplicação">
+              <button type="button" class="configuracoes__card-opcao" data-tema="neutro" aria-pressed="true">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-regular fa-sun"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Tema neutro</strong>
+                  <small>Visual limpo e direto para leitura rápida.</small>
+                </span>
+              </button>
+              <button type="button" class="configuracoes__card-opcao" data-tema="acolhedor" aria-pressed="false">
+                <span class="configuracoes__card-icone" aria-hidden="true"><i class="fa-regular fa-heart"></i></span>
+                <span class="configuracoes__card-texto">
+                  <strong>Tema acolhedor</strong>
+                  <small>Tons quentes e suaves para uso prolongado.</small>
+                </span>
               </button>
             </div>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Tema da aplicação</h3>
+              <h3>Recursos assistivos</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Escolha a identidade visual do Mutirão. A estrutura, a posição dos
-              elementos e as funções continuam iguais nos dois temas, e a escolha fica salva neste dispositivo.</p>
-            <div class="configuracoes__acoes-linha" role="group" aria-label="Tema da aplicação">
-              <button type="button" class="botao botao--secundario" data-tema="neutro" aria-pressed="true">
-                <i class="fa-regular fa-sun" aria-hidden="true"></i> Tema neutro
-              </button>
-              <button type="button" class="botao botao--secundario" data-tema="acolhedor" aria-pressed="false">
-                <i class="fa-regular fa-heart" aria-hidden="true"></i> Tema acolhedor
+            <p class="configuracoes__texto-apoio">Ajuste tamanho da fonte, alto contraste, destaque de links e redução de animações na Central de Acessibilidade.</p>
+            <div class="configuracoes__acoes-linha">
+              <button type="button" class="botao botao--secundario" data-abrir-acessibilidade>
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i> Abrir Central de Acessibilidade
               </button>
             </div>
           </div>
@@ -402,31 +419,35 @@
           <div class="configuracoes__painel-topo">
             <div>
               <h2>Privacidade e dados</h2>
-              <p>Exporte um resumo das suas preferências atuais sem expor dados de saúde.</p>
+              <p>Veja o que fica salvo neste navegador e exporte um resumo sem expor dados de saúde.</p>
             </div>
             <span class="selo selo--neutro">Zé da Manga · Neto</span>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Resumo da conta</h3>
+              <h3>Armazenamento local</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Copie rapidamente suas preferências de alertas e canal de contato para
-              compartilhar com outros familiares administradores.</p>
-            <div class="configuracoes__acoes-linha">
-              <button type="button" class="botao botao--secundario" data-exportar-resumo>
-                <i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar resumo das configurações
-              </button>
-            </div>
+            <dl class="configuracoes__resumo-dados">
+              <div>
+                <dt>Sessão atual</dt>
+                <dd>Rotina, escala, recados e preferências de alertas ficam apenas nesta aba/sessão.</dd>
+              </div>
+              <div>
+                <dt>Preferências visuais</dt>
+                <dd>Tema e ajustes de acessibilidade ficam salvos localmente neste navegador.</dd>
+              </div>
+            </dl>
           </div>
 
           <div class="configuracoes__bloco">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Transparência e termos</h3>
+              <h3>Exportação e documentos legais</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Consulte como tratamos dados da rotina de cuidado, armazenamento local
-              de acessibilidade e integrações públicas.</p>
             <div class="configuracoes__acoes-linha">
+              <button type="button" class="botao botao--secundario" data-exportar-resumo>
+                <i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar resumo das configurações
+              </button>
               <a class="botao botao--secundario" href="privacidade.html">
                 <i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Ler Política de Privacidade e Termos
               </a>
@@ -451,12 +472,12 @@
             <p class="configuracoes__texto-apoio">Como administrador atual, você precisa transferir a administração para
               outro familiar antes de sair da rede.</p>
             <div class="dialogo-mvp__aviso-caixa" role="note">
-              <strong>Ação indisponível nesta demonstração</strong>
-              <span>A transferência de administração não está disponível neste protótipo, portanto não é possível
-                concluir a saída da rede por aqui.</span>
+              <strong>Transferência e saída simuladas</strong>
+              <span>Escolha o novo administrador na confirmação. Ele receberá seus turnos futuros e a responsabilidade
+                pela rede nesta sessão.</span>
             </div>
             <div class="configuracoes__acoes-linha">
-              <button type="button" class="botao botao--perigo" data-abrir-sair-rede disabled aria-disabled="true">
+              <button type="button" class="botao botao--perigo" data-abrir-sair-rede>
                 <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair da rede da Mari
               </button>
             </div>
@@ -464,8 +485,8 @@
         </section>
 
         <div class="configuracoes__rodape">
-          <p>Clique em “Salvar alterações” para aplicar suas preferências nesta sessão ou restaure apenas as escolhas
-            desta tela.</p>
+          <p>Clique em “Salvar alterações” para aplicar suas preferências nesta sessão ou restaure todos os dados da
+            sessão para o padrão inicial.</p>
           <div class="configuracoes__rodape-botoes">
             <button type="button" class="botao botao--secundario" data-restaurar-padroes>Restaurar preferências desta
               tela</button>
@@ -486,10 +507,11 @@
       </button>
     </div>
     <p>Você está conectado como administrador da rede de Maria das Dores (Mari). Antes de sair, certifique-se de que
-      outro familiar assumiu a administração em Pessoas da rede.</p>
+      outro familiar assuma a administração e seus turnos futuros nesta simulação.</p>
+    <label>Novo administrador e responsável pelos seus turnos<select data-sucessor-rede></select></label>
     <div class="dialogo-mvp__acoes">
       <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede>Confirmar saída</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede disabled aria-disabled="true">Confirmar saída</button>
     </div>
   </dialog>
   <nav class="barra-inferior" aria-label="Atalhos principais">

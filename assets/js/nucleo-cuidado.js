@@ -326,18 +326,41 @@
 
   let estadoAtual = carregarEstado();
 
-  function persistirEstado() {
+  function atualizarEstado(transformador) {
+    const rascunho = JSON.parse(JSON.stringify(estadoAtual));
+    const proximo = typeof transformador === 'function' ? transformador(rascunho) : { ...rascunho, ...transformador };
     try {
-      sessionStorage.setItem(CHAVE_ESTADO, JSON.stringify(estadoAtual));
-    } catch {
-      // Ignora caso o navegador restrinja sessionStorage
+      sessionStorage.setItem(CHAVE_ESTADO, JSON.stringify(proximo));
+    } catch (causa) {
+      const mensagem = 'Não foi possível salvar. A alteração não foi aplicada. Mantenha esta tela aberta, revise o espaço disponível e tente novamente.';
+      let aviso = document.getElementById('erro-persistencia-mutirao');
+      if (!aviso) {
+        aviso = document.createElement('p');
+        aviso.id = 'erro-persistencia-mutirao';
+        aviso.className = 'faixa-alerta faixa-alerta--atencao';
+        aviso.setAttribute('role', 'alert');
+        document.querySelector('main')?.prepend(aviso);
+      }
+      aviso.textContent = mensagem;
+      throw new Error(mensagem, { cause: causa });
     }
+    document.getElementById('erro-persistencia-mutirao')?.remove();
+    estadoAtual = proximo;
+    window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
+    return estadoAtual;
   }
 
-  function atualizarEstado(transformador) {
-    estadoAtual = typeof transformador === 'function' ? transformador(estadoAtual) : { ...estadoAtual, ...transformador };
-    persistirEstado();
+  function restaurarEstadoPadrao() {
+    try {
+      sessionStorage.removeItem(CHAVE_ESTADO);
+      localStorage.removeItem(CHAVE_ESTADO);
+    } catch {
+      // Ignora erro caso o armazenamento esteja indisponível.
+    }
+    estadoAtual = criarEstadoInicial();
+    document.getElementById('erro-persistencia-mutirao')?.remove();
     window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
+    window.dispatchEvent(new CustomEvent('mutirao:perfil-atualizado'));
     return estadoAtual;
   }
 
@@ -392,8 +415,37 @@
         foto: ''
       };
     });
-    return lista.filter(pessoa => !/maria das dores|\(mari\)/i.test(pessoa.nome));
+    return [...lista, ...(estado.participantesExtras || [])].filter(pessoa => !/maria das dores|\(mari\)/i.test(pessoa.nome));
   };
+
+  const resolverConvite = (email, aceitar) => atualizarEstado(estado => {
+    const convite = (estado.convites || []).find(item => item.email === email);
+    if (!convite) throw new Error('Este convite não está mais pendente.');
+    const participantesExtras = [...(estado.participantesExtras || [])];
+    if (aceitar && !participantesExtras.some(item => item.email === email)) {
+      participantesExtras.push({ ...convite, nome: email, nomeBase: email,
+        avatar: 'icone-mascote-cubado.svg', foto: '' });
+    }
+    return { ...estado, participantesExtras,
+      convites: estado.convites.filter(item => item.email !== email),
+      historicoConvites: [...(estado.historicoConvites || []), { ...convite, status: aceitar ? 'Aceito' : 'Recusado' }] };
+  });
+
+  const atualizarSeletoresRede = () => {
+    const pessoas = obterParticipantesRede();
+    document.querySelectorAll('select[name="responsavel"], select[name="acompanhante"], select[name="acompanhanteEvento"], select[name="para"]').forEach(select => {
+      for (const pessoa of pessoas) {
+        if (![...select.options].some(opcao => opcao.value === pessoa.nome)) {
+          const opcao = document.createElement('option');
+          opcao.value = pessoa.nome;
+          opcao.textContent = pessoa.nome;
+          select.append(opcao);
+        }
+      }
+    });
+  };
+  document.addEventListener('DOMContentLoaded', atualizarSeletoresRede);
+  window.addEventListener('mutirao:cuidado-atualizado', atualizarSeletoresRede);
 
   const resolverPessoaRede = (nome, estado = estadoAtual) => {
     const participantes = obterParticipantesRede(estado);
@@ -581,46 +633,9 @@
     return mesclados;
   };
 
-  const obterLacunasDia = (dia, estado = estadoAtual) => {
-    const escala = obterEscalaDia(dia);
-    const lacunas = [];
-
-    for (const item of escala) {
-      const slot = extrairHorasTurno(item.horario);
-      const chave = `${dia}|${item.horario}`;
-      const edicao = estado.shiftEdits?.[chave];
-
-      if (item.lacuna) {
-        const cobertos = normalizarIntervalos(estado.covered?.[dia], slot.inicio, slot.fim);
-        let cursor = slot.inicio;
-        for (const cob of cobertos) {
-          if (cob.inicio > cursor) {
-            lacunas.push({ inicio: cursor, fim: cob.inicio, horario: formatarIntervaloTurno(cursor, cob.inicio - cursor) });
-          }
-          cursor = Math.max(cursor, cob.fim);
-        }
-        if (cursor < slot.fim) {
-          lacunas.push({ inicio: cursor, fim: slot.fim, horario: formatarIntervaloTurno(cursor, slot.fim - cursor) });
-        }
-      } else if (edicao?.cancelado) {
-        lacunas.push({ inicio: slot.inicio, fim: slot.fim, horario: item.horario });
-      } else if (edicao && typeof edicao.inicio === 'number' && typeof edicao.duracao === 'number') {
-        if (edicao.inicio > slot.inicio) {
-          lacunas.push({ inicio: slot.inicio, fim: edicao.inicio, horario: formatarIntervaloTurno(slot.inicio, edicao.inicio - slot.inicio) });
-        }
-        const fimEdicao = edicao.inicio + edicao.duracao;
-        if (fimEdicao < slot.fim) {
-          lacunas.push({ inicio: fimEdicao, fim: slot.fim, horario: formatarIntervaloTurno(fimEdicao, slot.fim - fimEdicao) });
-        }
-      }
-    }
-
-    return normalizarIntervalos(lacunas, 0, 24).map(l => ({
-      inicio: l.inicio,
-      fim: l.fim,
-      horario: formatarIntervaloTurno(l.inicio, l.fim - l.inicio)
-    }));
-  };
+  const obterLacunasDia = (dia, estado = estadoAtual) => construirLinhaDoTempoDia(dia, estado)
+    .filter(item => item.tipo === 'lacuna')
+    .map(({ inicio, fim }) => ({ inicio, fim, horario: formatarIntervaloTurno(inicio, fim - inicio) }));
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
     const escala = obterEscalaDia(dia);
@@ -690,8 +705,21 @@
       }
     }
 
+    let linha = segmentos;
+    for (const cobertura of (estado.coberturasRede || []).filter(item => item.dia === dia)) {
+      linha = linha.flatMap(seg => {
+        const inicio = Math.max(seg.inicio, cobertura.inicio);
+        const fim = Math.min(seg.fim, cobertura.fim);
+        if (inicio >= fim) return [seg];
+        return [
+          ...(seg.inicio < inicio ? [{ ...seg, fim: inicio }] : []),
+          { tipo: 'turno', inicio, fim, pessoa: resolverPessoaRede(cobertura.responsavel, estado), temCobertura: false },
+          ...(fim < seg.fim ? [{ ...seg, inicio: fim }] : [])
+        ];
+      });
+    }
     const mesclados = [];
-    for (const seg of segmentos) {
+    for (const seg of linha) {
       const ultimo = mesclados[mesclados.length - 1];
       const mesmoTurnoZe = ultimo
         && ultimo.tipo === 'turno'
@@ -801,6 +829,110 @@
     return { ...estado, covered, shiftEdits, atribuicoesTurno };
   };
 
+  const pessoaDisponivel = (nome, dia, inicio, fim, estado = estadoAtual) => !construirLinhaDoTempoDia(dia, estado)
+    .some(seg => seg.tipo === 'turno' && seg.pessoa.nome === nome && seg.inicio < fim && seg.fim > inicio);
+
+  const resolverAtribuicao = (chave, aceitar) => atualizarEstado(estado => {
+    const item = estado.atribuicoesTurno?.[chave];
+    if (!item) throw new Error('Esta atribuição não está mais pendente.');
+    const { inicio, fim } = extrairHorasTurno(item.horario);
+    if (aceitar && (!obterLacunasDia(item.dia, estado).some(l => l.inicio <= inicio && l.fim >= fim)
+      || !pessoaDisponivel(item.responsavel, item.dia, inicio, fim, estado))) {
+      throw new Error('O turno mudou ou a pessoa não está disponível. Atualize a escala.');
+    }
+    const atribuicoesTurno = { ...estado.atribuicoesTurno };
+    delete atribuicoesTurno[chave];
+    return { ...estado, atribuicoesTurno,
+      coberturasRede: [...(estado.coberturasRede || []), ...(aceitar ? [{ dia: item.dia, inicio, fim, responsavel: item.responsavel }] : [])],
+      historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Recusada ou cancelada' }] };
+  });
+
+  const resolverFolga = (id, status, responsavel = '') => atualizarEstado(estado => {
+    const pedido = (estado.pedidosFolga || []).find(item => item.id === id);
+    if (!pedido || pedido.status !== 'Pendente') throw new Error('Pedido não está pendente.');
+    if (status === 'Aceita') {
+      const turnoAtual = construirLinhaDoTempoDia(pedido.dia, estado).find(seg => seg.tipo === 'turno'
+        && seg.pessoa.ehUsuarioAtual && seg.inicio <= pedido.inicio && seg.fim >= pedido.fim);
+      if (!turnoAtual || !obterParticipantesRede(estado).some(p => p.nome === responsavel)
+        || !pessoaDisponivel(responsavel, pedido.dia, pedido.inicio, pedido.fim, estado)) {
+        throw new Error('Escala alterada ou substituto indisponível. Revise o pedido.');
+      }
+    }
+    return { ...estado,
+      pedidosFolga: estado.pedidosFolga.map(item => item.id === id ? { ...item, status, responsavel } : item),
+      coberturasRede: [...(estado.coberturasRede || []), ...(status === 'Aceita' ? [{ dia: pedido.dia, inicio: pedido.inicio, fim: pedido.fim, responsavel }] : [])] };
+  });
+
+  const sairDaRede = responsavel => atualizarEstado(estado => {
+    const usuario = obterUsuarioAtual(estado);
+    if (!obterParticipantesRede(estado).some(p => p.nome === responsavel) || responsavel === usuario.nomeComApelido) throw new Error('Escolha outro participante ativo.');
+    const dias = [...new Set([...Object.keys(ESCALAS_FIXAS), ...Object.keys(estado.covered || {}), ...Object.keys(estado.shiftEdits || {}).map(k => k.split('|')[0])])].filter(dia => dia >= HOJE);
+    const transferencias = dias.flatMap(dia => construirLinhaDoTempoDia(dia, estado)
+      .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
+      .map(seg => ({ dia, inicio: seg.inicio, fim: seg.fim, responsavel })));
+    if (transferencias.some(seg => !pessoaDisponivel(responsavel, seg.dia, seg.inicio, seg.fim, estado))) throw new Error('O substituto possui conflito de horários. Escolha outra pessoa.');
+    return { ...estado, redeSaiu: true, administradorRede: responsavel,
+      coberturasRede: [...(estado.coberturasRede || []), ...transferencias],
+      pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item),
+      perfilUsuario: { ...estado.perfilUsuario, papel: 'Participante' } };
+  });
+
+  const mostrarSaidaRede = () => {
+    if (!estadoAtual.redeSaiu) return;
+    let dialogo = document.getElementById('dialogo-rede-encerrada');
+    if (!dialogo) {
+      dialogo = document.createElement('dialog'); dialogo.id = 'dialogo-rede-encerrada';
+      dialogo.className = 'dialogo-mvp'; dialogo.setAttribute('aria-labelledby', 'titulo-rede-encerrada');
+      dialogo.innerHTML = '<h2 id="titulo-rede-encerrada">Você saiu da rede nesta simulação</h2><p>A administração e seus turnos futuros foram transferidos. A rotina permanece preservada nesta sessão.</p><button type="button" class="botao botao--primario">Voltar à demonstração como participante</button>';
+      dialogo.addEventListener('cancel', evento => evento.preventDefault());
+      dialogo.querySelector('button').addEventListener('click', () => {
+        atualizarEstado(estado => ({ ...estado, redeSaiu: false })); location.href = 'home.html';
+      });
+      document.body.append(dialogo);
+    }
+    if (!dialogo.open) dialogo.showModal();
+  };
+  document.addEventListener('DOMContentLoaded', mostrarSaidaRede);
+
+  const executarLembretes = (ate, preferencias = {}) => {
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(ate) || !Number.isFinite(Date.parse(ate))) throw new Error('Informe uma data e hora válidas.');
+    const estado = estadoAtual;
+    const desde = estado.relogioLembretes || `${HOJE}T00:00`;
+    if (ate < desde) throw new Error('O relógio deve avançar.');
+    const novos = [];
+    const existentes = new Set((estado.lembretesExecutados || []).map(item => item.id));
+    const incluir = (id, quando, texto) => {
+      if (quando > desde && quando <= ate && !existentes.has(id)) novos.push({ id, quando, texto, canal: preferencias.canalNotificacao || 'app-email' });
+    };
+    if (preferencias.notificacoesMedicacao !== false) {
+      for (const dose of obterDoses(estado).filter(item => item.estado === 'prevista')) {
+        const minutos = Number(preferencias.antecedenciaMedicacao || 30);
+        const data = new Date(`${HOJE}T${String(parseInt(dose.hora, 10)).padStart(2, '0')}:00:00Z`);
+        data.setUTCMinutes(data.getUTCMinutes() - minutos);
+        incluir(`dose-${HOJE}-${dose.chave}`, data.toISOString().slice(0, 16), `Dose prevista: ${dose.nome} · ${dose.hora}`);
+      }
+    }
+    const cuidar = { pausa: true, apoio: true, agradecer: false, ...estado.cuidar?.preferencias };
+    const usuario = obterUsuarioAtual(estado);
+    const primeiro = new Date(`${desde.slice(0, 10)}T00:00:00Z`);
+    const ultimo = new Date(`${ate.slice(0, 10)}T00:00:00Z`);
+    if ((ultimo - primeiro) / 86400000 > 366) throw new Error('Avance no máximo um ano por vez.');
+    for (let data = primeiro; data <= ultimo; data.setUTCDate(data.getUTCDate() + 1)) {
+      const dia = data.toISOString().slice(0, 10);
+      if (cuidar.pausa) for (const turno of construirLinhaDoTempoDia(dia, estado)) {
+        if (turno.tipo === 'turno' && turno.pessoa.nome === usuario.nomeComApelido && turno.fim - turno.inicio > 5) {
+          incluir(`pausa-${dia}-${turno.inicio}`, `${dia}T${String(turno.inicio + 5).padStart(2, '0')}:00`, 'Seu turno passou de cinco horas. Combine uma pausa com a rede.');
+        }
+      }
+      if (data.getUTCDay() === 0) {
+        if (cuidar.apoio) incluir(`apoio-${dia}`, `${dia}T18:00`, 'Cuidar cansa. Pedir ajuda também é cuidar.');
+        if (cuidar.agradecer) incluir(`agradecer-${dia}`, `${dia}T18:00`, 'Que tal agradecer alguém da rede nesta semana?');
+      }
+    }
+    atualizarEstado(atual => ({ ...atual, relogioLembretes: ate, lembretesExecutados: [...(atual.lembretesExecutados || []), ...novos] }));
+    return novos;
+  };
+
   const possuiLacuna = (dia, estado = estadoAtual) =>
     obterLacunasDia(dia, estado).length > 0;
 
@@ -809,7 +941,7 @@
     if (!lacunas.length) return 'Coberto';
     const totalHoras = lacunas.reduce((soma, l) => soma + (l.fim - l.inicio), 0);
     if (totalHoras >= 24) return 'Descoberto';
-    if (LACUNAS_TURNO[dia]?.[1] === 'Descoberto' && !estado.covered?.[dia]) return 'Descoberto';
+
     return 'Parcial';
   };
 
@@ -1136,6 +1268,7 @@
         quem: registro.quem || '',
         horario: registro.horario || '',
         motivo: registro.motivo || '',
+        origemExterna: registro.origemExterna || '',
         meu: Boolean(meu)
       };
     }));
@@ -1156,10 +1289,32 @@
     });
   };
 
-  const registrarDose = (chave, registro) => atualizarEstado(estado => ({
-    ...estado,
-    registrosDose: { ...(estado.registrosDose || {}), [chave]: registro }
-  }));
+  const prepararOrigemEstoque = (form, dose) => {
+    if (!form || !dose) return;
+    let campo = form.querySelector('[data-origem-estoque]');
+    if (!campo) {
+      campo = document.createElement('label');
+      campo.dataset.origemEstoque = '';
+      campo.textContent = 'Estoque zerado. Se a administração já ocorreu, informe a origem da unidade utilizada (não será descontada deste estoque):';
+      const input = document.createElement('textarea');
+      input.name = 'origemExterna'; input.maxLength = 300; input.rows = 2;
+      campo.append(input);
+      form.prepend(campo);
+    }
+    const semSaldo = obterEstoque(dose.itemId) === 0 && dose.estado !== 'administrado';
+    campo.hidden = !semSaldo;
+    campo.querySelector('textarea').required = semSaldo;
+    campo.querySelector('textarea').value = '';
+  };
+
+  const registrarDose = (chave, registro) => atualizarEstado(estado => {
+    const dose = obterDoses(estado).find(item => item.chave === chave);
+    if (!dose) throw new Error('Dose não encontrada. Atualize a rotina.');
+    if (registro.estado === 'administrado' && dose.estado !== 'administrado' && obterEstoque(dose.itemId, estado) === 0 && !registro.origemExterna?.trim()) {
+      throw new Error('Estoque zerado. Reponha o saldo ou informe a origem externa da unidade utilizada.');
+    }
+    return { ...estado, registrosDose: { ...(estado.registrosDose || {}), [chave]: registro } };
+  });
 
   const desfazerDose = chave => atualizarEstado(estado => {
     const registros = { ...(estado.registrosDose || {}) };
@@ -1168,7 +1323,7 @@
   });
 
   const contarUnidadesUsadas = (id, estado) => Object.entries(estado.registrosDose || {})
-    .filter(([chave, registro]) => chave.split('|')[1] === id && registro.estado === 'administrado').length;
+    .filter(([chave, registro]) => chave.split('|')[1] === id && registro.estado === 'administrado' && !registro.origemExterna).length;
 
   const obterEstoque = (id, estado = estadoAtual) => {
     const nomeAnterior = estado.itensEditados?.[id]?.nome
@@ -1209,6 +1364,10 @@
     EQUIPE_CUIDADO,
     LACUNAS_TURNO,
     obterEstado: () => estadoAtual,
+    obterPreferencias: () => {
+      try { return JSON.parse(sessionStorage.getItem('mutirao-configuracoes-sessao-v1') || '{}'); }
+      catch { return {}; }
+    },
     atualizarEstado,
     obterUsuarioAtual,
     nomePessoaAcompanhada,
@@ -1216,6 +1375,13 @@
     obterCompromissosFuturos,
     obterProximoCompromisso,
     obterParticipantesRede,
+    resolverConvite,
+    resolverAtribuicao,
+    resolverFolga,
+    executarLembretes,
+    sairDaRede,
+    mostrarSaidaRede,
+    pessoaDisponivel,
     resolverPessoaRede,
     normalizarBusca,
     vincularFiltro,
@@ -1241,11 +1407,14 @@
     anunciarStatus,
     chaveDose,
     obterDoses,
+    obterResumoMedicamentos: (estado = estadoAtual) => [...new Set(obterDoses(estado).map(dose => `${dose.nome} · ${dose.hora}`))],
     obterCompartimentos,
     registrarDose,
+    prepararOrigemEstoque,
     desfazerDose,
     obterEstoque,
     definirSaldoEstoque,
-    reporEstoque
+    reporEstoque,
+    restaurarEstadoPadrao
   };
 })();

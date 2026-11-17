@@ -54,8 +54,10 @@
       }
       sessionStorage.setItem(CHAVE_CONFIG_SESSAO, JSON.stringify(dados));
     } catch {
-      // Ignora erro caso sessionStorage esteja indisponível
+      mostrarStatus('Não foi possível salvar. Suas alterações continuam no formulário.', 'erro');
+      return false;
     }
+    return true;
   };
 
   const serializarEstadoFormulario = () => {
@@ -151,24 +153,52 @@
     evento.preventDefault();
     if (serializarEstadoFormulario() === snapshotSalvo) return;
 
-    salvarPreferenciasSessao();
+    if (!salvarPreferenciasSessao()) return;
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
     window.MutiraoNotificacoes.registrar('Configurações atualizadas', 'Preferências salvas para esta sessão.', 'configuracoes.html');
     mostrarStatus('Configurações salvas com sucesso!', 'sucesso');
   });
 
+  const limparCookiesSessao = () => {
+    if (!document.cookie) return;
+    document.cookie.split(';').forEach(cookie => {
+      const nome = cookie.split('=')[0].trim();
+      if (!nome) return;
+      document.cookie = `${nome}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+  };
+
   botaoRestaurar?.addEventListener('click', () => {
-    formulario.reset();
     try {
-      sessionStorage.removeItem(CHAVE_CONFIG_SESSAO);
+      sessionStorage.clear();
     } catch {
       // Ignora erro caso sessionStorage esteja indisponível
     }
+    try {
+      localStorage.clear();
+    } catch {
+      // Ignora erro caso localStorage esteja indisponível
+    }
+    limparCookiesSessao();
+    if ('caches' in window) {
+      caches.keys().then(nomes => nomes.forEach(nome => caches.delete(nome))).catch(() => {});
+    }
+    document.getElementById('acessibilidade-restaurar')?.click();
+    window.MutiraoTema?.restaurar?.();
+    window.MutiraoNotificacoes?.limpar?.();
+    window.MutiraoCuidado?.restaurarEstadoPadrao?.();
+    try {
+      localStorage.clear();
+    } catch {
+      // Garante remoção de preferências gravadas ao restaurar acessibilidade
+    }
+    formulario.reset();
     atualizarEstadoAntecedencia();
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
-    mostrarStatus('Padrões recomendados restaurados.', 'sucesso');
+    renderizarLembretes?.();
+    mostrarStatus('Preferências e dados da sessão restaurados para o estado inicial.', 'sucesso');
   });
 
   botaoAcessibilidade?.addEventListener('click', () => {
@@ -179,6 +209,47 @@
       mostrarStatus('Não foi possível abrir o painel de acessibilidade.', 'erro');
     }
   });
+
+  const core = window.MutiraoCuidado;
+  const CANAIS_SIMULADOS = {
+    'app-email': 'Aplicativo e e-mail',
+    app: 'Somente no aplicativo',
+    email: 'Somente por e-mail'
+  };
+  const formatarQuandoLembrete = valor => {
+    const match = String(valor || '').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+    return match ? `${match[3]}/${match[2]}/${match[1]} às ${match[4]}h${match[5]}` : String(valor || '');
+  };
+
+  const simulacao = document.createElement('section');
+  simulacao.className = 'configuracoes__bloco configuracoes__simulacao';
+  simulacao.innerHTML = `<div class="configuracoes__bloco-cabecalho">
+    <h3>Testar lembretes</h3>
+  </div>
+  <p class="configuracoes__texto-apoio">Avance o horário do cenário para executar os lembretes nesta sessão. Os canais são simulados; nenhum e-mail é enviado.</p>
+  <div class="configuracoes__simulacao-controles">
+    <label>Avançar até
+      <input type="datetime-local" data-horario-lembretes>
+    </label>
+    <button type="button" class="botao botao--secundario" data-executar-lembretes>Executar lembretes</button>
+  </div>
+  <ul class="configuracoes__historico-lembretes" data-historico-lembretes></ul>`;
+  formulario.querySelector('#painel-notificacoes')?.append(simulacao);
+  const renderizarLembretes = () => {
+    simulacao.querySelector('input').value = core.obterEstado().relogioLembretes || `${core.HOJE}T11:58`;
+    const lista = core.obterEstado().lembretesExecutados || [];
+    simulacao.querySelector('ul').innerHTML = lista.length
+      ? lista.map(item => `<li><strong>${core.escaparHtml(item.texto)}</strong><small>${core.escaparHtml(formatarQuandoLembrete(item.quando))} · Canal simulado: ${core.escaparHtml(CANAIS_SIMULADOS[item.canal] || item.canal)}</small></li>`).join('')
+      : '<li class="configuracoes__historico-vazio">Nenhum lembrete executado nesta sessão.</li>';
+  };
+  simulacao.querySelector('button').addEventListener('click', () => {
+    try {
+      const novos = core.executarLembretes(simulacao.querySelector('input').value, core.obterPreferencias());
+      for (const item of novos) if (item.canal !== 'email') window.MutiraoNotificacoes?.registrar('Lembrete da simulação', item.texto, 'configuracoes.html');
+      renderizarLembretes(); mostrarStatus(`${novos.length} lembrete(s) executado(s). Consulte o histórico.`, 'sucesso');
+    } catch (erro) { mostrarStatus(erro.message, 'erro'); }
+  });
+  renderizarLembretes();
 
   botaoExportar?.addEventListener('click', async () => {
     const canal = formulario.querySelector('#config-canal-notificacao')?.selectedOptions?.[0]?.textContent || 'Aplicativo e e-mail';
@@ -200,6 +271,9 @@
   });
 
   botaoAbrirSairRede?.addEventListener('click', () => {
+    const select = dialogoSairRede.querySelector('[data-sucessor-rede]');
+    select.innerHTML = core.obterParticipantesRede().filter(p => p.nome !== core.obterUsuarioAtual().nomeComApelido)
+      .map(p => `<option value="${core.escaparHtml(p.nome)}">${core.escaparHtml(p.nome)}</option>`).join('');
     dialogoSairRede?.showModal();
   });
 
@@ -208,7 +282,10 @@
   });
 
   botaoConfirmarSair?.addEventListener('click', () => {
-    dialogoSairRede?.close();
-    mostrarStatus('A saída da rede exige transferir a administração. Esta demonstração não oferece transferência.', 'erro');
+    try {
+      core.sairDaRede(dialogoSairRede.querySelector('[data-sucessor-rede]').value);
+      dialogoSairRede.close();
+      core.mostrarSaidaRede();
+    } catch (erro) { mostrarStatus(erro.message, 'erro'); }
   });
 })();
