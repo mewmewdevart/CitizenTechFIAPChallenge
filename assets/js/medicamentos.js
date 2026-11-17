@@ -269,26 +269,51 @@
     renderizarItens(itens);
   };
 
+  const DESCRICOES_MEDICAMENTOS = {
+    Levotiroxina: 'para controle da tireoide (em jejum)',
+    Carbamazepina: 'para controle neurológico',
+    Bombinha: 'para aliviar e prevenir falta de ar',
+    Losartana: 'para controle da pressão arterial',
+    Metformina: 'para controle da glicemia',
+    Hidroclorotiazida: 'para controle da pressão e retenção de líquidos',
+    'Cálcio + vit. D': 'para fortalecimento dos ossos',
+    'Ácido fólico': 'como suplementação vitamínica',
+    Omeprazol: 'para proteção gástrica',
+    AAS: 'para proteção cardiovascular',
+    'Vitamina B12': 'para reposição vitamínica',
+    Colírio: 'para hidratação e cuidado ocular'
+  };
+
+  const descreverDoseMari = dose => {
+    const item = obterItens().find(atual => atual.nome === dose.nome || atual.chave === dose.itemId);
+    const detalheDose = item?.dose ? ` (${item.dose})` : '';
+    const finalidade = DESCRICOES_MEDICAMENTOS[dose.nome];
+    if (finalidade) {
+      return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, ${finalidade}.`;
+    }
+    return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, conforme prescrição médica.`;
+  };
+
   const prepararDialogos = dose => {
     const grupo = obterCompartimentos().find(item => item.hora === dose.hora);
     const usuario = obterUsuarioAtual();
     const avatar = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     const horaAtual = `${dose.hora.replace('h', '').padStart(2, '0')}h10`;
     dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Registrar administração - ${dose.nome}`;
-    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Prevista para ${dose.hora} · ${grupo?.responsavel ? `Turno de ${grupo.responsavel}` : 'Turno sem cobertura'}`;
+    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = descreverDoseMari(dose);
     for (const dialogo of [dialogos.registrar, dialogos.confirmar, dialogos.naoAdministrada, dialogos.registrada]) {
       dialogo.querySelectorAll('[data-usuario-avatar]').forEach(img => { img.src = avatar; });
       dialogo.querySelectorAll('[data-usuario-registro]').forEach(el => {
         el.textContent = `${usuario.nomeComApelido} · ${usuario.papel}`;
       });
       dialogo.querySelectorAll('[data-usuario-turno]').forEach(el => {
-        el.textContent = `${usuario.nomeComApelido} · Turno das 19h às 24h`;
+        el.textContent = `${usuario.nomeComApelido} · ${grupo?.responsavel ? `Turno de ${grupo.responsavel}` : usuario.papel}`;
       });
     }
     const horaEl = dialogos.naoAdministrada?.querySelector('[data-registro-hora-atual]');
     if (horaEl) horaEl.textContent = `Registro às ${horaAtual}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
-      dialogo.querySelector('[data-dose-previsto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Horário previsto: ${dose.hora}`;
+      dialogo.querySelector('[data-dose-previsto]').textContent = descreverDoseMari(dose);
     }
     dialogos.confirmar.querySelector('[name="horario"]').value = `${dose.hora.replace('h', '').padStart(2, '0')}:05`;
   };
@@ -326,7 +351,7 @@
     }));
 
     dialogos.registrada.querySelector('[data-registro-titulo]').textContent = `${administrada ? 'Administração registrada' : 'Ocorrência registrada'} - ${dose.nome}`;
-    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Terça, 10 nov.`;
+    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${dose.nome} · Dose prevista para as ${dose.hora} na rotina da Mari.`;
     dialogos.registrada.querySelector('[data-registro-agenda]').textContent = administrada
       ? `${dose.hora} · Administrada às ${formatarHorario(detalhe)} · ${usuario.nomeComApelido}`
       : `${dose.hora} · Não administrada · Registro por ${usuario.nomeComApelido}`;
