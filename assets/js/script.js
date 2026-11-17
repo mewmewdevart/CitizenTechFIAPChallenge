@@ -165,7 +165,12 @@ const criarDialogoSair = () => {
   dialogo.className = 'dialogo-mvp';
   dialogo.setAttribute('aria-labelledby', 'titulo-sair-conta');
   dialogo.innerHTML = `
-    <h2 id="titulo-sair-conta">Sair da sua conta?</h2>
+    <div class="dialogo-mvp__cabecalho">
+      <h2 id="titulo-sair-conta">Sair da sua conta?</h2>
+      <button type="button" class="botao-icone" data-cancelar-saida aria-label="Fechar">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
     <p>Você será redirecionado para a tela inicial do Mutirão nesta sessão.</p>
     <div class="dialogo-mvp__acoes">
       <button type="button" class="botao botao--secundario" data-cancelar-saida>Cancelar</button>

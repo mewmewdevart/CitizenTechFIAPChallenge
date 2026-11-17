@@ -458,7 +458,12 @@
   </main>
 
   <dialog id="dialogo-sair-rede" class="dialogo-mvp" aria-labelledby="titulo-sair-rede">
-    <h2 id="titulo-sair-rede">Sair da rede de cuidado?</h2>
+    <div class="dialogo-mvp__cabecalho">
+      <h2 id="titulo-sair-rede">Sair da rede de cuidado?</h2>
+      <button type="button" class="botao-icone" data-fechar-dialogo aria-label="Fechar">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
     <p>Você está conectado como administrador da rede de Maria das Dores (Mari). Antes de sair, certifique-se de que
       outro familiar assumiu a administração em Pessoas da rede.</p>
     <div class="dialogo-mvp__acoes">
