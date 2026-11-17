@@ -256,7 +256,6 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
   gap: var(--espaco-md);
   align-items: flex-start;
   min-width: 0;
-
   background: var(--cor-neutra-clara-01);
   border-radius: var(--raio-lg);
   padding: var(--espaco-md);
@@ -373,8 +372,8 @@ html.tema--acolhedor .agenda__avatar {
   text-align: left;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-border: var(--borda-padrao);
-    border-radius: var(--raio-xl);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-xl);
   cursor: pointer;
 }
 
@@ -480,7 +479,7 @@ border: var(--borda-padrao);
 
 [data-turnos] {
   margin-top: var(--espaco-md);
-  background: var(--cor-fundo-pagina);
+  background: var(--cor-neutra-clara-01);
   border: var(--borda-padrao);
   border-radius: var(--raio-md);
   overflow: hidden;
@@ -558,6 +557,7 @@ border: var(--borda-padrao);
 
 .agenda__link-lacuna:hover {
   background: var(--cor-superficie-suave);
+  border-radius: var(--raio-lg);
 }
 
 .agenda__outro-dia {

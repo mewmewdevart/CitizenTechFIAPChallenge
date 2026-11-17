@@ -107,13 +107,17 @@
 .painel__bloco {
   display: grid;
   gap: var(--espaco-sm);
-  padding: 0 var(--espaco-md);
+  padding: var(--espaco-md);
   border-radius: var(--raio-lg);
   background: var(--cor-fundo-pagina);
 }
 
 .painel__bloco .painel__item {
   padding: var(--espaco-md) 0;
+}
+
+.painel__bloco .painel__item:first-child {
+  padding: 0 0 var(--espaco-md);
 }
 
 .faixa-alerta {

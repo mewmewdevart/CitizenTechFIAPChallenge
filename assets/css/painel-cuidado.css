@@ -144,10 +144,11 @@ html.tema--acolhedor .avatar {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--espaco-md);
+  gap: var(--espaco-md);
   background: var(--cor-neutra-clara-01);
   border-radius: var(--raio-lg);
   padding: var(--espaco-md);
-  
+
 }
 
 html:not(.tema--acolhedor) .inicio__resumo .painel__bloco {
@@ -731,6 +732,15 @@ html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
 
 .meds__painel-estoque[hidden] {
   display: none;
+}
+
+.meds__registro--concluido {
+  opacity: 0.72;
+}
+
+.meds__registro--concluido .painel__texto strong {
+  font-weight: var(--peso-normal);
+  color: var(--cor-texto-secundario);
 }
 
 .rotina__painel {

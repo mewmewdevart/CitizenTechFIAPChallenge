@@ -155,7 +155,7 @@
   font-size: var(--texto-legenda);
 }
 
-.calendario-mensal__grade > span {
+.calendario-mensal__grade>span {
   color: var(--cor-texto-secundario);
   padding-bottom: var(--espaco-xs);
 }
@@ -194,7 +194,7 @@
   display: flex;
   justify-content: center;
   gap: 3px;
-  font-size: 9px;
+  font-size: 14px;
   line-height: 1;
 }
 
@@ -340,7 +340,7 @@
   color: var(--cor-texto-secundario);
 }
 
-.dialogo-mvp__cabecalho + p {
+.dialogo-mvp__cabecalho+p {
   color: var(--cor-texto-secundario);
 }
 
@@ -370,20 +370,20 @@
   gap: var(--espaco-md);
 }
 
-.dialogo-mvp__cabecalho > form {
+.dialogo-mvp__cabecalho>form {
   flex: none;
 }
 
-.dialogo-mvp > :where(:not(:first-child)),
-.formulario-mvp > :where(:not(:first-child)) {
+.dialogo-mvp> :where(:not(:first-child)),
+.formulario-mvp> :where(:not(:first-child)) {
   margin-top: var(--espaco-lg);
 }
 
-.dialogo-mvp--compacto > :where(:not(:first-child)) {
+.dialogo-mvp--compacto> :where(:not(:first-child)) {
   margin-top: var(--espaco-md);
 }
 
-.dialogo-mvp > .dialogo-mvp__cabecalho + :is(p, .dialogo-mvp__subtitulo) {
+.dialogo-mvp>.dialogo-mvp__cabecalho+ :is(p, .dialogo-mvp__subtitulo) {
   margin-top: var(--espaco-sm);
 }
 
@@ -611,7 +611,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .dialogo-mvp__acoes > .botao {
+  .dialogo-mvp__acoes>.botao {
     flex: 1 1 auto;
     min-height: var(--tamanho-alvo-toque);
     min-width: 0;
