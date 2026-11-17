@@ -9,7 +9,9 @@
     obterEstado,
     atualizarEstado,
     obterUsuarioAtual,
+    resolverPessoaRede,
     escaparHtml,
+    sanitizarHtmlEditor,
     formatarData,
     formatarDataCurta,
     capitalizarPrimeira,
@@ -545,12 +547,18 @@
     renderizarEscala();
   });
 
+  const editoresRicos = core.inicializarEditoresRicos(pagina);
+
   pagina.querySelector('[data-formulario-mvp="relato"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
     const form = evento.target;
+    editoresRicos.sincronizarTodos(form);
     const campos = Object.fromEntries(new FormData(form));
     const relato = (campos.relato || '').trim();
-    if (!relato) return;
+    if (!relato) {
+      anunciarStatus(elementoStatus, 'Descreva o relato do turno antes de salvar.');
+      return;
+    }
 
     atualizarEstado(estado => ({
       ...estado,
@@ -570,7 +578,9 @@
     }));
 
     form.reset();
+    editoresRicos.limparTodos(form);
     form.closest('dialog')?.close();
+    atualizarPassagemCuidado();
     anunciarStatus(elementoStatus, 'Relato salvo no diário de turno da Mari.');
   });
 
@@ -610,9 +620,53 @@
     }
   };
 
+  const atualizarPassagemCuidado = () => {
+    const painelPassagem = pagina.querySelector('#titulo-passagem')?.closest('section');
+    if (!painelPassagem) return;
+
+    const estado = obterEstado();
+    const diasComRelato = Object.keys(estado.reports || {})
+      .filter(dia => Array.isArray(estado.reports[dia]) && estado.reports[dia].length > 0)
+      .sort((a, b) => b.localeCompare(a));
+    if (!diasComRelato.length) return;
+
+    const diaMaisRecente = diasComRelato[0];
+    const [nome, papel, , relato, proximo] = estado.reports[diaMaisRecente][0];
+    const pessoa = resolverPessoaRede(nome, estado);
+    const srcAvatar = pessoa?.foto || `assets/media/mascotes/${escaparHtml(pessoa?.avatar || 'icone-mascote-cubado.svg')}`;
+    const dataFormatada = formatarData(diaMaisRecente, { day: 'numeric', month: 'short', year: 'numeric' });
+
+    const imgAvatar = painelPassagem.querySelector('.painel__item img.avatar');
+    const nomeEl = painelPassagem.querySelector('.painel__texto strong');
+    const subtituloEl = painelPassagem.querySelector('.painel__texto span');
+    const relatoEl = painelPassagem.querySelector('[data-passagem-relato], :scope > p');
+    const notaEl = painelPassagem.querySelector('.passagem__nota');
+
+    if (imgAvatar) imgAvatar.src = srcAvatar;
+    if (nomeEl) nomeEl.textContent = nome;
+    if (subtituloEl) {
+      subtituloEl.innerHTML = `${escaparHtml(papel || '')}${papel ? ' - ' : ''}<time datetime="${escaparHtml(diaMaisRecente)}">${escaparHtml(dataFormatada)}</time>`;
+    }
+    if (relatoEl) relatoEl.innerHTML = sanitizarHtmlEditor(relato);
+    if (notaEl) {
+      const textoProximo = (proximo || '').trim();
+      notaEl.hidden = !textoProximo;
+      if (textoProximo) {
+        const tituloNota = notaEl.querySelector('strong');
+        const textoNota = notaEl.querySelector('span');
+        if (tituloNota) tituloNota.textContent = 'Para o próximo turno';
+        if (textoNota) textoNota.innerHTML = sanitizarHtmlEditor(textoProximo.replaceAll('\n', '<br>'));
+      }
+    }
+  };
+
   renderizarPortaRemedios();
   renderizarEscala();
   sincronizarRedeInicio();
+  atualizarPassagemCuidado();
   atualizarProximoCompromisso();
-  window.addEventListener('mutirao:perfil-atualizado', sincronizarRedeInicio);
+  window.addEventListener('mutirao:perfil-atualizado', () => {
+    sincronizarRedeInicio();
+    atualizarPassagemCuidado();
+  });
 })();

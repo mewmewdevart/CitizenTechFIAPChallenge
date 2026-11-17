@@ -215,40 +215,40 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
 }
 
 .ficha__cartao--saude dd :is(ul, ol),
-.editar-ficha__editor-area :is(ul, ol) {
+.ficha__relato-conteudo :is(ul, ol) {
   margin: 6px 0;
   padding-left: 20px;
 }
 
 .ficha__cartao--saude dd ul,
-.editar-ficha__editor-area ul {
+.ficha__relato-conteudo ul {
   list-style-type: disc;
 }
 
 .ficha__cartao--saude dd ol,
-.editar-ficha__editor-area ol {
+.ficha__relato-conteudo ol {
   list-style-type: decimal;
 }
 
 .ficha__cartao--saude dd li+li,
-.editar-ficha__editor-area li+li {
+.ficha__relato-conteudo li+li {
   margin-top: 2px;
 }
 
 .ficha__cartao--saude dd :is(b, strong),
-.editar-ficha__editor-area :is(b, strong) {
+.ficha__relato-conteudo :is(b, strong) {
   font-weight: var(--peso-negrito);
   color: var(--cor-texto-principal);
 }
 
 .ficha__cartao--saude dd u,
-.editar-ficha__editor-area u {
+.ficha__relato-conteudo u {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .ficha__cartao--saude dd :is(p, div)+ :is(p, div),
-.editar-ficha__editor-area :is(p, div)+ :is(p, div) {
+.ficha__relato-conteudo :is(p, div)+ :is(p, div) {
   margin-top: 4px;
 }
 
@@ -627,63 +627,6 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
   width: auto;
   height: auto;
   font-size: var(--texto-micro);
-}
-
-.editar-ficha__editor-rico {
-  border: var(--borda-controle);
-  border-radius: var(--raio-lg);
-  background: var(--cor-superficie);
-  overflow: hidden;
-}
-
-.editar-ficha__editor-rico:focus-within {
-  border-color: var(--cor-primaria);
-}
-
-.editar-ficha__editor-barra {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-bottom: var(--borda-padrao);
-  background: var(--cor-fundo-pagina);
-}
-
-.editar-ficha__editor-botao {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  min-height: 36px;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: var(--raio-sm);
-  background: transparent;
-  color: var(--cor-texto-secundario);
-  cursor: pointer;
-}
-
-.editar-ficha__editor-botao:hover {
-  background: var(--cor-superficie-suave);
-  color: var(--cor-primaria);
-}
-
-.editar-ficha__editor-botao[aria-pressed="true"] {
-  background: var(--cor-superficie-suave);
-  border-color: var(--cor-borda-sutil);
-  color: var(--cor-primaria);
-}
-
-.editar-ficha__editor-area {
-  min-height: 100px;
-  padding: 10px var(--espaco-md);
-  font: inherit;
-  font-size: var(--texto-interface);
-  line-height: 1.5;
-  color: var(--cor-texto-secundario);
-  outline: none;
-  overflow-wrap: anywhere;
 }
 
 @media (max-width: 600px) {

@@ -338,6 +338,7 @@
 }
 
 .formulario-mvp label,
+.formulario-mvp__campo-editor,
 .dialogo-mvp__rotulo-compartilhar {
   display: grid;
   gap: var(--espaco-xs);

@@ -84,45 +84,8 @@
     atualizarBotaoOculto(botaoForm, info.visivelForm, info.rotulo);
   };
 
-  const sanitizarHtmlEditor = html => {
-    const template = document.createElement('template');
-    template.innerHTML = String(html ?? '');
-    const tagsPermitidas = new Set(['B', 'STRONG', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV']);
-    const limparNo = no => {
-      [...no.childNodes].forEach(filho => {
-        if (filho.nodeType !== Node.ELEMENT_NODE) return;
-        if (!tagsPermitidas.has(filho.tagName)) {
-          filho.replaceWith(document.createTextNode(filho.textContent || ''));
-          return;
-        }
-        [...filho.attributes].forEach(attr => filho.removeAttribute(attr.name));
-        limparNo(filho);
-      });
-    };
-    limparNo(template.content);
-    if (!(template.content.textContent || '').trim() && !template.content.querySelector('li')) {
-      return '';
-    }
-    return template.innerHTML.trim();
-  };
-
-  const sincronizarEditorRico = editor => {
-    if (!editor) return;
-    const area = editor.querySelector('[data-editor-alvo]');
-    if (!area) return;
-    const chave = area.dataset.editorAlvo;
-    const inputOculto = pagina.querySelector(`[data-input-editor="${chave}"]`);
-    if (inputOculto) {
-      inputOculto.value = sanitizarHtmlEditor(area.innerHTML);
-    }
-    editor.querySelectorAll('[data-comando-editor]').forEach(botao => {
-      try {
-        botao.setAttribute('aria-pressed', String(document.queryCommandState(botao.dataset.comandoEditor)));
-      } catch {
-        botao.setAttribute('aria-pressed', 'false');
-      }
-    });
-  };
+  const sanitizarHtmlEditor = core.sanitizarHtmlEditor;
+  const editoresRicos = core.inicializarEditoresRicos(pagina);
 
   let diaSelecionado = HOJE;
   let anoAtual = 2026;
@@ -179,8 +142,8 @@
         </div>
         ${tarefa ? `<p class="ficha__texto-suave ficha__relato-meta"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> ${escaparHtml(tarefa)}</p>` : ''}
         ${ocorrencia ? `<p class="ficha__texto-suave ficha__relato-meta"><i class="fa-regular fa-note-sticky" aria-hidden="true"></i> Ocorrência${escaparHtml(ocorrencia)}</p>` : ''}
-        <p>${escaparHtml(relato)}</p>
-        ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><p>${escaparHtml(proximo).replaceAll('\n', '<br>')}</p></div>` : ''}
+        <div class="ficha__relato-conteudo">${sanitizarHtmlEditor(relato)}</div>
+        ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><div class="ficha__relato-conteudo">${sanitizarHtmlEditor(String(proximo).replaceAll('\n', '<br>'))}</div></div>` : ''}
       </article>`;
     }).join('')}`;
   };
@@ -271,7 +234,7 @@
 
   const serializarFormularioFicha = () => {
     if (!formularioFicha) return '';
-    formularioFicha.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditorRico);
+    editoresRicos.sincronizarTodos(formularioFicha);
     const dados = [...new FormData(formularioFicha).entries()].map(([k, v]) => [k, String(v)]);
     const previaFoto = formularioFicha.querySelector('[data-foto-previa]');
     dados.push(['__fotoRemovida', previaFoto?.dataset.fotoRemovida || '']);
@@ -503,7 +466,7 @@
         const areaEditor = formulario?.querySelector('[data-editor-alvo="historicoSaude"]');
         if (areaEditor) {
           areaEditor.innerHTML = htmlSeguro;
-          sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
+          editoresRicos.sincronizarTodos(formulario);
         }
       } else if (chave === 'alergias' || chave === 'condicoes') {
         const itens = String(valor || '').split(',').map(item => item.trim()).filter(Boolean);
@@ -691,16 +654,6 @@
       });
     }
 
-    if (botao.dataset.comandoEditor) {
-      const editor = botao.closest('[data-editor-rico]');
-      const area = editor?.querySelector('[data-editor-alvo]');
-      if (area) {
-        area.focus();
-        document.execCommand(botao.dataset.comandoEditor, false, null);
-        sincronizarEditorRico(editor);
-      }
-    }
-
     if (botao.classList.contains('editar-ficha__remover-etiqueta')) {
       const lista = botao.closest('[data-lista-etiquetas]');
       botao.closest('.ficha__etiqueta')?.remove();
@@ -766,34 +719,14 @@
     leitor.readAsDataURL(arquivo);
   });
 
-  pagina.addEventListener('mousedown', evento => {
-    if (evento.target.closest('[data-comando-editor]')) {
-      evento.preventDefault();
-    }
-  });
-
-  document.addEventListener('selectionchange', () => {
-    const areaEditor = document.activeElement?.closest?.('[data-editor-alvo]');
-    if (areaEditor && pagina.contains(areaEditor)) {
-      sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
-    }
-  });
-
-  ['input', 'keyup', 'mouseup'].forEach(tipoEvento => {
-    pagina.addEventListener(tipoEvento, evento => {
-      const areaEditor = evento.target.closest('[data-editor-alvo]');
-      if (areaEditor) sincronizarEditorRico(areaEditor.closest('[data-editor-rico]'));
-    });
-  });
-
   pagina.addEventListener('submit', evento => {
     const formulario = evento.target;
     const tipoFormulario = formulario.dataset.formularioMvp;
     if (!tipoFormulario) return;
 
     evento.preventDefault();
+    editoresRicos.sincronizarTodos(formulario);
     if (tipoFormulario === 'ficha') {
-      formulario.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditorRico);
       formulario.querySelectorAll('.editar-ficha__input-etiqueta').forEach(inputEtiqueta => {
         if (!inputEtiqueta.value.trim()) return;
         adicionarEtiqueta(inputEtiqueta.closest('[data-lista-etiquetas]'), inputEtiqueta.value);
@@ -848,8 +781,8 @@
         reports: {
           ...estado.reports,
           [campos.dia]: [
-            ...(estado.reports[campos.dia] || []),
-            [usuario.nome, `${usuario.papel} · ${turno}`, '', textoRelato, (campos.recado || '').trim()]
+            [usuario.nome, `${usuario.papel} · ${turno}`, '', textoRelato, (campos.recado || '').trim()],
+            ...(estado.reports[campos.dia] || [])
           ]
         }
       }));
@@ -860,7 +793,10 @@
     }
 
     formulario.closest('dialog')?.close();
-    if (tipoFormulario !== 'ficha') formulario.reset();
+    if (tipoFormulario !== 'ficha') {
+      formulario.reset();
+      editoresRicos.limparTodos(formulario);
+    }
     registrarStatus(mensagem);
     renderizar();
   });

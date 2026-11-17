@@ -131,7 +131,7 @@
           dia: '2026-11-09',
           titulo: '06h e 08h · Medicações da manhã administradas',
           descricao: 'Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h',
-          icone: 'icone-medicamento.svg',
+          icone: 'bi bi-capsule',
           concluida: true,
           href: 'ficha.html#diario',
           rotuloAcao: 'Ver no Diário'
@@ -161,7 +161,7 @@
           dia: '2026-11-09',
           titulo: '20h · Metformina e separação de documentos',
           descricao: 'Administrada por Zé da Manga (Zé) · RG e carteirinha separados para a UBS · Turno 19h–24h',
-          icone: 'icone-medicamento.svg',
+          icone: 'bi bi-capsule',
           concluida: true,
           href: 'documentos.html',
           rotuloAcao: 'Ver Documentos'
@@ -180,7 +180,7 @@
           dia: HOJE,
           titulo: '08h · Metformina',
           descricao: 'Não administrada · Ocorrência registrada por Bea',
-          icone: 'icone-medicamento.svg',
+          icone: 'bi bi-capsule',
           concluida: false,
           href: 'medicamentos.html',
           rotuloAcao: 'Registrar administração'
@@ -190,7 +190,7 @@
           dia: HOJE,
           titulo: '20h · Metformina',
           descricao: 'Prevista para 20h · Turno de Zé da Manga (Zé)',
-          icone: 'icone-medicamento.svg',
+          icone: 'bi bi-capsule',
           concluida: false,
           href: 'medicamentos.html',
           rotuloAcao: 'Registrar administração'
@@ -200,7 +200,7 @@
           dia: HOJE,
           titulo: '06h · Medicações em jejum administradas',
           descricao: '3 doses administradas às 06h10 por Beatriz da Silva (Bea) · Turno 07h–12h',
-          icone: 'icone-medicamento.svg',
+          icone: 'bi bi-capsule',
           concluida: true,
           href: 'medicamentos.html#registros-de-hoje',
           rotuloAcao: 'Ver registros'
@@ -212,8 +212,8 @@
             'Beatriz da Silva (Bea)',
             'Cuidadora · Turno 07h–12h',
             'Tarefa relacionada · Retirar medicamento na UBS · Ocorrência · Metformina das 08h não administrada',
-            'Confirmei a consulta das 14h. A metformina das 08h não foi administrada e o motivo não foi informado. Caso não apareça ninguém para assumir o turno seguinte, posso estender meu turno até 13h.',
-            'Ana leva a pasta e retira o medicamento na UBS. A volta está combinada com Paulo.\nA agendar consulta com otorrinolaringologista. Antes de agendar, confirme se o convênio cobre a consulta.'
+            'Confirmei a consulta das 14h. A metformina das 08h não foi administrada e o motivo não foi informado.',
+            'A agendar consulta com otorrinolaringologista. Antes de agendar, confirme se o convênio cobre a consulta.'
           ],
           [
             'Ana da Silva (Aninha)',
@@ -432,6 +432,96 @@
     '"': '&quot;',
     "'": '&#39;'
   })[caractere]);
+
+  const sanitizarHtmlEditor = html => {
+    const template = document.createElement('template');
+    template.innerHTML = String(html ?? '');
+    const tagsPermitidas = new Set(['B', 'STRONG', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV']);
+    const limparNo = no => {
+      [...no.childNodes].forEach(filho => {
+        if (filho.nodeType !== Node.ELEMENT_NODE) return;
+        if (!tagsPermitidas.has(filho.tagName)) {
+          filho.replaceWith(document.createTextNode(filho.textContent || ''));
+          return;
+        }
+        [...filho.attributes].forEach(attr => filho.removeAttribute(attr.name));
+        limparNo(filho);
+      });
+    };
+    limparNo(template.content);
+    if (!(template.content.textContent || '').trim() && !template.content.querySelector('li')) {
+      return '';
+    }
+    return template.innerHTML.trim();
+  };
+
+  const inicializarEditoresRicos = raiz => {
+    if (!raiz) {
+      return { sincronizarTodos: () => {}, limparTodos: () => {} };
+    }
+
+    const sincronizarEditor = editor => {
+      if (!editor) return;
+      const area = editor.querySelector('[data-editor-alvo]');
+      if (!area) return;
+      const chave = area.dataset.editorAlvo;
+      const inputOculto = raiz.querySelector(`[data-input-editor="${chave}"]`);
+      if (inputOculto) {
+        inputOculto.value = sanitizarHtmlEditor(area.innerHTML);
+      }
+      editor.querySelectorAll('[data-comando-editor]').forEach(botao => {
+        try {
+          botao.setAttribute('aria-pressed', String(document.queryCommandState(botao.dataset.comandoEditor)));
+        } catch {
+          botao.setAttribute('aria-pressed', 'false');
+        }
+      });
+    };
+
+    raiz.addEventListener('mousedown', evento => {
+      if (evento.target.closest('[data-comando-editor]')) {
+        evento.preventDefault();
+      }
+    });
+
+    raiz.addEventListener('click', evento => {
+      const botao = evento.target.closest('[data-comando-editor]');
+      if (!botao) return;
+      const editor = botao.closest('[data-editor-rico]');
+      const area = editor?.querySelector('[data-editor-alvo]');
+      if (!area) return;
+      area.focus();
+      document.execCommand(botao.dataset.comandoEditor, false, null);
+      sincronizarEditor(editor);
+    });
+
+    document.addEventListener('selectionchange', () => {
+      const areaEditor = document.activeElement?.closest?.('[data-editor-alvo]');
+      if (areaEditor && raiz.contains(areaEditor)) {
+        sincronizarEditor(areaEditor.closest('[data-editor-rico]'));
+      }
+    });
+
+    ['input', 'keyup', 'mouseup'].forEach(tipoEvento => {
+      raiz.addEventListener(tipoEvento, evento => {
+        const areaEditor = evento.target.closest('[data-editor-alvo]');
+        if (areaEditor) sincronizarEditor(areaEditor.closest('[data-editor-rico]'));
+      });
+    });
+
+    return {
+      sincronizarTodos: (container = raiz) => {
+        container.querySelectorAll('[data-editor-rico]').forEach(sincronizarEditor);
+      },
+      limparTodos: (container = raiz) => {
+        container.querySelectorAll('[data-editor-rico]').forEach(editor => {
+          const area = editor.querySelector('[data-editor-alvo]');
+          if (area) area.innerHTML = '';
+          sincronizarEditor(editor);
+        });
+      }
+    };
+  };
 
   const gerarChaveData = (ano, mes, dia) => [
     ano,
@@ -998,6 +1088,8 @@
     normalizarBusca,
     vincularFiltro,
     escaparHtml,
+    sanitizarHtmlEditor,
+    inicializarEditoresRicos,
     gerarChaveData,
     formatarData,
     formatarDataCurta,

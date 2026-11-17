@@ -252,7 +252,7 @@
               <span>Cuidadora - <time datetime="2026-11-09T08:10">9 nov. 2026 · 08h10</time></span>
             </div>
           </div>
-          <p>Agendar consulta com otorrinolaringologista para Dona Mari.</p>
+          <div class="passagem__conteudo" data-passagem-relato>Agendar consulta com otorrinolaringologista para Dona Mari.</div>
           <div class="passagem__nota">
             <strong>Antes de agendar</strong>
             <span>Confirme se o convênio cobre a consulta.</span>
@@ -280,7 +280,28 @@
       </div>
       <p data-contexto-relato-inicio>Maria das Dores (Mari) · Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por Zé da Manga (Zé)</p>
       <form class="formulario-mvp" data-formulario-mvp="relato">
-        <label>Relato do turno<textarea name="relato" rows="4" placeholder="Descreva o que aconteceu durante o cuidado." required></textarea></label>
+        <div class="formulario-mvp__campo-editor">
+          <span id="rotulo-relato-inicio" class="editar-ficha__rotulo-campo">Relato do turno</span>
+          <input type="hidden" name="relato" value="" data-input-editor="relatoInicio" />
+          <div class="editar-ficha__editor-rico" data-editor-rico="relatoInicio">
+            <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold"
+                aria-pressed="false" aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold"
+                  aria-hidden="true"></i></button>
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
+                aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
+                  aria-hidden="true"></i></button>
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
+                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
+                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
+                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i
+                  class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
+            </div>
+            <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
+              aria-required="true" aria-labelledby="rotulo-relato-inicio" data-editor-alvo="relatoInicio"></div>
+          </div>
+        </div>
         <label>Tarefa relacionada · opcional
           <select name="tarefa">
             <option value="">Selecione uma tarefa</option>
@@ -289,7 +310,28 @@
             <option>20h · Metformina</option>
           </select>
         </label>
-        <label>Recado para o próximo turno · opcional<textarea name="recado" rows="3" placeholder="O que a próxima pessoa precisa saber?"></textarea></label>
+        <div class="formulario-mvp__campo-editor">
+          <span id="rotulo-recado-inicio" class="editar-ficha__rotulo-campo">Recado para o próximo turno · opcional</span>
+          <input type="hidden" name="recado" value="" data-input-editor="recadoInicio" />
+          <div class="editar-ficha__editor-rico" data-editor-rico="recadoInicio">
+            <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold"
+                aria-pressed="false" aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold"
+                  aria-hidden="true"></i></button>
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
+                aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
+                  aria-hidden="true"></i></button>
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
+                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
+                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
+                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i
+                  class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
+            </div>
+            <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
+              aria-labelledby="rotulo-recado-inicio" data-editor-alvo="recadoInicio"></div>
+          </div>
+        </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario">Salvar relato</button>
