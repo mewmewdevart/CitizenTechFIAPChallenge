@@ -77,6 +77,8 @@
     const inputForm = formulario?.elements?.[chave];
     if (inputForm) {
       inputForm.value = info.visivelForm ? valorReal : obterValorMascarado(chave);
+      inputForm.readOnly = !info.visivelForm;
+      inputForm.title = info.visivelForm ? '' : `Clique no ícone para revelar e editar ${info.rotulo}`;
     }
     const botaoForm = formulario?.querySelector(`.editar-ficha__botao-oculto[data-alternar-oculto="${chave}"]`);
     atualizarBotaoOculto(botaoForm, info.visivelForm, info.rotulo);
@@ -328,7 +330,7 @@
     const blocoAlergia = alergias
       ? `<div class="folha-impressao__alerta">
           <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Alergia à ${escaparHtml(alergias.toLowerCase())}</strong>
-          <p>Não administrar. Em caso de dor, consultar o responsável antes.</p>
+          <p>Não administrar. Em caso de dúvida, consultar o responsável antes.</p>
         </div>`
       : `<div class="folha-impressao__cartao">
           <h4>Alergias registradas</h4>
@@ -374,7 +376,7 @@
           const dataItem = formatarData(item.dia, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '') + '.';
           const horaItem = item.hora ? item.hora.replace(':00', 'h') : '';
           const localTexto = item.local ? ` · ${item.local}` : '';
-          const respTexto = item.responsavel ? ` · ${item.responsavel} acompanha.` : '';
+          const respTexto = item.acompanhante ? ` · ${item.acompanhante} acompanha.` : '';
           return `<li>${escaparHtml(`${dataItem}${horaItem ? `, ${horaItem}` : ''} · ${item.titulo}${localTexto}${respTexto}`)}</li>`;
         }).join('')}</ul>`
       : '<p>Nenhum compromisso agendado</p>';
@@ -499,8 +501,9 @@
         }
       } else if (chave === 'alergias' || chave === 'condicoes') {
         const itens = String(valor || '').split(',').map(item => item.trim()).filter(Boolean);
+        const classeEtiqueta = chave === 'alergias' ? 'ficha__etiqueta ficha__etiqueta--alerta' : 'ficha__etiqueta';
         no.innerHTML = itens.length
-          ? itens.map(item => `<span class="ficha__etiqueta ficha__etiqueta--alerta">${escaparHtml(item)}</span>`).join(' ')
+          ? itens.map(item => `<span class="${classeEtiqueta}">${escaparHtml(item)}</span>`).join(' ')
           : 'Nenhuma registrada';
         const listaModal = formulario?.querySelector(`[data-lista-etiquetas="${chave}"]`);
         if (listaModal) {
@@ -508,7 +511,7 @@
           const inputEtiqueta = listaModal.querySelector('.editar-ficha__input-etiqueta');
           itens.forEach(item => {
             const span = document.createElement('span');
-            span.className = 'ficha__etiqueta ficha__etiqueta--alerta';
+            span.className = classeEtiqueta;
             span.innerHTML = `${escaparHtml(item)} <button type="button" class="editar-ficha__remover-etiqueta" aria-label="Remover ${escaparHtml(item)}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
             listaModal.insertBefore(span, inputEtiqueta);
           });
@@ -567,8 +570,9 @@
     const jaExiste = [...lista.querySelectorAll('.ficha__etiqueta')]
       .some(el => el.textContent.trim().toLowerCase() === valor.toLowerCase());
     if (!jaExiste) {
+      const ehAlergia = lista.dataset.listaEtiquetas === 'alergias';
       const span = document.createElement('span');
-      span.className = 'ficha__etiqueta ficha__etiqueta--alerta';
+      span.className = ehAlergia ? 'ficha__etiqueta ficha__etiqueta--alerta' : 'ficha__etiqueta';
       span.innerHTML = `${escaparHtml(valor)} <button type="button" class="editar-ficha__remover-etiqueta" aria-label="Remover ${escaparHtml(valor)}"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>`;
       lista.insertBefore(span, lista.querySelector('.editar-ficha__input-etiqueta'));
       sincronizarInputEtiquetas(lista);
