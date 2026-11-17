@@ -6,19 +6,44 @@
   const { obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
 
   const lista = pagina.querySelector('[data-participantes]');
+  const secaoConvites = pagina.querySelector('[data-secao-convites]');
+  const listaConvites = pagina.querySelector('[data-convites-lista]');
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const dialogoEnviado = document.getElementById('dialogo-convite-enviado');
   const formConvite = pagina.querySelector('[data-formulario-mvp="convite"]');
   const erroConvite = pagina.querySelector('[data-erro-convite]');
 
   const PARTICIPANTES = [
-    { nome: 'Zé da Manga (Zé)', papel: 'Neto · Administrador', situacao: 'Você', avatar: 'icone-mascote-cubado.svg', perfil: 'meu-perfil.html' },
-    { nome: 'Ana da Silva (Aninha)', papel: 'Filha · Contato de referência · Participante', situacao: 'Convite aceito', avatar: 'icone-mascote-espeto.svg' },
-    { nome: 'Beatriz da Silva (Bea)', papel: 'Cuidadora · Participante', situacao: 'Convite aceito', avatar: 'icone-mascote-trevo.svg' },
-    { nome: 'Paulo da Silva (Paul)', papel: 'Neto · Participante', situacao: 'Convite aceito', avatar: 'icone-mascote-pingo.svg' }
+    { nome: 'Zé da Manga (Zé)', vinculo: 'Neto', papel: 'Administrador', situacao: 'Você', avatar: 'icone-mascote-cubado.svg', perfil: 'meu-perfil.html' },
+    { nome: 'Ana da Silva (Aninha)', vinculo: 'Filha · Contato de referência', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-espeto.svg' },
+    { nome: 'Beatriz da Silva (Bea)', vinculo: 'Cuidadora', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-trevo.svg' },
+    { nome: 'Paulo da Silva (Paul)', vinculo: 'Neto', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-pingo.svg' }
   ];
 
   const obterConvites = () => obterEstado().convites || [];
+
+  const montarItemPessoa = pessoa => {
+    const imagem = pessoa.foto
+      ? `<img class="avatar" src="${escaparHtml(pessoa.foto)}" alt="">`
+      : pessoa.avatar
+        ? `<img class="avatar" src="assets/media/mascotes/${escaparHtml(pessoa.avatar)}" alt="">`
+        : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';
+    const acao = pessoa.perfil
+      ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
+      : pessoa.pendente
+        ? `<button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}" aria-label="Cancelar convite para ${escaparHtml(pessoa.nome)}">Cancelar convite</button>`
+        : '<span class="selo selo--sucesso">Ativo na rede</span>';
+    const situacao = pessoa.pendente
+      ? `<span class="selo selo--atencao">${escaparHtml(pessoa.situacao)}</span>`
+      : pessoa.perfil
+        ? `<span>${escaparHtml(pessoa.situacao)}</span>`
+        : '';
+    return `<li class="painel__item">
+      ${imagem}
+      <span class="painel__texto"><strong>${escaparHtml(pessoa.nome)}</strong><span>Vínculo: ${escaparHtml(pessoa.vinculo)} · Papel: ${escaparHtml(pessoa.papel)}</span>${situacao}</span>
+      ${acao}
+    </li>`;
+  };
 
   const renderizar = () => {
     const perfil = obterEstado().perfilUsuario;
@@ -35,33 +60,17 @@
 
     const convites = obterConvites().map(convite => ({
       nome: convite.email,
-      papel: `${convite.vinculo} · ${convite.papel}`,
-      situacao: 'Aguardando aceite',
+      vinculo: convite.vinculo,
+      papel: convite.papel,
+      situacao: 'Convite simulado',
       pendente: true
     }));
 
-    lista.innerHTML = [...participantes, ...convites].map(pessoa => {
-      const imagem = pessoa.foto
-        ? `<img class="avatar" src="${escaparHtml(pessoa.foto)}" alt="">`
-        : pessoa.avatar
-          ? `<img class="avatar" src="assets/media/mascotes/${escaparHtml(pessoa.avatar)}" alt="">`
-          : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';
-      const acao = pessoa.perfil
-        ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
-        : pessoa.pendente
-          ? `<button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}" aria-label="Cancelar convite para ${escaparHtml(pessoa.nome)}">Cancelar convite</button>`
-          : '<span class="selo selo--sucesso">Ativo na rede</span>';
-      const situacao = pessoa.pendente
-        ? `<span class="selo selo--atencao">${escaparHtml(pessoa.situacao)}</span>`
-        : pessoa.perfil
-          ? `<span>${escaparHtml(pessoa.situacao)}</span>`
-          : '';
-      return `<li class="painel__item">
-        ${imagem}
-        <span class="painel__texto"><strong>${escaparHtml(pessoa.nome)}</strong><span>${escaparHtml(pessoa.papel)}</span>${situacao}</span>
-        ${acao}
-      </li>`;
-    }).join('');
+    lista.innerHTML = participantes.map(montarItemPessoa).join('');
+    if (secaoConvites && listaConvites) {
+      secaoConvites.hidden = convites.length === 0;
+      listaConvites.innerHTML = convites.map(montarItemPessoa).join('');
+    }
   };
 
   pagina.addEventListener('click', async evento => {
