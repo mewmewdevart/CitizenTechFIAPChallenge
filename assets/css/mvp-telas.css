@@ -566,7 +566,8 @@ html.tema--acolhedor .ficha__etiqueta {
 
 @media (width < 1150px) {
   [data-mvp-status] {
-    bottom: calc(var(--altura-barra-inferior-mobile) + env(safe-area-inset-bottom) + var(--espaco-md));
+    top: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-sm));
+    bottom: auto;
     left: var(--espaco-md);
     right: var(--espaco-md);
     width: auto;
