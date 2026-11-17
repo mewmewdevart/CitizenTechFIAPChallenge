@@ -140,13 +140,54 @@
     </li>`).join('')}</ul>`;
   };
 
+  const controlesRegistros = pagina.querySelector('[data-registros-controles]');
+  const buscaRegistros = pagina.querySelector('[data-registros-busca]');
+  const botaoVerMaisRegistros = pagina.querySelector('[data-registros-ver-mais]');
+  let filtroEstadoRegistros = 'Todos';
+  let termoRegistros = '';
+  let mostrarTodosRegistros = false;
+
   const renderizarRegistros = grupos => {
     const registradas = grupos.flatMap(grupo => grupo.itens).filter(dose => dose.estado !== 'prevista').reverse();
-    listaRegistros.innerHTML = registradas.map(dose => `<li class="painel__item">
-      <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
-      <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
-      ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar agora</button>` : ''}
-    </li>`).join('');
+    const temMaisDeCinco = registradas.length > 5;
+    if (controlesRegistros) controlesRegistros.hidden = !temMaisDeCinco;
+    if (!temMaisDeCinco) {
+      filtroEstadoRegistros = 'Todos';
+      termoRegistros = '';
+      mostrarTodosRegistros = false;
+      if (buscaRegistros) buscaRegistros.value = '';
+    }
+
+    const filtrados = registradas.filter(dose => {
+      const bateEstado = filtroEstadoRegistros === 'Todos' || dose.estado === filtroEstadoRegistros;
+      const termo = termoRegistros.trim().toLocaleLowerCase('pt-BR');
+      const bateTexto = !termo || `${dose.hora} ${dose.nome} ${descreverRegistro(dose)}`.toLocaleLowerCase('pt-BR').includes(termo);
+      return bateEstado && bateTexto;
+    });
+
+    const filtroAtivo = filtroEstadoRegistros !== 'Todos' || Boolean(termoRegistros.trim());
+    const visiveis = (!filtroAtivo && !mostrarTodosRegistros && filtrados.length > 5)
+      ? filtrados.slice(0, 5)
+      : filtrados;
+
+    if (botaoVerMaisRegistros) {
+      if (!filtroAtivo && filtrados.length > 5) {
+        botaoVerMaisRegistros.hidden = false;
+        botaoVerMaisRegistros.textContent = mostrarTodosRegistros
+          ? 'Ver menos'
+          : `Ver mais (${filtrados.length - 5})`;
+      } else {
+        botaoVerMaisRegistros.hidden = true;
+      }
+    }
+
+    listaRegistros.innerHTML = visiveis.length
+      ? visiveis.map(dose => `<li class="painel__item">
+        <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
+        <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
+        ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar agora</button>` : ''}
+      </li>`).join('')
+      : '<li class="estado-vazio"><strong>Nenhum registro encontrado</strong><p>Tente outro filtro ou termo de busca.</p></li>';
   };
 
   const renderizarEstoque = itens => {
@@ -164,12 +205,53 @@
     itemEmEstoque = baixos[0]?.nome || itens.find(item => item.estoque !== null)?.nome || 'Metformina';
   };
 
+  const controlesItens = pagina.querySelector('[data-itens-controles]');
+  const buscaItens = pagina.querySelector('[data-itens-busca]');
+  const botaoVerMaisItens = pagina.querySelector('[data-itens-ver-mais]');
+  let filtroTipoItens = 'Todos';
+  let termoItens = '';
+  let mostrarTodosItens = false;
+
   const renderizarItens = itens => {
-    listaItens.innerHTML = itens.map(item => `<li class="painel__item">
-      <span class="painel__icone" aria-hidden="true"><i class="${item.tipo === 'Insumo' ? 'fa-solid fa-box-open' : 'bi bi-capsule'}"></i></span>
-      <span class="painel__texto"><strong>${escaparHtml(item.nome)}</strong><span>${escaparHtml(descreverItem(item))}</span></span>
-      <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.nome)}">Ver item</button>
-    </li>`).join('');
+    const temMaisDeCinco = itens.length > 5;
+    if (controlesItens) controlesItens.hidden = !temMaisDeCinco;
+    if (!temMaisDeCinco) {
+      filtroTipoItens = 'Todos';
+      termoItens = '';
+      mostrarTodosItens = false;
+      if (buscaItens) buscaItens.value = '';
+    }
+
+    const filtrados = itens.filter(item => {
+      const bateTipo = filtroTipoItens === 'Todos' || item.tipo === filtroTipoItens;
+      const termo = termoItens.trim().toLocaleLowerCase('pt-BR');
+      const bateTexto = !termo || `${item.nome} ${item.uso || ''}`.toLocaleLowerCase('pt-BR').includes(termo);
+      return bateTipo && bateTexto;
+    });
+
+    const filtroAtivo = filtroTipoItens !== 'Todos' || Boolean(termoItens.trim());
+    const visiveis = (!filtroAtivo && !mostrarTodosItens && filtrados.length > 5)
+      ? filtrados.slice(0, 5)
+      : filtrados;
+
+    if (botaoVerMaisItens) {
+      if (!filtroAtivo && filtrados.length > 5) {
+        botaoVerMaisItens.hidden = false;
+        botaoVerMaisItens.textContent = mostrarTodosItens
+          ? 'Ver menos'
+          : `Ver mais (${filtrados.length - 5})`;
+      } else {
+        botaoVerMaisItens.hidden = true;
+      }
+    }
+
+    listaItens.innerHTML = visiveis.length
+      ? visiveis.map(item => `<li class="painel__item">
+        <span class="painel__icone" aria-hidden="true"><i class="${item.tipo === 'Insumo' ? 'fa-solid fa-box-open' : 'bi bi-capsule'}"></i></span>
+        <span class="painel__texto"><strong>${escaparHtml(item.nome)}</strong><span>${escaparHtml(descreverItem(item))}</span></span>
+        <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.nome)}">Ver item</button>
+      </li>`).join('')
+      : '<li class="estado-vazio"><strong>Nenhum item encontrado</strong><p>Tente outro filtro ou termo de busca.</p></li>';
   };
 
   const renderizar = () => {
@@ -327,6 +409,46 @@
     dialogos.item.close();
     anunciarStatus(elementoStatus, `${nome} adicionado aos itens da Mari.`);
     renderizar();
+  });
+
+  controlesRegistros?.addEventListener('click', evento => {
+    const botao = evento.target.closest('[data-registros-filtro]');
+    if (!botao) return;
+    filtroEstadoRegistros = botao.dataset.registrosFiltro || 'Todos';
+    for (const item of controlesRegistros.querySelectorAll('[data-registros-filtro]')) {
+      item.setAttribute('aria-pressed', String(item === botao));
+    }
+    renderizarRegistros(obterCompartimentos());
+  });
+
+  buscaRegistros?.addEventListener('input', () => {
+    termoRegistros = buscaRegistros.value;
+    renderizarRegistros(obterCompartimentos());
+  });
+
+  botaoVerMaisRegistros?.addEventListener('click', () => {
+    mostrarTodosRegistros = !mostrarTodosRegistros;
+    renderizarRegistros(obterCompartimentos());
+  });
+
+  controlesItens?.addEventListener('click', evento => {
+    const botao = evento.target.closest('[data-itens-filtro]');
+    if (!botao) return;
+    filtroTipoItens = botao.dataset.itensFiltro || 'Todos';
+    for (const item of controlesItens.querySelectorAll('[data-itens-filtro]')) {
+      item.setAttribute('aria-pressed', String(item === botao));
+    }
+    renderizarItens(obterItens());
+  });
+
+  buscaItens?.addEventListener('input', () => {
+    termoItens = buscaItens.value;
+    renderizarItens(obterItens());
+  });
+
+  botaoVerMaisItens?.addEventListener('click', () => {
+    mostrarTodosItens = !mostrarTodosItens;
+    renderizarItens(obterItens());
   });
 
   renderizar();
