@@ -301,7 +301,18 @@ summary::after {
   transition: background-color var(--transicao-padrao), color var(--transicao-padrao);
 }
 
-#barra-lateral nav a::before {
+#barra-lateral nav a:hover:not([aria-current="page"]) {
+  background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
+}
+
+#barra-lateral nav a:is(:active, [aria-current="page"]) {
+  background: var(--cor-primaria);
+  color: var(--cor-neutra-clara-02);
+  font-weight: var(--peso-semibold);
+}
+
+html.tema--acolhedor #barra-lateral nav a::before {
   content: "";
   position: absolute;
   left: -20px;
@@ -314,38 +325,30 @@ summary::after {
   transition: opacity var(--transicao-padrao);
 }
 
-#barra-lateral nav a:is(:hover, :active, [aria-current="page"]) {
+html.tema--acolhedor #barra-lateral nav a:is(:hover, :active, [aria-current="page"]),
+html.acessibilidade--alto-contraste #barra-lateral nav a:is(:hover, :active, [aria-current="page"]) {
   background: var(--cor-primaria);
   color: var(--cor-neutra-clara-02);
   font-weight: var(--peso-semibold);
 }
 
-#barra-lateral nav a:is(:hover, :active, [aria-current="page"])::before {
+html.tema--acolhedor #barra-lateral nav a:is(:hover, :active, [aria-current="page"])::before {
   opacity: 1;
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #barra-lateral nav a:hover:not([aria-current="page"]) {
-  background: var(--cor-superficie-suave);
-  color: var(--cor-primaria);
-  font-weight: var(--peso-regular);
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #barra-lateral nav a::before {
-  display: none;
 }
 
 .cartao-status {
   margin-top: 14px;
-  border: var(--borda-padrao);
-  border-radius: var(--raio-xl);
-  padding: 10px var(--espaco-md);
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .cartao-status {
   border: 0;
   border-top: var(--borda-padrao);
   border-radius: 0;
   padding: 14px 0 0;
+}
+
+html.tema--acolhedor .cartao-status,
+html.acessibilidade--alto-contraste .cartao-status {
+  border: var(--borda-padrao);
+  border-radius: var(--raio-xl);
+  padding: 10px var(--espaco-md);
 }
 
 .cartao-status h2 {
@@ -400,7 +403,7 @@ body.menu-fechado .barra-topo {
   margin-left: var(--largura-menu-lateral);
   max-width: none;
   min-width: 0;
-  padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-xl)) 28px 32px;
+  padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-xl)) clamp(28px, 4vw, 56px) 32px 28px;
   transition: margin-left var(--transicao-padrao);
 }
 
@@ -456,11 +459,10 @@ body.menu-fechado .conteudo-pagina {
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
   padding: var(--espaco-lg);
-  box-shadow: var(--sombra-cartao);
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .cartao {
-  box-shadow: none;
+html.tema--acolhedor .cartao {
+  box-shadow: var(--sombra-cartao);
 }
 
 .cartao__cabecalho {
@@ -628,28 +630,30 @@ dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
   display: flex;
   align-items: center;
   padding: var(--espaco-sm) var(--espaco-md);
-  border: var(--borda-padrao);
+  border: 1px solid transparent;
   border-radius: var(--raio-lg);
-  background: var(--cor-superficie-suave);
+  background: transparent;
   color: var(--cor-texto-principal);
-  font-weight: var(--peso-semibold);
+  font-weight: var(--peso-regular);
   text-decoration: none;
 }
 
-#resultados-busca a:hover {
-  border-color: var(--cor-primaria);
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #resultados-busca a {
-  border-color: transparent;
-  background: transparent;
-  font-weight: var(--peso-regular);
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #resultados-busca a:hover,
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #resultados-busca a:focus-visible {
+#resultados-busca a:hover,
+#resultados-busca a:focus-visible {
   background: var(--cor-superficie-suave);
   color: var(--cor-primaria);
+}
+
+html.tema--acolhedor #resultados-busca a,
+html.acessibilidade--alto-contraste #resultados-busca a {
+  border: var(--borda-padrao);
+  background: var(--cor-superficie-suave);
+  font-weight: var(--peso-semibold);
+}
+
+html.tema--acolhedor #resultados-busca a:hover,
+html.acessibilidade--alto-contraste #resultados-busca a:hover {
+  border-color: var(--cor-primaria);
 }
 
 #dialogo-busca button {

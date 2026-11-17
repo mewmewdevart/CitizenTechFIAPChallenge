@@ -71,31 +71,49 @@ body.menu-fechado .conteudo-pagina.agenda {
   min-width: 0;
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
+.agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
   border: 0;
   border-radius: 0;
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel .calendario-mensal {
+.agenda__painel .calendario-mensal {
   padding: 0;
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel .agenda__legenda {
+.agenda__painel .agenda__legenda {
   padding: var(--espaco-md) 0 0;
   border-top: var(--borda-padrao);
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel .agenda__tarefas {
+.agenda__painel .agenda__tarefas {
   padding: 0 0 0 var(--espaco-lg);
   border-left: var(--borda-padrao);
 }
 
 @media (max-width: 860px) {
-  html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .agenda__painel .agenda__tarefas {
+  .agenda__painel .agenda__tarefas {
     padding: var(--espaco-lg) 0 0;
     border-left: 0;
     border-top: var(--borda-padrao);
   }
+}
+
+html.tema--acolhedor .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas),
+html.acessibilidade--alto-contraste .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
+  border: var(--borda-padrao);
+  border-radius: var(--raio-lg);
+}
+
+html.tema--acolhedor .agenda__painel .calendario-mensal,
+html.acessibilidade--alto-contraste .agenda__painel .calendario-mensal,
+html.tema--acolhedor .agenda__painel .agenda__tarefas,
+html.acessibilidade--alto-contraste .agenda__painel .agenda__tarefas {
+  padding: var(--espaco-lg);
+}
+
+html.tema--acolhedor .agenda__painel .agenda__legenda,
+html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
+  padding: var(--espaco-md);
 }
 
 .agenda__painel > h2 {

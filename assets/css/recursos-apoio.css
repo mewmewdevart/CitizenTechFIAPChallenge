@@ -142,7 +142,6 @@ body.menu-fechado .conteudo-pagina.apoio.privacidade {
   background: var(--cor-superficie);
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
-  box-shadow: var(--sombra-cartao);
 }
 
 .apoio__cartao-conteudo {
@@ -185,12 +184,11 @@ body.menu-fechado .conteudo-pagina.apoio.privacidade {
   background: var(--cor-superficie);
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
-  box-shadow: var(--sombra-cartao);
   min-width: 0;
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) :is(.apoio__painel, .apoio__cartao) {
-  box-shadow: none;
+html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
+  box-shadow: var(--sombra-cartao);
 }
 
 .apoio__painel h2 {

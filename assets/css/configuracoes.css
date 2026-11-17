@@ -10,16 +10,17 @@
   top: var(--espaco-lg);
   display: grid;
   gap: 4px;
-  padding: var(--espaco-sm);
-  border: var(--borda-padrao);
+  padding: 0;
+  border: 0;
   border-radius: var(--raio-xl);
-  background: var(--cor-superficie);
+  background: transparent;
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__menu {
-  border: 0;
-  padding: 0;
-  background: transparent;
+html.tema--acolhedor .configuracoes__menu,
+html.acessibilidade--alto-contraste .configuracoes__menu {
+  padding: var(--espaco-sm);
+  border: var(--borda-padrao);
+  background: var(--cor-superficie);
 }
 
 .configuracoes__aba {
@@ -106,22 +107,28 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__
 .configuracoes__bloco {
   display: grid;
   gap: var(--espaco-md);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.configuracoes__bloco + .configuracoes__bloco {
+  padding-top: var(--espaco-lg);
+  border-top: var(--borda-padrao);
+}
+
+html.tema--acolhedor .configuracoes__bloco,
+html.acessibilidade--alto-contraste .configuracoes__bloco {
   padding: var(--espaco-lg);
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
 }
 
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__bloco {
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  background: transparent;
-}
-
-html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__bloco + .configuracoes__bloco {
+html.tema--acolhedor .configuracoes__bloco + .configuracoes__bloco,
+html.acessibilidade--alto-contraste .configuracoes__bloco + .configuracoes__bloco {
   padding-top: var(--espaco-lg);
-  border-top: var(--borda-padrao);
 }
 
 .configuracoes__bloco-cabecalho {
