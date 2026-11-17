@@ -236,6 +236,7 @@
     <div class="agenda__inferior" id="escala">
       <section class="cartao agenda__painel">
         <h2 data-titulo-escala tabindex="-1">Escala semanal · 9 a 15 nov.</h2>
+        <p class="agenda__subtitulo-escala" data-subtitulo-escala></p>
         <div class="agenda__semana" data-semana></div>
         <div data-turnos></div>
       </section>
@@ -392,7 +393,8 @@
       <p class="dialogo-mvp__contexto">Retirar o medicamento prescrito na UBS após a consulta das 14h. Responsável: Ana da Silva (Aninha).</p>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <a class="botao botao--primario" href="documentos.html">Ver receita em Documentos</a>
+        <a class="botao botao--secundario" href="documentos.html?documento=doc-receita-ubs">Ver receita em Documentos</a>
+        <button type="button" class="botao botao--primario" data-concluir-tarefa-ubs>Marcar como retirada</button>
       </div>
     </dialog>
 

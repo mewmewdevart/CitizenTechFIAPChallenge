@@ -31,7 +31,11 @@
 
   const parametros = new URLSearchParams(location.search);
   const diaParam = parametros.get('dia');
-  const diaInicial = diaParam && /^\d{4}-\d{2}-\d{2}$/.test(diaParam) ? diaParam : HOJE;
+  const compromissoParam = parametros.get('compromisso');
+  const eventoInicial = compromissoParam ? core.obterCompromissos().find(item => item.id === compromissoParam) : null;
+  const diaInicial = diaParam && /^\d{4}-\d{2}-\d{2}$/.test(diaParam)
+    ? diaParam
+    : (eventoInicial?.dia && /^\d{4}-\d{2}-\d{2}$/.test(eventoInicial.dia) ? eventoInicial.dia : HOJE);
 
   let diaSelecionado = diaInicial;
   let diaSemana = diaInicial;
@@ -47,7 +51,28 @@
 
   const obterTarefas = () => {
     const doses = core.obterDoses();
+    const compartimentos = core.obterCompartimentos();
     return obterEstado().tasks.flatMap(tarefa => {
+      if (tarefa.id === 'tarefa-hoje-jejum-06') {
+        const grupo6h = compartimentos.find(g => g.hora === '6h');
+        if (!grupo6h) return [tarefa];
+        const administradas = grupo6h.itens.filter(item => item.estado === 'administrado');
+        const horarios = [...new Set(administradas.map(item => item.horario).filter(Boolean))]
+          .sort()
+          .map(h => h.replace(':', 'h'));
+        const responsaveis = [...new Set(administradas.map(item => item.quem).filter(Boolean))];
+        const quemTexto = responsaveis.length ? responsaveis.join(', ') : (grupo6h.responsavel || 'Responsável do turno');
+        const horariosTexto = horarios.length > 1
+          ? `${horarios.slice(0, -1).join(', ')} e ${horarios[horarios.length - 1]}`
+          : (horarios[0] || '');
+        const titulo = grupo6h.completo
+          ? '06h · Medicações em jejum administradas'
+          : `06h · Medicações em jejum (${administradas.length} de ${grupo6h.itens.length})`;
+        const descricao = administradas.length
+          ? `${administradas.length} ${administradas.length === 1 ? 'dose administrada' : 'doses administradas'} por ${quemTexto}${horariosTexto ? ` (${horariosTexto})` : ''}${grupo6h.responsavel ? ` · Turno de ${grupo6h.responsavel}` : ''}`
+          : `Previstas para 06h${grupo6h.responsavel ? ` · Turno de ${grupo6h.responsavel}` : ''}`;
+        return [{ ...tarefa, titulo, descricao, concluida: grupo6h.completo }];
+      }
       const hora = { 'tarefa-metformina-08': '8h', 'tarefa-metformina-20': '20h' }[tarefa.id];
       if (!hora) return [tarefa];
       const dose = doses.find(item => item.chave === core.chaveDose(hora, 'Metformina'));
@@ -214,6 +239,10 @@
     if (tituloEscala) {
       tituloEscala.textContent = `Escala semanal · ${inicioSemana} a ${fimSemana}`;
     }
+    const subtituloEscala = pagina.querySelector('[data-subtitulo-escala]');
+    if (subtituloEscala) {
+      subtituloEscala.textContent = `Cobertura da semana · exibindo turnos de ${formatarDataCurta(diaSemana, true)}`;
+    }
 
     pagina.querySelector('[data-semana]').innerHTML = semana.map(dia => `
       <button type="button" data-dia-semana="${dia}" aria-pressed="${diaSemana === dia}">
@@ -222,14 +251,20 @@
       </button>
     `).join('');
 
-    const linhaDescoberto = (horario, dia) => `<div class="agenda__lacuna">
+    const linhaDescoberto = (horario, dia) => {
+      const atribuicao = estado.atribuicoesTurno?.[`${dia}|${horario}`];
+      const detalhe = atribuicao
+        ? `Atribuição simulada para ${atribuicao.responsavel} · Aguardando aceite (sem cobertura real).`
+        : 'A Mari precisa de acompanhamento nesse horário.';
+      return `<div class="agenda__lacuna">
       <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div>
-        <strong>${escaparHtml(horario)} · Turno sem cobertura</strong>
-        <p>A Mari precisa de acompanhamento nesse horário.</p>
+        <strong>${escaparHtml(horario)} · ${atribuicao ? 'Atribuição simulada' : 'Turno sem cobertura'}</strong>
+        <p>${escaparHtml(detalhe)}</p>
       </div>
       <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Cobrir horário</button>
     </div>`;
+    };
 
     const renderizarTurno = (seg, dia) => {
       const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga');
@@ -562,6 +597,37 @@
       return;
     }
 
+    if (botao.hasAttribute('data-concluir-tarefa-ubs')) {
+      const tarefaAtual = obterEstado().tasks.find(t => t.id === 'tarefa-ubs-retirada');
+      const novaConclusao = !tarefaAtual?.concluida;
+      atualizarEstado(estado => ({
+        ...estado,
+        tasks: (estado.tasks || []).map(t => (t.id === 'tarefa-ubs-retirada'
+          ? {
+            ...t,
+            concluida: novaConclusao,
+            descricao: novaConclusao
+              ? 'Medicamento retirado na UBS · Ana da Silva (Aninha)'
+              : 'Após a consulta · Ana da Silva (Aninha) · Receita vinculada'
+          }
+          : t))
+      }));
+      botao.closest('dialog')?.close();
+      registrarStatus(novaConclusao
+        ? 'Retirada de medicamento na UBS marcada como concluída.'
+        : 'Retirada de medicamento na UBS retornou para pendentes.');
+      renderizar();
+      return;
+    }
+
+    if (botao.dataset.dialogo === 'dialogo-tarefa-ubs') {
+      const tarefaAtual = obterEstado().tasks.find(t => t.id === 'tarefa-ubs-retirada');
+      const botaoConcluir = document.querySelector('[data-concluir-tarefa-ubs]');
+      if (botaoConcluir) {
+        botaoConcluir.textContent = tarefaAtual?.concluida ? 'Desfazer retirada' : 'Marcar como retirada';
+      }
+    }
+
     if (botao.hasAttribute('data-abrir-atribuir-turno')) {
       dialogoCobrirHorario?.close();
       const dialogoAtribuir = document.getElementById('dialogo-atribuir-turno');
@@ -707,7 +773,20 @@
       const inicio = cobrirTudo ? gapInicio : Number(formulario.elements.inicio.value);
       const fim = cobrirTudo ? gapFim : Number(formulario.elements.fim.value);
 
-      atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
+      atualizarEstado(estado => {
+        const proximoEstado = aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim);
+        const atribuicoesRestantes = Object.fromEntries(
+          Object.entries(proximoEstado.atribuicoesTurno || {}).filter(([, item]) => {
+            if (item.dia !== diaTurno) return true;
+            const seg = extrairHorasTurno(item.horario);
+            return !(seg.inicio < fim && seg.fim > inicio);
+          })
+        );
+        return {
+          ...proximoEstado,
+          atribuicoesTurno: atribuicoesRestantes
+        };
+      });
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;
       const usuarioAtual = obterUsuarioAtual();
@@ -727,10 +806,28 @@
         'Paulo da Silva (Paul)': 'assets/media/mascotes/icone-mascote-pingo.svg'
       };
       const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
+      const horarioAlvo = horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || '';
+      const avatar = avatares[responsavel] || 'assets/media/mascotes/icone-mascote-trevo.svg';
+      if (horarioAlvo) {
+        atualizarEstado(estado => ({
+          ...estado,
+          atribuicoesTurno: {
+            ...(estado.atribuicoesTurno || {}),
+            [`${diaTurno}|${horarioAlvo}`]: {
+              responsavel,
+              nomeCurto,
+              avatar,
+              dia: diaTurno,
+              horario: horarioAlvo,
+              status: 'Atribuição simulada · Aguardando aceite'
+            }
+          }
+        }));
+      }
       mensagem = {
-        titulo: 'Atribuição enviada · Aguardando aceite',
-        descricao: `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)}, ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}. ${nomeCurto} recebeu o convite. O horário continua sem cobertura até aceitar.`,
-        avatar: avatares[responsavel] || 'assets/media/mascotes/icone-mascote-trevo.svg'
+        titulo: 'Atribuição simulada registrada',
+        descricao: `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)}, ${horarioAlvo}. Convite simulado para ${nomeCurto} (nenhum aviso real foi enviado; o horário segue sem cobertura).`,
+        avatar
       };
     }
 
@@ -809,4 +906,5 @@
   );
 
   renderizar();
+  if (compromissoParam) abrirDetalhesEvento(compromissoParam);
 })();
