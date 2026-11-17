@@ -105,16 +105,47 @@
   };
 
   const atualizarProximoCompromisso = () => {
-    const bloco = pagina.querySelector('[data-proximo-compromisso]');
-    if (!bloco) return;
-    const proximo = core.obterProximoCompromisso();
-    bloco.querySelector('strong').textContent = proximo
-      ? `${proximo.dia === HOJE ? '' : core.formatarDataCurta(proximo.dia) + ' · '}${proximo.hora.replace(':00', 'h')} · ${proximo.titulo}`
-      : 'Nenhum compromisso agendado';
-    bloco.querySelector('[data-compromisso-detalhes]').textContent = proximo
-      ? [proximo.local, proximo.acompanhante && `${proximo.acompanhante} acompanha`].filter(Boolean).join(' · ')
-      : 'Consulte a Agenda para organizar os próximos cuidados.';
-    bloco.querySelector('a').href = proximo ? `agenda.html?dia=${encodeURIComponent(proximo.dia)}` : 'agenda.html';
+    const modelo = pagina.querySelector('[data-proximo-compromisso]');
+    const resumo = modelo?.closest('.inicio__resumo');
+    if (!modelo || !resumo) return;
+
+    resumo.querySelectorAll('[data-compromisso-extra]').forEach(el => el.remove());
+
+    const compromissos = core.obterCompromissos().filter(item => item.dia === HOJE);
+    const preencherBloco = (bloco, item, indice) => {
+      const pessoa = item ? core.resolverPessoaRede(item.acompanhante || item.criadoPor) : null;
+      const avatar = bloco.querySelector('.avatar');
+      if (avatar) {
+        avatar.src = pessoa ? pessoa.src : 'assets/media/mascotes/icone-mascote-espeto.svg';
+      }
+      const rotulo = bloco.querySelector('.inicio__rotulo');
+      if (rotulo) {
+        rotulo.textContent = indice === 0 ? 'Próximo compromisso' : 'Compromisso agendado';
+      }
+      bloco.querySelector('strong').textContent = item
+        ? `${item.dia === HOJE ? '' : core.formatarDataCurta(item.dia) + ' · '}${item.hora.replace(':00', 'h')} · ${item.titulo}`
+        : 'Nenhum compromisso agendado';
+      bloco.querySelector('[data-compromisso-detalhes]').textContent = item
+        ? [item.local, item.acompanhante && `${item.acompanhante} acompanha`].filter(Boolean).join(' · ')
+        : 'Consulte a Agenda para organizar os próximos cuidados.';
+      bloco.querySelector('a').href = item ? `agenda.html?dia=${encodeURIComponent(item.dia)}` : 'agenda.html';
+    };
+
+    if (!compromissos.length) {
+      preencherBloco(modelo, null, 0);
+      return;
+    }
+
+    preencherBloco(modelo, compromissos[0], 0);
+    let referencia = modelo;
+    for (let i = 1; i < compromissos.length; i++) {
+      const clone = modelo.cloneNode(true);
+      clone.removeAttribute('data-proximo-compromisso');
+      clone.setAttribute('data-compromisso-extra', compromissos[i].id || String(i));
+      preencherBloco(clone, compromissos[i], i);
+      referencia.after(clone);
+      referencia = clone;
+    }
   };
 
   const atualizarProximaMedicacao = grupos => {

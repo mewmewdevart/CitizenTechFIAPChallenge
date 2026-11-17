@@ -129,18 +129,30 @@
       return;
     }
 
-    containerTarefas.innerHTML = tarefas.map(tarefa => `
+    const renderizarItemTarefa = tarefa => `
       <div class="agenda__tarefa ${tarefa.concluida ? 'agenda__tarefa--concluida' : ''}">
         <span class="agenda__tarefa-icone"><img src="assets/media/icones/${escaparHtml(tarefa.icone)}" alt="" width="20" height="20"></span>
         <div>
           <strong>${escaparHtml(tarefa.titulo)}</strong>
           <p>${escaparHtml(tarefa.descricao)}</p>
-          ${tarefa.concluida ? '<span class="agenda__etiqueta agenda__etiqueta--sucesso">Concluída</span>' : ''}
         </div>
         ${tarefa.dialogo ? `<button class="botao botao--secundario" type="button" data-dialogo="${escaparHtml(tarefa.dialogo)}">Ver tarefa</button>` : ''}
         ${tarefa.href ? `<a class="botao botao--secundario" href="${escaparHtml(tarefa.href)}">${escaparHtml(tarefa.rotuloAcao)}</a>` : ''}
       </div>
-    `).join('');
+    `;
+
+    const pendentes = tarefas.filter(tarefa => !tarefa.concluida);
+    const concluidas = tarefas.filter(tarefa => tarefa.concluida);
+
+    containerTarefas.innerHTML = [
+      pendentes.map(renderizarItemTarefa).join(''),
+      concluidas.length
+        ? `<section class="agenda__tarefas-concluidas" aria-label="Tarefas cumpridas">
+            <h4 class="agenda__tarefas-subtitulo">Tarefas cumpridas</h4>
+            ${concluidas.map(renderizarItemTarefa).join('')}
+          </section>`
+        : ''
+    ].filter(Boolean).join('');
   };
 
   const renderizarAgenda = () => {
@@ -150,7 +162,7 @@
     pagina.querySelector('[data-eventos]').innerHTML = itens.map(item => `
       <article class="agenda__evento">
         <div class="agenda__tarefa">
-          ${avatarMascote('icone-mascote-espeto.svg')}
+          ${avatarMascote(core.resolverPessoaRede(item.acompanhante || item.criadoPor))}
           <div>
             <strong>${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</strong>
             <p>${escaparHtml([item.local, item.acompanhante].filter(Boolean).join(' · '))}</p>
@@ -274,6 +286,22 @@
     });
   });
 
+  const popularSelectAcompanhante = (select, valorSelecionado = '') => {
+    if (!select) return;
+    const usuario = core.obterUsuarioAtual();
+    const opcoes = core.obterParticipantesRede().map(pessoa => pessoa.nome);
+    const valorResolvido = valorSelecionado
+      ? core.resolverPessoaRede(valorSelecionado).nome
+      : usuario.nomeComApelido;
+    if (valorResolvido && !opcoes.includes(valorResolvido)) {
+      opcoes.push(valorResolvido);
+    }
+    select.innerHTML = opcoes
+      .map(nome => `<option value="${escaparHtml(nome)}">${escaparHtml(nome)}</option>`)
+      .join('');
+    select.value = valorResolvido || opcoes[0] || '';
+  };
+
   const abrirFormularioEvento = (eventoExistente = null) => {
     const dialogo = document.getElementById('dialogo-novo-compromisso');
     const formulario = dialogo?.querySelector('[data-formulario-mvp="evento"]');
@@ -286,7 +314,7 @@
     formulario.elements.dia.value = eventoExistente?.dia || diaSelecionado;
     formulario.elements.hora.value = eventoExistente?.hora || '';
     formulario.elements.local.value = eventoExistente?.local || '';
-    formulario.elements.acompanhante.value = eventoExistente?.acompanhante ?? 'Zé da Manga';
+    popularSelectAcompanhante(formulario.elements.acompanhante, eventoExistente?.acompanhante || '');
     if (tituloDialogo) {
       tituloDialogo.textContent = eventoExistente ? 'Editar compromisso' : 'Novo compromisso';
     }
@@ -616,7 +644,8 @@
               dia: campos.dia,
               hora: campos.hora,
               local,
-              acompanhante
+              acompanhante,
+              criadoPor: core.obterUsuarioAtual().nomeComApelido
             }
           ]
         };

@@ -86,6 +86,15 @@
       },
       events: [
         {
+          id: 'evt-caminhada-09',
+          dia: '2026-11-09',
+          hora: '15:30',
+          titulo: 'Caminhada leve no quintal e hidratação',
+          local: 'Casa · Turno 13h–19h',
+          acompanhante: 'Paulo da Silva (Paul)',
+          criadoPor: 'Paulo da Silva (Paul)'
+        },
+        {
           id: 'evt-ubs-10',
           dia: HOJE,
           hora: '14:00',
@@ -118,6 +127,46 @@
       shiftEdits: {},
       tasks: [
         {
+          id: 'tarefa-ontem-06-08',
+          dia: '2026-11-09',
+          titulo: '06h e 08h · Medicações da manhã administradas',
+          descricao: 'Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h',
+          icone: 'icone-medicamento.svg',
+          concluida: true,
+          href: 'ficha.html#diario',
+          rotuloAcao: 'Ver no Diário'
+        },
+        {
+          id: 'tarefa-ontem-otorrino',
+          dia: '2026-11-09',
+          titulo: '08h10 · Passagem registrada: agendar otorrino',
+          descricao: 'Verificar cobertura do Convênio Vida Plena antes de marcar · Beatriz da Silva (Bea)',
+          icone: 'icone-receita.svg',
+          concluida: true,
+          href: 'index.html#passagem-cuidado',
+          rotuloAcao: 'Ver passagem'
+        },
+        {
+          id: 'tarefa-ontem-retorno-ubs',
+          dia: '2026-11-09',
+          titulo: '16h · Retorno da consulta de terça combinado',
+          descricao: 'Paulo da Silva (Paul) confirmou buscar Mari e Ana na UBS após as 14h · Turno 13h–19h',
+          icone: 'icone-receita.svg',
+          concluida: true,
+          href: 'agenda.html?dia=2026-11-10',
+          rotuloAcao: 'Ver dia 10/11'
+        },
+        {
+          id: 'tarefa-ontem-20h-docs',
+          dia: '2026-11-09',
+          titulo: '20h · Metformina e separação de documentos',
+          descricao: 'Administrada por Zé da Manga (Zé) · RG e carteirinha separados para a UBS · Turno 19h–24h',
+          icone: 'icone-medicamento.svg',
+          concluida: true,
+          href: 'documentos.html',
+          rotuloAcao: 'Ver Documentos'
+        },
+        {
           id: 'tarefa-ubs-retirada',
           dia: HOJE,
           titulo: 'Retirar medicamento na UBS',
@@ -140,11 +189,21 @@
           id: 'tarefa-metformina-20',
           dia: HOJE,
           titulo: '20h · Metformina',
-          descricao: 'Prevista para 20h',
+          descricao: 'Prevista para 20h · Turno de Zé da Manga (Zé)',
           icone: 'icone-medicamento.svg',
           concluida: false,
           href: 'medicamentos.html',
           rotuloAcao: 'Registrar administração'
+        },
+        {
+          id: 'tarefa-hoje-jejum-06',
+          dia: HOJE,
+          titulo: '06h · Medicações em jejum administradas',
+          descricao: '3 doses administradas às 06h10 por Beatriz da Silva (Bea) · Turno 07h–12h',
+          icone: 'icone-medicamento.svg',
+          concluida: true,
+          href: 'medicamentos.html#registros-de-hoje',
+          rotuloAcao: 'Ver registros'
         }
       ],
       reports: {
@@ -306,9 +365,51 @@
   const obterCompromissos = (estado = estadoAtual) =>
     [...estado.events].sort((a, b) => `${a.dia}T${a.hora}`.localeCompare(`${b.dia}T${b.hora}`));
 
-  const obterProximoCompromisso = () => obterCompromissos().find(
-    item => `${item.dia}T${item.hora}` >= `${HOJE}T11:58`
-  );
+  const obterCompromissosFuturos = (estado = estadoAtual) =>
+    obterCompromissos(estado).filter(item => `${item.dia}T${item.hora}` >= `${HOJE}T11:58`);
+
+  const obterProximoCompromisso = () => obterCompromissosFuturos()[0];
+
+  const obterParticipantesRede = (estado = estadoAtual) => {
+    const usuario = obterUsuarioAtual(estado);
+    const lista = EQUIPE_CUIDADO.map(pessoa => {
+      if (pessoa.nome === 'Zé da Manga') {
+        return {
+          nome: usuario.nomeComApelido,
+          nomeBase: usuario.nome,
+          avatar: usuario.avatarArquivo,
+          foto: usuario.foto
+        };
+      }
+      return {
+        nome: pessoa.nome,
+        nomeBase: pessoa.nome.split(' (')[0].trim(),
+        avatar: pessoa.avatar,
+        foto: ''
+      };
+    });
+    return lista.filter(pessoa => !/maria das dores|\(mari\)/i.test(pessoa.nome));
+  };
+
+  const resolverPessoaRede = (nome, estado = estadoAtual) => {
+    const participantes = obterParticipantesRede(estado);
+    const alvo = normalizarBusca(nome);
+    const usuario = obterUsuarioAtual(estado);
+    let encontrada = participantes.find(pessoa =>
+      normalizarBusca(pessoa.nome) === alvo || normalizarBusca(pessoa.nomeBase) === alvo
+    );
+    if (!encontrada && alvo && (alvo.includes('ze da manga') || alvo === normalizarBusca(usuario.apelido))) {
+      encontrada = participantes.find(pessoa => normalizarBusca(pessoa.nome) === normalizarBusca(usuario.nomeComApelido));
+    }
+    const avatar = encontrada?.avatar || 'icone-mascote-cubado.svg';
+    const foto = encontrada?.foto || '';
+    return {
+      nome: encontrada?.nome || nome || usuario.nomeComApelido,
+      avatar,
+      foto,
+      src: foto || `assets/media/mascotes/${avatar}`
+    };
+  };
 
   const normalizarBusca = valor => String(valor ?? '').normalize('NFD')
     .replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR').trim();
@@ -890,7 +991,10 @@
     obterUsuarioAtual,
     nomePessoaAcompanhada,
     obterCompromissos,
+    obterCompromissosFuturos,
     obterProximoCompromisso,
+    obterParticipantesRede,
+    resolverPessoaRede,
     normalizarBusca,
     vincularFiltro,
     escaparHtml,
