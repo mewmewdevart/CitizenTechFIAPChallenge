@@ -4,11 +4,6 @@ body.menu-fechado .conteudo-pagina.apoio {
   min-width: 0;
 }
 
-body .conteudo-pagina.apoio.privacidade,
-body.menu-fechado .conteudo-pagina.apoio.privacidade {
-  max-width: 820px;
-}
-
 .apoio {
   display: grid;
   gap: var(--espaco-lg);

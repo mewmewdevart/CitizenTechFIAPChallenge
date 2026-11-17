@@ -242,7 +242,7 @@ html.tema--acolhedor .ajuda__contato {
   list-style: decimal;
 }
 
-.ajuda__editor-area li + li {
+.ajuda__editor-area li+li {
   margin-top: 2px;
 }
 
@@ -285,6 +285,11 @@ html.tema--acolhedor .ajuda__contato {
   padding-top: var(--espaco-xs);
 }
 
+.ajuda__acoes A {
+  color: var(--cor-primaria);
+  text-decoration: underline;
+}
+
 .ajuda__formulario [hidden] {
   display: none;
 }
@@ -314,6 +319,7 @@ html.tema--acolhedor .ajuda__contato {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .ajuda__pergunta,
   .ajuda__pergunta summary,
   .ajuda__pergunta summary i {

@@ -76,7 +76,7 @@
       <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
+      <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i
           class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
@@ -689,50 +689,12 @@
             <option value="Turno 19h–24h" selected>19h–24h</option>
           </select>
         </label>
-        <div class="formulario-mvp__campo-editor">
-          <span id="rotulo-relato-turno" class="editar-ficha__rotulo-campo">Relato do turno</span>
-          <input type="hidden" name="relato" value="" data-input-editor="relatoTurno" />
-          <div class="editar-ficha__editor-rico" data-editor-rico="relatoTurno">
-            <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold"
-                aria-pressed="false" aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
-                aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
-                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
-                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
-                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i
-                  class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
-            </div>
-            <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
-              aria-required="true" aria-labelledby="rotulo-relato-turno" data-editor-alvo="relatoTurno"></div>
-          </div>
-        </div>
-        <div class="formulario-mvp__campo-editor">
-          <span id="rotulo-recado-turno" class="editar-ficha__rotulo-campo">Recado para o próximo turno</span>
-          <input type="hidden" name="recado" value="" data-input-editor="recadoTurno" />
-          <div class="editar-ficha__editor-rico" data-editor-rico="recadoTurno">
-            <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold"
-                aria-pressed="false" aria-label="Negrito" title="Negrito"><i class="fa-solid fa-bold"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="underline"
-                aria-pressed="false" aria-label="Sublinhado" title="Sublinhado"><i class="fa-solid fa-underline"
-                  aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertUnorderedList"
-                aria-pressed="false" aria-label="Lista com marcadores" title="Lista com marcadores"><i
-                  class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
-              <button type="button" class="editar-ficha__editor-botao" data-comando-editor="insertOrderedList"
-                aria-pressed="false" aria-label="Lista numerada" title="Lista numerada"><i
-                  class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
-            </div>
-            <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
-              aria-labelledby="rotulo-recado-turno" data-editor-alvo="recadoTurno"></div>
-          </div>
-        </div>
+        <label>Relato do turno
+          <textarea name="relato" rows="3" placeholder="Como a Mari passou, alimentação, humor ou intercorrências..." required></textarea>
+        </label>
+        <label>Recado para o próximo turno (opcional)
+          <textarea name="recado" rows="2" placeholder="Orientações ou lembretes para quem assume o próximo turno"></textarea>
+        </label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario">Salvar relato</button>
@@ -748,14 +710,6 @@
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
-    <form method="dialog">
-      <h2 id="titulo-busca">Buscar uma página</h2><label for="campo-busca">Nome da página</label><input id="campo-busca"
-        type="search">
-      <p id="status-busca" role="status"></p>
-      <ul id="resultados-busca"></ul><button>Fechar</button>
-    </form>
-  </dialog>
 </body>
 
 </html>
