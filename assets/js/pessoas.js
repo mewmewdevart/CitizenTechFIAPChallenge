@@ -64,7 +64,7 @@
     }).join('');
   };
 
-  pagina.addEventListener('click', evento => {
+  pagina.addEventListener('click', async evento => {
     const botao = evento.target.closest('[data-fechar-dialogo]');
     if (botao) {
       botao.closest('dialog')?.close();
@@ -74,7 +74,12 @@
     const cancelar = evento.target.closest('[data-cancelar-convite]');
     if (cancelar) {
       const emailAlvo = cancelar.dataset.cancelarConvite;
-      if (!window.confirm(`Cancelar o convite de demonstração para ${emailAlvo}?`)) return;
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Cancelar convite',
+        descricao: `Deseja cancelar o convite de demonstração para ${emailAlvo}?`,
+        confirmarTexto: 'Cancelar convite'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => ({
         ...estado,
         convites: (estado.convites || []).filter(c => c.email !== emailAlvo)

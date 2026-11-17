@@ -456,7 +456,7 @@
     listaDias.querySelector(`[data-dia-semana="${diaSelecionado}"]`)?.focus();
   });
 
-  pagina.addEventListener('click', evento => {
+  pagina.addEventListener('click', async evento => {
     const botaoFechar = evento.target.closest('[data-fechar-dialogo]');
     if (botaoFechar) {
       botaoFechar.closest('dialog')?.close();
@@ -488,7 +488,12 @@
     }
 
     if (botao.hasAttribute('data-cancelar-cobertura')) {
-      if (!window.confirm('Cancelar a cobertura e deixar o intervalo disponível para a rede?')) return;
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Cancelar cobertura',
+        descricao: 'Cancelar a cobertura e deixar o intervalo disponível para a rede?',
+        confirmarTexto: 'Cancelar cobertura'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, 0, 0));
       botao.closest('dialog')?.close();
       anunciarStatus(elementoStatus, 'Cobertura do turno cancelada. O horário ficou disponível para a rede.');

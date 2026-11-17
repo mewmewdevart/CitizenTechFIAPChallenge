@@ -441,7 +441,7 @@
     atualizarPreviaNovaCobertura(evento.target.name === 'inicio');
   });
 
-  pagina.addEventListener('click', evento => {
+  pagina.addEventListener('click', async evento => {
     if (evento.target.closest('[data-ver-turno]')) {
       diaSemana = diaSelecionado;
       renderizarAgenda();
@@ -479,7 +479,13 @@
 
     if (botao.hasAttribute('data-excluir-compromisso')) {
       const item = obterTodosEventos().find(e => e.id === eventoEmFocoId);
-      if (!item || !window.confirm(`Excluir o compromisso “${item.titulo}” da Agenda?`)) return;
+      if (!item) return;
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Excluir compromisso',
+        descricao: `Deseja excluir o compromisso “${item.titulo}” da Agenda?`,
+        confirmarTexto: 'Excluir compromisso'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => ({
         ...estado,
         events: estado.events.filter(e => e.id !== item.id)
@@ -515,7 +521,12 @@
     }
 
     if (botao.hasAttribute('data-cancelar-cobertura')) {
-      if (!window.confirm('Cancelar a cobertura e deixar o intervalo disponível para a rede?')) return;
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Cancelar cobertura',
+        descricao: 'Cancelar a cobertura e deixar o intervalo disponível para a rede?',
+        confirmarTexto: 'Cancelar cobertura'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, 0, 0));
       botao.closest('dialog')?.close();
       registrarStatus('Cobertura do turno cancelada. O horário ficou disponível para a rede.');

@@ -148,7 +148,7 @@
     renderizar();
   });
 
-  pagina.addEventListener('click', evento => {
+  pagina.addEventListener('click', async evento => {
     const botao = evento.target.closest('button');
     if (!botao) return;
 
@@ -183,7 +183,13 @@
 
     if (botao.hasAttribute('data-excluir-documento')) {
       const doc = (obterEstado().documents || []).find(d => d.id === documentoEmFocoId);
-      if (!doc || !window.confirm(`Excluir a referência “${doc.titulo}”?`)) return;
+      if (!doc) return;
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Excluir documento',
+        descricao: `Deseja excluir a referência “${doc.titulo}”?`,
+        confirmarTexto: 'Excluir'
+      });
+      if (!confirmado) return;
       atualizarEstado(estado => ({
         ...estado,
         documents: (estado.documents || []).filter(d => d.id !== doc.id)

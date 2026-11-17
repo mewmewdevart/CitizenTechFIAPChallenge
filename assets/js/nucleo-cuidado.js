@@ -879,6 +879,68 @@
     return atualizarPrevia;
   }
 
+  function confirmarAcao({
+    titulo = 'Confirmar ação',
+    descricao = '',
+    confirmarTexto = 'Confirmar',
+    cancelarTexto = 'Voltar',
+    perigoso = true
+  } = {}) {
+    return new Promise(resolve => {
+      let dialogo = document.getElementById('dialogo-confirmacao-mvp');
+      if (!dialogo) {
+        dialogo = document.createElement('dialog');
+        dialogo.id = 'dialogo-confirmacao-mvp';
+        dialogo.className = 'dialogo-mvp dialogo-mvp--compacto';
+        dialogo.setAttribute('aria-labelledby', 'titulo-confirmacao-mvp');
+        dialogo.innerHTML = `
+          <div class="dialogo-mvp__cabecalho">
+            <h2 id="titulo-confirmacao-mvp"></h2>
+          </div>
+          <p data-confirmacao-descricao></p>
+          <div class="dialogo-mvp__acoes">
+            <button type="button" class="botao botao--secundario" data-confirmacao-cancelar></button>
+            <button type="button" class="botao" data-confirmacao-ok></button>
+          </div>
+        `;
+        document.body.appendChild(dialogo);
+      }
+
+      const tituloEl = dialogo.querySelector('#titulo-confirmacao-mvp');
+      const descEl = dialogo.querySelector('[data-confirmacao-descricao]');
+      const btnCancelar = dialogo.querySelector('[data-confirmacao-cancelar]');
+      const btnOk = dialogo.querySelector('[data-confirmacao-ok]');
+
+      tituloEl.textContent = titulo;
+      descEl.textContent = descricao;
+      descEl.hidden = !descricao;
+      btnCancelar.textContent = cancelarTexto;
+      btnOk.textContent = confirmarTexto;
+      btnOk.className = `botao ${perigoso ? 'botao--perigo' : 'botao--primario'}`;
+
+      let resolvido = false;
+      const finalizar = resultado => {
+        if (resolvido) return;
+        resolvido = true;
+        btnCancelar.removeEventListener('click', aoCancelar);
+        btnOk.removeEventListener('click', aoConfirmar);
+        dialogo.removeEventListener('close', aoFechar);
+        if (dialogo.open) dialogo.close();
+        resolve(resultado);
+      };
+
+      const aoCancelar = () => finalizar(false);
+      const aoConfirmar = () => finalizar(true);
+      const aoFechar = () => finalizar(false);
+
+      btnCancelar.addEventListener('click', aoCancelar);
+      btnOk.addEventListener('click', aoConfirmar);
+      dialogo.addEventListener('close', aoFechar);
+      dialogo.showModal();
+      btnCancelar.focus();
+    });
+  }
+
   let timerStatus = null;
   function anunciarStatus(elementoStatus, mensagem, opcoes = {}) {
     if (!elementoStatus) return;
@@ -1138,6 +1200,7 @@
     obterEscalaDia,
     renderizarCalendarioMensal,
     inicializarCompartilhamento,
+    confirmarAcao,
     anunciarStatus,
     chaveDose,
     obterDoses,
