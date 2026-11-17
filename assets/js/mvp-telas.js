@@ -112,7 +112,47 @@
     });
   };
 
+  const avatarPorNome = nome => (nome.startsWith('Ana')
+    ? 'icone-mascote-espeto.svg'
+    : nome.startsWith('Beatriz')
+      ? 'icone-mascote-trevo.svg'
+      : nome.startsWith('Paulo')
+        ? 'icone-mascote-pingo.svg'
+        : 'icone-mascote-cubado.svg');
+
+  const renderizarResumoUltimoRelato = () => {
+    const container = pagina.querySelector('[data-resumo-ultimo-relato-conteudo]');
+    if (!container) return;
+    const reports = obterEstado().reports || {};
+    const diasComRelato = Object.keys(reports)
+      .filter(dia => Array.isArray(reports[dia]) && reports[dia].length > 0)
+      .sort((a, b) => b.localeCompare(a));
+
+    if (!diasComRelato.length) {
+      container.innerHTML = '<p class="ficha__texto-suave">Nenhum relato registrado no diário ainda.</p>';
+      return;
+    }
+
+    const diaMaisRecente = diasComRelato[0];
+    const [nome, papel, , relato, proximo] = reports[diaMaisRecente][0];
+    const partes = String(papel || '').split(' · ');
+    const turno = partes.find(parte => parte.startsWith('Turno'));
+    const papelRestante = partes.filter(parte => parte !== turno).join(' · ');
+    const dataFormatada = formatarDataCurta(diaMaisRecente, true);
+
+    container.innerHTML = `<article class="ficha__relato">
+      <div class="ficha__relato-autor">
+        <img alt="" src="assets/media/mascotes/${avatarPorNome(nome)}">
+        <div><strong>${escaparHtml(nome)}</strong><p>${escaparHtml([dataFormatada, papelRestante].filter(Boolean).join(' · '))}</p></div>
+        ${turno ? `<span class="ficha__etiqueta">${escaparHtml(turno)}</span>` : ''}
+      </div>
+      <div class="ficha__relato-conteudo">${sanitizarHtmlEditor(relato)}</div>
+      ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><div class="ficha__relato-conteudo">${sanitizarHtmlEditor(String(proximo).replaceAll('\n', '<br>'))}</div></div>` : ''}
+    </article>`;
+  };
+
   const renderizarRelatos = () => {
+    renderizarResumoUltimoRelato();
     const containerRelatos = pagina.querySelector('[data-relatos]');
     if (!containerRelatos) return;
 
@@ -168,7 +208,7 @@
           ? 'icone-exame.svg'
           : 'icone-consulta.svg';
         return `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/${icone}">
-          <dt><a href="agenda.html?dia=${escaparHtml(item.dia)}">${escaparHtml(tituloDia)}</a></dt>
+          <dt><a href="agenda.html?dia=${escaparHtml(item.dia)}&compromisso=${encodeURIComponent(item.id)}">${escaparHtml(tituloDia)}</a></dt>
           <dd>${escaparHtml(subtitulo)}</dd>
         </div>`;
       }).join('');
@@ -176,7 +216,7 @@
       const exame = exames[0];
       const ultimoExame = exame ? `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
         <dt>Último exame cadastrado</dt>
-        <dd><a href="${detalheExame(exame)}">${escaparHtml(exame.titulo)} · ${escaparHtml(formatarData(exame.dia, { day: 'numeric', month: 'short' }))}</a></dd>
+        <dd><a href="${detalheExame(exame)}">Ver referência · ${escaparHtml(exame.titulo)} (${escaparHtml(formatarData(exame.dia, { day: 'numeric', month: 'short' }))})</a></dd>
       </div>` : '';
 
       listaResumo.innerHTML = itensHtml + ultimoExame || '<div><dt>Nenhum compromisso ou exame cadastrado</dt></div>';
@@ -185,8 +225,8 @@
     const listaExames = pagina.querySelector('[data-lista-exames]');
     if (listaExames) {
       listaExames.innerHTML = [
-        ...eventos.map(item => `<p><a href="agenda.html?dia=${escaparHtml(item.dia)}">${escaparHtml(formatarData(item.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</a></p>`),
-        ...exames.map(doc => `<p><a href="${detalheExame(doc)}">${escaparHtml(formatarData(doc.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(doc.titulo)} (Documentos)</a></p>`)
+        ...eventos.map(item => `<p><a href="agenda.html?dia=${escaparHtml(item.dia)}&compromisso=${encodeURIComponent(item.id)}">${escaparHtml(formatarData(item.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</a></p>`),
+        ...exames.map(doc => `<p><a href="${detalheExame(doc)}">${escaparHtml(formatarData(doc.dia, { day: 'numeric', month: 'short' }))} · Ver referência · ${escaparHtml(doc.titulo)} (Documentos)</a></p>`)
       ].join('') || '<p>Nenhum compromisso ou exame cadastrado.</p>';
     }
   };
