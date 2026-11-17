@@ -881,34 +881,19 @@ function sincronizarStatusMedicamentos() {
   const grupoProximo = proxima
     ? doses.filter(dose => dose.hora === proxima.hora && dose.estado === 'prevista')
     : [];
-  const itens = ocorrencias.length ? ocorrencias : grupoProximo;
   const ehAlerta = Boolean(ocorrencias.length);
 
-  const preencherLinha = (elemento, dose) => {
-    elemento.classList.toggle('cartao-status__linha--alerta', ehAlerta);
-    elemento.querySelector('strong').textContent = dose
-      ? `${dose.hora.padStart(3, '0')} · ${dose.nome}`
-      : 'Nenhuma dose futura';
-    elemento.querySelector('small').textContent = ehAlerta
-      ? 'Não administrada'
-      : dose ? 'Prevista' : 'Veja os registros de hoje';
-  };
-
-  if (!itens.length) {
-    preencherLinha(linha, null);
-    return;
+  linha.classList.toggle('cartao-status__linha--alerta', ehAlerta);
+  if (ehAlerta) {
+    linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'dose pendente' : 'doses pendentes'}`;
+    linha.querySelector('small').textContent = 'Não administrada · ver detalhes';
+  } else if (grupoProximo.length) {
+    linha.querySelector('strong').textContent = 'Há medicamentos previstos';
+    linha.querySelector('small').textContent = `Próximo horário às ${proxima.hora.padStart(3, '0')}`;
+  } else {
+    linha.querySelector('strong').textContent = 'Nenhuma dose futura';
+    linha.querySelector('small').textContent = 'Veja os registros de hoje';
   }
-
-  preencherLinha(linha, itens[0]);
-  let anterior = linha;
-  itens.slice(1).forEach(dose => {
-    const extra = linha.cloneNode(true);
-    extra.removeAttribute('data-status-medicamento');
-    extra.setAttribute('data-status-medicamento-extra', '');
-    preencherLinha(extra, dose);
-    anterior.after(extra);
-    anterior = extra;
-  });
 }
 
 document.addEventListener('DOMContentLoaded', sincronizarStatusMedicamentos);
