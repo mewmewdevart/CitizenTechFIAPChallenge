@@ -344,15 +344,18 @@
     if (!item || !dialogo || !lista) return;
 
     eventoEmFocoId = item.id;
-    lista.innerHTML = `
-      <div><dt>Compromisso</dt><dd>${escaparHtml(item.titulo)}</dd></div>
-      <div><dt>Data e horário</dt><dd>${escaparHtml(formatarDataCurta(item.dia, true))} · ${escaparHtml(item.hora)}</dd></div>
-      <div><dt>Local</dt><dd>${escaparHtml(item.local || 'Não informado')}</dd></div>
-      <div><dt>Quem acompanha</dt><dd>${escaparHtml(item.acompanhante || 'Não definido')}</dd></div>
-      ${Array.isArray(item.preparacao) && item.preparacao.length
-        ? `<div><dt>Preparação e transporte</dt><dd>${item.preparacao.map(p => escaparHtml(p)).join('<br>')}</dd></div>`
-        : ''}
-    `;
+    const tituloEl = dialogo.querySelector('#titulo-detalhes-compromisso');
+    const pessoaEl = dialogo.querySelector('[data-detalhes-compromisso-pessoa]');
+    if (tituloEl) tituloEl.textContent = formatarDataCurta(item.dia, true);
+    if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
+    const horaTexto = item.hora ? item.hora.replace(':', 'h').replace(/h00$/, 'h') : '';
+    const linhas = [
+      `${horaTexto ? `${horaTexto} · ` : ''}${item.titulo}`,
+      item.local || 'Local não informado',
+      `Acompanhante: ${item.acompanhante || 'Não definido'}`,
+      ...(Array.isArray(item.preparacao) ? item.preparacao : [])
+    ].filter(Boolean);
+    lista.innerHTML = linhas.map(linha => `<span>${escaparHtml(linha)}</span>`).join('');
     const botaoDocumentos = dialogo.querySelector('[data-ver-documentos-compromisso]');
     if (botaoDocumentos) {
       const tituloLower = String(item.titulo || '').toLowerCase();
@@ -546,6 +549,23 @@
       return;
     }
 
+    if (botao.hasAttribute('data-abrir-atribuir-turno')) {
+      dialogoCobrirHorario?.close();
+      const dialogoAtribuir = document.getElementById('dialogo-atribuir-turno');
+      if (dialogoAtribuir) {
+        const ctx = dialogoAtribuir.querySelector('[data-atribuir-contexto]');
+        if (ctx) ctx.textContent = `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)} · ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+        dialogoAtribuir.showModal();
+      }
+      return;
+    }
+
+    if (botao.hasAttribute('data-voltar-cobrir')) {
+      botao.closest('dialog')?.close();
+      dialogoCobrirHorario?.showModal();
+      return;
+    }
+
     if (botao.dataset.dialogoDinamico) {
       diaTurno = botao.dataset.dia;
       horarioTurno = botao.dataset.horario || '';
@@ -677,7 +697,28 @@
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;
-      mensagem = `Turno das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h assumido por ${obterUsuarioAtual().nome}.`;
+      const usuarioAtual = obterUsuarioAtual();
+      const nomeCurto = usuarioAtual.apelido || usuarioAtual.nome;
+      mensagem = {
+        titulo: 'Horário assumido',
+        descricao: `${core.nomePessoaAcompanhada()} · ${nomeCurto} assumiu ${String(inicio).padStart(2, '0')}h–${String(fim).padStart(2, '0')}h.`,
+        avatar: usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg'
+      };
+    }
+
+    if (tipoFormulario === 'atribuir-turno') {
+      const responsavel = campos.responsavel || 'Beatriz da Silva (Bea)';
+      const avatares = {
+        'Beatriz da Silva (Bea)': 'assets/media/mascotes/icone-mascote-trevo.svg',
+        'Ana da Silva (Aninha)': 'assets/media/mascotes/icone-mascote-espeto.svg',
+        'Paulo da Silva (Paul)': 'assets/media/mascotes/icone-mascote-pingo.svg'
+      };
+      const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
+      mensagem = {
+        titulo: 'Atribuição enviada · Aguardando aceite',
+        descricao: `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)}, ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}. ${nomeCurto} recebeu o convite. O horário continua sem cobertura até aceitar.`,
+        avatar: avatares[responsavel] || 'assets/media/mascotes/icone-mascote-trevo.svg'
+      };
     }
 
     if (tipoFormulario === 'editar-cobertura') {

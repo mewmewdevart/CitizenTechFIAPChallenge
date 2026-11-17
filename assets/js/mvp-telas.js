@@ -765,7 +765,10 @@
         ...estado,
         person: { ...estado.person, ...campos }
       }));
-      mensagem = 'Ficha atualizada nesta sessão.';
+      mensagem = {
+        titulo: 'Ficha atualizada',
+        descricao: `Cadastro de ${core.nomePessoaAcompanhada()} atualizado.`
+      };
     }
 
     if (tipoFormulario === 'relato') {

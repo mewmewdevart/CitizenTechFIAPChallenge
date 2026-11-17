@@ -248,13 +248,19 @@
 
     <dialog class="dialogo-mvp" id="dialogo-registrar-administracao" aria-labelledby="titulo-registrar-administracao">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-registrar-administracao" data-dose-titulo>Registrar administração</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
+          <h2 id="titulo-registrar-administracao" data-dose-titulo>Registrar administração</h2>
+        </div>
       </div>
       <p data-dose-contexto></p>
-      <dl class="dialogo-mvp__dados">
-        <div><dt>Quem registra</dt><dd>Zé da Manga (Zé) · Administrador</dd></div>
-      </dl>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Quem registra</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-usuario-avatar>
+          <span data-usuario-registro>Zé da Manga (Zé) · Administrador</span>
+        </div>
+      </div>
       <div class="dialogo-mvp__escolhas">
         <div class="dialogo-mvp__escolha">
           <span><strong>Administrada</strong><small>Informe o horário em que foi administrada.</small></span>
@@ -272,15 +278,21 @@
 
     <dialog class="dialogo-mvp" id="dialogo-confirmar-administracao" aria-labelledby="titulo-confirmar-administracao">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-confirmar-administracao">Confirmar administração</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
+          <h2 id="titulo-confirmar-administracao">Confirmar administração</h2>
+        </div>
       </div>
       <p data-dose-previsto></p>
       <form class="formulario-mvp" data-formulario-mvp="administrada">
         <label>Horário da administração<input type="time" name="horario" value="12:05" required></label>
-        <dl class="dialogo-mvp__dados">
-          <div><dt>Registrado por</dt><dd>Zé da Manga (Zé) · Administrador</dd></div>
-        </dl>
+        <div class="dialogo-mvp__secao">
+          <p class="dialogo-mvp__secao-titulo">Registrado por</p>
+          <div class="dialogo-mvp__linha-info">
+            <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-usuario-avatar>
+            <span data-usuario-turno>Zé da Manga (Zé) · Turno das 19h às 24h</span>
+          </div>
+        </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-voltar-administracao>Voltar</button>
           <button type="submit" class="botao botao--primario">Salvar registro</button>
@@ -290,15 +302,21 @@
 
     <dialog class="dialogo-mvp" id="dialogo-nao-administrada" aria-labelledby="titulo-nao-administrada">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-nao-administrada">Registrar como não administrada</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
+          <h2 id="titulo-nao-administrada">Registrar como não administrada</h2>
+        </div>
       </div>
       <p data-dose-previsto></p>
       <form class="formulario-mvp" data-formulario-mvp="nao-administrada">
-        <label>Motivo · opcional<textarea name="motivo" rows="3" placeholder="Descreva o ocorrido, se souber."></textarea></label>
-        <dl class="dialogo-mvp__dados">
-          <div><dt>Registrado por</dt><dd>Zé da Manga (Zé) · Administrador</dd></div>
-        </dl>
+        <label>Motivo · opcional<input type="text" name="motivo" placeholder="Descreva o ocorrido, se souber."></label>
+        <div class="dialogo-mvp__secao">
+          <p class="dialogo-mvp__secao-titulo" data-registro-hora-atual>Registro às 12h10</p>
+          <div class="dialogo-mvp__linha-info">
+            <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-usuario-avatar>
+            <span data-usuario-turno>Zé da Manga (Zé) · Turno das 19h às 24h</span>
+          </div>
+        </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-voltar-administracao>Voltar</button>
           <button type="submit" class="botao botao--primario">Salvar registro</button>
@@ -308,14 +326,26 @@
 
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-administracao-registrada" aria-labelledby="titulo-administracao-registrada">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-administracao-registrada" data-registro-titulo>Administração registrada - Metformina</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+        <div class="dialogo-mvp__titulo-com-icone">
+          <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-solid fa-pills"></i></span>
+          <h2 id="titulo-administracao-registrada" data-registro-titulo>Administração registrada - Metformina</h2>
+        </div>
       </div>
       <p data-registro-contexto></p>
-      <dl class="dialogo-mvp__dados">
-        <div><dt>Agenda</dt><dd data-registro-agenda></dd></div>
-        <div><dt>Diário de turno</dt><dd data-registro-diario></dd></div>
-      </dl>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Agenda</p>
+        <div class="dialogo-mvp__linha-info">
+          <span class="dialogo-mvp__icone dialogo-mvp__icone--sm" aria-hidden="true"><i class="fa-regular fa-calendar"></i></span>
+          <span data-registro-agenda></span>
+        </div>
+      </div>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Diário de turno</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-usuario-avatar>
+          <span data-registro-diario></span>
+        </div>
+      </div>
       <div class="dialogo-mvp__acoes">
         <a class="botao botao--secundario" href="ficha.html#diario">Ver diário</a>
         <a class="botao botao--primario" href="agenda.html">Ver na Agenda</a>
@@ -352,7 +382,6 @@
     <dialog class="dialogo-mvp" id="dialogo-atualizar-estoque" aria-labelledby="titulo-atualizar-estoque">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-atualizar-estoque" data-estoque-titulo>Atualizar estoque de metformina</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-estoque-contexto>Maria das Dores (Mari) · Estoque atual: 4 unidades. O registro guarda a autoria e a data.</p>
       <form class="formulario-mvp" data-formulario-mvp="estoque">
@@ -366,16 +395,16 @@
       </form>
     </dialog>
 
-    <dialog class="dialogo-mvp" id="dialogo-detalhe-item" aria-labelledby="titulo-detalhe-item">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhe-item" aria-labelledby="titulo-detalhe-item">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-detalhe-item" data-detalhe-titulo>Item</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <dl class="dialogo-mvp__dados" data-detalhe-lista></dl>
-      <div class="dialogo-mvp__acoes dialogo-mvp__acoes--iguais">
+      <p data-detalhe-pessoa>Maria das Dores (Mari)</p>
+      <p data-detalhe-resumo></p>
+      <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-item>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-item>Editar</button>
-        <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
       </div>
     </dialog>
 

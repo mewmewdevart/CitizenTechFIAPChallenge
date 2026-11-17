@@ -900,7 +900,7 @@ html.tema--acolhedor .dose {
 
 .dialogo-mvp__escolhas {
   display: grid;
-  gap: var(--espaco-sm);
+  gap: var(--espaco-md);
 }
 
 .dialogo-mvp__escolha {
@@ -909,9 +909,7 @@ html.tema--acolhedor .dose {
   align-items: center;
   justify-content: space-between;
   gap: var(--espaco-sm) var(--espaco-md);
-  padding: var(--espaco-md);
-  border: var(--borda-padrao);
-  border-radius: var(--raio-lg);
+  padding: 2px 0;
 }
 
 .dialogo-mvp__escolha span {

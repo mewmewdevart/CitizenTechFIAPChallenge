@@ -880,16 +880,49 @@
   }
 
   let timerStatus = null;
-  function anunciarStatus(elementoStatus, mensagem) {
+  function anunciarStatus(elementoStatus, mensagem, opcoes = {}) {
     if (!elementoStatus) return;
     clearTimeout(timerStatus);
-    elementoStatus.textContent = '';
+
+    const dados = typeof mensagem === 'object' && mensagem !== null
+      ? mensagem
+      : { titulo: opcoes.titulo || '', descricao: mensagem, ...opcoes };
+
+    const titulo = String(dados.titulo || '').trim();
+    const descricao = String(dados.descricao || '').trim();
+    if (!titulo && !descricao) {
+      elementoStatus.innerHTML = '';
+      elementoStatus.removeAttribute('data-mvp-status');
+      elementoStatus.setAttribute('data-mvp-status', '');
+      return;
+    }
+
+    const limpar = () => {
+      clearTimeout(timerStatus);
+      elementoStatus.innerHTML = '';
+      elementoStatus.setAttribute('data-mvp-status', '');
+    };
+
+    const avatarHtml = dados.avatar
+      ? `<img class="status-mvp__avatar" src="${escaparHtml(dados.avatar)}" alt="" aria-hidden="true">`
+      : '';
+    const tituloHtml = titulo ? `<strong>${escaparHtml(titulo)}</strong>` : '';
+    const descricaoHtml = descricao
+      ? (titulo ? `<span>${escaparHtml(descricao)}</span>` : `<strong>${escaparHtml(descricao)}</strong>`)
+      : '';
+
+    elementoStatus.setAttribute('data-mvp-status', dados.tipo || '');
+    elementoStatus.innerHTML = '';
     requestAnimationFrame(() => {
-      elementoStatus.textContent = mensagem;
+      elementoStatus.innerHTML = `
+        ${avatarHtml}
+        <div class="status-mvp__conteudo">${tituloHtml}${descricaoHtml}</div>
+        <button type="button" class="botao botao--secundario botao--pequeno status-mvp__fechar">Fechar</button>
+      `;
+      elementoStatus.querySelector('.status-mvp__fechar')?.addEventListener('click', limpar);
     });
-    timerStatus = setTimeout(() => {
-      elementoStatus.textContent = '';
-    }, 5000);
+
+    timerStatus = setTimeout(limpar, 6000);
   }
 
   const PORTA_REMEDIOS = [

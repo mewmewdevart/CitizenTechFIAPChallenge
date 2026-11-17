@@ -495,6 +495,31 @@
       return;
     }
 
+    if (botao.dataset.passagemEtapa) {
+      botao.closest('dialog')?.close();
+      const proximo = document.getElementById(botao.dataset.passagemEtapa);
+      if (proximo) {
+        const usuarioAtual = obterUsuarioAtual();
+        const pessoa = core.nomePessoaAcompanhada();
+        if (proximo.id === 'dialogo-pedido-andamento') {
+          const ctx = proximo.querySelector('[data-pedido-contexto]');
+          const avatar = proximo.querySelector('[data-pedido-avatar]');
+          const resp = proximo.querySelector('[data-pedido-responsavel]');
+          const papel = proximo.querySelector('[data-pedido-papel]');
+          if (ctx) ctx.textContent = `Otorrinolaringologia · ${pessoa}`;
+          if (avatar) avatar.src = usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
+          if (resp) resp.textContent = usuarioAtual.nomeComApelido;
+          if (papel) papel.textContent = `${usuarioAtual.papel} · ${usuarioAtual.vinculo || 'Neto'}`;
+        }
+        if (proximo.id === 'dialogo-cadastrar-consulta') {
+          const ctx = proximo.querySelector('[data-consulta-contexto]');
+          if (ctx) ctx.textContent = `Otorrinolaringologia · ${pessoa}`;
+        }
+        proximo.showModal();
+      }
+      return;
+    }
+
     if (botao.dataset.dialogoDinamico) {
       diaTurno = botao.dataset.dia;
       horarioTurno = botao.dataset.horario || '';
@@ -526,7 +551,13 @@
     atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
     diaSelecionado = diaTurno;
     form.closest('dialog')?.close();
-    anunciarStatus(elementoStatus, `Turno das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h assumido por ${obterUsuarioAtual().nome}.`);
+    const usuarioAtual = obterUsuarioAtual();
+    const nomeCurto = usuarioAtual.apelido || usuarioAtual.nome;
+    anunciarStatus(elementoStatus, {
+      titulo: 'Horário assumido',
+      descricao: `${core.nomePessoaAcompanhada()} · ${nomeCurto} assumiu ${String(inicio).padStart(2, '0')}h–${String(fim).padStart(2, '0')}h.`,
+      avatar: usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg'
+    });
     renderizarEscala();
     listaDias.querySelector(`[data-dia-semana="${diaSelecionado}"]`)?.focus();
   });
@@ -581,7 +612,59 @@
     editoresRicos.limparTodos(form);
     form.closest('dialog')?.close();
     atualizarPassagemCuidado();
-    anunciarStatus(elementoStatus, 'Relato salvo no diário de turno da Mari.');
+    const dialogoRelatoRegistrado = document.getElementById('dialogo-relato-registrado');
+    if (dialogoRelatoRegistrado) {
+      const usuarioAtual = obterUsuarioAtual();
+      const pessoa = core.nomePessoaAcompanhada();
+      const contextoEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-contexto]');
+      const avatarEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-avatar]');
+      const detalheEl = dialogoRelatoRegistrado.querySelector('[data-relato-registrado-detalhe]');
+      if (contextoEl) contextoEl.textContent = `${pessoa} · Diário de turno`;
+      if (avatarEl) avatarEl.src = usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
+      if (detalheEl) detalheEl.textContent = `Registro por ${usuarioAtual.nomeComApelido} · Disponível na ficha da ${pessoa}.`;
+      dialogoRelatoRegistrado.showModal();
+    } else {
+      anunciarStatus(elementoStatus, 'Relato salvo no diário de turno da Mari.');
+    }
+  });
+
+  pagina.querySelector('[data-formulario-mvp="consulta-passagem"]')?.addEventListener('submit', evento => {
+    evento.preventDefault();
+    const form = evento.target;
+    const campos = Object.fromEntries(new FormData(form));
+    const dia = (campos.dia || '2026-11-23').trim();
+    const hora = (campos.hora || '14:00').trim();
+    const local = (campos.local || 'Clínica do convênio').trim();
+    const acompanhante = (campos.acompanhante || obterUsuarioAtual().nomeComApelido).trim();
+    const titulo = 'Otorrinolaringologia';
+
+    atualizarEstado(estado => ({
+      ...estado,
+      events: [
+        ...(estado.events || []),
+        {
+          id: `evt-${Date.now()}`,
+          titulo,
+          dia,
+          hora,
+          local,
+          acompanhante,
+          criadoPor: obterUsuarioAtual().nomeComApelido
+        }
+      ]
+    }));
+
+    form.closest('dialog')?.close();
+    const dialogoAgendada = document.getElementById('dialogo-consulta-agendada');
+    if (dialogoAgendada) {
+      const dataFormatada = core.formatarDataCurta ? core.formatarDataCurta(dia) : dia;
+      const horaFormatada = hora.replace(':', 'h').replace(/h00$/, 'h');
+      const tituloEl = dialogoAgendada.querySelector('[data-consulta-agendada-titulo]');
+      const detalheEl = dialogoAgendada.querySelector('[data-consulta-agendada-detalhe]');
+      if (tituloEl) tituloEl.textContent = `${titulo} · ${dataFormatada} · ${horaFormatada}`;
+      if (detalheEl) detalheEl.textContent = `${local} · ${acompanhante} acompanha.`;
+      dialogoAgendada.showModal();
+    }
   });
 
   const sincronizarRedeInicio = () => {

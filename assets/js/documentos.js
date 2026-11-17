@@ -118,19 +118,25 @@
 
   const abrirDetalhes = docId => {
     const doc = (obterEstado().documents || []).find(d => d.id === docId);
-    const dl = dialogoDetalhes?.querySelector('[data-detalhes-documento]');
-    if (!doc || !dialogoDetalhes || !dl) return;
+    const bloco = dialogoDetalhes?.querySelector('[data-detalhes-documento]');
+    if (!doc || !dialogoDetalhes || !bloco) return;
 
     documentoEmFocoId = doc.id;
     dialogoDetalhes.querySelector('#titulo-detalhes-documento').textContent = doc.titulo;
-    dl.innerHTML = `
-      <div><dt>Categoria</dt><dd>${escaparHtml(doc.categoria)}</dd></div>
-      <div><dt>Data</dt><dd>${escaparHtml(doc.dia ? formatarDataCurta(doc.dia, true) : 'Não informada')}</dd></div>
-      <div><dt>Adicionado por</dt><dd>${escaparHtml(doc.autor || 'Não informado')}</dd></div>
-      <div><dt>Vínculo / Assunto</dt><dd>${escaparHtml(doc.vinculo || 'Documento geral')}</dd></div>
-      ${doc.observacoes ? `<div><dt>Observações</dt><dd>${escaparHtml(doc.observacoes)}</dd></div>` : ''}
-      ${doc.nomeArquivo ? `<div><dt>Arquivo anexado</dt><dd>${escaparHtml(doc.nomeArquivo)}</dd></div>` : ''}
-    `;
+    const pessoaEl = dialogoDetalhes.querySelector('[data-detalhes-pessoa]');
+    if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
+    const dataTexto = doc.dia ? formatarDataCurta(doc.dia, true) : 'Data não informada';
+    const adicionada = doc.categoria === 'Receita' ? 'Adicionada' : 'Adicionado';
+    const linhas = [
+      `${doc.categoria} · ${dataTexto}`,
+      `${adicionada} por ${doc.autor || 'Não informado'}.`,
+      doc.vinculo ? `Vinculado(a) à ${doc.vinculo}.` : '',
+      doc.observacoes ? doc.observacoes : '',
+      doc.nomeArquivo ? `Arquivo: ${doc.nomeArquivo}` : ''
+    ].filter(Boolean);
+    bloco.innerHTML = linhas.map(linha => `<span>${escaparHtml(linha)}</span>`).join('');
+    const botaoAtendimento = dialogoDetalhes.querySelector('[data-ver-atendimento]');
+    if (botaoAtendimento) botaoAtendimento.hidden = !doc.vinculo;
     dialogoDetalhes.showModal();
   };
 

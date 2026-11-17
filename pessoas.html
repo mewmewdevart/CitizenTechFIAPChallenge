@@ -192,7 +192,6 @@
     <dialog class="dialogo-mvp" id="dialogo-convidar" aria-labelledby="titulo-convidar">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-convidar">Convidar participante</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p>Rede de Maria das Dores (Mari)</p>
       <form class="formulario-mvp" data-formulario-mvp="convite">
@@ -223,12 +222,12 @@
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-convite-enviado" aria-labelledby="titulo-convite-enviado">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-convite-enviado">Convite enviado</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p>Rede de Maria das Dores (Mari)</p>
-      <dl class="dialogo-mvp__dados">
-        <div><dt><span class="selo selo--atencao">Aguardando aceite</span></dt><dd data-convite-resumo>A pessoa terá acesso à rede após aceitar o convite.</dd></div>
-      </dl>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Aguardando aceite</p>
+        <p data-convite-resumo>A pessoa terá acesso à rede após aceitar o convite.</p>
+      </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--primario" data-fechar-dialogo>Voltar à rede</button>
       </div>

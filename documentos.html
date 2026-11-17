@@ -192,7 +192,6 @@
     <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-adicionar-documento" data-titulo-dialogo-documento>Adicionar documento da Mari</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p>Relacione o documento ao atendimento para manter o histórico organizado.</p>
       <form class="formulario-mvp" data-formulario-mvp="documento" novalidate>
@@ -234,13 +233,14 @@
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-detalhes-documento" aria-labelledby="titulo-detalhes-documento">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-detalhes-documento">Detalhes do documento</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
-      <dl class="dialogo-mvp__dados" data-detalhes-documento></dl>
+      <p data-detalhes-pessoa>Maria das Dores (Mari)</p>
+      <div class="dialogo-mvp__detalhe-texto" data-detalhes-documento></div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-documento>Excluir</button>
         <button type="button" class="botao botao--secundario" data-editar-documento>Editar</button>
-        <button type="button" class="botao botao--primario" data-fechar-dialogo>Fechar</button>
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar aos documentos</button>
+        <a class="botao botao--primario" href="agenda.html" data-ver-atendimento hidden>Ver atendimento</a>
       </div>
     </dialog>
 

@@ -272,8 +272,21 @@
   const prepararDialogos = dose => {
     const grupo = obterCompartimentos().find(item => item.hora === dose.hora);
     const usuario = obterUsuarioAtual();
+    const avatar = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
+    const horaAtual = `${dose.hora.replace('h', '').padStart(2, '0')}h10`;
     dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Registrar administração - ${dose.nome}`;
     dialogos.registrar.querySelector('[data-dose-contexto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Prevista para ${dose.hora} · ${grupo?.responsavel ? `Turno de ${grupo.responsavel}` : 'Turno sem cobertura'}`;
+    for (const dialogo of [dialogos.registrar, dialogos.confirmar, dialogos.naoAdministrada, dialogos.registrada]) {
+      dialogo.querySelectorAll('[data-usuario-avatar]').forEach(img => { img.src = avatar; });
+      dialogo.querySelectorAll('[data-usuario-registro]').forEach(el => {
+        el.textContent = `${usuario.nomeComApelido} · ${usuario.papel}`;
+      });
+      dialogo.querySelectorAll('[data-usuario-turno]').forEach(el => {
+        el.textContent = `${usuario.nomeComApelido} · Turno das 19h às 24h`;
+      });
+    }
+    const horaEl = dialogos.naoAdministrada?.querySelector('[data-registro-hora-atual]');
+    if (horaEl) horaEl.textContent = `Registro às ${horaAtual}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
       dialogo.querySelector('[data-dose-previsto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Horário previsto: ${dose.hora}`;
     }
@@ -339,25 +352,10 @@
     if (!item) return;
     itemEmFoco = item;
     dialogos.detalhe.querySelector('[data-detalhe-titulo]').textContent = item.nome;
-    const lista = dialogos.detalhe.querySelector('[data-detalhe-lista]');
-    if (lista) {
-      const dias = item.consumoDia && item.estoque !== null ? Math.floor(item.estoque / item.consumoDia) : null;
-      const textoEstoque = item.estoque === null || item.estoque === undefined
-        ? 'Não informado'
-        : `${plural(item.estoque, 'unidade', 'unidades')}${dias !== null ? ` · Previsão para ${plural(dias, 'dia', 'dias')}` : ''}`;
-
-      const linhas = [
-        ['Pessoa acompanhada', 'Maria das Dores (Mari)'],
-        ['Tipo', item.tipo || 'Medicamento'],
-        item.tipo !== 'Insumo' ? ['Apresentação e dose', item.dose || 'Consulte a prescrição'] : null,
-        item.horarios ? ['Horários previstos', item.horarios] : null,
-        ['Estoque atual', textoEstoque]
-      ].filter(Boolean);
-
-      lista.innerHTML = linhas.map(([rotulo, valor]) =>
-        `<div><dt>${escaparHtml(rotulo)}</dt><dd>${escaparHtml(valor)}</dd></div>`
-      ).join('');
-    }
+    const pessoaEl = dialogos.detalhe.querySelector('[data-detalhe-pessoa]');
+    const resumoEl = dialogos.detalhe.querySelector('[data-detalhe-resumo]');
+    if (pessoaEl) pessoaEl.textContent = core.nomePessoaAcompanhada();
+    if (resumoEl) resumoEl.textContent = detalharItem(item);
     dialogos.detalhe.showModal();
   };
 

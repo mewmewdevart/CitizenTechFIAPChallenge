@@ -257,7 +257,7 @@
             <strong>Antes de agendar</strong>
             <span>Confirme se o convênio cobre a consulta.</span>
           </div>
-          <a class="botao botao--secundario painel__acao-larga" href="ficha.html#diario">Ver detalhes da passagem</a>
+          <button type="button" class="botao botao--secundario painel__acao-larga" data-dialogo="dialogo-passagem-cuidado">Ver detalhes da passagem</button>
         </section>
 
         <section class="apoio__painel" aria-labelledby="titulo-rede">
@@ -276,7 +276,6 @@
     <dialog class="dialogo-mvp" id="dialogo-registrar-cuidado" aria-labelledby="titulo-registrar-cuidado">
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-registrar-cuidado">Registrar cuidado</h2>
-        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
       </div>
       <p data-contexto-relato-inicio>Maria das Dores (Mari) · Turno de Beatriz da Silva (Bea) · 07h–12h · Registro por Zé da Manga (Zé)</p>
       <form class="formulario-mvp" data-formulario-mvp="relato">
@@ -379,6 +378,128 @@
           <button type="submit" class="botao botao--primario">Salvar alterações</button>
         </div>
       </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-relato-registrado" aria-labelledby="titulo-relato-registrado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-relato-registrado">Relato registrado</h2>
+      </div>
+      <p data-relato-registrado-contexto>Maria das Dores (Mari) · Diário de turno</p>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo" data-relato-registrado-turno>Turno das 07h às 12h</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-relato-registrado-avatar>
+          <span data-relato-registrado-detalhe>Registro por Zé da Manga (Zé) · Disponível na ficha da Maria das Dores (Mari).</span>
+        </div>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="ficha.html#diario">Ver diário na ficha</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-horario-expirado" aria-labelledby="titulo-horario-expirado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-horario-expirado">Horário expirado</h2>
+      </div>
+      <p data-horario-expirado-contexto>Maria das Dores (Mari) · Terça, 10 nov. · 12h–13h</p>
+      <div class="dialogo-mvp__aviso-caixa">
+        <strong>A cobertura não foi alterada</strong>
+        <span>Este turno já terminou. Confira os próximos horários sem cobertura.</span>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="agenda.html">Ver horários</a>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-passagem-cuidado" aria-labelledby="titulo-passagem-cuidado">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-passagem-cuidado">Passagem de cuidado</h2>
+      </div>
+      <div class="dialogo-mvp__linha-info">
+        <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" aria-hidden="true">
+        <div>
+          <strong>Beatriz da Silva (Bea)</strong>
+          <small style="display: block; color: var(--cor-texto-secundario);">Solicitação feita em 9 nov. · 08h10</small>
+        </div>
+      </div>
+      <div class="dialogo-mvp__aviso-caixa">
+        <strong>Para o próximo turno</strong>
+        <span data-passagem-modal-texto>Agendar consulta de otorrinolaringologia para Maria das Dores (Mari). Antes de agendar, confirmar a cobertura do convênio.</span>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-pedido-andamento">Assumir pedido</button>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-pedido-andamento" aria-labelledby="titulo-pedido-andamento">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-pedido-andamento">Pedido em andamento</h2>
+      </div>
+      <p data-pedido-contexto>Otorrinolaringologia · Maria das Dores (Mari)</p>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Responsável</p>
+        <div class="dialogo-mvp__linha-info">
+          <img class="dialogo-mvp__avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" aria-hidden="true" data-pedido-avatar>
+          <div>
+            <strong data-pedido-responsavel>Zé da Manga (Zé)</strong>
+            <small style="display: block; color: var(--cor-texto-secundario);" data-pedido-papel>Administrador · Neto</small>
+          </div>
+        </div>
+      </div>
+      <div class="dialogo-mvp__secao">
+        <p class="dialogo-mvp__secao-titulo">Próximo passo</p>
+        <p style="color: var(--cor-texto-secundario); font-size: var(--texto-interface);">Após combinar a data com a clínica, cadastre a consulta na Agenda.</p>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-passagem-etapa="dialogo-passagem-cuidado">Voltar</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-cadastrar-consulta">Cadastrar consulta</button>
+      </div>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-cadastrar-consulta" aria-labelledby="titulo-cadastrar-consulta">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-cadastrar-consulta">Cadastrar consulta</h2>
+      </div>
+      <p data-consulta-contexto>Otorrinolaringologia · Maria das Dores (Mari)</p>
+      <form class="formulario-mvp" data-formulario-mvp="consulta-passagem">
+        <div class="formulario-mvp__grade">
+          <label>Data<input type="date" name="dia" value="2026-11-23" required></label>
+          <label>Horário<input type="time" name="hora" value="14:00" required></label>
+        </div>
+        <label>Local<input type="text" name="local" value="Clínica do convênio" required></label>
+        <label>Quem acompanha
+          <select name="acompanhante">
+            <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
+            <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
+            <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
+            <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+          </select>
+        </label>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-passagem-etapa="dialogo-pedido-andamento">Voltar</button>
+          <button type="submit" class="botao botao--primario">Salvar compromisso</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-consulta-agendada" aria-labelledby="titulo-consulta-agendada">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-consulta-agendada">Consulta agendada</h2>
+      </div>
+      <div class="dialogo-mvp__linha-info">
+        <span class="dialogo-mvp__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
+        <div>
+          <strong data-consulta-agendada-titulo>Otorrinolaringologia · 23 nov. 2026 · 14h</strong>
+          <small style="display: block; color: var(--cor-texto-secundario);" data-consulta-agendada-detalhe>Clínica do convênio · Zé da Manga (Zé) acompanha.</small>
+        </div>
+      </div>
+      <div class="dialogo-mvp__acoes">
+        <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
+        <a class="botao botao--primario" href="agenda.html">Ver compromisso na Agenda</a>
+      </div>
     </dialog>
 
     <p role="status" data-mvp-status></p>
