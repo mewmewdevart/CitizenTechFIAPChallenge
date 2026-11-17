@@ -150,13 +150,25 @@
         baixos.push({ nome: info.nome, estoque, consumoDia: info.consumoDia });
       }
     }
+    const insumosConhecidos = [
+      { id: 'Fraldas', nome: 'Fraldas' },
+      ...(estado.itensExtras || []).filter(item => item.tipo === 'Insumo').map(item => ({ id: item.chave || item.nome, nome: item.nome }))
+    ];
+    for (const insumo of insumosConhecidos) {
+      if ((estado.itensExcluidos || []).includes(insumo.id)) continue;
+      const estoque = core.obterEstoque(insumo.id, estado);
+      if (estoque !== null && estoque <= 5) {
+        baixos.push({ nome: estado.itensEditados?.[insumo.id]?.nome || insumo.nome, estoque, consumoDia: null });
+      }
+    }
     alerta.hidden = !baixos.length;
     if (baixos.length) {
       const principal = baixos[0];
-      const dias = Math.floor(principal.estoque / principal.consumoDia);
+      const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
       alerta.querySelector('strong').textContent = `Estoque baixo · ${principal.nome}`;
-      alerta.querySelector('.faixa-alerta__texto > span').textContent =
-        `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Previsão para ${dias} ${dias === 1 ? 'dia' : 'dias'}`;
+      alerta.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
+        ? `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Previsão para ${dias} ${dias === 1 ? 'dia' : 'dias'}`
+        : `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} em estoque`;
     }
   };
 

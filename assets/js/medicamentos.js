@@ -208,15 +208,21 @@
   };
 
   const renderizarEstoque = itens => {
-    const baixos = itens.filter(item => item.tipo === 'Medicamento' && item.estoque !== null && item.consumoDia && item.estoque / item.consumoDia <= 3);
+    const baixos = itens.filter(item => {
+      if (item.estoque === null || item.estoque === undefined) return false;
+      if (item.tipo === 'Medicamento' && item.consumoDia) return item.estoque / item.consumoDia <= 3;
+      return item.tipo === 'Insumo' && item.estoque <= 5;
+    });
     const alertaEstoque = pagina.querySelector('[data-alerta-estoque]');
     if (alertaEstoque) {
       alertaEstoque.hidden = !baixos.length;
       if (baixos.length) {
         const principal = baixos[0];
-        const dias = Math.floor(principal.estoque / principal.consumoDia);
+        const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
         alertaEstoque.querySelector('strong').textContent = `Estoque baixo · ${principal.nome}`;
-        alertaEstoque.querySelector('.faixa-alerta__texto > span').textContent = `${plural(principal.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}`;
+        alertaEstoque.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
+          ? `${plural(principal.estoque, 'unidade', 'unidades')} · Previsão para ${plural(dias, 'dia', 'dias')}`
+          : `${plural(principal.estoque, 'unidade', 'unidades')} em estoque`;
       }
     }
     if (avisosEstoque) {
