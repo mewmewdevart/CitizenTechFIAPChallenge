@@ -145,6 +145,7 @@ document.addEventListener('keydown', evento => {
 });
 
 for (const botao of document.querySelectorAll('[data-dialogo]')) {
+  if (botao.dataset.dialogo === 'dialogo-busca') continue;
   botao.addEventListener('click', () => {
     document.getElementById(botao.dataset.dialogo)?.showModal();
   });
@@ -199,9 +200,6 @@ for (const botaoSair of document.querySelectorAll('[data-acao="sair"]')) {
   });
 }
 
-const campoBusca = document.querySelector('#campo-busca');
-const listaResultados = document.querySelector('#resultados-busca');
-const statusBusca = document.querySelector('#status-busca');
 const itensPesquisaveis = [
   ...linksMenu.map(link => ({ href: link.getAttribute('href'), rotulo: link.textContent.trim() })),
   { href: 'meu-perfil.html', rotulo: 'Meu perfil' },
@@ -210,28 +208,110 @@ const itensPesquisaveis = [
   { href: 'ficha.html', rotulo: 'Ficha da pessoa acompanhada · Maria das Dores (Mari)' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
-function renderizarResultados() {
-  if (!campoBusca || !listaResultados || !statusBusca) return;
-  const termo = campoBusca.value.trim().toLocaleLowerCase('pt-BR');
-  const correspondencias = itensPesquisaveis.filter(item => item.rotulo.toLocaleLowerCase('pt-BR').includes(termo));
+const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-dialogo="dialogo-busca"]');
 
-  listaResultados.replaceChildren(...correspondencias.map(item => {
-    const itemLista = document.createElement('li');
-    const resultado = document.createElement('a');
-    resultado.href = item.href;
-    resultado.textContent = item.rotulo;
-    resultado.addEventListener('click', () => campoBusca.closest('dialog')?.close());
-    itemLista.append(resultado);
-    return itemLista;
-  }));
+function inicializarBuscaTopo() {
+  if (!gatilhoBuscaTopo) return;
 
-  statusBusca.textContent = correspondencias.length
-    ? `${correspondencias.length} ${correspondencias.length === 1 ? 'item encontrado' : 'itens encontrados'}.`
-    : 'Nenhum item encontrado.';
+  const container = document.createElement('div');
+  container.className = 'busca-topo';
+
+  gatilhoBuscaTopo.removeAttribute('data-dialogo');
+  gatilhoBuscaTopo.setAttribute('type', 'button');
+  gatilhoBuscaTopo.setAttribute('aria-expanded', 'false');
+  gatilhoBuscaTopo.setAttribute('aria-controls', 'busca-topo-painel');
+  gatilhoBuscaTopo.classList.add('busca-topo__gatilho');
+
+  const campo = document.createElement('input');
+  campo.id = 'campo-busca-topo';
+  campo.type = 'search';
+  campo.className = 'busca-topo__input';
+  campo.placeholder = 'Pesquisar no menu...';
+  campo.setAttribute('aria-label', 'Encontrar no menu');
+  campo.setAttribute('autocomplete', 'off');
+
+  const botaoFechar = document.createElement('button');
+  botaoFechar.type = 'button';
+  botaoFechar.className = 'botao-icone busca-topo__fechar';
+  botaoFechar.setAttribute('aria-label', 'Fechar pesquisa');
+  botaoFechar.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+
+  const painel = document.createElement('div');
+  painel.id = 'busca-topo-painel';
+  painel.className = 'busca-topo__painel';
+  painel.hidden = true;
+
+  const status = document.createElement('p');
+  status.className = 'busca-topo__status';
+  status.setAttribute('role', 'status');
+
+  const lista = document.createElement('ul');
+  lista.id = 'resultados-busca-topo';
+  lista.className = 'busca-topo__lista';
+
+  painel.append(status, lista);
+  gatilhoBuscaTopo.replaceWith(container);
+  container.append(gatilhoBuscaTopo, campo, botaoFechar, painel);
+
+  function renderizarResultados() {
+    const termo = campo.value.trim().toLocaleLowerCase('pt-BR');
+    const correspondencias = itensPesquisaveis.filter(item => item.rotulo.toLocaleLowerCase('pt-BR').includes(termo));
+
+    lista.replaceChildren(...correspondencias.map(item => {
+      const itemLista = document.createElement('li');
+      const resultado = document.createElement('a');
+      resultado.href = item.href;
+      resultado.textContent = item.rotulo;
+      resultado.addEventListener('click', () => definirBuscaAberta(false));
+      itemLista.append(resultado);
+      return itemLista;
+    }));
+
+    status.textContent = correspondencias.length
+      ? `${correspondencias.length} ${correspondencias.length === 1 ? 'item encontrado' : 'itens encontrados'}.`
+      : 'Nenhum item encontrado.';
+  }
+
+  function definirBuscaAberta(aberta) {
+    container.classList.toggle('busca-topo--aberta', aberta);
+    gatilhoBuscaTopo.setAttribute('aria-expanded', String(aberta));
+    painel.hidden = !aberta;
+    if (aberta) {
+      for (const outro of document.querySelectorAll('.barra-topo details[open]')) outro.open = false;
+      renderizarResultados();
+      requestAnimationFrame(() => campo.focus());
+    } else {
+      campo.value = '';
+    }
+  }
+
+  gatilhoBuscaTopo.addEventListener('click', () => {
+    const aberta = !container.classList.contains('busca-topo--aberta');
+    definirBuscaAberta(aberta);
+  });
+
+  botaoFechar.addEventListener('click', () => {
+    definirBuscaAberta(false);
+    gatilhoBuscaTopo.focus();
+  });
+
+  campo.addEventListener('input', renderizarResultados);
+
+  document.addEventListener('click', evento => {
+    if (container.classList.contains('busca-topo--aberta') && !container.contains(evento.target)) {
+      definirBuscaAberta(false);
+    }
+  });
+
+  document.addEventListener('keydown', evento => {
+    if (evento.key === 'Escape' && container.classList.contains('busca-topo--aberta')) {
+      definirBuscaAberta(false);
+      gatilhoBuscaTopo.focus();
+    }
+  });
 }
 
-campoBusca?.addEventListener('input', renderizarResultados);
-renderizarResultados();
+inicializarBuscaTopo();
 definirMenu(telaMobile.matches ? false : obterEstadoInicialMenuDesktop());
 atualizarPaginaAtual();
 
@@ -266,6 +346,13 @@ function sincronizarPerfilGlobal() {
     const bruto = sessionStorage.getItem('mutirao-mvp-estado-v1') || localStorage.getItem('mutirao-mvp-estado-v1');
     if (!bruto) return;
     const estado = JSON.parse(bruto);
+    const pessoa = estado?.person;
+    if (pessoa?.nome) {
+      const nome = pessoa.apelido ? `${pessoa.nome} (${pessoa.apelido})` : pessoa.nome;
+      document.querySelectorAll('.seletor-pessoa > summary, #titulo-pessoa, [data-identidade-acompanhada]').forEach(item => {
+        item.textContent = nome;
+      });
+    }
     const perfil = estado?.perfilUsuario;
     if (!perfil) return;
 
@@ -299,6 +386,25 @@ function sincronizarPerfilGlobal() {
 
 sincronizarPerfilGlobal();
 window.addEventListener('mutirao:perfil-atualizado', sincronizarPerfilGlobal);
+window.addEventListener('mutirao:pessoa-atualizada', sincronizarPerfilGlobal);
 window.addEventListener('storage', evento => {
   if (evento.key === 'mutirao-mvp-estado-v1') sincronizarPerfilGlobal();
 });
+
+function sincronizarStatusMedicamentos() {
+  const core = window.MutiraoCuidado;
+  const linha = document.querySelector('.cartao-status [data-status-medicamento]');
+  if (!core || !linha) return;
+  const doses = core.obterDoses();
+  const ocorrencia = doses.find(dose => dose.estado === 'nao-administrado');
+  const proxima = doses.find(dose => dose.estado === 'prevista' && dose.momento !== 'passado');
+  const destaque = ocorrencia || proxima;
+  linha.classList.toggle('cartao-status__linha--alerta', Boolean(ocorrencia));
+  linha.querySelector('strong').textContent = destaque
+    ? `${destaque.hora.padStart(3, '0')} · ${destaque.nome}` : 'Nenhuma dose futura';
+  linha.querySelector('small').textContent = ocorrencia ? 'Não administrada'
+    : proxima ? 'Prevista' : 'Veja os registros de hoje';
+}
+
+document.addEventListener('DOMContentLoaded', sincronizarStatusMedicamentos);
+window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamentos);
