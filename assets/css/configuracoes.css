@@ -51,6 +51,11 @@ html.acessibilidade--alto-contraste .configuracoes__menu {
   color: var(--cor-primaria);
 }
 
+html.acessibilidade--alto-contraste .configuracoes__aba[aria-selected="true"] {
+  background: var(--cor-primaria);
+  color: var(--cor-fundo-pagina);
+}
+
 .configuracoes__aba--perigo {
   margin-top: var(--espaco-xs);
   padding-top: var(--espaco-md);
@@ -118,17 +123,11 @@ html.acessibilidade--alto-contraste .configuracoes__menu {
   border-top: var(--borda-padrao);
 }
 
-html.tema--acolhedor .configuracoes__bloco,
 html.acessibilidade--alto-contraste .configuracoes__bloco {
   padding: var(--espaco-lg);
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
-}
-
-html.tema--acolhedor .configuracoes__bloco + .configuracoes__bloco,
-html.acessibilidade--alto-contraste .configuracoes__bloco + .configuracoes__bloco {
-  padding-top: var(--espaco-lg);
 }
 
 .configuracoes__bloco-cabecalho {
@@ -255,7 +254,7 @@ html.acessibilidade--alto-contraste .configuracoes__bloco + .configuracoes__bloc
   width: 100%;
   min-height: 40px;
   padding: 8px 12px;
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-md);
   background: var(--cor-superficie);
   color: var(--cor-texto-principal);
@@ -344,6 +343,23 @@ html.acessibilidade--alto-contraste .configuracoes__bloco + .configuracoes__bloc
 }
 
 @media (max-width: 600px) {
+  .configuracoes__menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .configuracoes__aba {
+    min-height: var(--tamanho-alvo-toque);
+    padding-inline: var(--espaco-sm);
+    white-space: normal;
+  }
+
+  .configuracoes__aba--perigo {
+    grid-column: 1 / -1;
+    border-top: var(--borda-padrao);
+  }
+
   .configuracoes .apoio__cabecalho > *,
   .configuracoes .apoio__cabecalho .botao {
     width: 100%;

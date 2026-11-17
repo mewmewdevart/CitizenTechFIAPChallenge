@@ -66,7 +66,8 @@
   --raio-xl: 12px;
   --raio-pill: 999px;
   --borda-padrao: 1px solid var(--cor-borda-sutil);
-  --sombra-cartao: 0 1px 3px #302b3d0a;
+  --borda-controle: 1px solid var(--cor-borda-controle);
+  --sombra-cartao: none;
   --sombra-popover: 0 4px 14px #302b3d16;
   --sombra-elevada: 0 8px 24px #302b3d22;
   --transicao-padrao: 0.15s ease;

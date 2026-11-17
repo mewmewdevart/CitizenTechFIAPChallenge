@@ -442,3 +442,42 @@ html.acessibilidade--alto-contraste.tema--acolhedor .botao--primario {
     flex-direction: column-reverse;
   }
 }
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-xs);
+}
+
+.filtros__opcao {
+  min-height: var(--tamanho-alvo-toque);
+  padding: 6px var(--espaco-md);
+  border: var(--borda-controle);
+  border-radius: var(--raio-pill);
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+  font: inherit;
+  font-size: var(--texto-legenda);
+  font-weight: var(--peso-semibold);
+  cursor: pointer;
+}
+
+.filtros__opcao:hover {
+  border-color: var(--cor-primaria);
+  color: var(--cor-primaria);
+}
+
+.filtros__opcao[aria-pressed="true"] {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+  color: var(--cor-neutra-clara-02);
+}
+
+.filtros__opcao:focus-visible {
+  outline: var(--anel-foco);
+  outline-offset: 2px;
+}
+
+.faixa-alerta[hidden] {
+  display: none;
+}

@@ -575,7 +575,7 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia {
   gap: 6px;
   min-height: var(--tamanho-alvo-toque);
   padding: 6px 10px;
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
   cursor: text;
@@ -630,7 +630,7 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
 }
 
 .editar-ficha__editor-rico {
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
   overflow: hidden;
@@ -687,8 +687,22 @@ html.acessibilidade--alto-contraste .editar-ficha__caixa-etiquetas .editar-ficha
 }
 
 @media (max-width: 600px) {
-  .ficha__acoes,
-  .ficha__acoes .botao,
+  .ficha__acoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .ficha__acoes .botao--primario {
+    grid-column: 1 / -1;
+  }
+
+  .ficha__acoes .botao {
+    min-height: var(--tamanho-alvo-toque);
+    white-space: normal;
+    text-align: center;
+  }
+
   .dialogo-mvp>.botao {
     width: 100%;
   }

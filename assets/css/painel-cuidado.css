@@ -143,6 +143,10 @@ html.tema--acolhedor .avatar {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--espaco-md);
+  background: transparent;
+  border-top: var(--borda-padrao);
+  border-radius: 0;
+  padding-inline: 0;
 }
 
 .inicio__rotulo {
@@ -980,7 +984,7 @@ html.tema--acolhedor .dose {
   display: none;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1320px) {
   [data-pagina-mvp="meu-perfil"] .perfil__identidade {
     grid-template-columns: auto minmax(0, 1fr);
   }
@@ -1024,7 +1028,7 @@ html.tema--acolhedor .dose {
 
 .perfil__identidade {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(13rem, 1fr) minmax(0, 1fr);
   align-items: center;
   gap: var(--espaco-lg);
 }
@@ -1060,7 +1064,7 @@ html.tema--acolhedor .dose {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: min(406px, 100%);
+  width: min(406px, calc(100% - 48px));
   min-height: 96px;
   margin-right: 48px;
   padding: 18px 32px 18px 22px;
@@ -1527,6 +1531,11 @@ html.acessibilidade--alto-contraste .perfil__recado {
 
   .rotina__painel {
     grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--espaco-md);
+  }
+
+  .rotina__pote .compartimento {
+    max-width: 44px;
   }
 
   .rotina__doses {
@@ -2049,4 +2058,8 @@ button.figurinha-colada:focus-visible {
   .recado-postit {
     padding-inline: 14px;
   }
+}
+/* O grupo acompanhado é a referência da rede. A lista de participantes é secundária. */
+html.tema--acolhedor [data-pagina-mvp="pessoas"] [aria-labelledby="titulo-participantes"] {
+  box-shadow: none;
 }

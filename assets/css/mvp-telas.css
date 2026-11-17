@@ -373,7 +373,7 @@
   font: inherit;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
 }
 
@@ -382,7 +382,9 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--espaco-sm);
-  margin-top: var(--espaco-xl);
+  margin-top: var(--espaco-lg);
+  padding-top: var(--espaco-md);
+  border-top: 1px solid var(--cor-borda-sutil);
 }
 
 .dialogo-mvp__acoes .botao--perigo {
@@ -515,6 +517,9 @@
   .dialogo-mvp__acoes > .botao {
     flex: 1 1 auto;
     min-height: var(--tamanho-alvo-toque);
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
   }
 }
 

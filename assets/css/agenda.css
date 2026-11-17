@@ -98,7 +98,7 @@ body.menu-fechado .conteudo-pagina.agenda {
   }
 }
 
-html.tema--acolhedor .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas),
+html.tema--acolhedor .agenda__painel :is(.calendario-mensal, .agenda__tarefas),
 html.acessibilidade--alto-contraste .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
@@ -111,7 +111,6 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__tarefas {
   padding: var(--espaco-lg);
 }
 
-html.tema--acolhedor .agenda__painel .agenda__legenda,
 html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
   padding: var(--espaco-md);
 }
@@ -347,7 +346,7 @@ html.tema--acolhedor .agenda__avatar {
   text-align: left;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-md);
   cursor: pointer;
 }
@@ -611,7 +610,21 @@ html.tema--acolhedor .agenda__avatar {
     margin-left: 0;
   }
 
-  .agenda__acoes .botao,
+  .agenda__acoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agenda__acoes .botao--primario {
+    grid-column: 1 / -1;
+  }
+
+  .agenda__acoes .botao {
+    min-height: var(--tamanho-alvo-toque);
+    white-space: normal;
+    text-align: center;
+  }
+
   .agenda__tarefa > .botao,
   .agenda__lacuna > .botao,
   .agenda__turno .botao,

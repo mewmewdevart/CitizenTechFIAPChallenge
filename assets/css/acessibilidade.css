@@ -352,6 +352,25 @@ html.acessibilidade--espacamento-texto :is(h1, h2, h3, h4) {
   min-height: var(--tamanho-alvo-toque);
 }
 
+@media (width < 1024px) {
+  .barra-topo__acoes .acessibilidade__botao-flutuante {
+    position: static;
+    flex: none;
+    width: var(--tamanho-alvo-toque);
+    min-height: var(--tamanho-alvo-toque);
+    padding: 0;
+    transform: none;
+    border: 1px solid var(--cor-borda-sutil);
+    border-radius: var(--raio-md);
+    box-shadow: none;
+  }
+
+  .barra-topo__acoes .acessibilidade__rotulo-flutuante {
+    display: none;
+  }
+
+}
+
 @media (width < 640px) {
   .acessibilidade__painel {
     top: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-sm));

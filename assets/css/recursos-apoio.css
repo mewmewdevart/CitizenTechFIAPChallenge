@@ -197,6 +197,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
 }
 
 .documentos__busca {
+  width: 100%;
   display: grid;
   gap: var(--espaco-xs);
 }
@@ -227,38 +228,8 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   font: inherit;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
-}
-
-.documentos__filtros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espaco-xs);
-}
-
-.documentos__filtro {
-  min-height: 36px;
-  padding: 6px var(--espaco-md);
-  border: 1px solid var(--cor-borda-controle);
-  border-radius: var(--raio-pill);
-  background: var(--cor-superficie);
-  color: var(--cor-texto-secundario);
-  font: inherit;
-  font-size: var(--texto-legenda);
-  font-weight: var(--peso-semibold);
-  cursor: pointer;
-}
-
-.documentos__filtro:hover {
-  border-color: var(--cor-primaria);
-  color: var(--cor-primaria);
-}
-
-.documentos__filtro[aria-pressed="true"] {
-  background: var(--cor-primaria);
-  border-color: var(--cor-primaria);
-  color: var(--cor-neutra-clara-02);
 }
 
 .documentos__lista {
@@ -287,6 +258,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   height: 40px;
   border-radius: var(--raio-sm);
   background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
 }
 
 .documentos__conteudo {
@@ -410,7 +382,8 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   bottom: calc(var(--espaco-xl) * -1);
   display: block;
   width: 100%;
-  max-width: clamp(280px, 34vw, 420px);
+  max-width: min(100%, 23rem);
+  max-height: 100%;
   height: auto;
   object-fit: contain;
 }
@@ -663,7 +636,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   font-size: var(--texto-interface);
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
 }
 
@@ -764,7 +737,7 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
 .direitos-guia__filtros button {
   min-height: 36px;
   padding: 6px var(--espaco-md);
-  border: 1px solid var(--cor-borda-controle);
+  border: var(--borda-controle);
   border-radius: var(--raio-pill);
   background: var(--cor-superficie);
   color: var(--cor-texto-principal);
@@ -920,7 +893,8 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
 
   .direitos-banner__arte img {
     position: static;
-    max-width: min(280px, 100%);
+    max-width: min(12rem, 100%);
+    max-height: none;
   }
 }
 
@@ -948,11 +922,15 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
   }
 
   .documentos__item {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: var(--espaco-sm);
   }
 
   .documentos__item .botao {
-    margin-left: auto;
+    grid-column: 2;
+    justify-self: start;
+    min-height: var(--tamanho-alvo-toque);
   }
 }
 
@@ -966,6 +944,20 @@ html.tema--acolhedor :is(.apoio__painel, .apoio__cartao) {
 .privacidade__secao {
   display: grid;
   gap: var(--espaco-md);
+  align-content: start;
+}
+
+html .privacidade__secao:is(.apoio__painel) {
+  border: 0;
+  border-top: var(--borda-padrao);
+  border-radius: 0;
+  padding-inline: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.privacidade__secao :is(p, ul) {
+  max-inline-size: 72ch;
 }
 
 .privacidade__cabecalho-card {
