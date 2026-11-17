@@ -227,6 +227,17 @@
     };
   }
 
+  function migrarRegistrosDose(anterior) {
+    const registros = { ...anterior };
+    const chaveAnterior = '18h|Metformina';
+    const chaveAtual = '20h|Metformina';
+    if (registros[chaveAnterior] && !registros[chaveAtual]) {
+      registros[chaveAtual] = registros[chaveAnterior];
+      delete registros[chaveAnterior];
+    }
+    return registros;
+  }
+
   function carregarEstado() {
     const base = criarEstadoInicial();
     try {
@@ -236,6 +247,7 @@
       return {
         ...base,
         ...dados,
+        registrosDose: migrarRegistrosDose(dados?.registrosDose),
         person: { ...base.person, ...(dados?.person || {}) },
         events: Array.isArray(dados?.events) ? dados.events : base.events,
         covered: dados?.covered && typeof dados.covered === 'object' ? dados.covered : {},
@@ -262,6 +274,7 @@
   function atualizarEstado(transformador) {
     estadoAtual = typeof transformador === 'function' ? transformador(estadoAtual) : { ...estadoAtual, ...transformador };
     persistirEstado();
+    window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
     return estadoAtual;
   }
 
@@ -284,6 +297,32 @@
       avatarArquivo: mascote.split('/').pop()
     };
   };
+
+  const nomePessoaAcompanhada = (estado = estadoAtual) => {
+    const { nome, apelido } = estado.person;
+    return apelido ? `${nome} (${apelido})` : nome;
+  };
+
+  const obterCompromissos = (estado = estadoAtual) =>
+    [...estado.events].sort((a, b) => `${a.dia}T${a.hora}`.localeCompare(`${b.dia}T${b.hora}`));
+
+  const obterProximoCompromisso = () => obterCompromissos().find(
+    item => `${item.dia}T${item.hora}` >= `${HOJE}T11:58`
+  );
+
+  const normalizarBusca = valor => String(valor ?? '').normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR').trim();
+
+  function vincularFiltro(grupo, seletor, selecionar) {
+    grupo?.addEventListener('click', evento => {
+      const botao = evento.target.closest(seletor);
+      if (!botao || !grupo.contains(botao)) return;
+      grupo.querySelectorAll(seletor).forEach(item => {
+        item.setAttribute('aria-pressed', String(item === botao));
+      });
+      selecionar(botao);
+    });
+  }
 
   const escaparHtml = valor => String(valor ?? '').replace(/[&<>"']/g, caractere => ({
     '&': '&amp;',
@@ -687,7 +726,8 @@
     },
     { hora: '12h', momento: 'agora', responsavel: 'Zé da Manga (Zé)', itens: [['Omeprazol'], ['Metformina'], ['AAS'], ['Vitamina B12']] },
     { hora: '14h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Carbamazepina'], ['Colírio']] },
-    { hora: '18h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Metformina'], ['Losartana'], ['Bombinha']] },
+    { hora: '18h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Losartana'], ['Bombinha']] },
+    { hora: '20h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Metformina']] },
     { hora: '22h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Sinvastatina'], ['Carbamazepina'], ['Pomada']] }
   ];
 
@@ -701,14 +741,22 @@
   };
 
   const obterGruposPortaRemedios = (estado = estadoAtual) => {
+    const editados = estado.itensEditados || {};
+    const registros = estado.registrosDose || {};
     const grupos = PORTA_REMEDIOS.map(g => ({
       ...g,
-      itens: g.itens.map(item => [...item])
+      itens: g.itens.filter(([id, inicial]) => {
+        const edicao = editados[id];
+        return inicial || registros[chaveDose(g.hora, id)]
+          || (edicao?.tipo !== 'Insumo' && (!edicao?.horarioDefinido || edicao.horarioDefinido === g.hora));
+      }).map(item => [...item])
     }));
     const excluidos = new Set(estado.itensExcluidos || []);
     const usuario = obterUsuarioAtual(estado);
 
-    for (const extra of estado.itensExtras || []) {
+    const reagendados = Object.entries(editados).filter(([, item]) => item.horarioDefinido)
+      .map(([chave, item]) => ({ ...item, chave, horarios: item.horarioDefinido }));
+    for (const extra of [...(estado.itensExtras || []), ...reagendados]) {
       if (extra?.tipo !== 'Medicamento' || !extra.horarios || excluidos.has(extra.chave || extra.nome)) continue;
       const hora = normalizarHoraPorta(extra.horarios);
       if (!hora) continue;
@@ -723,9 +771,24 @@
         };
         grupos.push(grupo);
       }
-      if (!grupo.itens.some(([nome]) => nome === extra.nome)) {
-        grupo.itens.push([extra.nome]);
+      const id = extra.chave || extra.nome;
+      if (!grupo.itens.some(([chave]) => chave === id)) {
+        grupo.itens.push([id]);
       }
+    }
+
+    for (const [chaveRegistro] of Object.entries(registros)) {
+      const [hora, id] = chaveRegistro.split('|');
+      const origem = editados[id] || estado.itensExtras?.find(item => (item.chave || item.nome) === id);
+      if (!origem || excluidos.has(id) || !/^\d{1,2}h$/.test(hora)) continue;
+      let grupo = grupos.find(item => item.hora === hora);
+      if (!grupo) {
+        const horaNum = parseInt(hora, 10);
+        grupo = { hora, momento: horaNum < 12 ? 'passado' : horaNum === 12 ? 'agora' : 'depois',
+          responsavel: usuario.nomeComApelido, itens: [] };
+        grupos.push(grupo);
+      }
+      if (!grupo.itens.some(([chave]) => chave === id)) grupo.itens.push([id]);
     }
 
     return grupos
@@ -737,12 +800,16 @@
   const obterDoses = (estado = estadoAtual) => {
     const registros = estado.registrosDose || {};
     return obterGruposPortaRemedios(estado).flatMap(grupo => grupo.itens.map(([nome, base]) => {
-      const chave = chaveDose(grupo.hora, nome);
+      const itemId = nome;
+      const chave = chaveDose(grupo.hora, itemId);
+      const nomeExibido = estado.itensEditados?.[itemId]?.nome
+        || estado.itensExtras?.find(item => (item.chave || item.nome) === itemId)?.nome || itemId;
       const meu = registros[chave];
       const registro = meu || base || { estado: 'prevista' };
       return {
         chave,
-        nome,
+        itemId,
+        nome: nomeExibido,
         hora: grupo.hora,
         momento: grupo.momento,
         responsavel: grupo.responsavel,
@@ -757,9 +824,11 @@
 
   const obterCompartimentos = (estado = estadoAtual) => {
     const doses = obterDoses(estado);
-    const usuario = obterUsuarioAtual(estado);
+    const escala = construirLinhaDoTempoDia(HOJE, estado);
     return obterGruposPortaRemedios(estado).map(grupo => {
-      const responsavel = grupo.responsavel === 'Zé da Manga (Zé)' ? usuario.nomeComApelido : grupo.responsavel;
+      const hora = parseInt(grupo.hora, 10);
+      const turno = escala.find(item => item.tipo === 'turno' && hora >= item.inicio && hora < item.fim);
+      const responsavel = turno?.pessoa?.nome || '';
       const itens = doses.filter(dose => dose.hora === grupo.hora);
       const faltam = itens.filter(dose => dose.estado !== 'administrado').length;
       const naoDados = itens.filter(dose => dose.estado === 'nao-administrado').length;
@@ -779,17 +848,37 @@
     return { ...estado, registrosDose: registros };
   });
 
-  const obterEstoque = (nome, estado = estadoAtual) => {
-    const base = estado.estoqueBase?.[nome] ?? ESTOQUE_INICIAL[nome];
-    if (base === undefined) return null;
-    const usados = Object.entries(estado.registrosDose || {})
-      .filter(([chave, registro]) => chave.split('|')[1] === nome && registro.estado === 'administrado').length;
-    return Math.max(0, base - usados);
+  const contarUnidadesUsadas = (id, estado) => Object.entries(estado.registrosDose || {})
+    .filter(([chave, registro]) => chave.split('|')[1] === id && registro.estado === 'administrado').length;
+
+  const obterEstoque = (id, estado = estadoAtual) => {
+    const nomeAnterior = estado.itensEditados?.[id]?.nome
+      || estado.itensExtras?.find(item => item.chave === id)?.nome;
+    const base = estado.estoqueBase?.[id] ?? estado.estoqueBase?.[nomeAnterior] ?? ESTOQUE_INICIAL[id];
+    return base === undefined ? null : Math.max(0, base - contarUnidadesUsadas(id, estado));
   };
 
-  const reporEstoque = (nome, quantidade) => atualizarEstado(estado => {
-    const base = estado.estoqueBase?.[nome] ?? ESTOQUE_INICIAL[nome] ?? 0;
-    return { ...estado, estoqueBase: { ...(estado.estoqueBase || {}), [nome]: base + quantidade } };
+  const definirSaldoEstoque = (estado, id, quantidade) => ({
+    ...estado.estoqueBase, [id]: quantidade + contarUnidadesUsadas(id, estado)
+  });
+
+  const reporEstoque = (id, quantidade, observacao = '') => {
+    if (!Number.isInteger(quantidade) || quantidade < 1) return estadoAtual;
+    return atualizarEstado(estado => {
+      const anotacao = { quantidade, autor: obterUsuarioAtual(estado).nomeComApelido,
+        dia: HOJE, observacao: observacao.trim() };
+      return {
+        ...estado,
+        estoqueBase: definirSaldoEstoque(estado, id, (obterEstoque(id, estado) ?? 0) + quantidade),
+        reposicoesEstoque: { ...estado.reposicoesEstoque,
+          [id]: [anotacao, ...(estado.reposicoesEstoque?.[id] || [])] }
+      };
+    });
+  };
+
+  window.addEventListener('pageshow', evento => {
+    if (!evento.persisted) return;
+    if (JSON.stringify(carregarEstado()) !== JSON.stringify(estadoAtual)) location.reload();
   });
 
   window.MutiraoCuidado = {
@@ -799,6 +888,11 @@
     obterEstado: () => estadoAtual,
     atualizarEstado,
     obterUsuarioAtual,
+    nomePessoaAcompanhada,
+    obterCompromissos,
+    obterProximoCompromisso,
+    normalizarBusca,
+    vincularFiltro,
     escaparHtml,
     gerarChaveData,
     formatarData,
@@ -822,6 +916,7 @@
     registrarDose,
     desfazerDose,
     obterEstoque,
+    definirSaldoEstoque,
     reporEstoque
   };
 })();

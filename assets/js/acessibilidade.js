@@ -208,6 +208,16 @@
     document.body.append(raiz);
 
     const botaoFlutuante = raiz.querySelector('#acessibilidade-botao');
+    const acoesTopo = document.querySelector('.barra-topo__acoes');
+    if (acoesTopo) {
+      const telaMobile = matchMedia('(width < 1024px)');
+      const posicionarAtalho = () => {
+        if (telaMobile.matches) acoesTopo.append(botaoFlutuante);
+        else raiz.prepend(botaoFlutuante);
+      };
+      posicionarAtalho();
+      telaMobile.addEventListener('change', posicionarAtalho);
+    }
     const fundo = raiz.querySelector('#acessibilidade-fundo');
     const painel = raiz.querySelector('#acessibilidade-painel');
     const botaoFechar = raiz.querySelector('#acessibilidade-fechar');

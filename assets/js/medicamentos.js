@@ -48,6 +48,7 @@
 
   let doseEmFoco = null;
   let itemEmEstoque = 'Metformina';
+  let nomeEstoque = 'Metformina';
   let itemEmFoco = null;
 
   const formatarHorario = valor => (valor ? valor.replace(':', 'h') : '');
@@ -61,14 +62,14 @@
     const doses = obterDoses();
     const editados = estado.itensEditados || {};
     const excluidos = new Set(estado.itensExcluidos || []);
-    const nomes = [...new Set(doses.map(dose => dose.nome))];
+    const nomes = [...new Set(doses.map(dose => dose.itemId))];
     const medicamentos = nomes.map(nome => {
-      const horarios = doses.filter(dose => dose.nome === nome).map(dose => dose.hora);
+      const horarios = doses.filter(dose => dose.itemId === nome).map(dose => dose.hora);
       return { chave: nome, nome, tipo: 'Medicamento', horarios: juntarHorarios(horarios), consumoDia: horarios.length };
     });
     const insumos = INSUMOS.map(item => ({ ...item, chave: item.nome }));
     const extras = (estado.itensExtras || [])
-      .filter(item => !nomes.includes(item.nome))
+      .filter(item => !nomes.includes(item.chave || item.nome))
       .map(item => ({ ...item, chave: item.chave || item.nome }));
 
     return [...medicamentos, ...extras, ...insumos]
@@ -76,7 +77,7 @@
       .map(item => {
         const edicao = editados[item.chave];
         const mesclado = edicao ? { ...item, ...edicao } : item;
-        return { ...mesclado, estoque: obterEstoque(mesclado.nome) ?? obterEstoque(item.chave) };
+        return { ...mesclado, horarios: item.horarios || mesclado.horarios, consumoDia: item.consumoDia ?? mesclado.consumoDia, estoque: obterEstoque(item.chave) };
       });
   };
 
@@ -155,7 +156,7 @@
     }
     proxima.innerHTML = `<ul class="painel__lista">${grupo.itens.filter(dose => dose.estado === 'prevista').map(dose => `<li class="painel__item">
       <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
-      <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>Prevista para ${escaparHtml(dose.hora)} · ${escaparHtml(grupo.responsavel)}</span></span>
+      <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>Prevista para ${escaparHtml(dose.hora)} · ${escaparHtml(grupo.responsavel || 'Turno sem cobertura')}</span></span>
       <button type="button" class="botao botao--secundario" data-registrar-dose="${escaparHtml(dose.chave)}">Registrar administração</button>
     </li>`).join('')}</ul>`;
   };
@@ -169,19 +170,10 @@
 
   const renderizarRegistros = grupos => {
     const registradas = grupos.flatMap(grupo => grupo.itens).filter(dose => dose.estado !== 'prevista').reverse();
-    const temMaisDeCinco = registradas.length > 5;
-    if (controlesRegistros) controlesRegistros.hidden = !temMaisDeCinco;
-    if (!temMaisDeCinco) {
-      filtroEstadoRegistros = 'Todos';
-      termoRegistros = '';
-      mostrarTodosRegistros = false;
-      if (buscaRegistros) buscaRegistros.value = '';
-    }
-
     const filtrados = registradas.filter(dose => {
       const bateEstado = filtroEstadoRegistros === 'Todos' || dose.estado === filtroEstadoRegistros;
-      const termo = termoRegistros.trim().toLocaleLowerCase('pt-BR');
-      const bateTexto = !termo || `${dose.hora} ${dose.nome} ${descreverRegistro(dose)}`.toLocaleLowerCase('pt-BR').includes(termo);
+      const termo = core.normalizarBusca(termoRegistros);
+      const bateTexto = !termo || core.normalizarBusca(`${dose.hora} ${dose.nome} ${descreverRegistro(dose)}`).includes(termo);
       return bateEstado && bateTexto;
     });
 
@@ -224,7 +216,7 @@
         }).join('')
         : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nenhum item com previsão curta.</p></div>';
     }
-    itemEmEstoque = baixos[0]?.nome || itens.find(item => item.estoque !== null)?.nome || 'Metformina';
+    itemEmEstoque = baixos[0]?.chave || itens.find(item => item.estoque !== null)?.chave || 'Metformina';
   };
 
   const controlesItens = pagina.querySelector('[data-itens-controles]');
@@ -235,19 +227,10 @@
   let mostrarTodosItens = false;
 
   const renderizarItens = itens => {
-    const temMaisDeCinco = itens.length > 5;
-    if (controlesItens) controlesItens.hidden = !temMaisDeCinco;
-    if (!temMaisDeCinco) {
-      filtroTipoItens = 'Todos';
-      termoItens = '';
-      mostrarTodosItens = false;
-      if (buscaItens) buscaItens.value = '';
-    }
-
     const filtrados = itens.filter(item => {
       const bateTipo = filtroTipoItens === 'Todos' || item.tipo === filtroTipoItens;
-      const termo = termoItens.trim().toLocaleLowerCase('pt-BR');
-      const bateTexto = !termo || `${item.nome} ${item.dose || ''} ${item.tipo || ''}`.toLocaleLowerCase('pt-BR').includes(termo);
+      const termo = core.normalizarBusca(termoItens);
+      const bateTexto = !termo || core.normalizarBusca(`${item.nome} ${item.dose || ''} ${item.tipo || ''}`).includes(termo);
       return bateTipo && bateTexto;
     });
 
@@ -271,7 +254,7 @@
       ? visiveis.map(item => `<li class="painel__item">
         <span class="painel__icone" aria-hidden="true"><i class="${item.tipo === 'Insumo' ? 'fa-solid fa-box-open' : 'bi bi-capsule'}"></i></span>
         <span class="painel__texto"><strong>${escaparHtml(item.nome)}</strong><span>${escaparHtml(descreverItem(item))}</span></span>
-        <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.nome)}">Ver item</button>
+        <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.chave)}">Ver item</button>
       </li>`).join('')
       : '<li class="estado-vazio"><strong>Nenhum item encontrado</strong><p>Tente outro filtro ou termo de busca.</p></li>';
   };
@@ -290,9 +273,9 @@
     const grupo = obterCompartimentos().find(item => item.hora === dose.hora);
     const usuario = obterUsuarioAtual();
     dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Registrar administração - ${dose.nome}`;
-    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Prevista para ${dose.hora} · Turno de ${grupo?.responsavel || usuario.nomeComApelido}`;
+    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Prevista para ${dose.hora} · ${grupo?.responsavel ? `Turno de ${grupo.responsavel}` : 'Turno sem cobertura'}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
-      dialogo.querySelector('[data-dose-previsto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Horário previsto: ${dose.hora}`;
+      dialogo.querySelector('[data-dose-previsto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Horário previsto: ${dose.hora}`;
     }
     dialogos.confirmar.querySelector('[name="horario"]').value = `${dose.hora.replace('h', '').padStart(2, '0')}:05`;
   };
@@ -330,7 +313,7 @@
     }));
 
     dialogos.registrada.querySelector('[data-registro-titulo]').textContent = `${administrada ? 'Administração registrada' : 'Ocorrência registrada'} - ${dose.nome}`;
-    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Terça, 10 nov.`;
+    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${core.nomePessoaAcompanhada()} · ${dose.nome} · Terça, 10 nov.`;
     dialogos.registrada.querySelector('[data-registro-agenda]').textContent = administrada
       ? `${dose.hora} · Administrada às ${formatarHorario(detalhe)} · ${usuario.nomeComApelido}`
       : `${dose.hora} · Não administrada · Registro por ${usuario.nomeComApelido}`;
@@ -341,11 +324,12 @@
   };
 
   const abrirEstoque = nome => {
-    const item = obterItens().find(atual => atual.nome === nome);
+    const item = obterItens().find(atual => atual.chave === nome || atual.nome === nome);
     if (!item) return;
-    itemEmEstoque = item.nome;
+    itemEmEstoque = item.chave;
+    nomeEstoque = item.nome;
     dialogos.estoque.querySelector('[data-estoque-titulo]').textContent = `Atualizar estoque de ${item.nome.toLocaleLowerCase('pt-BR')}`;
-    dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `Maria das Dores (Mari) · Estoque atual: ${plural(item.estoque ?? 0, 'unidade', 'unidades')}. O registro guarda a autoria e a data.`;
+    dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `Maria das Dores (Mari) · Estoque atual: ${plural(item.estoque ?? 0, 'unidade', 'unidades')}. A quantidade será somada ao estoque atual.`;
     dialogos.estoque.querySelector('[name="item"]').value = item.nome;
     dialogos.estoque.showModal();
   };
@@ -403,6 +387,7 @@
     const horasExtraidas = (item.horarios || '').match(/\d{1,2}/g) || [];
     const h = horasExtraidas[0] ? String(Number(horasExtraidas[0])).padStart(2, '0') : '';
     popularSelectHorarioItem(h);
+    form.dataset.horarioInicial = h;
     form.elements.estoque.value = item.estoque === null || item.estoque === undefined ? '' : String(item.estoque);
     dialogos.detalhe?.close();
     dialogos.item.showModal();
@@ -519,10 +504,10 @@
   pagina.querySelector('[data-formulario-mvp="estoque"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
     const quantidade = Number(evento.target.elements.quantidade.value);
-    if (!quantidade || quantidade < 1) return;
-    reporEstoque(itemEmEstoque, quantidade);
+    if (!Number.isInteger(quantidade) || quantidade < 1) return;
+    reporEstoque(itemEmEstoque, quantidade, evento.target.elements.observacao.value);
     evento.target.closest('dialog')?.close();
-    anunciarStatus(elementoStatus, `Estoque de ${itemEmEstoque} atualizado com ${plural(quantidade, 'unidade', 'unidades')}.`);
+    anunciarStatus(elementoStatus, `Estoque de ${nomeEstoque} atualizado com ${plural(quantidade, 'unidade', 'unidades')}.`);
     renderizar();
   });
 
@@ -533,6 +518,11 @@
     const nomeOriginal = (campos.nomeOriginal || '').trim();
     const nome = (campos.nome || '').trim();
     if (!nome) return;
+    if (obterItens().some(item => item.chave !== nomeOriginal && core.normalizarBusca(item.nome) === core.normalizarBusca(nome))) {
+      form.elements.nome.setCustomValidity('Já existe um item com esse nome.');
+      form.elements.nome.reportValidity();
+      return;
+    }
     const horarios = campos.horario ? `${campos.horario}h` : '';
     const dadosItem = {
       nome,
@@ -551,17 +541,23 @@
         const itensEditados = ehExtra
           ? estado.itensEditados
           : { ...(estado.itensEditados || {}), [nomeOriginal]: dadosItem };
+        if (!ehExtra) {
+          const anterior = estado.itensEditados?.[nomeOriginal]?.horarioDefinido;
+          const novo = campos.horario !== form.dataset.horarioInicial && horarios ? horarios.replace(/^0/, '') : anterior;
+          if (novo) itensEditados[nomeOriginal].horarioDefinido = novo;
+        }
         const estoqueBase = campos.estoque === ''
           ? estado.estoqueBase
-          : { ...(estado.estoqueBase || {}), [nome]: Number(campos.estoque), [nomeOriginal]: Number(campos.estoque) };
+          : core.definirSaldoEstoque(estado, nomeOriginal, Number(campos.estoque));
         return { ...estado, itensExtras, itensEditados, estoqueBase };
       });
       anunciarStatus(elementoStatus, `${nome} atualizado.`);
     } else {
+      const chave = `item-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       atualizarEstado(estado => ({
         ...estado,
-        itensExtras: [...(estado.itensExtras || []), dadosItem],
-        estoqueBase: campos.estoque === '' ? estado.estoqueBase : { ...(estado.estoqueBase || {}), [nome]: Number(campos.estoque) }
+        itensExtras: [...(estado.itensExtras || []), { ...dadosItem, chave }],
+        estoqueBase: campos.estoque === '' ? estado.estoqueBase : core.definirSaldoEstoque(estado, chave, Number(campos.estoque))
       }));
       anunciarStatus(elementoStatus, `${nome} adicionado aos itens da Mari.`);
     }
@@ -572,13 +568,9 @@
     renderizar();
   });
 
-  controlesRegistros?.addEventListener('click', evento => {
-    const botao = evento.target.closest('[data-registros-filtro]');
-    if (!botao) return;
-    filtroEstadoRegistros = botao.dataset.registrosFiltro || 'Todos';
-    for (const item of controlesRegistros.querySelectorAll('[data-registros-filtro]')) {
-      item.setAttribute('aria-pressed', String(item === botao));
-    }
+  core.vincularFiltro(controlesRegistros, '[data-registros-filtro]', botao => {
+    filtroEstadoRegistros = botao.dataset.registrosFiltro;
+    mostrarTodosRegistros = false;
     renderizarRegistros(obterCompartimentos());
   });
 
@@ -592,13 +584,9 @@
     renderizarRegistros(obterCompartimentos());
   });
 
-  controlesItens?.addEventListener('click', evento => {
-    const botao = evento.target.closest('[data-itens-filtro]');
-    if (!botao) return;
-    filtroTipoItens = botao.dataset.itensFiltro || 'Todos';
-    for (const item of controlesItens.querySelectorAll('[data-itens-filtro]')) {
-      item.setAttribute('aria-pressed', String(item === botao));
-    }
+  core.vincularFiltro(controlesItens, '[data-itens-filtro]', botao => {
+    filtroTipoItens = botao.dataset.itensFiltro;
+    mostrarTodosItens = false;
     renderizarItens(obterItens());
   });
 
@@ -612,5 +600,22 @@
     renderizarItens(obterItens());
   });
 
+  dialogos.item?.querySelector('[name="nome"]')?.addEventListener('input', evento => evento.target.setCustomValidity(''));
+  dialogos.item?.addEventListener('close', () => dialogos.item.querySelector('[name="nome"]').setCustomValidity(''));
+  const pessoa = obterEstado().person;
+  const alerta = pagina.querySelector('[data-alerta-medicamentos]');
+  const alergias = pessoa.alergias?.trim();
+  if (alerta) {
+    alerta.hidden = !alergias && !pessoa.avisoTitulo && !pessoa.avisoTexto;
+    alerta.querySelector('strong').textContent = pessoa.avisoTitulo || (alergias ? `Alergia registrada: ${alergias}` : 'Atenção no cuidado');
+    alerta.querySelector('.faixa-alerta__texto > span').textContent = pessoa.avisoTexto || 'Confira as orientações na Ficha.';
+  }
   renderizar();
+  const doseInicial = new URLSearchParams(location.search).get('dose');
+  if (doseInicial) {
+    const url = new URL(location.href);
+    url.searchParams.delete('dose');
+    history.replaceState(null, '', url);
+    abrirRegistro(doseInicial);
+  }
 })();

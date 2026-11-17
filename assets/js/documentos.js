@@ -17,7 +17,7 @@
 
   const lista = pagina.querySelector('[data-documentos-lista]');
   const campoBusca = pagina.querySelector('[data-documentos-busca]');
-  const filtrosCategoria = pagina.querySelectorAll('[data-documentos-filtro]');
+  const filtrosCategoria = pagina.querySelector('.filtros');
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const dialogoDetalhes = document.getElementById('dialogo-detalhes-documento');
   const dialogoAdicionar = document.getElementById('dialogo-adicionar-documento');
@@ -80,13 +80,13 @@
   };
 
   const renderizar = () => {
-    const termo = (campoBusca?.value || '').trim().toLowerCase();
+    const termo = core.normalizarBusca(campoBusca?.value);
     const docs = [...(obterEstado().documents || [])]
       .sort((a, b) => (b.dia || '').localeCompare(a.dia || ''))
       .filter(doc => {
         if (categoriaAtiva !== 'Todos' && doc.categoria !== categoriaAtiva) return false;
         if (!termo) return true;
-        const texto = `${doc.titulo} ${doc.categoria} ${doc.autor} ${doc.vinculo} ${doc.observacoes}`.toLowerCase();
+        const texto = core.normalizarBusca([doc.titulo, doc.categoria, doc.autor, doc.vinculo, doc.observacoes].filter(Boolean).join(' '));
         return texto.includes(termo);
       });
 
@@ -136,14 +136,9 @@
 
   campoBusca?.addEventListener('input', renderizar);
 
-  filtrosCategoria.forEach(botao => {
-    botao.addEventListener('click', () => {
-      categoriaAtiva = botao.dataset.documentosFiltro || 'Todos';
-      filtrosCategoria.forEach(item => {
-        item.setAttribute('aria-pressed', String(item === botao));
-      });
-      renderizar();
-    });
+  core.vincularFiltro(filtrosCategoria, '[data-documentos-filtro]', botao => {
+    categoriaAtiva = botao.dataset.documentosFiltro;
+    renderizar();
   });
 
   pagina.addEventListener('click', evento => {
@@ -220,6 +215,15 @@
     }
 
     const arquivo = form.elements.arquivo?.files?.[0];
+    if (arquivo && (!/\.(pdf|jpe?g|png)$/i.test(arquivo.name)
+      || (arquivo.type && !['application/pdf', 'image/jpeg', 'image/png'].includes(arquivo.type))
+      || arquivo.size > 10 * 1024 * 1024)) {
+      form.elements.arquivo.setAttribute('aria-invalid', 'true');
+      const aviso = pagina.querySelector('#dialogo-arquivo-invalido');
+      aviso.addEventListener('close', () => form.elements.arquivo.focus(), { once: true });
+      aviso.showModal();
+      return;
+    }
     const idEdicao = (campos.id || '').trim();
 
     if (idEdicao) {
@@ -269,4 +273,6 @@
   popularSelectAutor();
   window.addEventListener('mutirao:perfil-atualizado', () => popularSelectAutor());
   renderizar();
+  const idInicial = new URLSearchParams(location.search).get('documento');
+  if (idInicial) abrirDetalhes(idInicial);
 })();

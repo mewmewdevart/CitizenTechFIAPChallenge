@@ -104,38 +104,38 @@
       : `${dados} de ${total} administrados · deslize para ver mais`;
   };
 
-  const obterResponsavelHorario = horaTexto => {
-    const hora = parseInt(horaTexto, 10);
-    if (Number.isNaN(hora)) return null;
-    const linhaTempo = construirLinhaDoTempoDia(HOJE, obterEstado());
-    const segmento = linhaTempo.find(item => {
-      const partes = String(item.horario || '').match(/(\d{1,2})h\D+(\d{1,2})h/);
-      if (!partes) return false;
-      const inicio = Number(partes[1]);
-      const fim = Number(partes[2]);
-      return hora >= inicio && hora < fim;
-    });
-    if (!segmento || segmento.tipo === 'lacuna' || !segmento.pessoa?.nome) return null;
-    return segmento.pessoa.nome;
+  const atualizarProximoCompromisso = () => {
+    const bloco = pagina.querySelector('[data-proximo-compromisso]');
+    if (!bloco) return;
+    const proximo = core.obterProximoCompromisso();
+    bloco.querySelector('strong').textContent = proximo
+      ? `${proximo.dia === HOJE ? '' : core.formatarDataCurta(proximo.dia) + ' · '}${proximo.hora.replace(':00', 'h')} · ${proximo.titulo}`
+      : 'Nenhum compromisso agendado';
+    bloco.querySelector('[data-compromisso-detalhes]').textContent = proximo
+      ? [proximo.local, proximo.acompanhante && `${proximo.acompanhante} acompanha`].filter(Boolean).join(' · ')
+      : 'Consulte a Agenda para organizar os próximos cuidados.';
+    bloco.querySelector('a').href = proximo ? `agenda.html?dia=${encodeURIComponent(proximo.dia)}` : 'agenda.html';
   };
 
   const atualizarProximaMedicacao = grupos => {
-    const proximo = grupos.find(grupo => !grupo.completo && grupo.momento !== 'passado') || grupos.find(grupo => !grupo.completo);
+    const proximo = grupos.find(grupo => grupo.momento !== 'passado'
+      && grupo.itens.some(dose => dose.estado === 'prevista'));
     const titulo = pagina.querySelector('[data-proxima-medicacao]');
     const responsavel = pagina.querySelector('[data-proxima-responsavel]');
     const bloco = titulo?.closest('.painel__bloco');
     if (!titulo || !responsavel) return;
     if (bloco) bloco.hidden = false;
     if (!proximo) {
-      titulo.textContent = 'Todos os remédios de hoje foram dados';
-      responsavel.textContent = 'Porta-remédios completo';
+      titulo.textContent = 'Nenhuma dose futura pendente';
+      const temPendencias = grupos.some(grupo => !grupo.completo);
+      responsavel.textContent = temPendencias ? 'Consulte os registros de hoje.' : 'Porta-remédios completo';
       return;
     }
-    const pendentes = proximo.itens.filter(dose => dose.estado !== 'administrado');
+    const pendentes = proximo.itens.filter(dose => dose.estado === 'prevista');
     titulo.textContent = pendentes.length > 1
       ? `${proximo.hora} · ${pendentes.length} medicamentos previstos (${pendentes[0].nome} + ${pendentes.length - 1})`
       : `${proximo.hora} · ${pendentes[0].nome}`;
-    const pessoaTurno = obterResponsavelHorario(proximo.hora);
+    const pessoaTurno = proximo.responsavel;
     responsavel.textContent = pessoaTurno
       ? `Responsável: ${pessoaTurno}`
       : 'Sem responsável neste turno (horário sem cobertura)';
@@ -582,5 +582,6 @@
   renderizarPortaRemedios();
   renderizarEscala();
   sincronizarRedeInicio();
+  atualizarProximoCompromisso();
   window.addEventListener('mutirao:perfil-atualizado', sincronizarRedeInicio);
 })();

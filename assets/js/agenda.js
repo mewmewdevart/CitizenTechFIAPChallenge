@@ -43,8 +43,27 @@
   let limiteMaxTurno = 24;
   let eventoEmFocoId = null;
 
-  const obterTodosEventos = () =>
-    [...obterEstado().events].sort((a, b) => (a.dia + a.hora).localeCompare(b.dia + b.hora));
+  const obterTodosEventos = () => core.obterCompromissos();
+
+  const obterTarefas = () => {
+    const doses = core.obterDoses();
+    return obterEstado().tasks.flatMap(tarefa => {
+      const hora = { 'tarefa-metformina-08': '8h', 'tarefa-metformina-20': '20h' }[tarefa.id];
+      if (!hora) return [tarefa];
+      const dose = doses.find(item => item.chave === core.chaveDose(hora, 'Metformina'));
+      if (!dose) return [];
+      const administrada = dose.estado === 'administrado';
+      const naoAdministrada = dose.estado === 'nao-administrado';
+      const titulo = `${hora.padStart(3, '0')} · ${dose.nome}`;
+      const descricao = administrada
+        ? ['Administrada', dose.horario && `às ${dose.horario}`, dose.quem && `por ${dose.quem}`].filter(Boolean).join(' ')
+        : naoAdministrada ? ['Não administrada', dose.motivo].filter(Boolean).join(' · ') : `Prevista para ${hora}`;
+      const href = administrada ? 'medicamentos.html#registros-de-hoje'
+        : `medicamentos.html?dose=${encodeURIComponent(dose.chave)}`;
+      return [{ ...tarefa, titulo, descricao, concluida: administrada, href,
+        rotuloAcao: administrada ? 'Ver registros' : 'Registrar administração' }];
+    });
+  };
 
   const obterEventosDia = dia => obterTodosEventos().filter(item => item.dia === dia);
 
@@ -103,7 +122,7 @@
     const containerTarefas = pagina.querySelector('[data-tarefas-diarias]');
     if (!containerTarefas) return;
 
-    const tarefas = obterEstado().tasks.filter(t => t.dia === diaSelecionado);
+    const tarefas = obterTarefas().filter(t => t.dia === diaSelecionado);
     containerTarefas.hidden = tarefas.length === 0;
     if (!tarefas.length) {
       containerTarefas.innerHTML = '';
@@ -159,7 +178,7 @@
         : `${lacunasDia.map(l => l.horario).join(', ')} · Turnos sem cobertura`;
     }
 
-    const totalTarefasDia = estado.tasks.filter(t => t.dia === diaSelecionado).length;
+    const totalTarefasDia = obterTarefas().filter(t => t.dia === diaSelecionado).length;
     pagina.querySelector('[data-resumo-dia]').textContent =
       `${itens.length} ${itens.length === 1 ? 'compromisso' : 'compromissos'}` +
       (lacunaDia ? ` · ${lacunasDia.length} ${lacunasDia.length === 1 ? 'horário sem cobertura' : 'horários sem cobertura'}` : '') +
@@ -396,6 +415,12 @@
 
     if (botao.hasAttribute('data-fechar-dialogo')) {
       botao.closest('dialog')?.close();
+      return;
+    }
+
+    if (botao.dataset.dialogo === 'dialogo-tarefa-ubs') {
+      const dialogoTarefa = document.getElementById(botao.dataset.dialogo);
+      if (dialogoTarefa && !dialogoTarefa.open) dialogoTarefa.showModal();
       return;
     }
 
@@ -681,7 +706,7 @@
               return `• ${formatarDataCurta(dia)} (${obterRotuloLacuna(dia, estado)})\n${turnosDia}`;
             })
             .join('\n'),
-          'Tarefas': () => estado.tasks
+          'Tarefas': () => obterTarefas()
             .filter(t => diasAlvo.includes(t.dia))
             .map(t => `• ${formatarDataCurta(t.dia)} — ${t.titulo} (${t.concluida ? 'Concluída' : 'Pendente'})`)
             .join('\n') || `Nenhuma tarefa registrada ${rotuloPeriodo}.`

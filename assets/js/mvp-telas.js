@@ -186,7 +186,11 @@
   };
 
   const renderizarConsultas = () => {
-    const eventos = [...obterEstado().events].sort((a, b) => (a.dia + a.hora).localeCompare(b.dia + b.hora));
+    const estado = obterEstado();
+    const eventos = core.obterCompromissos(estado);
+    const exames = estado.documents.filter(doc => doc.categoria === 'Exame')
+      .sort((a, b) => b.dia.localeCompare(a.dia));
+    const detalheExame = doc => `documentos.html?documento=${encodeURIComponent(doc.id)}`;
     const listaResumo = pagina.querySelector('[data-consultas-resumo]');
     if (listaResumo) {
       const itensHtml = eventos.slice(0, 3).map(item => {
@@ -206,20 +210,21 @@
         </div>`;
       }).join('');
 
-      const exameCadastrado = `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
-        <dt>Exame cadastrado</dt>
-        <dd><a href="documentos.html">Hemograma · 4 nov. 2026 · 1 anexo</a></dd>
-      </div>`;
+      const exame = exames[0];
+      const ultimoExame = exame ? `<div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
+        <dt>Último exame cadastrado</dt>
+        <dd><a href="${detalheExame(exame)}">${escaparHtml(exame.titulo)} · ${escaparHtml(formatarData(exame.dia, { day: 'numeric', month: 'short' }))}</a></dd>
+      </div>` : '';
 
-      listaResumo.innerHTML = itensHtml + exameCadastrado;
+      listaResumo.innerHTML = itensHtml + ultimoExame || '<div><dt>Nenhum compromisso ou exame cadastrado</dt></div>';
     }
 
     const listaExames = pagina.querySelector('[data-lista-exames]');
     if (listaExames) {
       listaExames.innerHTML = [
         ...eventos.map(item => `<p><a href="agenda.html?dia=${escaparHtml(item.dia)}">${escaparHtml(formatarData(item.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</a></p>`),
-        '<p><a href="documentos.html">4 nov. · Hemograma (Documentos)</a></p>'
-      ].join('');
+        ...exames.map(doc => `<p><a href="${detalheExame(doc)}">${escaparHtml(formatarData(doc.dia, { day: 'numeric', month: 'short' }))} · ${escaparHtml(doc.titulo)} (Documentos)</a></p>`)
+      ].join('') || '<p>Nenhum compromisso ou exame cadastrado.</p>';
     }
   };
 
@@ -418,6 +423,7 @@
   });
 
   const renderizarPessoa = () => {
+    window.dispatchEvent(new Event('mutirao:pessoa-atualizada'));
     const person = obterEstado().person;
     if (!person) return;
 
