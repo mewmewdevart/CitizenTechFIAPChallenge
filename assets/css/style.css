@@ -590,7 +590,7 @@ dialog::backdrop {
 
 #dialogo-busca h2 {
   margin: 0;
-  font-size: var(--texto-subtitulo);
+  font-size: var(--texto-titulo-secao);
 }
 
 #dialogo-busca label {

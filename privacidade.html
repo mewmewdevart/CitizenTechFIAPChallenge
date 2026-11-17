@@ -198,17 +198,21 @@
       </div>
       <p>O Mutirão não utiliza cookies de publicidade ou rastreamento comportamental. O armazenamento no seu dispositivo ocorre apenas para melhorar a experiência de uso:</p>
       <ul class="privacidade__lista">
-        <li><strong>Acessibilidade (<code>localStorage</code>):</strong> salva exclusivamente suas preferências assistivas (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave <code>mutirao-acessibilidade-preferencias</code>.</li>
-        <li><strong>Estado da interface (<code>sessionStorage</code>):</strong> guarda apenas se o menu lateral está aberto ou recolhido durante a navegação atual.</li>
-        <li><strong>Dados de sessão:</strong> respostas do verificador de direitos, alterações de configurações e envios do formulário permanecem apenas em memória nesta sessão e não são gravados em banco externo.</li>
+        <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas preferências assistivas (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave <code>mutirao-acessibilidade-preferencias</code> e o tema visual escolhido (neutro ou acolhedor) na chave <code>mutirao-tema</code>.</li>
+        <li><strong>Estado da sessão (<code>sessionStorage</code>):</strong> guarda se o menu lateral está aberto ou recolhido (<code>mutirao-menu-aberto</code>), preferências de configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha, agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v1</code>), permanecendo apenas no seu navegador até o encerramento da sessão.</li>
+        <li><strong>Dados em memória:</strong> respostas do verificador de direitos e envios do formulário de Ajuda permanecem apenas em memória durante a visualização atual e não são gravados em banco externo.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-apis">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas externas opcionais</h2>
+        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas e serviços externos</h2>
       </div>
-      <p>Na página <a href="direitos.html">Direitos e serviços</a>, caso você opte por buscar unidades públicas por CEP ou cidade/UF, o navegador realiza requisições diretas às APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong> apenas para identificar o município informado e exibir links oficiais do SUS, CRAS e Farmácia Popular.</p>
+      <p>O Mutirão utiliza recursos externos apenas em funcionalidades específicas de apoio:</p>
+      <ul class="privacidade__lista">
+        <li><strong>Localização de serviços públicos (ViaCEP e IBGE):</strong> na página <a href="direitos.html">Direitos e serviços</a>, caso você opte por buscar unidades por CEP ou cidade/UF, o navegador realiza requisições diretas às APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong> para identificar o município e exibir links oficiais do SUS, CRAS e Farmácia Popular.</li>
+        <li><strong>Assistente virtual (<code>ponto-bot</code>):</strong> todas as páginas carregam o componente de atendimento automático hospedado em <code>mutirao-pontobot-frontend.vercel.app</code>. O envio de mensagens ao assistente é opcional; evite informar dados pessoais sensíveis ou documentos no chat.</li>
+      </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-termos-uso">
