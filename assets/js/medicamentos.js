@@ -341,7 +341,7 @@
     if (!item) return;
     itemEmEstoque = item.chave;
     nomeEstoque = item.nome;
-    dialogos.estoque.querySelector('[data-estoque-titulo]').textContent = `Atualizar estoque de ${item.nome.toLocaleLowerCase('pt-BR')}`;
+    dialogos.estoque.querySelector('[data-estoque-titulo]').textContent = `Adicionar ao estoque de ${item.nome.toLocaleLowerCase('pt-BR')}`;
     dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `Maria das Dores (Mari) · Estoque atual: ${plural(item.estoque ?? 0, 'unidade', 'unidades')}. A quantidade será somada ao estoque atual.`;
     dialogos.estoque.querySelector('[name="item"]').value = item.nome;
     dialogos.estoque.showModal();

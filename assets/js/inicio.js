@@ -488,6 +488,7 @@
     }
 
     if (botao.hasAttribute('data-cancelar-cobertura')) {
+      if (!window.confirm('Cancelar a cobertura e deixar o intervalo disponível para a rede?')) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, 0, 0));
       botao.closest('dialog')?.close();
       anunciarStatus(elementoStatus, 'Cobertura do turno cancelada. O horário ficou disponível para a rede.');

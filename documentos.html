@@ -76,7 +76,7 @@
       <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
           class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 itens)">
@@ -124,13 +124,13 @@
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
               Manga · Neto</strong><small>Administrador</small></span></summary>
-        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+        <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
     <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
@@ -159,20 +159,20 @@
             Metformina</strong><small>Não administrada</small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Suporte e configurações"><a class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+          aria-hidden="true"></i>Ajuda</a><button type="button" class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
   </aside>
   <main class="conteudo-pagina apoio" id="conteudo" data-pagina-mvp="documentos">
     <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span aria-hidden="true">›</span> Documentos</nav>
     <header class="apoio__cabecalho">
       <div>
         <h1>Documentos</h1>
-        <p>Encontre receitas, exames e outros arquivos vinculados ao cuidado da Mari.</p>
+        <p>Consulte referências de receitas, exames e outros documentos do cuidado da Mari. Use dados fictícios nesta demonstração.</p>
       </div>
-      <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-documento"><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar documento</button>
+      <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-documento"><i class="fa-solid fa-plus" aria-hidden="true"></i> Cadastrar referência</button>
     </header>
 
     <section class="apoio__painel" aria-labelledby="titulo-arquivos">
-      <h2 id="titulo-arquivos">Arquivos da Mari</h2>
+      <h2 id="titulo-arquivos">Referências da Mari</h2>
       <div class="documentos__busca">
         <label for="pesquisa-documentos">Pesquisar documentos</label>
         <div class="documentos__campo-busca">
@@ -184,14 +184,14 @@
         <button type="button" class="filtros__opcao" data-documentos-filtro="Todos" aria-pressed="true">Todos</button>
         <button type="button" class="filtros__opcao" data-documentos-filtro="Receita" aria-pressed="false">Receitas</button>
         <button type="button" class="filtros__opcao" data-documentos-filtro="Exame" aria-pressed="false">Exames</button>
-        <button type="button" class="filtros__opcao" data-documentos-filtro="Documento" aria-pressed="false">Documentos</button>
+        <button type="button" class="filtros__opcao" data-documentos-filtro="Documento" aria-pressed="false">Outros documentos</button>
       </div>
       <div class="documentos__lista" data-documentos-lista></div>
     </section>
 
     <dialog class="dialogo-mvp" id="dialogo-adicionar-documento" aria-labelledby="titulo-adicionar-documento">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-adicionar-documento" data-titulo-dialogo-documento>Adicionar documento da Mari</h2>
+        <h2 id="titulo-adicionar-documento" data-titulo-dialogo-documento>Cadastrar referência de documento</h2>
       </div>
       <p>Relacione o documento ao atendimento para manter o histórico organizado.</p>
       <form class="formulario-mvp" data-formulario-mvp="documento" novalidate>
@@ -217,15 +217,14 @@
         </div>
         <label>Vínculo ou assunto<input type="text" name="vinculo" placeholder="Ex.: Consulta na UBS de 10 nov."></label>
         <label>Observações<textarea name="observacoes" rows="3" placeholder="Detalhes importantes sobre este arquivo"></textarea></label>
-        <label class="documentos__arquivo">
-          Arquivo (opcional)
-          <input type="file" name="arquivo" aria-describedby="ajuda-arquivo-documento">
-          <small id="ajuda-arquivo-documento">O cadastro guarda o nome do arquivo.</small>
+        <label>Nome do arquivo (opcional)
+          <input type="text" name="nomeArquivo" maxlength="255" aria-describedby="ajuda-arquivo-documento">
+          <small id="ajuda-arquivo-documento">Somente o nome é salvo. O arquivo fica com você.</small>
         </label>
         <p class="formulario-mvp__erro" data-erro-documento role="alert"></p>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Salvar documento</button>
+          <button type="submit" class="botao botao--primario">Salvar referência</button>
         </div>
       </form>
     </dialog>
@@ -245,15 +244,6 @@
     </dialog>
 
     <p role="status" data-mvp-status></p>
-    <dialog id="dialogo-arquivo-invalido" class="dialogo-mvp dialogo-mvp--compacto" aria-labelledby="titulo-arquivo-invalido">
-      <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-arquivo-invalido">Não foi possível adicionar o arquivo</h2>
-      </div>
-      <p>Escolha um PDF, JPG ou PNG de até 10 MB. Os outros campos continuam preenchidos.</p>
-      <form method="dialog" class="dialogo-mvp__acoes">
-        <button class="botao botao--primario" autofocus>Voltar e corrigir</button>
-      </form>
-    </dialog>
   </main>
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
@@ -264,7 +254,7 @@
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+      <h2 id="titulo-busca">Buscar uma página</h2><label for="campo-busca">Nome da página</label><input id="campo-busca"
         type="search">
       <p id="status-busca" role="status"></p>
       <ul id="resultados-busca"></ul><button>Fechar</button>

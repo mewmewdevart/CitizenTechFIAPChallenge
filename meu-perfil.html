@@ -78,7 +78,7 @@
       <div class="painel-flutuante"><a href="ficha.html"><i class="fa-regular fa-id-card" aria-hidden="true"></i>Ver ficha da Mari</a></div>
     </details>
     <div class="barra-topo__acoes">
-      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Pesquisar"><i
+      <button class="botao-icone" data-dialogo="dialogo-busca" aria-label="Buscar uma página"><i
           class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
       <details class="menu-notificacoes">
         <summary class="botao-icone botao-icone--notificacao" aria-label="Notificações (3 pendentes)">
@@ -129,13 +129,13 @@
         <div class="painel-flutuante"><a href="meu-perfil.html" aria-current="page"><i class="fa-regular fa-user"
               aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
-            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></div>
+            data-acao="sair"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></div>
       </details>
     </div>
   </header>
   <aside id="barra-lateral" class="barra-lateral">
     <a class="barra-lateral__marca" href="index.html">
-      <img src="assets/media/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
+      <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" width="44" height="44" />
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html" aria-current="page">
@@ -169,7 +169,7 @@
           aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
           aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
-          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
+          class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Voltar ao Início</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="meu-perfil">
     <nav class="apoio__trilha" aria-label="Localização"><a href="index.html">Início</a> <span
@@ -276,7 +276,7 @@
               class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
           <label class="interruptor">
             <input type="checkbox" role="switch" data-cuidar-preferencia="avisarFamilia">
-            <span class="painel__texto"><strong>Avisar a família se eu marcar “sobrecarregado”</strong><span
+            <span class="painel__texto"><strong>Simular aviso à família ao marcar “sobrecarregado”</strong><span
                 data-cuidar-aviso-familia>Desligado. Você decide se e quando contar.</span></span>
           </label>
         </section>
@@ -481,11 +481,11 @@
 
     <dialog class="dialogo-mvp" id="dialogo-recado" aria-labelledby="titulo-recado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-recado">Mandar um recado</h2>
+        <h2 id="titulo-recado">Registrar um recado</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Aparece no perfil e no Início de quem receber.</p>
+      <p>O recado fica registrado nesta demonstração e não é enviado ao destinatário.</p>
       <form class="formulario-mvp" data-formulario-mvp="recado">
         <fieldset class="escolhas">
           <legend>Para quem</legend>
@@ -518,7 +518,7 @@
       <div class="dialogo-mvp__cabecalho">
         <h2 id="titulo-pedir-folga">Pedir uma folga</h2>
       </div>
-      <p>Alguém da família fica no seu lugar.</p>
+      <p>Registre o turno para o qual você precisa de apoio. Nesta demonstração, o pedido fica nesta aba.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga">
         <fieldset class="dialogo-mvp__opcoes">
           <legend>Qual turno você quer passar?</legend>
@@ -533,13 +533,12 @@
             rows="3">Preciso descansar esta semana. Alguém consegue ficar?</textarea></label>
         <div class="cuidar__retorno">
           <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-          <p><strong>Você não precisa explicar</strong><span>A família vê só o pedido. Quem aceitar aparece na escala e
-              você é avisado.</span></p>
+          <p><strong>Você não precisa explicar</strong><span>Você pode registrar o pedido sem informar o motivo.</span></p>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario"><i class="fa-regular fa-paper-plane"
-              aria-hidden="true"></i> Pedir para a família</button>
+              aria-hidden="true"></i> Registrar pedido</button>
         </div>
       </form>
     </dialog>
@@ -571,7 +570,7 @@
   </nav>
   <dialog id="dialogo-busca" aria-labelledby="titulo-busca">
     <form method="dialog">
-      <h2 id="titulo-busca">Pesquisar</h2><label for="campo-busca">Encontrar no menu</label><input id="campo-busca"
+      <h2 id="titulo-busca">Buscar uma página</h2><label for="campo-busca">Nome da página</label><input id="campo-busca"
         type="search">
       <p id="status-busca" role="status"></p>
       <ul id="resultados-busca"></ul><button>Fechar</button>

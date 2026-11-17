@@ -81,7 +81,7 @@
         alternativo: 'Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193',
         cobertura: '24 horas por dia',
         preferencias: 'Prefere consultas à tarde e gosta de conferir a agenda com a família.',
-        foto: 'assets/media/foto-perfil-maria.png',
+        foto: 'assets/media/fotos/foto-perfil-maria.png',
         mascote: 'assets/media/mascotes/icone-mascote-minhoca.svg'
       },
       events: [

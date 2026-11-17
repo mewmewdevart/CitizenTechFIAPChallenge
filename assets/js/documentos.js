@@ -62,8 +62,9 @@
     popularSelectAutor(doc?.autor || obterUsuarioAtual().nomeComApelido);
     formDocumento.elements.vinculo.value = doc?.vinculo || '';
     formDocumento.elements.observacoes.value = doc?.observacoes || '';
+    formDocumento.elements.nomeArquivo.value = doc?.nomeArquivo || '';
     if (tituloDialogoDoc) {
-      tituloDialogoDoc.textContent = doc ? 'Editar documento da Mari' : 'Adicionar documento da Mari';
+      tituloDialogoDoc.textContent = doc ? 'Editar referência de documento' : 'Cadastrar referência de documento';
     }
     dialogoAdicionar.showModal();
   };
@@ -86,15 +87,15 @@
       .filter(doc => {
         if (categoriaAtiva !== 'Todos' && doc.categoria !== categoriaAtiva) return false;
         if (!termo) return true;
-        const texto = core.normalizarBusca([doc.titulo, doc.categoria, doc.autor, doc.vinculo, doc.observacoes].filter(Boolean).join(' '));
+        const texto = core.normalizarBusca([doc.titulo, doc.categoria, doc.autor, doc.vinculo, doc.observacoes, doc.nomeArquivo].filter(Boolean).join(' '));
         return texto.includes(termo);
       });
 
     if (!docs.length) {
-      const textoVazio = termo || categoriaAtiva !== 'Todos'
-        ? 'Nenhum documento encontrado para os filtros aplicados.'
-        : 'Nenhum documento cadastrado ainda.';
-      lista.innerHTML = `<div class="estado-vazio"><strong>Sem resultados</strong><p>${textoVazio}</p></div>`;
+      const filtrado = Boolean(termo || categoriaAtiva !== 'Todos');
+      lista.innerHTML = filtrado
+        ? '<div class="estado-vazio"><strong>Nenhum documento encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros>Limpar filtros</button></div>'
+        : '<div class="estado-vazio"><strong>Nenhuma referência cadastrada</strong><p>Use Cadastrar referência para organizar um documento da Mari.</p></div>';
       return;
     }
 
@@ -132,7 +133,7 @@
       `${adicionada} por ${doc.autor || 'Não informado'}.`,
       doc.vinculo ? `Vinculado(a) à ${doc.vinculo}.` : '',
       doc.observacoes ? doc.observacoes : '',
-      doc.nomeArquivo ? `Arquivo: ${doc.nomeArquivo}` : ''
+      doc.nomeArquivo ? `Nome do arquivo: ${doc.nomeArquivo}` : ''
     ].filter(Boolean);
     bloco.innerHTML = linhas.map(linha => `<span>${escaparHtml(linha)}</span>`).join('');
     const botaoAtendimento = dialogoDetalhes.querySelector('[data-ver-atendimento]');
@@ -150,6 +151,13 @@
   pagina.addEventListener('click', evento => {
     const botao = evento.target.closest('button');
     if (!botao) return;
+
+    if (botao.hasAttribute('data-limpar-filtros')) {
+      campoBusca.value = '';
+      filtrosCategoria.querySelector('[data-documentos-filtro="Todos"]').click();
+      campoBusca.focus();
+      return;
+    }
 
     if (botao.hasAttribute('data-fechar-dialogo')) {
       botao.closest('dialog')?.close();
@@ -175,14 +183,15 @@
 
     if (botao.hasAttribute('data-excluir-documento')) {
       const doc = (obterEstado().documents || []).find(d => d.id === documentoEmFocoId);
-      if (!doc) return;
+      if (!doc || !window.confirm(`Excluir a referência “${doc.titulo}”?`)) return;
       atualizarEstado(estado => ({
         ...estado,
         documents: (estado.documents || []).filter(d => d.id !== doc.id)
       }));
       botao.closest('dialog')?.close();
-      anunciarStatus(elementoStatus, `Documento "${doc.titulo}" removido.`);
+      anunciarStatus(elementoStatus, `Referência "${doc.titulo}" excluída.`);
       renderizar();
+      campoBusca?.focus();
     }
   });
 
@@ -220,16 +229,7 @@
       return;
     }
 
-    const arquivo = form.elements.arquivo?.files?.[0];
-    if (arquivo && (!/\.(pdf|jpe?g|png)$/i.test(arquivo.name)
-      || (arquivo.type && !['application/pdf', 'image/jpeg', 'image/png'].includes(arquivo.type))
-      || arquivo.size > 10 * 1024 * 1024)) {
-      form.elements.arquivo.setAttribute('aria-invalid', 'true');
-      const aviso = pagina.querySelector('#dialogo-arquivo-invalido');
-      aviso.addEventListener('close', () => form.elements.arquivo.focus(), { once: true });
-      aviso.showModal();
-      return;
-    }
+    const nomeArquivo = (campos.nomeArquivo || '').trim();
     const idEdicao = (campos.id || '').trim();
 
     if (idEdicao) {
@@ -244,7 +244,7 @@
             autor,
             vinculo: (campos.vinculo || '').trim(),
             observacoes: (campos.observacoes || '').trim(),
-            nomeArquivo: arquivo ? arquivo.name : (d.nomeArquivo || '')
+            nomeArquivo
           }
           : d))
       }));
@@ -258,7 +258,7 @@
         autor,
         vinculo: (campos.vinculo || '').trim(),
         observacoes: (campos.observacoes || '').trim(),
-        nomeArquivo: arquivo ? arquivo.name : ''
+        nomeArquivo
       };
 
       atualizarEstado(estado => ({

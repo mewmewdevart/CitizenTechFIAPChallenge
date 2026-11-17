@@ -479,7 +479,7 @@
 
     if (botao.hasAttribute('data-excluir-compromisso')) {
       const item = obterTodosEventos().find(e => e.id === eventoEmFocoId);
-      if (!item) return;
+      if (!item || !window.confirm(`Excluir o compromisso “${item.titulo}” da Agenda?`)) return;
       atualizarEstado(estado => ({
         ...estado,
         events: estado.events.filter(e => e.id !== item.id)
@@ -487,6 +487,7 @@
       botao.closest('dialog')?.close();
       registrarStatus(`Compromisso "${item.titulo}" removido da Agenda.`);
       renderizar();
+      pagina.querySelector(`[data-selecionar-dia="${diaSelecionado}"]`)?.focus();
       return;
     }
 
@@ -514,6 +515,7 @@
     }
 
     if (botao.hasAttribute('data-cancelar-cobertura')) {
+      if (!window.confirm('Cancelar a cobertura e deixar o intervalo disponível para a rede?')) return;
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, limiteMinTurno, limiteMaxTurno, 0, 0));
       botao.closest('dialog')?.close();
       registrarStatus('Cobertura do turno cancelada. O horário ficou disponível para a rede.');
