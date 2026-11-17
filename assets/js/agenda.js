@@ -8,6 +8,7 @@
     LACUNAS_TURNO,
     obterEstado,
     atualizarEstado,
+    obterUsuarioAtual,
     escaparHtml,
     gerarChaveData,
     formatarData,
@@ -59,8 +60,12 @@
     });
   };
 
-  const avatarMascote = arquivo =>
-    `<img class="agenda__avatar" alt="" src="assets/media/mascotes/${arquivo}" width="40" height="40">`;
+  const avatarMascote = pessoa => {
+    const src = typeof pessoa === 'string'
+      ? `assets/media/mascotes/${escaparHtml(pessoa)}`
+      : (pessoa?.foto || `assets/media/mascotes/${escaparHtml(pessoa?.avatar || 'icone-mascote-cubado.svg')}`);
+    return `<img class="agenda__avatar" alt="" src="${escaparHtml(src)}" width="40" height="40">`;
+  };
 
   const criarEtiquetaCobertura = dia => {
     const estado = obterEstado();
@@ -186,9 +191,9 @@
     </div>`;
 
     const renderizarTurno = (seg, dia) => {
-      const ehZe = seg.pessoa.nome === 'Zé da Manga';
+      const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga');
       return `<div class="agenda__turno">
-        ${avatarMascote(seg.pessoa.avatar)}
+        ${avatarMascote(seg.pessoa)}
         <div>
           <strong>${escaparHtml(seg.horario)}</strong>
           <p>${escaparHtml(seg.pessoa.nome)} · ${ehZe ? 'Cobertura assumida por você' : 'Coberto'}</p>
@@ -600,7 +605,7 @@
       atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;
-      mensagem = `Turno das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h assumido por Zé da Manga.`;
+      mensagem = `Turno das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h assumido por ${obterUsuarioAtual().nome}.`;
     }
 
     if (tipoFormulario === 'editar-cobertura') {
@@ -661,7 +666,7 @@
               const turnosDia = construirLinhaDoTempoDia(dia, estado)
                 .map(seg => {
                   if (seg.tipo === 'lacuna') return `  ${seg.horario}: SEM COBERTURA`;
-                  const sufixo = seg.pessoa.nome === 'Zé da Manga' ? 'Cobertura assumida por você' : 'Coberto';
+                  const sufixo = (seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga') ? 'Cobertura assumida por você' : 'Coberto';
                   return `  ${seg.horario}: ${seg.pessoa.nome} · ${sufixo}`;
                 })
                 .join('\n');

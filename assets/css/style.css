@@ -324,11 +324,28 @@ summary::after {
   opacity: 1;
 }
 
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #barra-lateral nav a:hover:not([aria-current="page"]) {
+  background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
+  font-weight: var(--peso-regular);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #barra-lateral nav a::before {
+  display: none;
+}
+
 .cartao-status {
   margin-top: 14px;
   border: var(--borda-padrao);
   border-radius: var(--raio-xl);
   padding: 10px var(--espaco-md);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .cartao-status {
+  border: 0;
+  border-top: var(--borda-padrao);
+  border-radius: 0;
+  padding: 14px 0 0;
 }
 
 .cartao-status h2 {
@@ -440,6 +457,10 @@ body.menu-fechado .conteudo-pagina {
   border-radius: var(--raio-xl);
   padding: var(--espaco-lg);
   box-shadow: var(--sombra-cartao);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .cartao {
+  box-shadow: none;
 }
 
 .cartao__cabecalho {
@@ -617,6 +638,18 @@ dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
 
 #resultados-busca a:hover {
   border-color: var(--cor-primaria);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #resultados-busca a {
+  border-color: transparent;
+  background: transparent;
+  font-weight: var(--peso-regular);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #resultados-busca a:hover,
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) #resultados-busca a:focus-visible {
+  background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
 }
 
 #dialogo-busca button {

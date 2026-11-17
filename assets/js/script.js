@@ -258,7 +258,7 @@ inicializarPontoBot();
 
 function sincronizarPerfilGlobal() {
   try {
-    const bruto = localStorage.getItem('mutirao-mvp-estado-v1');
+    const bruto = sessionStorage.getItem('mutirao-mvp-estado-v1') || localStorage.getItem('mutirao-mvp-estado-v1');
     if (!bruto) return;
     const estado = JSON.parse(bruto);
     const perfil = estado?.perfilUsuario;
@@ -272,13 +272,20 @@ function sincronizarPerfilGlobal() {
     }
 
     const nomeExibido = (perfil.nome || '').trim();
+    const vinculo = (perfil.vinculo || 'Neto').trim();
+    const papel = (perfil.papel || 'Administrador').trim();
     if (nomeExibido) {
       const resumoTopo = document.querySelector('.menu-perfil summary');
       const nomeTopo = resumoTopo?.querySelector('strong');
-      if (nomeTopo) nomeTopo.textContent = `${nomeExibido} · Neto`;
+      const papelTopo = resumoTopo?.querySelector('small');
+      if (nomeTopo) nomeTopo.textContent = vinculo ? `${nomeExibido} · ${vinculo}` : nomeExibido;
+      if (papelTopo) papelTopo.textContent = papel;
       if (resumoTopo) resumoTopo.setAttribute('aria-label', `Menu do perfil de ${nomeExibido}`);
-      const nomeMobile = document.querySelector('.barra-lateral__perfil-mobile strong');
+      const perfilMobile = document.querySelector('.barra-lateral__perfil-mobile');
+      const nomeMobile = perfilMobile?.querySelector('strong');
+      const papelMobile = perfilMobile?.querySelector('small');
       if (nomeMobile) nomeMobile.textContent = nomeExibido;
+      if (papelMobile) papelMobile.textContent = `${papel} · Meu perfil`;
     }
   } catch {
     // Ignora estado ausente ou inválido

@@ -1,6 +1,7 @@
 /* Ajuda: composição alinhada ao Design System e tokens do Mutirão. */
 .conteudo-pagina.apoio.ajuda {
   padding-bottom: 0;
+  max-width: 820px;
 }
 
 .ajuda__duvidas,
@@ -32,6 +33,36 @@
   border-radius: var(--raio-xl);
   background: var(--cor-superficie);
   box-shadow: var(--sombra-cartao);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) :is(.ajuda__pergunta, .ajuda__contato) {
+  box-shadow: none;
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__grupo {
+  gap: 0;
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__grupo h3 {
+  margin-bottom: var(--espaco-sm);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__pergunta {
+  border-radius: 0;
+  border-bottom: 0;
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__grupo .ajuda__pergunta:first-of-type {
+  border-radius: var(--raio-xl) var(--raio-xl) 0 0;
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__grupo .ajuda__pergunta:last-of-type {
+  border-bottom: var(--borda-padrao);
+  border-radius: 0 0 var(--raio-xl) var(--raio-xl);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .ajuda__grupo .ajuda__pergunta:only-of-type {
+  border-radius: var(--raio-xl);
 }
 
 .ajuda__pergunta summary {

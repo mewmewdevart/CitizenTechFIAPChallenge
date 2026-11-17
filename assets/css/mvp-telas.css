@@ -68,6 +68,12 @@
   border-bottom: var(--borda-padrao);
 }
 
+.ficha__cartao dl>div:last-child,
+.dialogo-mvp dl>div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
 .ficha__cartao dt,
 .dialogo-mvp dt {
   font-weight: var(--peso-negrito);

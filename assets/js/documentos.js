@@ -7,6 +7,7 @@
     HOJE,
     obterEstado,
     atualizarEstado,
+    obterUsuarioAtual,
     escaparHtml,
     formatarData,
     formatarDataCurta,
@@ -143,7 +144,7 @@
       titulo,
       categoria: campos.categoria || 'Documento',
       dia: campos.dia || HOJE,
-      autor: (campos.autor || 'Zé da Manga').trim(),
+      autor: (campos.autor || obterUsuarioAtual().nome).trim(),
       vinculo: (campos.vinculo || '').trim(),
       observacoes: (campos.observacoes || '').trim(),
       nomeArquivo: arquivo ? arquivo.name : ''
@@ -156,7 +157,7 @@
 
     form.reset();
     if (form.elements.dia) form.elements.dia.value = HOJE;
-    if (form.elements.autor) form.elements.autor.value = 'Zé da Manga';
+    if (form.elements.autor) form.elements.autor.value = obterUsuarioAtual().nome;
     dialogoAdicionar.close();
     anunciarStatus(elementoStatus, `Documento "${titulo}" adicionado.`);
     renderizar();

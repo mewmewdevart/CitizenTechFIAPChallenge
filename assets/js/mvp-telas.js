@@ -832,13 +832,14 @@
         return;
       }
       const turno = campos.turno || 'Turno 19h–24h';
+      const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Manga', papel: 'Administrador' };
       atualizarEstado(estado => ({
         ...estado,
         reports: {
           ...estado.reports,
           [campos.dia]: [
             ...(estado.reports[campos.dia] || []),
-            ['Zé da Manga', `Administrador · ${turno}`, '', textoRelato, (campos.recado || '').trim()]
+            [usuario.nome, `${usuario.papel} · ${turno}`, '', textoRelato, (campos.recado || '').trim()]
           ]
         }
       }));

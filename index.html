@@ -58,6 +58,7 @@
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <link rel="stylesheet" href="assets/css/mvp-telas.css" />
   <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/agenda.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
   <script src="assets/js/script.js" defer></script>
@@ -192,8 +193,8 @@
         <span>A Mari precisa de acompanhamento nesse horário.</span>
       </div>
       <div class="faixa-alerta__acoes">
-        <a class="botao botao--secundario" href="agenda.html">Atribuir a alguém</a>
-        <a class="botao botao--primario" href="agenda.html">Cobrir horário</a>
+        <button type="button" class="botao botao--secundario" aria-disabled="true" title="Disponível em uma próxima versão">Atribuir a alguém</button>
+        <button type="button" class="botao botao--primario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="2026-11-10" data-horario="12h–13h" data-inicio-cobrir-lacuna>Cobrir horário</button>
       </div>
     </section>
 
@@ -239,11 +240,11 @@
 
         <section class="apoio__painel" aria-labelledby="titulo-escala">
           <div class="painel__cartao-cabecalho">
-            <h2 id="titulo-escala">Escala da semana</h2>
+            <h2 id="titulo-escala" data-titulo-escala>Escala semanal · 9 a 15 nov.</h2>
             <a class="botao botao--secundario" href="agenda.html">Ver escala</a>
           </div>
-          <div class="escala__dias" role="group" aria-label="Dias da semana" data-escala-dias></div>
-          <ul class="painel__lista painel__bloco escala__turnos" aria-live="polite" data-escala-turnos></ul>
+          <div class="agenda__semana" role="group" aria-label="Dias da semana" data-semana></div>
+          <div aria-live="polite" data-turnos></div>
         </section>
       </div>
 
@@ -298,6 +299,48 @@
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario">Salvar relato</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-cobrir-horario" aria-labelledby="titulo-cobrir-horario">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-cobrir-horario">Cobrir horário</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
+      <form class="formulario-mvp" data-formulario-mvp="cobertura">
+        <div class="dialogo-mvp__opcoes">
+          <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Cobrir todo o horário disponível</label>
+        </div>
+        <div class="agenda__grade-horarios" data-horarios-cobertura hidden>
+          <label>Horário de entrada<select name="inicio"></select></label>
+          <label>Horário de saída<select name="fim"></select></label>
+        </div>
+        <p class="agenda__previa-turno" data-previa-nova-cobertura></p>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
+          <button type="submit" class="botao botao--primario">Confirmar cobertura</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialogo-mvp" id="dialogo-editar-cobertura" aria-labelledby="titulo-editar-cobertura">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-editar-cobertura">Editar cobertura de turno</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <p class="dialogo-mvp__contexto" data-contexto-turno></p>
+      <form class="formulario-mvp" data-formulario-mvp="editar-cobertura">
+        <div class="agenda__grade-horarios">
+          <label>Horário de entrada<select name="inicio" required></select></label>
+          <label>Horário de saída<select name="fim" required></select></label>
+        </div>
+        <p class="agenda__previa-turno" data-previa-cobertura></p>
+        <div class="dialogo-mvp__acoes">
+          <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Cancelar cobertura</button>
+          <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
+          <button type="submit" class="botao botao--primario">Salvar alterações</button>
         </div>
       </form>
     </dialog>

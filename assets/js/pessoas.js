@@ -20,6 +20,18 @@
   const obterConvites = () => obterEstado().convites || [];
 
   const renderizar = () => {
+    const perfil = obterEstado().perfilUsuario;
+    const participantes = PARTICIPANTES.map((pessoa, indice) => {
+      if (indice !== 0 || !perfil) return pessoa;
+      const nome = `${perfil.nome || 'Zé da Manga'}${perfil.apelido ? ` (${perfil.apelido})` : ''}`;
+      return {
+        ...pessoa,
+        nome,
+        foto: perfil.foto || '',
+        avatar: perfil.mascote ? perfil.mascote.split('/').pop() : pessoa.avatar
+      };
+    });
+
     const convites = obterConvites().map(convite => ({
       nome: convite.email,
       papel: `${convite.vinculo} · ${convite.papel}`,
@@ -27,10 +39,12 @@
       pendente: true
     }));
 
-    lista.innerHTML = [...PARTICIPANTES, ...convites].map(pessoa => {
-      const imagem = pessoa.avatar
-        ? `<img class="avatar" src="assets/media/mascotes/${escaparHtml(pessoa.avatar)}" alt="">`
-        : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';
+    lista.innerHTML = [...participantes, ...convites].map(pessoa => {
+      const imagem = pessoa.foto
+        ? `<img class="avatar" src="${escaparHtml(pessoa.foto)}" alt="">`
+        : pessoa.avatar
+          ? `<img class="avatar" src="assets/media/mascotes/${escaparHtml(pessoa.avatar)}" alt="">`
+          : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';
       const acao = pessoa.perfil
         ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
         : `<button type="button" class="botao botao--secundario" aria-disabled="true" aria-label="Ver perfil de ${escaparHtml(pessoa.nome)}, disponível quando a pessoa compartilhar o perfil">Ver perfil</button>`;

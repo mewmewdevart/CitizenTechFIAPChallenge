@@ -16,6 +16,12 @@
   background: var(--cor-superficie);
 }
 
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__menu {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
 .configuracoes__aba {
   display: flex;
   align-items: center;
@@ -104,6 +110,18 @@
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
   background: var(--cor-superficie);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__bloco {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .configuracoes__bloco + .configuracoes__bloco {
+  padding-top: var(--espaco-lg);
+  border-top: var(--borda-padrao);
 }
 
 .configuracoes__bloco-cabecalho {

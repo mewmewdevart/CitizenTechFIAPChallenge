@@ -7,6 +7,7 @@
     HOJE,
     obterEstado,
     atualizarEstado,
+    obterUsuarioAtual,
     escaparHtml,
     anunciarStatus,
     obterDoses,
@@ -76,7 +77,8 @@
   };
 
   const descreverRegistro = dose => {
-    const quem = dose.meu ? 'Zé da Manga (Zé)' : nomeCompleto(dose.quem);
+    const usuario = obterUsuarioAtual();
+    const quem = dose.meu ? usuario.nomeComApelido : nomeCompleto(dose.quem);
     if (dose.estado === 'administrado') return `Administrado às ${formatarHorario(dose.horario)} · ${quem}`;
     return `Não administrado · ${quem} · ${dose.motivo || 'Motivo não informado'}`;
   };
@@ -266,8 +268,9 @@
 
   const prepararDialogos = dose => {
     const grupo = obterCompartimentos().find(item => item.hora === dose.hora);
+    const usuario = obterUsuarioAtual();
     dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Registrar administração - ${dose.nome}`;
-    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Prevista para ${dose.hora} · Turno de ${grupo?.responsavel || 'Zé da Manga (Zé)'}`;
+    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Prevista para ${dose.hora} · Turno de ${grupo?.responsavel || usuario.nomeComApelido}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
       dialogo.querySelector('[data-dose-previsto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Horário previsto: ${dose.hora}`;
     }
@@ -286,20 +289,21 @@
     if (!doseEmFoco) return;
     const dose = doseEmFoco;
     const administrada = estado === 'administrado';
+    const usuario = obterUsuarioAtual();
     registrarDose(dose.chave, administrada
-      ? { estado, quem: 'Zé da Manga (Zé)', horario: detalhe }
-      : { estado, quem: 'Zé da Manga (Zé)', motivo: detalhe });
+      ? { estado, quem: usuario.nomeComApelido, horario: detalhe }
+      : { estado, quem: usuario.nomeComApelido, motivo: detalhe });
 
     const diario = administrada
-      ? `Zé da Manga (Zé): Registro de administração de ${dose.nome} (${dose.hora}) às ${formatarHorario(detalhe)}.`
-      : `Dose de ${dose.nome} das ${dose.hora} não administrada. Registro por Zé da Manga (Zé)${detalhe ? ` · ${detalhe}` : ''}.`;
+      ? `${usuario.nomeComApelido}: Registro de administração de ${dose.nome} (${dose.hora}) às ${formatarHorario(detalhe)}.`
+      : `Dose de ${dose.nome} das ${dose.hora} não administrada. Registro por ${usuario.nomeComApelido}${detalhe ? ` · ${detalhe}` : ''}.`;
 
     atualizarEstado(estadoAtual => ({
       ...estadoAtual,
       reports: {
         ...estadoAtual.reports,
         [HOJE]: [
-          ['Zé da Manga', 'Administrador', `Tarefa relacionada · ${dose.hora} · ${dose.nome}`, diario, ''],
+          [usuario.nome, usuario.papel, `Tarefa relacionada · ${dose.hora} · ${dose.nome}`, diario, ''],
           ...(estadoAtual.reports?.[HOJE] || [])
         ]
       }
@@ -308,8 +312,8 @@
     dialogos.registrada.querySelector('[data-registro-titulo]').textContent = `${administrada ? 'Administração registrada' : 'Ocorrência registrada'} - ${dose.nome}`;
     dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `Maria das Dores (Mari) · ${dose.nome} · Terça, 10 nov.`;
     dialogos.registrada.querySelector('[data-registro-agenda]').textContent = administrada
-      ? `${dose.hora} · Administrada às ${formatarHorario(detalhe)} · Zé da Manga (Zé)`
-      : `${dose.hora} · Não administrada · Registro por Zé da Manga (Zé)`;
+      ? `${dose.hora} · Administrada às ${formatarHorario(detalhe)} · ${usuario.nomeComApelido}`
+      : `${dose.hora} · Não administrada · Registro por ${usuario.nomeComApelido}`;
     dialogos.registrada.querySelector('[data-registro-diario]').textContent = diario;
     dialogos.registrada.showModal();
     doseEmFoco = null;

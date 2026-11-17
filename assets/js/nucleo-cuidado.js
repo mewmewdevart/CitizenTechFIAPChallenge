@@ -265,6 +265,26 @@
     return estadoAtual;
   }
 
+  const obterUsuarioAtual = (estado = estadoAtual) => {
+    const perfil = estado?.perfilUsuario || {};
+    const nome = (perfil.nome || 'Zé da Manga').trim();
+    const apelido = (perfil.apelido || '').trim();
+    const nomeComApelido = apelido ? `${nome} (${apelido})` : nome;
+    const mascote = perfil.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
+    const foto = perfil.foto || '';
+    return {
+      nome,
+      apelido,
+      nomeComApelido,
+      vinculo: (perfil.vinculo || 'Neto').trim(),
+      papel: (perfil.papel || 'Administrador').trim(),
+      mascote,
+      foto,
+      avatar: foto || mascote,
+      avatarArquivo: mascote.split('/').pop()
+    };
+  };
+
   const escaparHtml = valor => String(valor ?? '').replace(/[&<>"']/g, caractere => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -370,6 +390,8 @@
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
     const escala = obterEscalaDia(dia);
+    const usuario = obterUsuarioAtual(estado);
+    const pessoaUsuario = { nome: usuario.nome, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
     const segmentos = [];
 
     for (const item of escala) {
@@ -388,7 +410,7 @@
             tipo: 'turno',
             inicio: cob.inicio,
             fim: cob.fim,
-            pessoa: EQUIPE_CUIDADO[3],
+            pessoa: pessoaUsuario,
             temCobertura: true
           });
           cursor = Math.max(cursor, cob.fim);
@@ -408,7 +430,7 @@
             tipo: 'turno',
             inicio: edicao.inicio,
             fim: fimEdicao,
-            pessoa: item.pessoa,
+            pessoa: pessoaUsuario,
             temCobertura: false
           });
           if (fimEdicao < slot.fim) {
@@ -419,7 +441,7 @@
             tipo: 'turno',
             inicio: slot.inicio,
             fim: slot.fim,
-            pessoa: item.pessoa,
+            pessoa: pessoaUsuario,
             temCobertura: false
           });
         }
@@ -440,8 +462,8 @@
       const mesmoTurnoZe = ultimo
         && ultimo.tipo === 'turno'
         && seg.tipo === 'turno'
-        && ultimo.pessoa?.nome === 'Zé da Manga'
-        && seg.pessoa?.nome === 'Zé da Manga'
+        && (ultimo.pessoa?.ehUsuarioAtual || ultimo.pessoa?.nome === 'Zé da Manga')
+        && (seg.pessoa?.ehUsuarioAtual || seg.pessoa?.nome === 'Zé da Manga')
         && ultimo.fim === seg.inicio;
       const mesmaLacuna = ultimo
         && ultimo.tipo === 'lacuna'
@@ -696,12 +718,14 @@
 
   const obterCompartimentos = (estado = estadoAtual) => {
     const doses = obterDoses(estado);
+    const usuario = obterUsuarioAtual(estado);
     return PORTA_REMEDIOS.map(grupo => {
+      const responsavel = grupo.responsavel === 'Zé da Manga (Zé)' ? usuario.nomeComApelido : grupo.responsavel;
       const itens = doses.filter(dose => dose.hora === grupo.hora);
       const faltam = itens.filter(dose => dose.estado !== 'administrado').length;
       const naoDados = itens.filter(dose => dose.estado === 'nao-administrado').length;
       const situacao = faltam === 0 ? 'dado' : naoDados || grupo.momento === 'passado' ? 'falta' : grupo.momento;
-      return { hora: grupo.hora, responsavel: grupo.responsavel, momento: grupo.momento, itens, faltam, completo: faltam === 0, situacao };
+      return { hora: grupo.hora, responsavel, momento: grupo.momento, itens, faltam, completo: faltam === 0, situacao };
     });
   };
 
@@ -735,6 +759,7 @@
     LACUNAS_TURNO,
     obterEstado: () => estadoAtual,
     atualizarEstado,
+    obterUsuarioAtual,
     escaparHtml,
     gerarChaveData,
     formatarData,

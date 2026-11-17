@@ -778,17 +778,29 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-painel_
 }
 
 html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa {
-  flex: none;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 406px;
-  min-height: 96px;
-  margin-right: 48px;
-  padding: 18px 32px 18px 22px;
+  width: calc(100% - 64px);
+  min-height: 84px;
+  margin-right: 64px;
+  padding: var(--espaco-lg) var(--espaco-xl);
   border: 0;
-  border-radius: 0;
-  background: transparent url('../media/alerta-fundo-ficha.svg') center / 100% 100% no-repeat;
+  border-radius: var(--raio-lg);
+  background: var(--cor-aviso-alerta-claro);
+  box-shadow: var(--sombra-cartao);
+}
+
+html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  bottom: 12px;
+  width: 14px;
+  height: 14px;
+  background: var(--cor-aviso-alerta-claro);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
 html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa strong {
@@ -803,12 +815,12 @@ html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa p
 }
 
 html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa img {
-  top: auto;
-  right: -54px;
-  bottom: 18px;
-  width: 49px;
-  height: 49px;
-  translate: none;
+  top: 50%;
+  right: -64px;
+  bottom: auto;
+  width: 48px;
+  height: 48px;
+  translate: 0 -50%;
 }
 
 .rotina__painel {
@@ -1656,9 +1668,9 @@ html.acessibilidade--alto-contraste .perfil__recado {
   }
 
   html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa {
-    width: min(406px, calc(100% - 36px));
-    margin-right: 36px;
-    padding: 18px 32px 18px 22px;
+    width: calc(100% - 52px);
+    margin-right: 52px;
+    padding: var(--espaco-md) var(--espaco-lg);
   }
 
   html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa strong {
@@ -1666,9 +1678,9 @@ html.acessibilidade--alto-contraste .perfil__recado {
   }
 
   html:not(.tema--acolhedor):not(.acessibilidade--alto-contraste) .alergia-faixa img {
-    right: -40px;
-    width: 42px;
-    height: 42px;
+    right: -52px;
+    width: 40px;
+    height: 40px;
   }
 
   .perfil__identidade {
