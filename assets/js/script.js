@@ -37,16 +37,38 @@ function definirTema(tema) {
 
 aplicarTema(obterTemaSalvo());
 
+window.MutiraoTema = {
+  restaurar() {
+    try {
+      localStorage.removeItem(CHAVE_TEMA);
+    } catch {
+      // Ignora erro caso localStorage esteja indisponível.
+    }
+    return aplicarTema('neutro');
+  }
+};
+
 for (const botao of document.querySelectorAll('[data-tema]')) {
   botao.addEventListener('click', () => definirTema(botao.dataset.tema));
 }
 
 window.addEventListener('storage', evento => {
   if (evento.key === CHAVE_TEMA) aplicarTema(obterTemaSalvo());
+
+window.MutiraoTema = {
+  restaurar() {
+    try {
+      localStorage.removeItem(CHAVE_TEMA);
+    } catch {
+      // Ignora erro caso localStorage esteja indisponível.
+    }
+    return aplicarTema('neutro');
+  }
+};
 });
 
 const alternarMenu = document.querySelector('#alternar-menu');
-const telaMobile = window.matchMedia('(width < 1024px)');
+const telaMobile = window.matchMedia('(width < 1150px)');
 const botaoMais = document.querySelector('#botao-mais');
 const linksMenu = [...document.querySelectorAll('#barra-lateral nav a')];
 const atalhosInferiores = [...document.querySelectorAll('.barra-inferior a')];
@@ -244,6 +266,15 @@ window.MutiraoNotificacoes = {
     salvarNotificacoes();
     renderizarNotificacoes();
     tocarSomNotificacao();
+  },
+  limpar() {
+    notificacoesLocais = [];
+    try {
+      sessionStorage.removeItem(CHAVE_NOTIFICACOES);
+    } catch {
+      // Ignora quando o armazenamento estiver indisponível.
+    }
+    renderizarNotificacoes();
   }
 };
 
@@ -356,6 +387,21 @@ const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-busca-topo], 
 function inicializarBuscaTopo() {
   if (!gatilhoBuscaTopo) return;
 
+  const CHAVE_RECENTES = 'mutirao-buscas-recentes-v1';
+  const SINONIMOS = {
+    remedio: ['medicamento', 'dose', 'pilula', 'comprimido'],
+    remedios: ['medicamento', 'dose', 'pilula', 'comprimido'],
+    medicamento: ['remedio', 'dose', 'estoque'],
+    estoque: ['fralda', 'fraldas', 'insumo', 'reposicao', 'metformina'],
+    consulta: ['agenda', 'exame', 'medico', 'ubs'],
+    calendario: ['agenda', 'turno', 'compromisso'],
+    alergia: ['dipirona', 'ficha'],
+    emergencia: ['ficha', 'contato', 'ajuda'],
+    tema: ['configuracoes', 'acolhedor', 'neutro', 'acessibilidade'],
+    fonte: ['acessibilidade', 'contraste', 'configuracoes'],
+    folga: ['perfil', 'cuidar', 'turno']
+  };
+
   const container = document.createElement('div');
   container.className = 'busca-topo';
 
@@ -369,14 +415,30 @@ function inicializarBuscaTopo() {
   campo.id = 'campo-busca-topo';
   campo.type = 'search';
   campo.className = 'busca-topo__input';
-  campo.placeholder = 'Buscar medicamento, consulta, documento ou página';
+  campo.placeholder = 'Buscar remédios, agenda, documentos...';
   campo.setAttribute('aria-label', 'Buscar no sistema');
   campo.setAttribute('autocomplete', 'off');
+
+  const botaoLimpar = document.createElement('button');
+  botaoLimpar.type = 'button';
+  botaoLimpar.className = 'busca-topo__limpar';
+  botaoLimpar.hidden = true;
+  botaoLimpar.setAttribute('aria-label', 'Limpar busca');
+  botaoLimpar.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+
+  const atalho = document.createElement('kbd');
+  atalho.className = 'busca-topo__atalho';
+  atalho.setAttribute('aria-hidden', 'true');
+  atalho.textContent = 'Ctrl K';
 
   const painel = document.createElement('div');
   painel.id = 'busca-topo-painel';
   painel.className = 'busca-topo__painel';
   painel.hidden = true;
+
+  const recentesEl = document.createElement('div');
+  recentesEl.className = 'busca-topo__recentes';
+  recentesEl.hidden = true;
 
   const status = document.createElement('p');
   status.className = 'busca-topo__status';
@@ -386,16 +448,39 @@ function inicializarBuscaTopo() {
   lista.id = 'resultados-busca-topo';
   lista.className = 'busca-topo__lista';
 
-  painel.append(status, lista);
+  painel.append(recentesEl, status, lista);
   gatilhoBuscaTopo.replaceWith(container);
-  container.append(gatilhoBuscaTopo, campo, painel);
+  container.append(gatilhoBuscaTopo, campo, botaoLimpar, atalho, painel);
+
+  const obterRecentes = () => {
+    try {
+      const salvo = JSON.parse(sessionStorage.getItem(CHAVE_RECENTES) || '[]');
+      return Array.isArray(salvo) ? salvo : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const salvarRecente = termoBruto => {
+    const limpo = termoBruto.trim();
+    if (limpo.length < 2) return;
+    const atual = obterRecentes().filter(item => item.toLowerCase() !== limpo.toLowerCase());
+    atual.unshift(limpo);
+    try {
+      sessionStorage.setItem(CHAVE_RECENTES, JSON.stringify(atual.slice(0, 4)));
+    } catch {
+      // Ignora erro caso sessionStorage esteja indisponível
+    }
+  };
 
   const obterItensBusca = () => {
     const core = window.MutiraoCuidado;
     const basePaginas = itensPesquisaveis.map(item => ({
       href: item.href,
       rotulo: item.rotulo,
-      detalhe: 'Página',
+      detalhe: 'Página do sistema',
+      categoria: 'Páginas',
+      icone: 'fa-regular fa-compass',
       busca: item.rotulo
     }));
     if (!core) return basePaginas;
@@ -412,14 +497,18 @@ function inicializarBuscaTopo() {
     const itensMeds = [...medicamentosMap.values()].map(med => ({
       href: 'medicamentos.html',
       rotulo: med.nome,
-      detalhe: `Medicamento · ${med.horarios.join(', ')}${med.naoAdministrada ? ' · Atenção' : ''}`,
+      detalhe: `Horários: ${med.horarios.join(', ')}${med.naoAdministrada ? ' · Atenção' : ''}`,
+      categoria: 'Medicamentos',
+      icone: 'fa-solid fa-pills',
       busca: `${med.nome} medicamento remedio horario ${med.horarios.join(' ')}`
     }));
 
     const itensCompromissos = (core.obterCompromissos ? core.obterCompromissos(estado) : []).map(evt => ({
       href: `agenda.html?dia=${encodeURIComponent(evt.dia)}&compromisso=${encodeURIComponent(evt.id)}`,
       rotulo: evt.titulo,
-      detalhe: `Agenda · ${core.formatarDataCurta ? core.formatarDataCurta(evt.dia) : evt.dia} · ${evt.hora.replace(':00', 'h')}${evt.local ? ` · ${evt.local}` : ''}`,
+      detalhe: `${core.formatarDataCurta ? core.formatarDataCurta(evt.dia) : evt.dia} · ${evt.hora.replace(':00', 'h')}${evt.local ? ` · ${evt.local}` : ''}`,
+      categoria: 'Agenda',
+      icone: 'fa-regular fa-calendar',
       busca: `${evt.titulo} agenda consulta exame ${evt.local || ''} ${evt.acompanhante || ''}`
     }));
 
@@ -427,6 +516,8 @@ function inicializarBuscaTopo() {
       href: `documentos.html?documento=${encodeURIComponent(doc.id)}`,
       rotulo: doc.titulo,
       detalhe: `${doc.categoria || 'Documento'}${doc.vinculo ? ` · ${doc.vinculo}` : ''}`,
+      categoria: 'Documentos',
+      icone: 'fa-regular fa-file-lines',
       busca: `${doc.titulo} ${doc.categoria || ''} documento receita exame ${doc.observacoes || ''}`
     }));
 
@@ -434,53 +525,126 @@ function inicializarBuscaTopo() {
       href: pessoa.nome.includes('Zé') ? 'meu-perfil.html' : 'pessoas.html',
       rotulo: pessoa.nome,
       detalhe: `${pessoa.papel} · ${pessoa.turno || 'Rede de cuidado'}`,
+      categoria: 'Pessoas da rede',
+      icone: 'fa-solid fa-user-group',
       busca: `${pessoa.nome} ${pessoa.papel} pessoa cuidador rede`
     }));
 
     const extras = [
-      { href: 'medicamentos.html', rotulo: 'Medicamentos e rotina de doses', detalhe: 'Medicamentos · Remédios, horários e porta-remédios', busca: 'remedio remedios medicamento medicamentos pilula comprimido dose doses horario horarios rotina tomar administracao atrasado porta remedios' },
-      { href: 'medicamentos.html?estoque=1', rotulo: 'Insumos e controle de estoque', detalhe: 'Medicamentos · Fraldas, Metformina e reposição', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
-      { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços', detalhe: 'Direitos e serviços · SUS, BPC/LOAS, Farmácia Popular e CRAS', busca: 'servico servicos direito direitos beneficio beneficios sus ubs farmacia popular bpc loas inss cras caps estatuto idoso transporte gratuidade auxilio lei guia' },
-      { href: 'agenda.html', rotulo: 'Agenda, turnos e cobertura de horários', detalhe: 'Agenda · Escala semanal, consultas e exames', busca: 'agenda turno turnos escala cobertura cobrir horario calendario compromisso consulta exame' },
-      { href: 'ficha.html', rotulo: 'Ficha de saúde, alergias e diário', detalhe: `Ficha · ${estado.person?.alergias || 'Dipirona'} e histórico clínico`, busca: `alergia alergias dipirona ficha saude historico cirurgia trombose diario relato emergencia convenio imprimir resumo ${estado.person?.alergias || ''}` },
-      { href: 'documentos.html', rotulo: 'Documentos, receitas e exames', detalhe: 'Documentos · Receitas, laudos e arquivos', busca: 'documento documentos receita receitas laudo exame exames arquivo pasta pdf anexo' },
-      { href: 'pessoas.html', rotulo: 'Pessoas da rede e cuidadores', detalhe: 'Pessoas · Família, cuidadores e convites', busca: 'pessoa pessoas rede familia cuidador cuidadora convite convidar participante' },
-      { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Configurações · Tema acolhedor, alto contraste e fonte', busca: 'configuracao configuracoes tema acolhedor neutro contraste fonte acessibilidade som' },
-      { href: 'ajuda.html', rotulo: 'Ajuda, dúvidas e suporte', detalhe: 'Ajuda · Perguntas frequentes e contato', busca: 'ajuda suporte duvida duvidas orientacao contato' },
-      { href: 'privacidade.html', rotulo: 'Privacidade e proteção de dados', detalhe: 'Privacidade · Uso dos dados e LGPD', busca: 'privacidade dados lgpd seguranca' }
+      { href: 'medicamentos.html', rotulo: 'Medicamentos e rotina de doses', detalhe: 'Remédios, horários e porta-remédios', categoria: 'Ações rápidas', icone: 'fa-solid fa-pills', busca: 'remedio remedios medicamento medicamentos pilula comprimido dose doses horario horarios rotina tomar administracao atrasado porta remedios' },
+      { href: 'medicamentos.html?estoque=1', rotulo: 'Insumos e controle de estoque', detalhe: 'Fraldas, Metformina e reposição', categoria: 'Ações rápidas', icone: 'fa-solid fa-boxes-stacked', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
+      { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços', detalhe: 'SUS, BPC/LOAS, Farmácia Popular e CRAS', categoria: 'Páginas', icone: 'fa-solid fa-circle-info', busca: 'servico servicos direito direitos beneficio beneficios sus ubs farmacia popular bpc loas inss cras caps estatuto idoso transporte gratuidade auxilio lei guia' },
+      { href: 'agenda.html', rotulo: 'Agenda, turnos e cobertura de horários', detalhe: 'Escala semanal, consultas e exames', categoria: 'Ações rápidas', icone: 'fa-regular fa-calendar', busca: 'agenda turno turnos escala cobertura cobrir horario calendario compromisso consulta exame' },
+      { href: 'ficha.html', rotulo: 'Ficha de saúde, alergias e diário', detalhe: `${estado.person?.alergias || 'Dipirona'} e histórico clínico`, categoria: 'Ações rápidas', icone: 'fa-regular fa-id-card', busca: `alergia alergias dipirona ficha saude historico cirurgia trombose diario relato emergencia convenio imprimir resumo ${estado.person?.alergias || ''}` },
+      { href: 'meu-perfil.html', rotulo: 'Cuidar de quem cuida e folgas', detalhe: 'Check-in emocional, horas e pedidos de folga', categoria: 'Ações rápidas', icone: 'fa-regular fa-heart', busca: 'cuidar folga descanso sobrecarga humor perfil recado' },
+      { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Tema acolhedor, alto contraste e fonte', categoria: 'Páginas', icone: 'fa-solid fa-gear', busca: 'configuracao configuracoes tema acolhedor neutro contraste fonte acessibilidade som' },
+      { href: 'ajuda.html', rotulo: 'Ajuda, dúvidas e suporte', detalhe: 'Perguntas frequentes e contato', categoria: 'Páginas', icone: 'fa-regular fa-circle-question', busca: 'ajuda suporte duvida duvidas orientacao contato' },
+      { href: 'privacidade.html', rotulo: 'Privacidade e proteção de dados', detalhe: 'Uso dos dados e LGPD', categoria: 'Páginas', icone: 'fa-solid fa-shield-halved', busca: 'privacidade dados lgpd seguranca' }
     ];
 
     const insumosExtras = (estado.itensExtras || [])
       .filter(item => item.tipo === 'Insumo')
       .map(item => ({
-        href: 'medicamentos.html',
+        href: 'medicamentos.html?estoque=1',
         rotulo: item.nome,
-        detalhe: 'Insumo · Medicamentos e estoque',
+        detalhe: 'Insumo · Controle de estoque',
+        categoria: 'Medicamentos',
+        icone: 'fa-solid fa-boxes-stacked',
         busca: `${item.nome} insumo estoque medicamento`
       }));
 
     return [...itensMeds, ...insumosExtras, ...itensCompromissos, ...itensDocs, ...equipe, ...extras, ...basePaginas];
   };
 
-  function renderizarResultados() {
-    const normalizar = texto => String(texto || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
-    const termo = normalizar(campo.value.trim());
-    const palavras = termo.split(/\s+/).filter(Boolean);
-    const todos = obterItensBusca();
+  const normalizar = texto => String(texto || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
 
+  const distanciaUm = (a, b) => {
+    if (Math.abs(a.length - b.length) > 1) return false;
+    let i = 0; let j = 0; let dif = 0;
+    while (i < a.length && j < b.length) {
+      if (a[i] === b[j]) { i++; j++; continue; }
+      if (++dif > 1) return false;
+      if (a.length > b.length) i++;
+      else if (b.length > a.length) j++;
+      else { i++; j++; }
+    }
+    return dif + (a.length - i) + (b.length - j) <= 1;
+  };
+
+  const palavraCasa = (palavra, tokensTexto, textoCompleto) => {
+    if (textoCompleto.includes(palavra)) return 1;
+    const sinonimos = SINONIMOS[palavra] || [];
+    if (sinonimos.some(sin => textoCompleto.includes(sin))) return 0.8;
+    if (palavra.length >= 4 && tokensTexto.some(tok => tok.length >= 4 && distanciaUm(palavra, tok))) return 0.6;
+    return 0;
+  };
+
+  const destacarTexto = (texto, palavras) => {
+    if (!palavras.length) return document.createTextNode(texto);
+    const frag = document.createDocumentFragment();
+    const norm = normalizar(texto);
+    let idx = 0;
+    const regex = new RegExp(palavras.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi');
+    let match;
+    while ((match = regex.exec(norm)) !== null) {
+      if (match.index > idx) frag.append(document.createTextNode(texto.slice(idx, match.index)));
+      const mark = document.createElement('mark');
+      mark.textContent = texto.slice(match.index, match.index + match[0].length);
+      frag.append(mark);
+      idx = match.index + match[0].length;
+    }
+    if (idx < texto.length) frag.append(document.createTextNode(texto.slice(idx)));
+    return frag;
+  };
+
+  function renderizarResultados() {
+    const bruto = campo.value.trim();
+    const termo = normalizar(bruto);
+    const palavras = termo.split(/\s+/).filter(Boolean);
+    container.classList.toggle('busca-topo--com-texto', Boolean(bruto));
+    botaoLimpar.hidden = !bruto;
+
+    const recentes = obterRecentes();
+    if (!palavras.length && recentes.length) {
+      recentesEl.hidden = false;
+      recentesEl.replaceChildren();
+      const rotulo = document.createElement('span');
+      rotulo.className = 'busca-topo__recentes-rotulo';
+      rotulo.textContent = 'Recentes:';
+      recentesEl.append(rotulo);
+      recentes.forEach(termoRecente => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'busca-topo__chip';
+        chip.textContent = termoRecente;
+        chip.addEventListener('click', () => {
+          campo.value = termoRecente;
+          renderizarResultados();
+          campo.focus();
+        });
+        recentesEl.append(chip);
+      });
+    } else {
+      recentesEl.hidden = true;
+    }
+
+    const todos = obterItensBusca();
     const pontuar = item => {
       const rotuloNorm = normalizar(item.rotulo);
       const detalheNorm = normalizar(item.detalhe);
       const buscaNorm = normalizar(item.busca);
       const tudo = `${rotuloNorm} ${detalheNorm} ${buscaNorm}`;
-      if (!palavras.every(p => tudo.includes(p))) return 0;
-      let score = 1;
+      const tokens = tudo.split(/[^a-z0-9]+/).filter(Boolean);
+      let score = 0;
+      for (const p of palavras) {
+        const peso = palavraCasa(p, tokens, tudo);
+        if (!peso) return 0;
+        score += peso;
+        if (rotuloNorm.includes(p)) score += 3;
+        else if (detalheNorm.includes(p)) score += 1.5;
+      }
       if (rotuloNorm.startsWith(termo)) score += 6;
       else if (rotuloNorm.includes(termo)) score += 4;
-      for (const p of palavras) {
-        if (rotuloNorm.includes(p)) score += 2;
-        else if (detalheNorm.includes(p)) score += 1;
-      }
       return score;
     };
 
@@ -490,26 +654,53 @@ function inicializarBuscaTopo() {
         .filter(entrada => entrada.score > 0)
         .sort((a, b) => b.score - a.score)
         .map(entrada => entrada.item)
-      : todos.slice(0, 6)
-    ).slice(0, 8);
+      : todos.filter(item => item.categoria === 'Ações rápidas' || item.categoria === 'Medicamentos').slice(0, 6)
+    ).slice(0, 10);
 
-    lista.replaceChildren(...correspondencias.map(item => {
+    const elementos = [];
+    let categoriaAtual = '';
+    correspondencias.forEach(item => {
+      if (palavras.length && item.categoria !== categoriaAtual) {
+        categoriaAtual = item.categoria;
+        const grupo = document.createElement('li');
+        grupo.className = 'busca-topo__grupo';
+        grupo.setAttribute('role', 'presentation');
+        grupo.textContent = categoriaAtual;
+        elementos.push(grupo);
+      }
       const itemLista = document.createElement('li');
       const resultado = document.createElement('a');
       resultado.href = item.href;
+
+      const iconeWrap = document.createElement('span');
+      iconeWrap.className = 'busca-topo__item-icone';
+      iconeWrap.setAttribute('aria-hidden', 'true');
+      iconeWrap.innerHTML = `<i class="${item.icone || 'fa-regular fa-file'}"></i>`;
+
+      const textoWrap = document.createElement('span');
+      textoWrap.className = 'busca-topo__item-texto';
       const tituloEl = document.createElement('strong');
-      tituloEl.textContent = item.rotulo;
+      tituloEl.append(destacarTexto(item.rotulo, palavras));
       const detalheEl = document.createElement('small');
       detalheEl.textContent = item.detalhe;
-      resultado.append(tituloEl, detalheEl);
-      resultado.addEventListener('click', () => definirBuscaAberta(false));
-      itemLista.append(resultado);
-      return itemLista;
-    }));
+      textoWrap.append(tituloEl, detalheEl);
 
-    status.textContent = correspondencias.length
-      ? `${correspondencias.length} ${correspondencias.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}.`
-      : 'Nenhum resultado encontrado. Tente buscar por medicamento, consulta, documento ou página.';
+      resultado.append(iconeWrap, textoWrap);
+      resultado.addEventListener('click', () => {
+        if (bruto) salvarRecente(bruto);
+        definirBuscaAberta(false);
+      });
+      itemLista.append(resultado);
+      elementos.push(itemLista);
+    });
+
+    lista.replaceChildren(...elementos);
+
+    status.textContent = palavras.length
+      ? (correspondencias.length
+        ? `${correspondencias.length} ${correspondencias.length === 1 ? 'resultado inteligente' : 'resultados inteligentes'}`
+        : 'Nenhum resultado encontrado. Tente outro termo, sinônimo ou nome.')
+      : 'Sugestões rápidas para você';
   }
 
   function definirBuscaAberta(aberta) {
@@ -522,12 +713,24 @@ function inicializarBuscaTopo() {
       requestAnimationFrame(() => campo.focus());
     } else {
       campo.value = '';
+      container.classList.remove('busca-topo--com-texto');
+      botaoLimpar.hidden = true;
     }
   }
 
   gatilhoBuscaTopo.addEventListener('click', () => {
     const aberta = !container.classList.contains('busca-topo--aberta');
     definirBuscaAberta(aberta);
+  });
+
+  campo.addEventListener('focus', () => {
+    if (!container.classList.contains('busca-topo--aberta')) definirBuscaAberta(true);
+  });
+
+  botaoLimpar.addEventListener('click', () => {
+    campo.value = '';
+    renderizarResultados();
+    campo.focus();
   });
 
   campo.addEventListener('input', renderizarResultados);
@@ -569,6 +772,11 @@ function inicializarBuscaTopo() {
   });
 
   document.addEventListener('keydown', evento => {
+    if ((evento.ctrlKey || evento.metaKey) && evento.key.toLowerCase() === 'k') {
+      evento.preventDefault();
+      definirBuscaAberta(true);
+      return;
+    }
     if (evento.key === 'Escape' && container.classList.contains('busca-topo--aberta')) {
       if (campo.value) {
         campo.value = '';
@@ -711,7 +919,7 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
     registrosDose: JSON.stringify(estado?.registrosDose || {}),
     estoque: JSON.stringify([estado?.estoqueBase || {}, estado?.historicoEstoque || []]),
     itens: JSON.stringify([estado?.itensExtras || [], estado?.itensEditados || {}, estado?.itensExcluidos || []]),
-    turnos: JSON.stringify([estado?.covered || {}, estado?.shiftEdits || {}]),
+    turnos: JSON.stringify([estado?.covered || {}, estado?.shiftEdits || {}, estado?.coberturasRede || [], estado?.atribuicoesTurno || {}]),
     events: JSON.stringify(estado?.events || []),
     reports: JSON.stringify(estado?.reports || {}),
     documents: JSON.stringify(estado?.documents || []),
