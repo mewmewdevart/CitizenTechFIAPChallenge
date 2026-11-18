@@ -3,8 +3,8 @@
   const CHAVE_TEMA = 'mutirao-tema';
   const TEMAS = ['neutro', 'acolhedor'];
   const FONTES_TEMA_ACOLHEDOR = 'https://fonts.googleapis.com/css2?family=Gloock&family=Gochi+Hand&family=Onest:wght@400;600;700&display=swap';
-  const FONTE_MINIMA = 90;
-  const FONTE_MAXIMA = 200;
+  const FONTE_MINIMA = 80;
+  const FONTE_MAXIMA = 140;
   const PASSO_FONTE = 5;
 
   const PADROES = {
