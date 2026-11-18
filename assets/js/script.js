@@ -921,7 +921,7 @@ function sincronizarPerfilGlobal() {
     img.src = pessoa.foto || pessoa.mascote || 'assets/media/mascotes/icone-mascote-forma.svg';
   });
   document.querySelectorAll('[data-cobertura-acompanhada]').forEach(item => {
-    item.textContent = pessoa.cobertura || 'Sem turnos definidos';
+    item.textContent = pessoa.cobertura || 'Nenhum turno';
   });
   renderizarSeletorPessoas();
   renderizarNotificacoes();

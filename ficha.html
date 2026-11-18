@@ -560,8 +560,21 @@
             </label>
             <label>Contato principal<input type="text" name="referencia" /></label>
             <label>Segundo contato<input type="text" name="alternativo" /></label>
-            <label>Precisa de alguém junto<input type="text" name="cobertura" /></label>
-            <label>Preferências<input type="text" name="preferencias" /></label>
+          </div>
+        </section>
+
+        <section class="editar-ficha__secao" aria-labelledby="secao-rotina-turnos">
+          <h3 id="secao-rotina-turnos" class="editar-ficha__subtitulo">Rotina e turnos</h3>
+          <div class="editar-ficha__grade">
+            <label>Precisa de alguém junto
+              <select name="cobertura">
+                <option value="24 horas por dia">Turnos de 24h</option>
+                <option value="12 horas por dia">Turnos de 12h</option>
+                <option value="Nenhum turno">Nenhum turno</option>
+              </select>
+              <small class="formulario-mvp__ajuda">Quando "Nenhum turno" está selecionado, a escala de turnos não aparece no Início.</small>
+            </label>
+            <label>Preferências de cuidado<input type="text" name="preferencias" /></label>
           </div>
         </section>
 

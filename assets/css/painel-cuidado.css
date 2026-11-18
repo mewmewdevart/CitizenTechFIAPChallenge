@@ -1788,6 +1788,14 @@ html.acessibilidade--alto-contraste .cuidar__alerta {
   .faixa-alerta__acoes .botao {
     flex: 1 1 140px;
   }
+
+  [data-aba-inicio="escala"] .painel__cartao-cabecalho>.botao,
+  [data-aba-inicio="escala"] .agenda__lacuna>.botao,
+  [data-aba-inicio="escala"] .agenda__turno .agenda__turno-acoes,
+  [data-aba-inicio="escala"] .agenda__turno .botao {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2585,7 +2593,6 @@ html.tema--acolhedor [data-pagina-mvp="pessoas"] [aria-labelledby="titulo-partic
 
 html:not(.acessibilidade--alto-contraste) .inicio__resumo .painel__bloco {
   border: 1px solid #D5DAEA;
-  background: #EEF0F8;
 }
 
 html.tema--acolhedor:not(.acessibilidade--alto-contraste) .inicio__resumo .painel__bloco {

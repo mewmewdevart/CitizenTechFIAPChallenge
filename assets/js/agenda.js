@@ -111,10 +111,14 @@ window.MutiraoCuidadoPronto.then(core => {
     return `<img class="agenda__avatar" alt="" src="${escaparHtml(src)}" width="40" height="40">`;
   };
 
-  const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém' };
+  const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém', 'Sem turnos': 'Sem turnos' };
+  const ICONE_SEM_TURNOS = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>';
   const criarEtiquetaCobertura = dia => {
     const estado = obterEstado();
     const rotulo = obterRotuloLacuna(dia, estado);
+    if (rotulo === 'Sem turnos') {
+      return `<span class="agenda__etiqueta agenda__etiqueta--neutro">${ICONE_SEM_TURNOS}Sem turnos</span>`;
+    }
     const lacuna = rotulo !== 'Coberto';
     const parcial = rotulo === 'Parcial';
     const modificador = lacuna ? (parcial ? 'agenda__etiqueta--atencao' : 'agenda__etiqueta--alerta') : 'agenda__etiqueta--sucesso';
@@ -147,9 +151,10 @@ window.MutiraoCuidadoPronto.then(core => {
       diaSelecionado,
       obterMetaDia: chave => {
         const temEvento = obterEventosDia(chave).length > 0;
-        const temLacuna = possuiLacuna(chave, estado);
-        const parcial = temLacuna && obterRotuloLacuna(chave, estado) === 'Parcial';
-        const coberto = !temLacuna && chave >= inicioSemana && chave <= fimSemana;
+        const rotuloDia = obterRotuloLacuna(chave, estado);
+        const temLacuna = rotuloDia === 'Parcial' || rotuloDia === 'Descoberto';
+        const parcial = rotuloDia === 'Parcial';
+        const coberto = rotuloDia === 'Coberto' && chave >= inicioSemana && chave <= fimSemana;
         const situacao = temLacuna ? (parcial ? 'parcial' : 'sem-ninguem') : coberto ? 'coberto' : '';
         const textos = {
           'sem-ninguem': ', sem ninguém em algum horário',
@@ -309,11 +314,14 @@ window.MutiraoCuidadoPronto.then(core => {
       </div>`;
     };
 
-    pagina.querySelector('[data-turnos]').innerHTML = construirLinhaDoTempoDia(diaSemana, estado).map(seg => (
-      seg.tipo === 'lacuna'
-        ? linhaDescoberto(seg.horario, diaSemana)
-        : renderizarTurno(seg, diaSemana)
-    )).join('');
+    const linhaDoDia = construirLinhaDoTempoDia(diaSemana, estado);
+    pagina.querySelector('[data-turnos]').innerHTML = linhaDoDia.length
+      ? linhaDoDia.map(seg => (
+        seg.tipo === 'lacuna'
+          ? linhaDescoberto(seg.horario, diaSemana)
+          : renderizarTurno(seg, diaSemana)
+      )).join('')
+      : `<div class="estado-vazio"><strong>Nenhum turno cadastrado</strong><p>Ainda não há rotina de turnos registrada para este dia.</p><button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${diaSemana}" data-horario="00h–24h">Adicionar turno</button></div>`;
 
     const diasComLacuna = [...new Set([...semana, ...Object.keys(estado.lacunasTurno || {})])]
       .sort()

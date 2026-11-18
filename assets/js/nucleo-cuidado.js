@@ -367,7 +367,9 @@ window.MutiraoCuidadoPronto = (async () => {
     .map(({ inicio, fim }) => ({ inicio, fim, horario: formatarIntervaloTurno(inicio, fim - inicio) }));
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
-    const escala = obterEscalaDia(dia, estado);
+    const escalaBase = obterEscalaDia(dia, estado);
+    const temCoberturaExtra = Boolean(estado.covered?.[dia]?.length || (estado.coberturasRede || []).some(item => item.dia === dia));
+    const escala = escalaBase.length ? escalaBase : (temCoberturaExtra ? [{ horario: '00h–24h', lacuna: true }] : []);
     const usuario = obterUsuarioAtual(estado);
     const pessoaUsuario = { nome: usuario.nomeComApelido, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
     const segmentos = [];
@@ -487,7 +489,8 @@ window.MutiraoCuidadoPronto = (async () => {
   };
 
   const aplicarIntervaloZe = (estado, dia, janelaMin, janelaMax, novoInicio, novoFim) => {
-    const escala = obterEscalaDia(dia, estado);
+    const escalaBase = obterEscalaDia(dia, estado);
+    const escala = escalaBase.length ? escalaBase : [{ horario: '00h–24h', lacuna: true }];
     const covered = { ...estado.covered };
     const shiftEdits = { ...estado.shiftEdits };
 

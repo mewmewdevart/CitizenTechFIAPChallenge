@@ -500,7 +500,7 @@ window.MutiraoCuidadoPronto.then(core => {
         return;
       }
       const valor = person[chave];
-      if (campos?.[chave]) campos[chave].value = valor ?? '';
+      if (campos?.[chave]) campos[chave].value = chave === 'cobertura' ? (valor || 'Nenhum turno') : (valor ?? '');
 
       if (chave === 'historicoSaude') {
         const htmlSeguro = sanitizarHtmlEditor(valor);
@@ -540,7 +540,7 @@ window.MutiraoCuidadoPronto.then(core => {
         const elNascimento = pagina.querySelector('[data-pessoa-nascimento]');
         if (elNascimento) elNascimento.textContent = `${anos} anos · ${nascimento}`;
       } else {
-        no.textContent = valor || (chave === 'cobertura' ? 'Sem turnos definidos' : 'Não informado');
+        no.textContent = valor || (chave === 'cobertura' ? 'Nenhum turno' : 'Não informado');
         if (chave === 'nascimento') {
           const elNascimento = pagina.querySelector('[data-pessoa-nascimento]');
           if (elNascimento) elNascimento.textContent = 'Nascimento não informado';

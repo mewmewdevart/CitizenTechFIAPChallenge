@@ -168,10 +168,11 @@ window.MutiraoCuidadoPronto.then(core => {
   };
 
   const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém', 'Sem turnos': 'Sem turnos' };
+  const ICONE_SEM_TURNOS = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>';
   const criarEtiquetaCobertura = (dia, estado) => {
     const rotulo = obterRotuloLacuna(dia, estado);
     if (rotulo === 'Sem turnos') {
-      return '<span class="agenda__etiqueta agenda__etiqueta--neutro">Sem turnos</span>';
+      return `<span class="agenda__etiqueta agenda__etiqueta--neutro">${ICONE_SEM_TURNOS}Sem turnos</span>`;
     }
     const lacuna = rotulo !== 'Coberto';
     const parcial = rotulo === 'Parcial';
@@ -193,7 +194,7 @@ window.MutiraoCuidadoPronto.then(core => {
     if (titulo) titulo.textContent = core.nomePessoaAcompanhada(estado);
     const subtitulo = resumo.querySelector('.painel__texto > span');
     if (subtitulo) {
-      subtitulo.textContent = person.cobertura || 'Sem turnos definidos';
+      subtitulo.textContent = person.cobertura || 'Nenhum turno';
     }
   };
 
@@ -344,9 +345,14 @@ window.MutiraoCuidadoPronto.then(core => {
           ? linhaDescoberto(seg.horario, diaSelecionado)
           : renderizarTurno(seg, diaSelecionado)
       )).join('')
-      : '<div class="estado-vazio"><strong>Nenhum turno cadastrado</strong><p>Ainda não há rotina de turnos registrada para este dia.</p></div>';
+      : `<div class="estado-vazio"><strong>Nenhum turno cadastrado</strong><p>Ainda não há rotina de turnos registrada para este dia.</p><button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${diaSelecionado}" data-horario="00h–24h">Adicionar turno</button></div>`;
 
-    const lacunasHoje = obterLacunasDia(HOJE, estado);
+    const semEscala = estado.person?.cobertura === 'Nenhum turno';
+    const secaoEscalaInicio = pagina.querySelector('[data-aba-inicio="escala"]');
+    const colunaEscalaInicio = secaoEscalaInicio?.closest('.painel__coluna');
+    if (colunaEscalaInicio) colunaEscalaInicio.hidden = semEscala;
+
+    const lacunasHoje = semEscala ? [] : obterLacunasDia(HOJE, estado);
     faixaLacuna.hidden = !lacunasHoje.length;
     if (lacunasHoje.length) {
       tituloLacuna.textContent = `${lacunasHoje[0].horario} · Horário sem ninguém`;
@@ -954,13 +960,14 @@ window.MutiraoCuidadoPronto.then(core => {
     });
 
     const secaoEscala = secoesAbas.find(secao => secao.dataset.abaInicio === 'escala');
+    const botaoAbaEscala = secaoEscala ? botoesAba[secoesAbas.indexOf(secaoEscala)] : null;
     const atualizarAviso = () => {
       if (!secaoEscala) return;
-      const comTurnos = secaoEscala.querySelectorAll('.agenda__etiqueta:not(.agenda__etiqueta--neutro)').length;
-      if (!comTurnos) {
-        aviso.dataset.tipo = 'neutro';
-        aviso.querySelector('[data-aviso-icone]').innerHTML = ICONE_NEUTRO;
-        aviso.querySelector('[data-aviso-texto]').textContent = 'Nenhum turno cadastrado na semana';
+      const semEscala = obterEstado().person?.cobertura === 'Nenhum turno';
+      aviso.hidden = semEscala;
+      if (botaoAbaEscala) botaoAbaEscala.hidden = semEscala;
+      if (semEscala) {
+        if (abaAtual() === secoesAbas.indexOf(secaoEscala)) escolherAba(0);
         return;
       }
       const hoje = secaoEscala.querySelector(`[data-dia-semana="${HOJE}"] .agenda__etiqueta`);
@@ -978,6 +985,7 @@ window.MutiraoCuidadoPronto.then(core => {
     });
 
     if (secaoEscala) new MutationObserver(atualizarAviso).observe(secaoEscala, { childList: true, subtree: true });
+    window.addEventListener('mutirao:cuidado-atualizado', atualizarAviso);
     atualizarAviso();
     escolherAba(0);
     telaPequena.addEventListener('change', () => escolherAba(abaAtual()));

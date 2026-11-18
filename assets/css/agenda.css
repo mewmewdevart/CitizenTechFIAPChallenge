@@ -72,50 +72,6 @@ body.menu-fechado .conteudo-pagina.agenda {
   min-width: 0;
 }
 
-.agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
-  border: 0;
-  border-radius: 0;
-}
-
-.agenda__painel .calendario-mensal {
-  padding: 0;
-}
-
-.agenda__painel .agenda__legenda {
-  padding: var(--espaco-md) 0 0;
-  border-top: var(--borda-padrao);
-}
-
-.agenda__painel .agenda__tarefas {
-  padding: 0 0 0 var(--espaco-lg);
-  border-left: var(--borda-padrao);
-}
-
-@media (max-width: 860px) {
-  .agenda__painel .agenda__tarefas {
-    padding: var(--espaco-lg) 0 0;
-    border-left: 0;
-    border-top: var(--borda-padrao);
-  }
-}
-
-html.tema--acolhedor .agenda__painel :is(.calendario-mensal, .agenda__tarefas),
-html.acessibilidade--alto-contraste .agenda__painel :is(.calendario-mensal, .agenda__legenda, .agenda__tarefas) {
-  border: var(--borda-padrao);
-  border-radius: var(--raio-lg);
-}
-
-html.tema--acolhedor .agenda__painel .calendario-mensal,
-html.acessibilidade--alto-contraste .agenda__painel .calendario-mensal,
-html.tema--acolhedor .agenda__painel .agenda__tarefas,
-html.acessibilidade--alto-contraste .agenda__painel .agenda__tarefas {
-  padding: var(--espaco-lg);
-}
-
-html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
-  padding: var(--espaco-md);
-}
-
 .agenda__painel>h2 {
   font-size: var(--texto-titulo-cartao);
   line-height: 1.4;
@@ -127,7 +83,7 @@ html.acessibilidade--alto-contraste .agenda__painel .agenda__legenda {
 
 .agenda__visao-geral {
   display: grid;
-  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 387fr) minmax(0, 743fr);
   gap: var(--espaco-lg);
   align-items: start;
 }
@@ -420,7 +376,8 @@ html.tema--acolhedor .agenda__etiqueta {
   box-sizing: border-box;
 }
 
-.agenda__etiqueta img {
+.agenda__etiqueta img,
+.agenda__etiqueta svg {
   flex: none;
   width: 14px;
   height: 14px;
@@ -444,6 +401,11 @@ html.tema--acolhedor .agenda__etiqueta {
 .agenda__etiqueta--troca {
   background: var(--cor-aviso-info-claro);
   color: var(--cor-aviso-info-escuro);
+}
+
+.agenda__etiqueta--neutro {
+  background: var(--cor-neutra-clara-04);
+  color: var(--cor-texto-secundario);
 }
 
 .agenda__tarefa--concluida .agenda__etiqueta {
@@ -736,8 +698,8 @@ html.acessibilidade--alto-contraste .agenda__coluna-calendario {
   gap: 2px;
   min-height: 60px;
   padding: 6px 2px;
-  border: 2px solid transparent;
-  border-radius: var(--raio-sm);
+  border: 1.5px solid transparent;
+  border-radius: var(--raio-md);
   background: var(--cor-superficie);
   color: var(--cor-texto-principal);
   font-size: var(--texto-titulo-cartao);
@@ -746,7 +708,7 @@ html.acessibilidade--alto-contraste .agenda__coluna-calendario {
 }
 
 .agenda__painel .calendario-mensal__dias button:hover {
-  border-color: var(--cor-borda-controle);
+  border-color: var(--cor-borda-sutil);
 }
 
 .agenda__painel .calendario-mensal__indicadores {
@@ -763,11 +725,11 @@ html.acessibilidade--alto-contraste .agenda__coluna-calendario {
 
 .calendario-mensal__selo-consulta {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 14px;
-  height: 14px;
-  border: 3px solid var(--cor-superficie);
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--cor-superficie);
   border-radius: 50%;
   background: var(--cor-primaria);
   box-sizing: content-box;
@@ -775,14 +737,14 @@ html.acessibilidade--alto-contraste .agenda__coluna-calendario {
 
 .agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--sem-ninguem,
 .agenda__amostra.calendario-mensal__dia--sem-ninguem {
-  border-color: var(--cor-aviso-alerta-escuro);
+  border-color: color-mix(in srgb, var(--cor-aviso-alerta-escuro) 40%, transparent);
   background: repeating-linear-gradient(135deg, var(--cor-aviso-alerta-claro) 0 6px, var(--cor-superficie) 6px 10px);
   color: var(--cor-aviso-alerta-escuro);
 }
 
 .agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--parcial,
 .agenda__amostra.calendario-mensal__dia--parcial {
-  border-color: var(--cor-aviso-atencao-escuro);
+  border-color: color-mix(in srgb, var(--cor-aviso-atencao-escuro) 42%, transparent);
   border-style: dashed;
   background: linear-gradient(to top, var(--dia-parcial) 50%, var(--cor-superficie) 50%);
   color: var(--cor-aviso-atencao-escuro);
@@ -801,19 +763,19 @@ html.acessibilidade--alto-contraste .agenda__coluna-calendario {
 
 .agenda__painel .calendario-mensal__dias button[aria-pressed="true"],
 .agenda__amostra--selecionado {
-  border: 3px solid var(--cor-texto-principal);
+  border: 2px solid var(--cor-primaria);
   font-weight: var(--peso-negrito);
 }
 
 .agenda__painel .calendario-mensal__dias button[aria-pressed="true"]::after {
   content: "";
   position: absolute;
-  bottom: -7px;
+  bottom: -6px;
   left: 50%;
   width: 0;
   height: 0;
   border: 5px solid transparent;
-  border-top-color: var(--cor-texto-principal);
+  border-top-color: var(--cor-primaria);
   transform: translateX(-50%);
 }
 
@@ -862,7 +824,26 @@ html.acessibilidade--alto-contraste .agenda__coluna-calendario {
 }
 
 .agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--consulta:not(.calendario-mensal__dia--sem-ninguem, .calendario-mensal__dia--parcial, .calendario-mensal__dia--coberto, [aria-pressed="true"]) {
-  border-color: var(--cor-borda-controle);
+  border-color: var(--cor-borda-sutil);
+}
+
+html.acessibilidade--alto-contraste .agenda__painel .calendario-mensal__dias button[aria-pressed="true"],
+html.acessibilidade--alto-contraste .agenda__amostra--selecionado {
+  border: 3px solid var(--cor-texto-principal);
+}
+
+html.acessibilidade--alto-contraste .agenda__painel .calendario-mensal__dias button[aria-pressed="true"]::after {
+  border-top-color: var(--cor-texto-principal);
+}
+
+html.acessibilidade--alto-contraste .agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--sem-ninguem,
+html.acessibilidade--alto-contraste .agenda__amostra.calendario-mensal__dia--sem-ninguem {
+  border-color: var(--cor-aviso-alerta-escuro);
+}
+
+html.acessibilidade--alto-contraste .agenda__painel .calendario-mensal__dias button.calendario-mensal__dia--parcial,
+html.acessibilidade--alto-contraste .agenda__amostra.calendario-mensal__dia--parcial {
+  border-color: var(--cor-aviso-atencao-escuro);
 }
 
 html.acessibilidade--alto-contraste .calendario-mensal__selo-consulta {
