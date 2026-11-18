@@ -634,7 +634,12 @@ html.acessibilidade--alto-contraste .aviso-remedio {
   border: var(--borda-padrao);
   background: var(--cor-fundo-pagina);
   color: var(--cor-texto-principal);
+  box-shadow: none;
   translate: -50% 0;
+}
+
+html.acessibilidade--alto-contraste .aviso-remedio>i {
+  color: var(--cor-aviso-sucesso);
 }
 
 html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
@@ -883,11 +888,11 @@ html.tema--acolhedor .compartimento :is(.compartimento__dobradica, .compartiment
 }
 
 html.tema--acolhedor .compartimento__dobradica {
-  fill: #C59D37;
+  fill: var(--pote-tampa-escura);
 }
 
 html.tema--acolhedor .compartimento__tampa {
-  fill: #F6C445;
+  fill: var(--pote-aba);
 }
 
 .compartimento__bandeja {
@@ -895,7 +900,7 @@ html.tema--acolhedor .compartimento__tampa {
 }
 
 html.tema--acolhedor .compartimento__bandeja {
-  fill: #EEF3F1;
+  fill: var(--pote-vidro);
 }
 
 .compartimento__fundo {
@@ -1993,7 +1998,7 @@ html.tema--acolhedor .recado-postit blockquote {
 
 html.tema--acolhedor .recado-postit__pino {
   background: #C9A7F0;
-  box-shadow: 0 2px 0 #302b3d33;
+  box-shadow: 0 2px 0 var(--cor-sombra);
 }
 
 html.tema--acolhedor .recado-postit__pino--amarelo {

@@ -308,6 +308,13 @@ html.tema--acolhedor .busca-topo {
   box-shadow: var(--sombra-cartao);
 }
 
+html.tema--acolhedor .busca-topo:focus-within,
+html.tema--acolhedor .busca-topo--aberta {
+  border-color: var(--cor-primaria);
+  outline: var(--anel-foco);
+  outline-offset: 2px;
+}
+
 html.acessibilidade--alto-contraste .busca-topo {
   border: var(--borda-padrao);
 }

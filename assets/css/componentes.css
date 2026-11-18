@@ -276,9 +276,17 @@ html.tema--acolhedor :is(input:not([type="checkbox"]):not([type="radio"]):not([t
   textarea,
   [contenteditable="true"],
   .editar-ficha__area-editor):focus {
-  outline: none;
   border-color: var(--cor-primaria);
   box-shadow: 3px 3px 0 var(--cor-primaria);
+}
+
+html.tema--acolhedor :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not(.busca-topo__input):not(.editar-ficha__input-etiqueta):not(.login__campo input),
+  select,
+  textarea,
+  [contenteditable="true"],
+  .editar-ficha__area-editor):focus-visible {
+  outline: var(--anel-foco);
+  outline-offset: 2px;
 }
 
 html.acessibilidade--alto-contraste.tema--acolhedor :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not(.busca-topo__input):not(.editar-ficha__input-etiqueta):not(.login__campo input),

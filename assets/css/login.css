@@ -303,11 +303,30 @@ html.tema--acolhedor .login__campo,
 html.tema--acolhedor .login__social-botao {
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor .login__social-botao:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--cor-sombra);
+}
+
+html.tema--acolhedor .login__campo:focus-within {
+  border-color: var(--cor-primaria);
+  outline: var(--anel-foco);
+  outline-offset: 2px;
+  box-shadow: 3px 3px 0 var(--cor-primaria);
+}
+
+html.tema--acolhedor .login__campo:has([aria-invalid="true"]) {
+  border-color: var(--cor-aviso-alerta-escuro);
+  box-shadow: 3px 3px 0 var(--cor-aviso-alerta-escuro);
 }
 
 html.acessibilidade--alto-contraste .login__campo,
 html.acessibilidade--alto-contraste .login__social-botao {
   border: 2px solid var(--cor-borda-controle);
+  box-shadow: none;
 }
 
 html.acessibilidade--alto-contraste .login__social-icone--facebook,
