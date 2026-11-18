@@ -30,7 +30,8 @@ window.MutiraoCuidadoPronto.then(core => {
 
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const secaoEscala = pagina.querySelector('[data-aba-inicio="escala"]');
-  const podeMostrarEscala = () => Boolean(core.obterNecessidadeAcompanhamento() || core.obterRotinasSemanais().length);
+  const podeMostrarEscala = () => Boolean(core.obterNecessidadeAcompanhamento()
+    || DIAS_SEMANA.some(dia => obterRotuloLacuna(dia) !== 'Sem turnos'));
   const listaDias = pagina.querySelector('[data-semana]');
   const listaTurnos = pagina.querySelector('[data-turnos]');
   const faixaLacuna = pagina.querySelector('[data-inicio-lacuna]');
@@ -542,14 +543,12 @@ window.MutiraoCuidadoPronto.then(core => {
     if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
       titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
     })) return;
-    atualizarEstado(estado => core.definirRotinaTurno(
-      aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim),
-      diaTurno,
-      inicio,
-      fim,
-      escopoTurno,
-      obterUsuarioAtual(estado).nomeComApelido
-    ));
+    try {
+      atualizarEstado(estado => core.assumirTurno(estado, diaTurno, { inicio, fim, gapInicio, gapFim }, escopoTurno));
+    } catch (erro) {
+      anunciarStatus(elementoStatus, erro.message);
+      return;
+    }
     diaSelecionado = diaTurno;
     form.closest('dialog')?.close();
     const usuarioAtual = obterUsuarioAtual();

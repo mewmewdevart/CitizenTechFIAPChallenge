@@ -440,11 +440,26 @@ window.MutiraoCuidadoPronto = (async () => {
     return Object.values(ESCOPO_TURNO).includes(escopo) ? escopo : ESCOPO_TURNO.pontual;
   };
 
+  const responsavelDaRotina = (rotina, dia) =>
+    rotina.transferidoDesde && dia < rotina.transferidoDesde ? rotina.responsavelAnterior : rotina.responsavel;
+
   const definirRotinaTurno = (estado, dia, inicio, fim, escopoInformado, responsavel = null) => {
     const escopo = normalizarEscopoTurno(escopoInformado);
     if (escopo === ESCOPO_TURNO.pontual || dia < HOJE || !(fim > inicio)) return estado;
-    if (escopo === ESCOPO_TURNO.diario) {
-      if (!podeDefinirRotina(estado)) return estado;
+    const semanal = escopo === ESCOPO_TURNO.semanal;
+    const diaSemana = obterDiaSemana(dia);
+    const janela = estado.janelaAcompanhamento;
+    const mesmaJanela = janela?.desde === dia && janela.inicio === inicio && janela.fim === fim;
+    const existenteDiaria = obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario ? janela : null;
+    const conflito = rotina => rotina?.responsavel && responsavel
+      && resolverPessoaRede(rotina.responsavel, estado).nome !== resolverPessoaRede(responsavel, estado).nome
+      && rotina.inicio < fim && inicio < rotina.fim;
+    if (conflito(existenteDiaria) || obterRotinasSemanais(estado).some(rotina =>
+      (!semanal || rotina.diaSemana === diaSemana) && conflito(rotina))) {
+      throw new Error('O horário coincide com uma rotina de outra pessoa. Escolha outro intervalo.');
+    }
+    if (!semanal) {
+      if (!podeDefinirRotina(estado) && !(mesmaJanela && existenteDiaria)) return estado;
       return {
         ...estado,
         person: { ...estado.person, cobertura: ACOMPANHAMENTO.diario },
@@ -452,7 +467,6 @@ window.MutiraoCuidadoPronto = (async () => {
       };
     }
     if (!podeDefinirRotinaSemanal(estado)) return estado;
-    const diaSemana = obterDiaSemana(dia);
     const existentes = obterRotinasSemanais(estado);
     const idxRepetida = existentes.findIndex(rotina => rotina.diaSemana === diaSemana && rotina.inicio === inicio && rotina.fim === fim);
     const necessidade = obterNecessidadeAcompanhamento(estado);
@@ -477,10 +491,21 @@ window.MutiraoCuidadoPronto = (async () => {
     };
   };
 
-  const removerRotinaSemanal = (estado, id) => ({
-    ...estado,
-    rotinasSemanais: obterRotinasSemanais(estado).filter(rotina => rotina.id !== id)
-  });
+  const removerCoberturaLegada = (covered, rotina, estado) => {
+    if (!rotina?.responsavel || !resolverPessoaRede(rotina.responsavel, estado).ehUsuarioAtual
+      || estado.escalasFixas?.[rotina.desde] || !Array.isArray(covered[rotina.desde])) return;
+    const restantes = covered[rotina.desde].filter(intervalo =>
+      intervalo.inicio !== rotina.inicio || intervalo.fim !== rotina.fim);
+    if (restantes.length) covered[rotina.desde] = restantes;
+    else delete covered[rotina.desde];
+  };
+
+  const removerRotinaSemanal = (estado, id) => {
+    const rotinas = obterRotinasSemanais(estado);
+    const covered = { ...estado.covered };
+    removerCoberturaLegada(covered, rotinas.find(rotina => rotina.id === id), estado);
+    return { ...estado, covered, rotinasSemanais: rotinas.filter(rotina => rotina.id !== id) };
+  };
 
   const contarParticipacoesUsuario = (estado = estadoAtual) => {
     const datas = new Set([
@@ -647,6 +672,8 @@ window.MutiraoCuidadoPronto = (async () => {
       const slot = extrairHorasTurno(item.horario);
       const chave = `${dia}|${item.horario}`;
       const edicao = estado.shiftEdits?.[chave];
+      const ehUsuario = resolverPessoaRede(item.pessoa?.nome, estado).ehUsuarioAtual;
+      const pessoa = ehUsuario ? pessoaUsuario : item.pessoa;
 
       if (item.lacuna) {
         const cobertos = normalizarIntervalos(estado.covered?.[dia], slot.inicio, slot.fim);
@@ -667,8 +694,8 @@ window.MutiraoCuidadoPronto = (async () => {
         if (cursor < slot.fim) {
           segmentos.push({ tipo: 'lacuna', inicio: cursor, fim: slot.fim, isLacunaOriginal: true });
         }
-      } else if (resolverPessoaRede(item.pessoa?.nome, estado).ehUsuarioAtual) {
-        if (edicao?.cancelado) {
+      } else if (edicao && (item.rotina || ehUsuario)) {
+        if (edicao.cancelado) {
           segmentos.push({ tipo: 'lacuna', inicio: slot.inicio, fim: slot.fim, isLacunaOriginal: false });
         } else if (edicao && typeof edicao.inicio === 'number' && typeof edicao.duracao === 'number') {
           const fimEdicao = edicao.inicio + edicao.duracao;
@@ -679,7 +706,7 @@ window.MutiraoCuidadoPronto = (async () => {
             tipo: 'turno',
             inicio: edicao.inicio,
             fim: fimEdicao,
-            pessoa: pessoaUsuario,
+            pessoa,
             temCobertura: false
           });
           if (fimEdicao < slot.fim) {
@@ -690,7 +717,7 @@ window.MutiraoCuidadoPronto = (async () => {
             tipo: 'turno',
             inicio: slot.inicio,
             fim: slot.fim,
-            pessoa: pessoaUsuario,
+            pessoa,
             temCobertura: false
           });
         }
@@ -699,7 +726,7 @@ window.MutiraoCuidadoPronto = (async () => {
           tipo: 'turno',
           inicio: slot.inicio,
           fim: slot.fim,
-          pessoa: item.pessoa,
+          pessoa,
           temCobertura: false
         });
       }
@@ -718,25 +745,44 @@ window.MutiraoCuidadoPronto = (async () => {
         ];
       });
     }
+    // Uma rotina diária e uma semanal podem cobrir a mesma parte do dia.
+    const turnos = linha.filter(seg => seg.tipo === 'turno').sort((a, b) => a.inicio - b.inicio);
+    let fimCoberto = 0;
+    const turnosSemSobreposicao = turnos.flatMap(seg => {
+      const inicio = Math.max(seg.inicio, fimCoberto);
+      fimCoberto = Math.max(fimCoberto, seg.fim);
+      return inicio < seg.fim ? [{ ...seg, inicio, sobreposto: inicio > seg.inicio }] : [];
+    });
+    const lacunas = linha.filter(seg => seg.tipo === 'lacuna').flatMap(seg => {
+      let cursor = seg.inicio;
+      const partes = [];
+      for (const turno of turnosSemSobreposicao) {
+        if (turno.fim <= cursor || turno.inicio >= seg.fim) continue;
+        if (turno.inicio > cursor) partes.push({ ...seg, inicio: cursor, fim: turno.inicio });
+        cursor = turno.fim;
+      }
+      if (cursor < seg.fim) partes.push({ ...seg, inicio: cursor });
+      return partes;
+    });
     const mesclados = [];
-    for (const seg of linha) {
+    for (const seg of [...turnosSemSobreposicao, ...lacunas].sort((a, b) => a.inicio - b.inicio)) {
       const ultimo = mesclados[mesclados.length - 1];
-      const mesmoTurnoZe = ultimo
+      const mesmoTurno = ultimo
         && ultimo.tipo === 'turno'
         && seg.tipo === 'turno'
-        && ultimo.pessoa?.ehUsuarioAtual
-        && seg.pessoa?.ehUsuarioAtual
+        && ultimo.pessoa?.nome === seg.pessoa?.nome
+        && (seg.pessoa?.ehUsuarioAtual || seg.sobreposto)
         && ultimo.fim === seg.inicio;
       const mesmaLacuna = ultimo
         && ultimo.tipo === 'lacuna'
         && seg.tipo === 'lacuna'
-        && ultimo.fim === seg.inicio;
+        && ultimo.fim >= seg.inicio;
 
-      if (mesmoTurnoZe) {
+      if (mesmoTurno) {
         ultimo.fim = seg.fim;
         ultimo.temCobertura = ultimo.temCobertura || seg.temCobertura;
       } else if (mesmaLacuna) {
-        ultimo.fim = seg.fim;
+        ultimo.fim = Math.max(ultimo.fim, seg.fim);
         ultimo.isLacunaOriginal = ultimo.isLacunaOriginal || seg.isLacunaOriginal;
       } else {
         mesclados.push({ ...seg });
@@ -838,6 +884,11 @@ window.MutiraoCuidadoPronto = (async () => {
     const escala = obterEscalaComHorariosLivres(dia, estado);
     const covered = { ...estado.covered };
     const shiftEdits = { ...estado.shiftEdits };
+    for (const item of escala) {
+      if (item.rotina?.desde === dia && janelaMin < item.rotina.fim && item.rotina.inicio < janelaMax) {
+        removerCoberturaLegada(covered, item.rotina, estado);
+      }
+    }
 
     for (const item of escala) {
       const slot = extrairHorasTurno(item.horario);
@@ -876,9 +927,14 @@ window.MutiraoCuidadoPronto = (async () => {
       }
     }
 
-    let atribuicoesTurno = estado.atribuicoesTurno ? { ...estado.atribuicoesTurno } : {};
-    if (novoInicio < novoFim) {
-      const novasAtribuicoes = {};
+    return { ...estado, covered, shiftEdits,
+      atribuicoesTurno: removerPedidosCobertos(estado, dia, novoInicio, novoFim) };
+  };
+
+  const removerPedidosCobertos = (estado, dia, novoInicio, novoFim) => {
+    const atribuicoesTurno = estado.atribuicoesTurno || {};
+    if (novoInicio >= novoFim) return atribuicoesTurno;
+    const novasAtribuicoes = {};
       for (const [chave, item] of Object.entries(atribuicoesTurno)) {
         if (!item || item.dia !== dia) {
           novasAtribuicoes[chave] = item;
@@ -900,10 +956,22 @@ window.MutiraoCuidadoPronto = (async () => {
           };
         }
       }
-      atribuicoesTurno = novasAtribuicoes;
-    }
+    return novasAtribuicoes;
+  };
 
-    return { ...estado, covered, shiftEdits, atribuicoesTurno };
+  const assumirTurno = (estado, dia, intervalo, escopo) => {
+    const { inicio, fim, gapInicio, gapFim } = intervalo;
+    if (!obterHorariosLivres(dia, estado).some(faixa => faixa.inicio <= inicio && faixa.fim >= fim)) {
+      throw new Error('O horário mudou. Confira a escala antes de assumir.');
+    }
+    const pontual = normalizarEscopoTurno(escopo) === ESCOPO_TURNO.pontual;
+    if (pontual) return aplicarIntervaloZe(estado, dia, gapInicio, gapFim, inicio, fim);
+
+    const comRotina = definirRotinaTurno(estado, dia, inicio, fim, escopo, obterUsuarioAtual(estado).nomeComApelido);
+    if (comRotina === estado) throw new Error('A rotina mudou. Confira as opções da escala.');
+    return estado.escalasFixas?.[dia]
+      ? aplicarIntervaloZe(comRotina, dia, gapInicio, gapFim, inicio, fim)
+      : { ...comRotina, atribuicoesTurno: removerPedidosCobertos(estado, dia, inicio, fim) };
   };
 
   const pessoaDisponivel = (nome, dia, inicio, fim, estado = estadoAtual) => !construirLinhaDoTempoDia(dia, estado)
@@ -917,10 +985,22 @@ window.MutiraoCuidadoPronto = (async () => {
       || !pessoaDisponivel(item.responsavel, item.dia, inicio, fim, estado))) {
       throw new Error('O turno mudou ou a pessoa não está disponível. Atualize a escala.');
     }
+    const mesmaFaixaSemResponsavel = rotina => rotina?.desde === item.dia && rotina.inicio === inicio
+      && rotina.fim === fim && !rotina.responsavel;
+    const escopo = item.escopo || (mesmaFaixaSemResponsavel(estado.janelaAcompanhamento)
+      ? ESCOPO_TURNO.diario
+      : obterRotinasSemanais(estado).some(mesmaFaixaSemResponsavel)
+        ? ESCOPO_TURNO.semanal : ESCOPO_TURNO.pontual);
+    const recorrente = normalizarEscopoTurno(escopo) !== ESCOPO_TURNO.pontual;
+    const proximo = aceitar && recorrente
+      ? definirRotinaTurno(estado, item.dia, inicio, fim, escopo, item.responsavel)
+      : estado;
+    if (aceitar && recorrente && proximo === estado) throw new Error('A rotina mudou. Confira a escala.');
     const atribuicoesTurno = { ...estado.atribuicoesTurno };
     delete atribuicoesTurno[chave];
-    return { ...estado, atribuicoesTurno,
-      coberturasRede: [...(estado.coberturasRede || []), ...(aceitar ? [{ dia: item.dia, inicio, fim, responsavel: item.responsavel }] : [])],
+    const salvarOcorrencia = aceitar && (!recorrente || estado.escalasFixas?.[item.dia]);
+    return { ...proximo, atribuicoesTurno,
+      coberturasRede: [...(estado.coberturasRede || []), ...(salvarOcorrencia ? [{ dia: item.dia, inicio, fim, responsavel: item.responsavel }] : [])],
       historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Recusada ou cancelada' }] };
   });
 
@@ -951,7 +1031,14 @@ window.MutiraoCuidadoPronto = (async () => {
       .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
       .map(seg => ({ dia, inicio: seg.inicio, fim: seg.fim, responsavel })));
     if (transferencias.some(seg => !pessoaDisponivel(responsavel, seg.dia, seg.inicio, seg.fim, estado))) throw new Error('O substituto possui conflito de horários. Escolha outra pessoa.');
+    const transferirRotina = rotina =>
+      rotina?.responsavel && resolverPessoaRede(rotina.responsavel, estado).ehUsuarioAtual
+        ? { ...rotina, responsavel, responsavelAnterior: rotina.responsavel, transferidoDesde: HOJE }
+        : rotina;
+    const janela = estado.janelaAcompanhamento;
     return { ...estado, redeSaiu: true, administradorRede: responsavel,
+      rotinasSemanais: obterRotinasSemanais(estado).map(transferirRotina),
+      ...(janela ? { janelaAcompanhamento: transferirRotina(janela) } : {}),
       coberturasRede: [...(estado.coberturasRede || []), ...transferencias],
       pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item) };
   });
@@ -1074,20 +1161,20 @@ window.MutiraoCuidadoPronto = (async () => {
 
     const recorrentes = [];
     const janela = estado.janelaAcompanhamento;
-    if (obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario && janela && dia >= janela.desde && janela.responsavel) {
-      recorrentes.push({ inicio: janela.inicio, fim: janela.fim, responsavel: janela.responsavel });
+    if (obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario && janela && dia >= janela.desde) {
+      recorrentes.push(janela);
     }
     const diaSemana = obterDiaSemana(dia);
     for (const rotina of obterRotinasSemanais(estado)) {
-      if (rotina.diaSemana === diaSemana && dia >= rotina.desde && rotina.responsavel) {
-        recorrentes.push({ inicio: rotina.inicio, fim: rotina.fim, responsavel: rotina.responsavel });
-      }
+      if (rotina.diaSemana === diaSemana && dia >= rotina.desde) recorrentes.push(rotina);
     }
     return recorrentes
+      .filter(rotina => responsavelDaRotina(rotina, dia))
       .sort((a, b) => a.inicio - b.inicio)
-      .map(item => ({
-        horario: formatarIntervaloTurno(item.inicio, item.fim - item.inicio),
-        pessoa: resolverPessoaRede(item.responsavel, estado)
+      .map(rotina => ({
+        horario: formatarIntervaloTurno(rotina.inicio, rotina.fim - rotina.inicio),
+        pessoa: resolverPessoaRede(responsavelDaRotina(rotina, dia), estado),
+        rotina
       }));
   }
 
@@ -1510,6 +1597,7 @@ window.MutiraoCuidadoPronto = (async () => {
     atualizarPreviaTurno,
     obterIntervaloFormularioTurno,
     definirRotinaTurno,
+    assumirTurno,
     removerRotinaSemanal,
     contarParticipacoesUsuario,
     cancelarTodasParticipacoesUsuario,

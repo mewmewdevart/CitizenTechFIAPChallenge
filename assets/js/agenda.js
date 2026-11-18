@@ -58,7 +58,7 @@ window.MutiraoCuidadoPronto.then(core => {
     const modelos = tarefas.filter(tarefa => tarefa.medicacao);
     const tarefasDeDose = core.obterCompartimentos(estado).flatMap(grupo => {
       const modeloGrupo = modelos.find(({ medicacao }) => medicacao.hora === grupo.hora && !medicacao.itemId);
-      const turno = grupo.responsavel ? ` · Turno de ${grupo.responsavel}` : '';
+      const turno = grupo.responsavel ? ` · Na escala atual: ${grupo.responsavel}` : '';
       const hora = grupo.hora.padStart(3, '0');
       const dados = grupo.itens.filter(dose => dose.estado === 'administrado');
       const pendentes = grupo.itens.filter(dose => dose.estado !== 'administrado');
@@ -100,7 +100,7 @@ window.MutiraoCuidadoPronto.then(core => {
           titulo: !pendentes.length
             ? ((usarModeloGrupo && modeloGrupo.titulo) || `${hora} · Remédios dados`)
             : `${hora} · ${dados.length} de ${grupo.itens.length} doses registradas`,
-          descricao: `${nomes} · ${resumoDoses}${turno}`,
+          descricao: `${nomes} · ${resumoDoses}`,
           concluida: true,
           href: 'medicamentos.html#registros-de-hoje',
           rotuloAcao: 'Ver anotações'
@@ -868,14 +868,12 @@ window.MutiraoCuidadoPronto.then(core => {
       if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
         titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
       })) return;
-      atualizarEstado(estado => core.definirRotinaTurno(
-        aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim),
-        diaTurno,
-        inicio,
-        fim,
-        escopoTurno,
-        obterUsuarioAtual(estado).nomeComApelido
-      ));
+      try {
+        atualizarEstado(estado => core.assumirTurno(estado, diaTurno, { inicio, fim, gapInicio, gapFim }, escopoTurno));
+      } catch (erro) {
+        registrarStatus(erro.message);
+        return;
+      }
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;
       const usuarioAtual = obterUsuarioAtual();
@@ -905,7 +903,7 @@ window.MutiraoCuidadoPronto.then(core => {
       }
       const avatar = core.resolverPessoaRede(responsavel).src;
       if (horarioAlvo) {
-        atualizarEstado(estado => core.definirRotinaTurno({
+        atualizarEstado(estado => ({
           ...estado,
           atribuicoesTurno: {
             ...(estado.atribuicoesTurno || {}),
@@ -915,10 +913,11 @@ window.MutiraoCuidadoPronto.then(core => {
               avatar,
               dia: diaTurno,
               horario: horarioAlvo,
+              escopo: criarRotinaComPedido,
               status: 'Pedido de teste · Esperando aceitar'
             }
           }
-        }, diaTurno, intervaloPedido.inicio, intervaloPedido.fim, criarRotinaComPedido));
+        }));
       }
       mensagem = {
         titulo: 'Pedido de teste enviado',
