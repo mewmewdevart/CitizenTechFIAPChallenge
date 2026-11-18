@@ -960,7 +960,7 @@ function sincronizarStatusCuidado() {
     if (turno) img.src = turno.pessoa.foto || `assets/media/mascotes/${turno.pessoa.avatar}`;
     linhaTurno.querySelector('strong').textContent = turno?.pessoa.nome || 'Sem turno em andamento';
     linhaTurno.querySelector('small').textContent = turno?.horario ||
-      (core.construirLinhaDoTempoDia(core.HOJE).length ? 'Horário sem cobertura' : 'Nenhum turno cadastrado hoje');
+      (core.obterLacunaAtual() ? 'Horário previsto sem cobertura' : 'Sem acompanhamento agendado para agora');
   }
   const linha = document.querySelector('.cartao-status [data-status-medicamento]');
   const cartao = linha?.closest('.cartao-status');

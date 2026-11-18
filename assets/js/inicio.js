@@ -20,6 +20,7 @@ window.MutiraoCuidadoPronto.then(core => {
     aplicarIntervaloZe,
     formatarIntervaloTurno,
     extrairHorasTurno,
+    popularOpcoesHorario,
     anunciarStatus,
     obterDoses,
     obterCompartimentos,
@@ -28,6 +29,8 @@ window.MutiraoCuidadoPronto.then(core => {
   } = core;
 
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
+  const secaoEscala = pagina.querySelector('[data-aba-inicio="escala"]');
+  const podeMostrarEscala = () => Boolean(core.obterNecessidadeAcompanhamento());
   const listaDias = pagina.querySelector('[data-semana]');
   const listaTurnos = pagina.querySelector('[data-turnos]');
   const faixaLacuna = pagina.querySelector('[data-inicio-lacuna]');
@@ -260,7 +263,6 @@ window.MutiraoCuidadoPronto.then(core => {
     if (!bloco) return;
     const estado = obterEstado();
     const apelido = estado.person?.apelido || estado.person?.nome || 'a pessoa';
-    const linhaTempo = construirLinhaDoTempoDia(HOJE, estado);
     const turnoAtual = core.obterTurnoAtual(estado);
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     const avatar = bloco.querySelector('.avatar');
@@ -268,7 +270,7 @@ window.MutiraoCuidadoPronto.then(core => {
     const detalhe = bloco.querySelector('[data-turno-atual-detalhe]');
     const link = bloco.querySelector('a');
 
-    if (!linhaTempo.length) {
+    if (!turnoAtual && !core.obterLacunaAtual(estado)) {
       bloco.hidden = true;
       return;
     }
@@ -281,13 +283,13 @@ window.MutiraoCuidadoPronto.then(core => {
     if (titulo) {
       titulo.textContent = turnoAtual
         ? `${turnoAtual.horario} · ${turnoAtual.pessoa.nome}`
-        : `11h · Ninguém com ${apelido} agora`;
+        : `Ninguém com ${apelido} neste horário previsto`;
     }
     if (detalhe) {
       const proximaLacuna = turnoAtual && lacunasHoje.find(lacuna => lacuna.inicio >= turnoAtual.fim);
       detalhe.textContent = !turnoAtual ? 'Horário sem cobertura.' : proximaLacuna
         ? `Tem alguém com ${apelido} agora · Próximo horário sem ninguém: ${proximaLacuna.horario}`
-        : `Tem alguém com ${apelido} agora${lacunasHoje.length ? '' : ' · Todos os horários de hoje têm alguém'}`;
+        : `Tem alguém com ${apelido} agora.`;
     }
     if (link) link.href = `agenda.html?dia=${encodeURIComponent(HOJE)}`;
   };
@@ -318,14 +320,14 @@ window.MutiraoCuidadoPronto.then(core => {
     </div>`;
 
     const renderizarTurno = (seg, dia) => {
-      const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga');
+      const ehUsuario = Boolean(seg.pessoa.ehUsuarioAtual);
       return `<div class="agenda__turno">
         ${avatarMascote(seg.pessoa)}
         <div>
           <strong>${escaparHtml(seg.horario)}</strong>
-          <p>${escaparHtml(seg.pessoa.nome)} · ${ehZe ? 'Você vai ficar nesse horário' : 'Vai ficar'}</p>
+          <p>${escaparHtml(seg.pessoa.nome)} · ${ehUsuario ? 'Você vai ficar nesse horário' : 'Vai ficar'}</p>
         </div>
-        ${ehZe && dia >= HOJE ? `
+        ${ehUsuario && dia >= HOJE ? `
           <div class="agenda__turno-acoes">
             <button type="button" class="botao botao--secundario" data-editar-cobertura data-dia="${dia}" data-horario="${escaparHtml(seg.horario)}" data-min="${seg.janelaMin}" data-max="${seg.janelaMax}" data-atual-inicio="${seg.inicio}" data-atual-fim="${seg.fim}">Editar</button>
           </div>
@@ -337,13 +339,12 @@ window.MutiraoCuidadoPronto.then(core => {
     if (linkAgenda) linkAgenda.href = `agenda.html?dia=${encodeURIComponent(diaSelecionado)}#escala`;
 
     const linhaDoDia = construirLinhaDoTempoDia(diaSelecionado, estado);
-    listaTurnos.innerHTML = linhaDoDia.length
-      ? linhaDoDia.map(seg => (
-        seg.tipo === 'lacuna'
-          ? linhaDescoberto(seg.horario, diaSelecionado)
-          : renderizarTurno(seg, diaSelecionado)
-      )).join('')
-      : `<div class="estado-vazio"><strong>Nenhum turno cadastrado</strong><p>Ainda não há rotina de turnos registrada para este dia.</p><button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${diaSelecionado}" data-horario="00h–24h">Adicionar turno</button></div>`;
+    const pedidos = core.obterPedidosForaDaRotina(diaSelecionado, estado);
+    const acoes = pedidos.map(([, pedido]) => `<p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · <a href="${linkAgenda.href}">Ver pedido na Agenda</a></p>`).join('');
+    listaTurnos.innerHTML = linhaDoDia.map(seg => seg.tipo === 'lacuna'
+      ? linhaDescoberto(seg.horario, diaSelecionado)
+      : renderizarTurno(seg, diaSelecionado)
+    ).join('') + acoes + core.renderizarAdicionarTurnos(diaSelecionado, estado, linhaDoDia);
 
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     faixaLacuna.hidden = !lacunasHoje.length;
@@ -367,15 +368,6 @@ window.MutiraoCuidadoPronto.then(core => {
   const dialogoEditarCobertura = document.getElementById('dialogo-editar-cobertura');
   const dialogoCobrirHorario = document.getElementById('dialogo-cobrir-horario');
 
-  const popularOpcoesHorario = (select, minHora, maxHora, valorSelecionado) => {
-    if (!select) return;
-    select.innerHTML = Array.from({ length: maxHora - minHora + 1 }, (_, i) => {
-      const hora = minHora + i;
-      const rotulo = `${String(hora).padStart(2, '0')}h00`;
-      return `<option value="${hora}" ${hora === valorSelecionado ? 'selected' : ''}>${rotulo}</option>`;
-    }).join('');
-  };
-
   const atualizarPreviaCobertura = (ajustarSaida = false) => {
     const form = dialogoEditarCobertura?.querySelector('[data-formulario-mvp="editar-cobertura"]');
     const previa = dialogoEditarCobertura?.querySelector('[data-previa-cobertura]');
@@ -391,47 +383,12 @@ window.MutiraoCuidadoPronto.then(core => {
     previa.textContent = `Você vai ficar das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'} no total)`;
   };
 
-  const atualizarPreviaNovaCobertura = (ajustarSaida = false) => {
-    const form = dialogoCobrirHorario?.querySelector('[data-formulario-mvp="cobertura"]');
-    const previa = dialogoCobrirHorario?.querySelector('[data-previa-nova-cobertura]');
-    const containerHorarios = dialogoCobrirHorario?.querySelector('[data-horarios-cobertura]');
-    if (!form || !previa || !containerHorarios) return;
-
-    const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
-    const podeFracionar = gapFim - gapInicio > 1;
-    const opcoesWrap = dialogoCobrirHorario?.querySelector('.dialogo-mvp__opcoes');
-    if (opcoesWrap) opcoesWrap.hidden = !podeFracionar;
-
-    const cobrirTudo = !podeFracionar || form.elements.cobrirTudo.checked;
-    containerHorarios.hidden = cobrirTudo;
-    if (cobrirTudo) {
-      const duracao = gapFim - gapInicio;
-      previa.textContent = `Você vai ficar o horário todo: das ${String(gapInicio).padStart(2, '0')}h às ${String(gapFim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).`;
-      return;
-    }
-
-    const inicio = Number(form.elements.inicio.value);
-    let fim = Number(form.elements.fim.value);
-    if (ajustarSaida || fim <= inicio) {
-      const selecionado = fim > inicio ? fim : Math.min(gapFim, inicio + 1);
-      popularOpcoesHorario(form.elements.fim, inicio + 1, gapFim, selecionado);
-      fim = Number(form.elements.fim.value);
-    }
-    const duracao = fim - inicio;
-    const sobras = [];
-    if (inicio > gapInicio) sobras.push(`${String(gapInicio).padStart(2, '0')}h–${String(inicio).padStart(2, '0')}h`);
-    if (fim < gapFim) sobras.push(`${String(fim).padStart(2, '0')}h–${String(gapFim).padStart(2, '0')}h`);
-
-    previa.textContent = `Você vai ficar das ${String(inicio).padStart(2, '0')}h às ${String(fim).padStart(2, '0')}h (${duracao} ${duracao === 1 ? 'hora' : 'horas'}).` +
-      (sobras.length ? ` Vai continuar sem ninguém: ${sobras.join(' e ')}.` : '');
-  };
-
   dialogoEditarCobertura?.addEventListener('change', evento => {
     atualizarPreviaCobertura(evento.target.name === 'inicio');
   });
 
-  dialogoCobrirHorario?.addEventListener('change', evento => {
-    atualizarPreviaNovaCobertura(evento.target.name === 'inicio');
+  dialogoCobrirHorario?.addEventListener('change', () => {
+    core.atualizarPreviaTurno(dialogoCobrirHorario, horarioTurno);
   });
 
   listaDias.addEventListener('click', evento => {
@@ -533,17 +490,7 @@ window.MutiraoCuidadoPronto.then(core => {
       horarioTurno = botao.dataset.horario || '';
       const dialogo = document.getElementById(botao.dataset.dialogoDinamico);
       if (dialogo) {
-        dialogo.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || obterLacunasDia(diaTurno)[0]?.horario || ''}`;
-        if (dialogo.id === 'dialogo-cobrir-horario') {
-          const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
-          const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
-          const primeiroTurno = !construirLinhaDoTempoDia(diaTurno).length;
-          form.elements.cobrirTudo.checked = !primeiroTurno;
-          popularOpcoesHorario(form.elements.inicio, gapInicio, gapFim - 1, gapInicio);
-          popularOpcoesHorario(form.elements.fim, gapInicio + 1, gapFim, primeiroTurno ? gapInicio + 1 : gapFim);
-          atualizarPreviaNovaCobertura();
-        }
+        core.prepararFormularioTurno(dialogo, diaTurno, horarioTurno, botao.hasAttribute('data-adicionar-turno'));
         dialogo.showModal();
       }
     }
@@ -553,14 +500,15 @@ window.MutiraoCuidadoPronto.then(core => {
     evento.preventDefault();
     const form = evento.target;
     const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
-    const cobrirTudo = form.elements.cobrirTudo?.checked;
-    const inicio = cobrirTudo ? gapInicio : Number(form.elements.inicio.value);
-    const fim = cobrirTudo ? gapFim : Number(form.elements.fim.value);
+    const { inicio, fim } = core.obterIntervaloFormularioTurno(form, horarioTurno);
+    const tornarDiario = form.elements.escopoTurno.value === 'diario';
 
     if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
       titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
     })) return;
-    atualizarEstado(estado => aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim));
+    atualizarEstado(estado => core.definirRotinaTurno(
+      aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim), diaTurno, inicio, fim, tornarDiario
+    ));
     diaSelecionado = diaTurno;
     form.closest('dialog')?.close();
     const usuarioAtual = obterUsuarioAtual();
@@ -919,6 +867,7 @@ window.MutiraoCuidadoPronto.then(core => {
     const escolherAba = (indice, focar) => {
       const ativo = telaPequena.matches;
       botoesAba.forEach((botao, i) => {
+        botao.hidden = secoesAbas[i] === secaoEscala && !podeMostrarEscala();
         botao.setAttribute('aria-selected', String(i === indice));
         botao.tabIndex = i === indice ? 0 : -1;
       });
@@ -926,11 +875,11 @@ window.MutiraoCuidadoPronto.then(core => {
         if (ativo) {
           secao.setAttribute('role', 'tabpanel');
           secao.setAttribute('aria-labelledby', botoesAba[i].id);
-          secao.hidden = i !== indice;
+          secao.hidden = botoesAba[i].hidden || i !== indice;
         } else {
           secao.removeAttribute('role');
           secao.setAttribute('aria-labelledby', rotulosOriginais[i]);
-          secao.hidden = false;
+          secao.hidden = botoesAba[i].hidden;
         }
       });
       if (focar) botoesAba[indice].focus();
@@ -946,29 +895,32 @@ window.MutiraoCuidadoPronto.then(core => {
     listaAbas.addEventListener('keydown', evento => {
       const atual = botoesAba.indexOf(document.activeElement);
       if (atual === -1) return;
-      const total = botoesAba.length;
-      const destino = { ArrowRight: (atual + 1) % total, ArrowLeft: (atual - 1 + total) % total, Home: 0, End: total - 1 }[evento.key];
+      const visiveis = botoesAba.map((botao, indice) => botao.hidden ? -1 : indice).filter(indice => indice >= 0);
+      const posicao = visiveis.indexOf(atual);
+      const total = visiveis.length;
+      const destino = visiveis[{ ArrowRight: (posicao + 1) % total, ArrowLeft: (posicao - 1 + total) % total, Home: 0, End: total - 1 }[evento.key]];
       if (destino === undefined) return;
       evento.preventDefault();
       escolherAba(destino, true);
     });
 
-    const secaoEscala = secoesAbas.find(secao => secao.dataset.abaInicio === 'escala');
     if (secaoEscala) {
       const atualizarAviso = () => {
+        aviso.hidden = !podeMostrarEscala();
         const estado = obterEstado();
         const rotulos = DIAS_SEMANA.map(dia => obterRotuloLacuna(dia, estado));
         const semTurnos = rotulos.filter(rotulo => rotulo === 'Sem turnos').length;
         const comLacunas = rotulos.filter(rotulo => rotulo === 'Parcial' || rotulo === 'Descoberto').length;
-        const tipo = comLacunas ? 'atencao' : semTurnos ? 'neutro' : 'ok';
+        const eventual = core.obterNecessidadeAcompanhamento(estado) === core.ACOMPANHAMENTO.eventual;
+        const tipo = comLacunas ? 'atencao' : semTurnos || eventual ? 'neutro' : 'ok';
         const textos = [];
         if (comLacunas) textos.push(`${comLacunas} ${comLacunas === 1 ? 'dia' : 'dias'} com horário sem cobertura`);
-        if (semTurnos) textos.push(`${semTurnos} ${semTurnos === 1 ? 'dia' : 'dias'} sem turnos cadastrados`);
+        if (semTurnos && !eventual) textos.push(`${semTurnos} ${semTurnos === 1 ? 'dia' : 'dias'} sem turnos cadastrados`);
         aviso.dataset.tipo = tipo;
         aviso.querySelector('[data-aviso-icone]').innerHTML = { atencao: ICONE_ATENCAO, neutro: ICONE_NEUTRO, ok: ICONE_OK }[tipo];
         aviso.querySelector('[data-aviso-texto]').textContent = semTurnos === DIAS_SEMANA.length
           ? 'Ainda não há turnos cadastrados nesta semana.'
-          : textos.join(' · ') || 'Todos os horários da semana têm alguém escalado.';
+          : textos.join(' · ') || (eventual ? 'Os turnos pontuais aparecem no dia combinado.' : 'Os turnos previstos para a semana têm alguém escalado.');
       };
       aviso.querySelector('.inicio__aviso-acao').addEventListener('click', () => {
         escolherAba(secoesAbas.indexOf(secaoEscala), true);
@@ -979,6 +931,10 @@ window.MutiraoCuidadoPronto.then(core => {
       aviso.hidden = true;
     }
     escolherAba(0);
+    window.addEventListener('mutirao:cuidado-atualizado', () => {
+      const indice = abaAtual();
+      escolherAba(secoesAbas[indice] === secaoEscala && !podeMostrarEscala() ? 0 : indice);
+    });
     telaPequena.addEventListener('change', () => escolherAba(abaAtual()));
   }
 });

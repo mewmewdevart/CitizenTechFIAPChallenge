@@ -354,6 +354,12 @@
       </div>
       <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="cobertura">
+        <label hidden>Como será este acompanhamento?
+          <select name="escopoTurno" disabled>
+            <option value="pontual">Só para a data selecionada</option>
+            <option value="diario">Tornar este horário uma rotina diária na Ficha</option>
+          </select>
+        </label>
         <div class="dialogo-mvp__opcoes">
           <label><input type="checkbox" name="cobrirTudo" checked data-cobrir-tudo> Ficar o horário todo</label>
         </div>

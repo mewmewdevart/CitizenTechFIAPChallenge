@@ -428,7 +428,8 @@ window.MutiraoCuidadoPronto.then(core => {
   });
 
   const renderizarPessoa = () => {
-    const person = obterEstado().person;
+    const estado = obterEstado();
+    const { person } = estado;
     if (!person) return;
 
     const { nome, apelido } = person;
@@ -500,7 +501,18 @@ window.MutiraoCuidadoPronto.then(core => {
         return;
       }
       const valor = person[chave];
-      if (campos?.[chave]) campos[chave].value = chave === 'cobertura' ? (valor || 'Nenhum turno') : (valor ?? '');
+      if (chave === 'cobertura' && campos?.cobertura) {
+        const { eventual, integral, parcial, diario } = core.ACOMPANHAMENTO;
+        const atual = core.obterNecessidadeAcompanhamento(estado);
+        campos.cobertura.replaceChildren(
+          new Option('Não informada', ''),
+          ...[eventual, integral, parcial].map(opcao => new Option(opcao, opcao))
+        );
+        if (atual === diario) campos.cobertura.add(new Option(core.obterDescricaoAcompanhamento(estado), diario));
+        campos.cobertura.value = atual;
+      } else if (campos?.[chave]) {
+        campos[chave].value = valor ?? '';
+      }
 
       if (chave === 'historicoSaude') {
         const htmlSeguro = sanitizarHtmlEditor(valor);
