@@ -362,14 +362,21 @@ window.MutiraoCuidadoPronto = (async () => {
     return mesclados;
   };
 
+  const obterDescricaoAcompanhamento = (estado = estadoAtual) => {
+    const cobertura = estado.person?.cobertura;
+    return !cobertura || cobertura === 'Nenhum turno' ? 'Não informada' : cobertura;
+  };
+
   const obterLacunasDia = (dia, estado = estadoAtual) => construirLinhaDoTempoDia(dia, estado)
     .filter(item => item.tipo === 'lacuna')
     .map(({ inicio, fim }) => ({ inicio, fim, horario: formatarIntervaloTurno(inicio, fim - inicio) }));
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
     const escalaBase = obterEscalaDia(dia, estado);
-    const temCoberturaExtra = Boolean(estado.covered?.[dia]?.length || (estado.coberturasRede || []).some(item => item.dia === dia));
-    const escala = escalaBase.length ? escalaBase : (temCoberturaExtra ? [{ horario: '00h–24h', lacuna: true }] : []);
+    const temTurnoOuPedido = estado.covered?.[dia]?.length
+      || (estado.coberturasRede || []).some(item => item.dia === dia)
+      || Object.values(estado.atribuicoesTurno || {}).some(item => item.dia === dia);
+    const escala = escalaBase.length ? escalaBase : (temTurnoOuPedido ? [{ horario: '00h–24h', lacuna: true }] : []);
     const usuario = obterUsuarioAtual(estado);
     const pessoaUsuario = { nome: usuario.nomeComApelido, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
     const segmentos = [];
@@ -1116,6 +1123,7 @@ window.MutiraoCuidadoPronto = (async () => {
     formatarDataCurta,
     capitalizarPrimeira,
     possuiLacuna,
+    obterDescricaoAcompanhamento,
     obterLacunasDia,
     obterRotuloLacuna,
     construirLinhaDoTempoDia,

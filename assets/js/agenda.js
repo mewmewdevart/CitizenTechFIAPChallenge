@@ -42,6 +42,7 @@ window.MutiraoCuidadoPronto.then(core => {
   let mesAtual = Number(diaInicial.slice(5, 7)) - 1;
   let diaTurno = diaInicial;
   let horarioTurno = '';
+  let horarioPedido = '';
   let limiteMinTurno = 0;
   let limiteMaxTurno = 24;
   let eventoEmFocoId = null;
@@ -281,19 +282,28 @@ window.MutiraoCuidadoPronto.then(core => {
       </button>
     `).join('');
 
+    const renderizarPedido = ([chave, pedido]) => `
+      <div class="painel__acoes">
+        <p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · Aguardando aceite</p>
+        <button type="button" class="botao botao--secundario" data-decidir-atribuicao="aceitar" data-chave="${escaparHtml(chave)}">Simular aceite</button>
+        <button type="button" class="botao botao--secundario" data-decidir-atribuicao="recusar" data-chave="${escaparHtml(chave)}">Simular recusa</button>
+        <button type="button" class="botao botao--secundario" data-decidir-atribuicao="cancelar" data-chave="${escaparHtml(chave)}">Cancelar pedido</button>
+      </div>`;
+
     const linhaDescoberto = (horario, dia) => {
-      const atribuicao = estado.atribuicoesTurno?.[`${dia}|${horario}`];
-      const apelido = estado.person?.apelido || estado.person?.nome || 'quem recebe cuidado';
-      const detalhe = atribuicao
-        ? `Pedido de teste para ${atribuicao.responsavel} · Esperando aceitar (o horário ainda está sem ninguém).`
-        : `${apelido} precisa de alguém nesse horário.`;
+      const faixa = extrairHorasTurno(horario);
+      const pedidos = Object.entries(estado.atribuicoesTurno || {}).filter(([, pedido]) => {
+        if (pedido.dia !== dia) return false;
+        const intervalo = extrairHorasTurno(pedido.horario);
+        return faixa.inicio <= intervalo.inicio && intervalo.fim <= faixa.fim;
+      });
       return `<div class="agenda__lacuna">
       <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div>
-        <strong>${escaparHtml(horario)} · ${atribuicao ? 'Pedido de teste' : 'Horário sem ninguém'}</strong>
-        <p>${escaparHtml(detalhe)}</p>
+        <strong>${escaparHtml(horario)} · Horário sem ninguém</strong>
+        <p>Ainda não há uma pessoa escalada para esse horário.</p>
+        ${pedidos.map(renderizarPedido).join('')}
       </div>
-       ${atribuicao ? `<div class="painel__acoes"><button type="button" class="botao botao--secundario" data-decidir-atribuicao="aceitar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Simular aceite</button><button type="button" class="botao botao--secundario" data-decidir-atribuicao="recusar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Simular recusa</button><button type="button" class="botao botao--secundario" data-decidir-atribuicao="cancelar" data-chave="${escaparHtml(`${dia}|${horario}`)}">Cancelar pedido</button></div>` : ''}
       <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Ficar nesse horário</button>
     </div>`;
     };
@@ -681,11 +691,15 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     if (botao.hasAttribute('data-abrir-atribuir-turno')) {
-      dialogoCobrirHorario?.close();
+      const camposCobertura = dialogoCobrirHorario.querySelector('[data-formulario-mvp="cobertura"]').elements;
+      const inicio = Number(camposCobertura.inicio.value);
+      const fim = Number(camposCobertura.fim.value);
+      horarioPedido = camposCobertura.cobrirTudo.checked ? horarioTurno : formatarIntervaloTurno(inicio, fim - inicio);
+      dialogoCobrirHorario.close();
       const dialogoAtribuir = document.getElementById('dialogo-atribuir-turno');
       if (dialogoAtribuir) {
         const ctx = dialogoAtribuir.querySelector('[data-atribuir-contexto]');
-        if (ctx) ctx.textContent = `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)} · ${horarioTurno || core.obterLacunasDia(diaTurno)[0]?.horario || ''}`;
+        if (ctx) ctx.textContent = `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)} · ${horarioPedido}`;
         dialogoAtribuir.showModal();
       }
       return;
@@ -707,9 +721,10 @@ window.MutiraoCuidadoPronto.then(core => {
         if (dialogo.id === 'dialogo-cobrir-horario') {
           const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
           const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
-          form.elements.cobrirTudo.checked = true;
+          const primeiroTurno = !construirLinhaDoTempoDia(diaTurno).length;
+          form.elements.cobrirTudo.checked = !primeiroTurno;
           popularOpcoesHorario(form.elements.inicio, gapInicio, gapFim - 1, gapInicio);
-          popularOpcoesHorario(form.elements.fim, gapInicio + 1, gapFim, gapFim);
+          popularOpcoesHorario(form.elements.fim, gapInicio + 1, gapFim, primeiroTurno ? gapInicio + 1 : gapFim);
           atualizarPreviaNovaCobertura();
         }
         dialogo.showModal();
@@ -856,7 +871,18 @@ window.MutiraoCuidadoPronto.then(core => {
       const responsavel = campos.responsavel;
       if (!core.obterParticipantesRede().some(pessoa => pessoa.nome === responsavel)) return;
       const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
-      const horarioAlvo = horarioTurno || core.obterLacunasDia(diaTurno)[0]?.horario || '';
+      const horarioAlvo = horarioPedido;
+      const intervaloPedido = extrairHorasTurno(horarioAlvo);
+      const existePedidoNoHorario = Object.values(obterEstado().atribuicoesTurno || {}).some(pedido => {
+        if (pedido.dia !== diaTurno) return false;
+        const outro = extrairHorasTurno(pedido.horario);
+        return intervaloPedido.inicio < outro.fim && outro.inicio < intervaloPedido.fim;
+      });
+      if (existePedidoNoHorario) {
+        formulario.closest('dialog')?.close();
+        registrarStatus('Já existe um pedido para parte desse horário. Escolha outro intervalo ou cancele o pedido anterior.');
+        return;
+      }
       const avatar = core.resolverPessoaRede(responsavel).src;
       if (horarioAlvo) {
         atualizarEstado(estado => ({

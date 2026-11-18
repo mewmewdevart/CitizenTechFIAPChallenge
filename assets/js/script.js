@@ -921,7 +921,7 @@ function sincronizarPerfilGlobal() {
     img.src = pessoa.foto || pessoa.mascote || 'assets/media/mascotes/icone-mascote-forma.svg';
   });
   document.querySelectorAll('[data-cobertura-acompanhada]').forEach(item => {
-    item.textContent = pessoa.cobertura || 'Nenhum turno';
+    item.textContent = 'Necessidade de acompanhamento: ' + core.obterDescricaoAcompanhamento().toLocaleLowerCase('pt-BR');
   });
   renderizarSeletorPessoas();
   renderizarNotificacoes();

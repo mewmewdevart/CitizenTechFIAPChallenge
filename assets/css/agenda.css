@@ -665,22 +665,9 @@ html.acessibilidade--alto-contraste.tema--acolhedor [data-turnos] {
 }
 
 .agenda__coluna-calendario {
-  --dia-sucesso-fundo: #DDF3E4;
-  --dia-sucesso: #1E6B3A;
-  --dia-foco: #1B5FA8;
-  --dia-parcial: #FFE08A;
-}
-
-html.tema--acolhedor .agenda__coluna-calendario {
   --dia-sucesso-fundo: var(--cor-aviso-sucesso-claro);
   --dia-sucesso: var(--cor-aviso-sucesso);
-  --dia-parcial: var(--cor-aviso-atencao-claro);
-}
-
-html.acessibilidade--alto-contraste .agenda__coluna-calendario {
-  --dia-sucesso-fundo: var(--cor-aviso-sucesso-claro);
-  --dia-sucesso: var(--cor-aviso-sucesso);
-  --dia-foco: #FFE600;
+  --dia-foco: var(--cor-primaria);
   --dia-parcial: var(--cor-aviso-atencao-claro);
 }
 
@@ -847,5 +834,5 @@ html.acessibilidade--alto-contraste .agenda__amostra.calendario-mensal__dia--par
 }
 
 html.acessibilidade--alto-contraste .calendario-mensal__selo-consulta {
-  background: #7CC4FF;
+  background: var(--cor-aviso-info-escuro);
 }

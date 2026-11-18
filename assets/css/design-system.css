@@ -354,7 +354,7 @@ body.menu-fechado .conteudo-pagina.ds {
   align-items: center;
   justify-content: space-between;
   padding: var(--espaco-xs) var(--espaco-md);
-  background: #221e2b;
+  background: var(--cor-neutra-escura-01);
   font-size: var(--texto-legenda);
   color: var(--cor-neutra-clara-03);
 }

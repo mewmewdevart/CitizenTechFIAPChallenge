@@ -614,18 +614,18 @@ html.tema--acolhedor .aviso-remedio {
   padding: var(--espaco-md) var(--espaco-md) var(--espaco-md) var(--espaco-lg);
   border: 0;
   border-radius: var(--raio-xl);
-  background: #12332E;
-  color: #FFFFFF;
-  box-shadow: 4px 4px 0 #1B7D4A;
+  background: var(--cor-texto-principal);
+  color: var(--cor-neutra-clara-02);
+  box-shadow: 4px 4px 0 var(--cor-primaria);
   translate: -50% 0;
 }
 
 html.tema--acolhedor .aviso-remedio>i {
-  color: #7FD3A0;
+  color: var(--cor-aviso-sucesso-claro);
 }
 
 html.tema--acolhedor .aviso-remedio [data-desfazer-remedio] {
-  color: #FFE59A;
+  color: var(--cor-aviso-atencao-claro);
   text-decoration: none;
 }
 
@@ -635,14 +635,14 @@ html.acessibilidade--alto-contraste .aviso-remedio {
   bottom: calc(var(--espaco-xl) + env(safe-area-inset-bottom));
   width: min(480px, calc(100vw - 32px));
   max-width: none;
-  border: 2px solid #FFFFFF;
-  background: #000000;
-  color: #FFFFFF;
+  border: var(--borda-padrao);
+  background: var(--cor-fundo-pagina);
+  color: var(--cor-texto-principal);
   translate: -50% 0;
 }
 
 html.acessibilidade--alto-contraste .aviso-remedio [data-desfazer-remedio] {
-  color: #FFE600;
+  color: var(--cor-primaria);
 }
 
 @keyframes aviso-remedio-entrar {
@@ -1860,7 +1860,7 @@ html.tema--acolhedor .botao--terciario {
 }
 
 html.acessibilidade--alto-contraste .pote__fechado {
-  color: #000000;
+  color: var(--pote-check-cor);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1902,18 +1902,12 @@ html.acessibilidade--alto-contraste .pote__fechado {
 
 html.tema--acolhedor .mural {
   --fonte-manuscrita: "Gochi Hand", "Onest", cursive;
-  --cor-mural: #D9D9D9;
-  --cor-postit-manteiga: #FFF6C8;
-  --cor-postit-branco: #FFFFFF;
-  --postit-borda: 1.5px solid #12332E;
-  --postit-sombra: 5px 5px 0 #12332E;
-  --cor-borda-controle: #12332E;
   --espessura-borda: 2px;
 }
 
 html.acessibilidade--alto-contraste .mural {
   --fonte-manuscrita: var(--fonte-interface);
-  --cor-postit-manteiga: #0D0D0D;
+  --cor-postit-manteiga: var(--cor-superficie);
   --postit-sombra: none;
 }
 
@@ -1923,7 +1917,7 @@ html:not(.acessibilidade--alto-contraste) .mural .recado-postit blockquote {
 }
 
 html.tema--acolhedor .mural .recado-postit blockquote {
-  color: #12332E;
+  color: var(--cor-texto-principal);
 }
 
 .mural__quadro {
@@ -2069,10 +2063,10 @@ button.figurinha-colada:focus-visible {
   place-items: center;
   width: 22px;
   height: 22px;
-  border: 1.5px solid #302B3D;
+  border: 1.5px solid var(--cor-neutra-escura-01);
   border-radius: 50%;
   background: #FFC94D;
-  color: #302B3D;
+  color: var(--cor-neutra-escura-01);
   font-size: var(--texto-micro);
   font-weight: var(--peso-negrito);
   rotate: 0deg;
@@ -2591,13 +2585,9 @@ html.tema--acolhedor [data-pagina-mvp="pessoas"] [aria-labelledby="titulo-partic
   }
 }
 
-html:not(.acessibilidade--alto-contraste) .inicio__resumo .painel__bloco {
-  border: 1px solid #D5DAEA;
-}
-
 html.tema--acolhedor:not(.acessibilidade--alto-contraste) .inicio__resumo .painel__bloco {
   border: 1.5px solid rgb(18 51 46 / 0.45);
-  background: #E4F2EA;
+  background: var(--cor-superficie-suave);
 }
 
 .inicio__abas,

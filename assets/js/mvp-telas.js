@@ -540,7 +540,7 @@ window.MutiraoCuidadoPronto.then(core => {
         const elNascimento = pagina.querySelector('[data-pessoa-nascimento]');
         if (elNascimento) elNascimento.textContent = `${anos} anos · ${nascimento}`;
       } else {
-        no.textContent = valor || (chave === 'cobertura' ? 'Nenhum turno' : 'Não informado');
+        no.textContent = chave === 'cobertura' ? core.obterDescricaoAcompanhamento() : (valor || 'Não informado');
         if (chave === 'nascimento') {
           const elNascimento = pagina.querySelector('[data-pessoa-nascimento]');
           if (elNascimento) elNascimento.textContent = 'Nascimento não informado';
