@@ -12,6 +12,21 @@
 
 .pular-conteudo:focus-visible {
   top: var(--espaco-md);
+  outline: var(--anel-foco);
+  outline-offset: 2px;
+}
+
+#conteudo {
+  scroll-margin-top: calc(var(--altura-barra-superior) + var(--espaco-md));
+}
+
+#conteudo:focus {
+  outline: var(--anel-foco);
+  outline-offset: -4px;
+}
+
+#conteudo:focus:not(:focus-visible) {
+  outline: none;
 }
 
 :is(.fa-solid, .fa-regular, .fa-brands, .bi) {

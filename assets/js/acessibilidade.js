@@ -435,9 +435,27 @@
     sincronizarInterface();
   }
 
+  function configurarPularConteudo() {
+    const pular = document.querySelector('.pular-conteudo');
+    if (!pular) return;
+    pular.addEventListener('click', (evento) => {
+      const seletor = pular.getAttribute('href');
+      const alvo = seletor && seletor.startsWith('#') ? document.querySelector(seletor) : null;
+      if (!alvo) return;
+      evento.preventDefault();
+      if (!alvo.hasAttribute('tabindex')) alvo.setAttribute('tabindex', '-1');
+      alvo.focus();
+      alvo.scrollIntoView({ behavior: 'auto', block: 'start' });
+    });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', criarPainelAcessibilidade);
+    document.addEventListener('DOMContentLoaded', () => {
+      configurarPularConteudo();
+      criarPainelAcessibilidade();
+    });
   } else {
+    configurarPularConteudo();
     criarPainelAcessibilidade();
   }
 })();
