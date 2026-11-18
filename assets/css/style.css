@@ -88,8 +88,8 @@
 .busca-topo--aberta {
   border-color: var(--cor-primaria);
   background: var(--cor-superficie);
-  outline: 2px solid color-mix(in srgb, var(--cor-primaria) 16%, transparent);
-  outline-offset: 0;
+  outline: var(--anel-foco);
+  outline-offset: 2px;
 }
 
 .busca-topo__gatilho {
@@ -398,7 +398,7 @@ summary::after {
 }
 
 .seletor-pessoa summary {
-  border: var(--borda-padrao);
+  border: var(--borda-controle);
   padding: 10px var(--espaco-md);
   min-height: 32px;
 }

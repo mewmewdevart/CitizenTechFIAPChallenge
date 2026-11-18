@@ -108,7 +108,8 @@
 
 .login__campo:focus-within {
   border-color: var(--cor-primaria);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-primaria) 18%, transparent);
+  outline: var(--anel-foco);
+  outline-offset: 2px;
 }
 
 .login__campo:has([aria-invalid="true"]) {

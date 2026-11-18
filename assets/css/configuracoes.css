@@ -345,7 +345,7 @@ html.acessibilidade--alto-contraste .configuracoes__bloco {
   gap: var(--espaco-md);
   width: 100%;
   padding: var(--espaco-md);
-  border: var(--borda-padrao);
+  border: var(--borda-controle);
   border-radius: var(--raio-lg);
   background: var(--cor-fundo-pagina);
   color: var(--cor-texto-principal);

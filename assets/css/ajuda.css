@@ -33,6 +33,10 @@
   background: var(--cor-superficie);
 }
 
+.ajuda__pergunta {
+  border-color: var(--cor-borda-controle);
+}
+
 html.tema--acolhedor .ajuda__contato {
   box-shadow: var(--sombra-cartao);
 }

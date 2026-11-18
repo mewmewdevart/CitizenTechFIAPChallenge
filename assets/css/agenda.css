@@ -347,7 +347,7 @@ html.tema--acolhedor .agenda__avatar {
   text-align: left;
   color: var(--cor-texto-principal);
   background: var(--cor-superficie);
-  border: var(--borda-padrao);
+  border: var(--borda-controle);
   border-radius: var(--raio-xl);
   cursor: pointer;
 }
