@@ -1,13 +1,18 @@
 <div align="center">
   <img width="160" height="160" alt="Logotipo do Mutirão — Plataforma de organização do cuidado compartilhado" src="https://github.com/user-attachments/assets/d8184c61-a040-4771-9bc1-860f6ddcb88a" />
   <h1>Mutirão</h1>
-  <h3>O cuidar fica mais simples quando fazemos um mutirão!</h3>
+  <h3>O cuidar fica mais leve quando formamos um mutirão.</h3>
   <p><b>Global Solution 2026 · Citizen Tech · Web Design FIAP</b></p>
-  <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir responsabilidades e acompanhar informações de saúde no cuidado compartilhado de pessoas de qualquer idade.</p>
-  <p><a href="https://mutirao-citizen-tech.vercel.app/">Acessar o Projeto</a></p>
+  <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir responsabilidades e passar adiante o que aconteceu no cuidado compartilhado.</p>
   <p>
-    <img src="https://img.shields.io/badge/Desafio-Citizen%20Tech-8495E1?style=for-the-badge" alt="Desafio Citizen Tech" />
-    <img src="https://img.shields.io/badge/Projeto-Acad%C3%AAmico-8495E1?style=for-the-badge" alt="Projeto acadêmico" />
+    <a href="https://mutirao-citizen-tech.vercel.app/">Acessar o Mutirão</a> ·
+    <a href="https://mutirao-pontobot-frontend.vercel.app/">PontoBOT (Assistente)</a> ·
+    <a href="https://github.com/mewmewdevart/PontoBOT">Repositório PontoBOT</a>
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Desafio-Citizen%20Tech-4B5DA9?style=for-the-badge" alt="Desafio Citizen Tech" />
+    <img src="https://img.shields.io/badge/HTML%20%7C%20CSS%20%7C%20JS-Nativo-146A3A?style=for-the-badge" alt="HTML, CSS e JS Nativos" />
+    <img src="https://img.shields.io/badge/Testes-17%20passando-235A38?style=for-the-badge" alt="17 testes passando" />
   </p>
 </div>
 
@@ -15,58 +20,126 @@
 
 ## 📌 Resumo do Projeto
 
-O **Mutirão** é uma plataforma desenvolvida para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech**. O projeto parte de uma situação comum no cuidado compartilhado de pessoas de qualquer idade: quando informações sobre compromissos, tarefas e saúde ficam espalhadas em conversas e anotações, familiares e cuidadores têm dificuldade para acompanhar o que precisa ser feito e quem ficou responsável por cada atividade.
+O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
 
-A proposta centraliza essas informações em um único espaço compartilhado, facilitando a organização da rotina, a divisão equilibrada de tarefas e o acompanhamento do cuidado no dia a dia.
+A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
-<!-- Insira uma captura da landing page ou do protótipo com texto alternativo. -->
+- **Cenário de demonstração:** Ao clicar em **Entrar na demonstração** (`index.html`), a aplicação abre na ficha inicial do **Flavio Barbosa (Flavinho)** para mostrar estados iniciais com poucos registros. Para percorrer o cenário completo de revezamento (data de referência `10/11/2026`), selecione **Mari** no seletor **Quem recebe cuidado** no topo da tela: Zé identifica a lacuna das `12h` às `13h`, assume o horário, registra uma dose no porta-remédios e deixa um recado no Diário da Ficha para a próxima pessoa.
+
+---
 
 ## ✨ Principais Soluções e Diferenciais
 
-- **Rotina de cuidado** — centraliza compromissos, horários e tarefas diárias em um só lugar.
-- **Divisão de responsabilidades** — distribui tarefas com clareza entre familiares e cuidadores.
-- **Acompanhamento de saúde** — reúne observações e registros relevantes para apoiar a rede de cuidado no dia a dia.
+- **Passagem de cuidado integrada:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e na **Ficha**.
+- **Escala com distinção entre vazio e lacuna:** Diferencia acompanhamento integral (24h), rotinas recorrentes (diárias e semanais), exceções por data e turnos pontuais.
+- **Porta-remédios compartilhado e estoque:** Agrupamento por horário com registro de dose dada, pendência com motivo, desfazer e saldo derivado por ficha.
+- **Apoio à rede e serviços públicos:** Guia e questionário em **Direitos e serviços** com busca territorial (IBGE e ViaCEP), mural de recados, pedidos de folga e catálogo de referências em **Documentos**.
+- **Acessibilidade e dois temas visuais:** Temas **Neutro** (`Inter`, `#4B5DA9`) e **Acolhedor** (neobrutalismo suave com `Onest`, `Gloock`, `Gochi Hand` e `#146A3A`), além de painel de recursos assistivos (alto contraste, escala de fonte, espaçamento de texto, destaque de links, redução de animações e VLibras).
+- **Assistente PontoBOT:** Web Component integrado para orientação de navegação em linguagem natural, com contingência local e backend dedicado.
 
-<!-- Revise os itens conforme o escopo confirmado e indique o que já está disponível. -->
+---
 
 ## 📁 Estrutura do Projeto
-
-O painel é uma aplicação multipágina em HTML, CSS e JavaScript. `home.html` abre o Início. As outras páginas ficam na raiz, e os estilos, scripts e imagens ficam em `assets/`.
-
-O cenário de demonstração usa 10 de novembro de 2026 como referência. A base fixa de Mari e Flavio fica em `assets/data/perfis-acompanhados.json`. O navegador salva na aba atual a seleção e as alterações de cada ficha. A conta do Zé é comum, e os registros de cuidado e a administração de cada rede pertencem à ficha selecionada. Convites e mensagens da Ajuda são simulados, e Documentos cadastra referências sem guardar anexos.
 
 ```text
 CitizenTechFIAPChallenge/
 ├── assets/
-│   ├── css/       # Estilos compartilhados e por seção
-│   ├── data/      # Base dos perfis acompanhados
-│   ├── js/        # Scripts e interações da página
-│   └── media/     # Logos, ícones e imagens
-├── home.html     # Página principal
-└── README.md      # Visão geral e instruções do projeto
+│   ├── css/
+│   │   ├── variaveis.css        # Tokens de cor, tipografia, espaçamento, temas e alto contraste
+│   │   ├── style.css            # Estrutura global, barra lateral, topo, busca e responsividade
+│   │   ├── componentes.css      # Botões, selos, alertas, formulários, rodapé e estados
+│   │   ├── acessibilidade.css   # Painel lateral de recursos assistivos
+│   │   ├── painel-cuidado.css   # Início, porta-remédios, passagem de cuidado e mural
+│   │   ├── agenda.css           # Calendário, tarefas e escala de turnos
+│   │   ├── ficha.css            # Ficha da pessoa acompanhada, Diário e impressão
+│   │   ├── recursos-apoio.css   # Documentos, Pessoas e Direitos e serviços
+│   │   ├── configuracoes.css    # Preferências de avisos e seleção de tema
+│   │   ├── ajuda.css            # Perguntas frequentes e formulário demonstrativo
+│   │   ├── login.css            # Tela de entrada e mascotes interativos
+│   │   └── mvp-telas.css        # Complementos de telas e calendário mensal
+│   ├── data/
+│   │   └── perfis-acompanhados.json  # Base fictícia de Mari e Flavio (referência 10/11/2026)
+│   ├── js/
+│   │   ├── estado-cuidado.mjs   # Normalização, migração (v1 → v2), isolamento e persistência
+│   │   ├── nucleo-cuidado.js    # Regras de escala, doses, estoque, Diário e eventos
+│   │   ├── script.js            # Navegação, seletor de perfil, busca global e PontoBOT
+│   │   ├── acessibilidade.js    # Preferências de leitura e alternância de temas
+│   │   └── *.js                 # Controladores específicos de cada página
+│   └── media/                   # Mascotes SVG, ícones, stickers, avatares e sons
+├── tests/                       # Suíte automatizada com node:test (17 testes)
+├── *.html                       # 12 páginas HTML semânticas na raiz
+└── README.md                    # Documentação do projeto
 ```
+
+### Páginas do Protótipo (12 telas)
+
+| Página | Arquivo | Responsabilidade |
+| :--- | :--- | :--- |
+| Entrada | `index.html` | Acesso demonstrativo, validação e mascotes (`login.js`) |
+| Início | `home.html` | Prioridades do turno, porta-remédios, próximos compromissos e passagem (`inicio.js`, `porta-remedios.js`) |
+| Agenda | `agenda.html` | Calendário mensal, exportação ICS, tarefas e escala (`agenda.js`) |
+| Medicamentos | `medicamentos.html` | Doses por horário, anotações, itens e estoque (`medicamentos.js`, `porta-remedios.js`) |
+| Ficha | `ficha.html` | Dados da pessoa acompanhada, acompanhamento e Diário (`mvp-telas.js`) |
+| Documentos | `documentos.html` | Referências pesquisáveis por categoria e vínculo com compromissos (`documentos.js`) |
+| Pessoas da rede | `pessoas.html` | Participantes e convites simulados (`pessoas.js`) |
+| Meu perfil | `meu-perfil.html` | Conta demonstrativa do Zé, pedidos de folga e mural de recados (`meu-perfil.js`, `mural-recados.js`) |
+| Direitos e serviços | `direitos.html` | Guia, questionário e consulta territorial via IBGE e ViaCEP (`direitos.js`) |
+| Configurações | `configuracoes.html` | Preferências de avisos na sessão e seleção de tema (`configuracoes.js`) |
+| Ajuda | `ajuda.html` | Perguntas frequentes e atendimento demonstrativo (`ajuda.js`) |
+| Privacidade | `privacidade.html` | Transparência sobre dados simulados, armazenamento local e integrações (`script.js`) |
+
+---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **HTML5** — estrutura semântica do painel e das páginas.
-- **CSS3** — identidade visual, layout e responsividade.
-- **JavaScript** — interações da interface.
-- **Figma** — design e prototipação da interface.
+- **HTML5 semântico** — regiões (`main`, `nav`, `aside`, `header`, `footer`), diálogos nativos e atributos ARIA.
+- **CSS3** — design tokens em variáveis CSS, temas **Neutro**, **Acolhedor** e **Alto Contraste**, Grid/Flexbox e breakpoints responsivos.
+- **JavaScript nativo (ES Modules e IIFE)** — gerenciamento de estado imutável por ficha (`estado-cuidado.mjs`), regras de negócio (`nucleo-cuidado.js`) e manipulação do DOM.
+- **Node.js (`node:test`)** — executor nativo para validação automatizada das regras de negócio e persistência.
+- **Integrações externas:** Google Fonts, Font Awesome, Bootstrap Icons, VLibras, APIs IBGE/ViaCEP e assistente [PontoBOT](https://github.com/mewmewdevart/PontoBOT).
+
+---
 
 ## 🚀 Como Executar Localmente
 
-**Pré-requisitos** — Git para clonar o repositório e um navegador web.
+**Pré-requisitos:** Git, um navegador web e um servidor HTTP local (necessário para o navegador carregar `assets/data/perfis-acompanhados.json` via `fetch`). Para rodar os testes automatizados, utilize **Node.js 22+**.
 
-1. Clone o repositório e acesse a pasta do projeto.
+1. Clone o repositório e acesse a pasta do projeto:
 
    ```bash
    git clone https://github.com/mewmewdevart/CitizenTechFIAPChallenge.git
    cd CitizenTechFIAPChallenge
    ```
 
-2. Sirva a pasta com a extensão **Live Server** do VS Code ou, se tiver Python, execute `python -m http.server 8000`. Abra `index.html` pelo endereço do servidor, por exemplo, `http://localhost:8000/`. O navegador carrega o JSON pelo servidor.
+2. Inicie um servidor HTTP local na raiz do projeto (ex.: com Live Server do VS Code ou Python):
 
-3. Se tiver Node.js 22 ou mais recente, execute `node --test tests/*.test.mjs` para rodar toda a suíte (11 testes cobrindo perfis fixos, isolamento, migração, turnos/escala, doses e compromissos).
+   ```bash
+   python -m http.server 8000 --bind 127.0.0.1
+   ```
+
+   Acesse `http://127.0.0.1:8000/` no navegador.
+
+---
+
+## 🧪 Qualidade e Testes Automatizados
+
+Execute a suíte completa na raiz do projeto com o executor nativo do Node.js:
+
+```bash
+node --test tests/*.test.mjs
+```
+
+Atualmente a suíte conta com **17 testes** distribuídos em **5 arquivos**:
+
+| Arquivo | Casos | Cobertura |
+| :--- | :---: | :--- |
+| `tests/estado-cuidado.test.mjs` | 5 | Seleção de perfil, recarga, isolamento, migrações (`v1` → `v2`), saldo zero e falha de gravação |
+| `tests/compromissos-agenda.test.mjs` | 2 | Compromissos com horário opcional, isolamento entre perfis e exportação ICS |
+| `tests/medicamentos-doses.test.mjs` | 2 | Preservação de finalidades da base, registro de dose e ação de desfazer |
+| `tests/turnos-escala.test.mjs` | 2 | Normalização de rotinas semanais, janela diária e cobertura pontual |
+| `tests/recorrencias-escala.test.mjs` | 6 | Exceções por data, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
+
+---
 
 ## 👥 Integrantes — Grupo Ctrl + People
 
@@ -74,9 +147,12 @@ CitizenTechFIAPChallenge/
 - **Larissa Cristina Benedito** — RM 570970 — [rm570970@fiap.com.br](mailto:rm570970@fiap.com.br)
 - **Mayla Mayumi Motobe** — RM 571213 — [rm571213@fiap.com.br](mailto:rm571213@fiap.com.br)
 
+---
 
-## 🔗 Referências
+## 🔗 Referências e Publicação
 
-- [Figma — GS Citizen Tech · Idosos](https://www.figma.com/design/ETGakMsnSiQnkVIekTOnKi/GS-Citizen-Tech---Idosos?node-id=160-384)
-- [Shields.io](https://shields.io/) — badges do README.
-<!-- Inclua fontes da pesquisa, materiais da FIAP e créditos de imagens ou ícones utilizados. -->
+- **Website publicado:** [mutirao-citizen-tech.vercel.app](https://mutirao-citizen-tech.vercel.app/)
+- **PontoBOT publicado:** [mutirao-pontobot-frontend.vercel.app](https://mutirao-pontobot-frontend.vercel.app/) · [Repositório](https://github.com/mewmewdevart/PontoBOT)
+- **Protótipo no Figma:** [GS Citizen Tech · Idosos (Mutirão)](https://www.figma.com/design/mzWEL8c6qp2yhZBmiQ4hut/-Projeto--GS-Citizen-Tech---GS-Citizen-Tech---Mutir%C3%A3o?node-id=2013-960&t=FJw3krrMZXicKrdg-1)
+- **Fundamentação social:** IBGE (PNAD Contínua 2022), ELSI-Brasil (Giacomin et al., 2018), *Managing the Binder* (Soni et al., 2026), Plano Brasil que Cuida (MDS) e ODS 5 (meta 5.4), ODS 3 e ODS 10 (ONU Brasil).
+- **Normas de acessibilidade:** [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/) e ABNT NBR 17225:2025.
