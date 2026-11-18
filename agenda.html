@@ -133,10 +133,9 @@
       <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
-        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
-          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button"
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
+        href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a
+        href="ajuda.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
@@ -178,11 +177,29 @@
             </div>
           </div>
           <div class="agenda__legenda">
-            <p><span class="agenda__amostra agenda__amostra--selecionado" aria-hidden="true">10</span> Dia que você está vendo</p>
-            <p><span class="agenda__amostra calendario-mensal__dia--sem-ninguem" aria-hidden="true">11<span class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg></span></span> Sem ninguém em algum horário</p>
-            <p><span class="agenda__amostra calendario-mensal__dia--parcial" aria-hidden="true">12<span class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></span></span> Falta alguém em parte do dia</p>
-            <p><span class="agenda__amostra calendario-mensal__dia--coberto" aria-hidden="true">13<span class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span> Todos os horários com alguém</p>
-            <p><span class="agenda__amostra calendario-mensal__dia--consulta" aria-hidden="true">18<span class="calendario-mensal__selo-consulta"></span></span> Tem consulta ou exame</p>
+            <p><span class="agenda__amostra agenda__amostra--selecionado" aria-hidden="true">10</span> Dia que você está
+              vendo</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--sem-ninguem" aria-hidden="true">11<span
+                  class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                    stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3 2.5 20h19z" />
+                    <path d="M12 10v4.5" />
+                    <circle cx="12" cy="17.3" r=".6" fill="currentColor" />
+                  </svg></span></span> Sem ninguém em algum horário</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--parcial" aria-hidden="true">12<span
+                  class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                    stroke="currentColor" stroke-width="2.4">
+                    <circle cx="12" cy="12" r="8.5" />
+                    <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" />
+                  </svg></span></span> Falta alguém em parte do dia</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--coberto" aria-hidden="true">13<span
+                  class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" />
+                    <path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg></span></span> Todos os horários com alguém</p>
+            <p><span class="agenda__amostra calendario-mensal__dia--consulta" aria-hidden="true">18<span
+                  class="calendario-mensal__selo-consulta"></span></span> Tem consulta ou exame</p>
           </div>
         </div>
 
@@ -209,7 +226,8 @@
       <section class="cartao agenda__painel">
         <div class="agenda__painel-cabecalho">
           <h2 data-titulo-escala tabindex="-1">Quem cuida na semana · 9 a 15 nov.</h2>
-          <button type="button" class="botao botao--secundario" data-adicionar-turno-cabecalho data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno hidden>
+          <button type="button" class="botao botao--secundario" data-adicionar-turno-cabecalho
+            data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno hidden>
             <i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar turno
           </button>
         </div>
@@ -244,8 +262,8 @@
         <label><input type="checkbox" value="Escala de quem cuida"> Escala de quem cuida</label>
         <label><input type="checkbox" value="Tarefas"> Tarefas do dia</label>
       </fieldset>
-      <label class="dialogo-mvp__rotulo-compartilhar">Como a mensagem vai ficar<textarea data-previa-compartilhar readonly
-          rows="6"></textarea></label>
+      <label class="dialogo-mvp__rotulo-compartilhar">Como a mensagem vai ficar<textarea data-previa-compartilhar
+          readonly rows="6"></textarea></label>
       <p class="dialogo-mvp__retorno" data-retorno-compartilhar role="status" aria-live="polite"></p>
       <div class="dialogo-mvp__acoes">
         <button class="botao botao--secundario" type="button" data-compartilhar="copy"><i class="fa-regular fa-copy"
@@ -267,10 +285,11 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Baixe as consultas do mês para colocar no calendário do celular (Google Agenda, Apple Calendário ou Outlook).</p>
+      <p>Baixe as consultas do mês para colocar no calendário do celular (Google Agenda, Apple Calendário ou Outlook).
+      </p>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <button data-agenda-exportar class="botao botao--primario" type="button">Baixar para o calendário do celular</button>
+        <button data-agenda-exportar class="botao botao--primario" type="button">Baixar o calendário</button>
       </div>
     </dialog>
 
@@ -369,7 +388,8 @@
         <div class="dialogo-mvp__secao" data-bloco-cancelar-lote hidden>
           <p class="dialogo-mvp__secao-titulo">Cancelamento em lote</p>
           <p class="formulario-mvp__ajuda" data-texto-cancelar-lote></p>
-          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar todas as minhas participações</button>
+          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar todas as minhas
+            participações</button>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>
