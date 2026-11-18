@@ -392,11 +392,12 @@ window.MutiraoCuidadoPronto = (async () => {
   const obterDescricaoAcompanhamento = (estado = estadoAtual) => {
     const necessidade = obterNecessidadeAcompanhamento(estado);
     const janela = estado.janelaAcompanhamento;
-    const base = necessidade === ACOMPANHAMENTO.diario && janela
-      ? `Todos os dias, ${formatarIntervaloTurno(janela.inicio, janela.fim - janela.inicio)}`
-      : necessidade || 'Não informada';
     const semanais = necessidade === ACOMPANHAMENTO.integral ? [] : obterRotinasSemanais(estado).map(descreverRotinaSemanal);
-    return [base, ...semanais].join(' · ');
+    if (necessidade === ACOMPANHAMENTO.diario && janela) {
+      return [`Todos os dias, ${formatarIntervaloTurno(janela.inicio, janela.fim - janela.inicio)}`, ...semanais].join(' · ');
+    }
+    if (necessidade) return [necessidade, ...semanais].join(' · ');
+    return semanais.length ? semanais.join(' · ') : 'Não informada';
   };
 
   // Fonte única da expectativa de cuidado: quais faixas do dia precisam de alguém.

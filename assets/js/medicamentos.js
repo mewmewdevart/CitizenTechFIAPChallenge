@@ -481,7 +481,7 @@ window.MutiraoCuidadoPronto.then(core => {
       const ehInsumo = item.tipo === 'Insumo';
       secaoOrientacao.hidden = ehInsumo;
       if (!ehInsumo) {
-        const finalidade = obterEstado().descricoesMedicamentos?.[item.nome] || item.finalidade || '';
+        const finalidade = obterEstado().finalidadesMedicacao?.[item.nome] || item.finalidade || '';
         orientacaoEl.textContent = finalidade
           ? `Indicado ${finalidade}. Veja a dose na receita.`
           : 'Confira a dose na receita.';

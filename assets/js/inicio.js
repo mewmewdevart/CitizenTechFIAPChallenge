@@ -30,7 +30,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
   const secaoEscala = pagina.querySelector('[data-aba-inicio="escala"]');
-  const podeMostrarEscala = () => Boolean(core.obterNecessidadeAcompanhamento());
+  const podeMostrarEscala = () => Boolean(core.obterNecessidadeAcompanhamento() || core.obterRotinasSemanais().length);
   const listaDias = pagina.querySelector('[data-semana]');
   const listaTurnos = pagina.querySelector('[data-turnos]');
   const faixaLacuna = pagina.querySelector('[data-inicio-lacuna]');
@@ -131,8 +131,8 @@ window.MutiraoCuidadoPronto.then(core => {
   };
 
   const atualizarProximaMedicacao = grupos => {
-    const proximo = grupos.find(grupo => grupo.momento !== 'passado'
-      && grupo.itens.some(dose => dose.estado === 'prevista'));
+    const proximo = grupos.find(grupo => grupo.momento === 'passado' && grupo.itens.some(dose => dose.estado === 'prevista'))
+      || grupos.find(grupo => grupo.momento !== 'passado' && grupo.itens.some(dose => dose.estado === 'prevista'));
     const titulo = pagina.querySelector('[data-proxima-medicacao]');
     const responsavel = pagina.querySelector('[data-proxima-responsavel]');
     const bloco = titulo?.closest('.painel__bloco');
@@ -149,9 +149,10 @@ window.MutiraoCuidadoPronto.then(core => {
       return;
     }
     const pendentes = proximo.itens.filter(dose => dose.estado === 'prevista');
+    const prefixo = proximo.momento === 'passado' ? `Atrasado · ${proximo.hora}` : proximo.hora;
     titulo.textContent = pendentes.length > 1
-      ? `${proximo.hora} · ${pendentes.length} remédios (${pendentes[0].nome} + ${pendentes.length - 1})`
-      : `${proximo.hora} · ${pendentes[0].nome}`;
+      ? `${prefixo} · ${pendentes.length} remédios (${pendentes[0].nome} + ${pendentes.length - 1})`
+      : `${prefixo} · ${pendentes[0].nome}`;
     const pessoaTurno = proximo.responsavel;
     responsavel.textContent = pessoaTurno
       ? `Responsável: ${pessoaTurno}`

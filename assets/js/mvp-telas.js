@@ -585,7 +585,9 @@ window.MutiraoCuidadoPronto.then(core => {
         const campoEl = linha.querySelector('[data-pessoa-campo]');
         const chave = campoEl?.dataset.pessoaCampo;
         const val = String(person[chave] || '').trim();
-        const vazio = !val || (chave === 'cobertura' && val === 'Sem turnos definidos');
+        const vazio = chave === 'cobertura'
+          ? (!val || val === 'Sem turnos definidos') && !core.obterRotinasSemanais().length
+          : !val;
         linha.hidden = vazio;
         if (!vazio) algumVisivel = true;
       });

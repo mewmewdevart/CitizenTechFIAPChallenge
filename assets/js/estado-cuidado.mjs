@@ -5,7 +5,7 @@ const CHAVE_SESSAO = 'mutirao-mvp-estado-v2';
 const CHAVE_LEGADA = 'mutirao-mvp-estado-v1';
 const LISTAS = [
   'equipeCuidado', 'insumos', 'portaRemedios', 'events', 'tasks', 'documents',
-  'recadosMural', 'coberturasRede', 'itensExtras', 'itensExcluidos', 'participantesExtras',
+  'recadosMural', 'coberturasRede', 'rotinasSemanais', 'itensExtras', 'itensExcluidos', 'participantesExtras',
   'convites', 'historicoConvites', 'historicoAtribuicoes', 'pedidosFolga', 'lembretesExecutados',
   'recadosEnviados', 'chamados'
 ];

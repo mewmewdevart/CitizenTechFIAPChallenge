@@ -721,18 +721,26 @@ window.MutiraoCuidadoPronto.then(core => {
         const fim = new Date(Date.UTC(ano, mes - 1, data, hh + 1, mm));
         return fim.toISOString().slice(0, 19).replace(/[-:]/g, '');
       };
+      const calcularProximoDia = dia => {
+        const [ano, mes, data] = dia.split('-').map(Number);
+        return new Date(Date.UTC(ano, mes - 1, data + 1)).toISOString().slice(0, 10).replaceAll('-', '');
+      };
 
-      const linhas = eventosMes.flatMap((item, indice) => [
-        'BEGIN:VEVENT',
-        `UID:${item.id || `mutirao-${item.dia}-${indice}`}@mutirao.local`,
-        `DTSTAMP:${carimbo}`,
-        `DTSTART;TZID=America/Sao_Paulo:${item.dia.replaceAll('-', '')}T${item.hora.replace(':', '')}00`,
-        `DTEND;TZID=America/Sao_Paulo:${calcularFim(item.dia, item.hora)}`,
-        `SUMMARY:${escaparIcs(item.titulo)}`,
-        `LOCATION:${escaparIcs(item.local)}`,
-        `DESCRIPTION:${escaparIcs(item.acompanhante ? `Acompanhante: ${item.acompanhante}` : '')}`,
-        'END:VEVENT'
-      ]);
+      const linhas = eventosMes.flatMap((item, indice) => {
+        const temHora = /^\d{2}:\d{2}$/.test(String(item.hora || '').trim());
+        const dataLimpa = item.dia.replaceAll('-', '');
+        return [
+          'BEGIN:VEVENT',
+          `UID:${item.id || `mutirao-${item.dia}-${indice}`}@mutirao.local`,
+          `DTSTAMP:${carimbo}`,
+          temHora ? `DTSTART;TZID=America/Sao_Paulo:${dataLimpa}T${item.hora.replace(':', '')}00` : `DTSTART;VALUE=DATE:${dataLimpa}`,
+          temHora ? `DTEND;TZID=America/Sao_Paulo:${calcularFim(item.dia, item.hora)}` : `DTEND;VALUE=DATE:${calcularProximoDia(item.dia)}`,
+          `SUMMARY:${escaparIcs(item.titulo)}`,
+          `LOCATION:${escaparIcs(item.local)}`,
+          `DESCRIPTION:${escaparIcs(item.acompanhante ? `Acompanhante: ${item.acompanhante}` : '')}`,
+          'END:VEVENT'
+        ];
+      });
       const calendario = [
         'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Mutirao//Agenda//PT-BR',
         'BEGIN:VTIMEZONE', 'TZID=America/Sao_Paulo', 'BEGIN:STANDARD', 'DTSTART:20190217T000000',

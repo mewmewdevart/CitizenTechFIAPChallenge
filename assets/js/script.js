@@ -972,20 +972,24 @@ function sincronizarStatusCuidado() {
 
   const doses = core.obterDoses();
   const ocorrencias = doses.filter(dose => dose.estado === 'nao-administrado');
+  const atrasadas = doses.filter(dose => dose.estado === 'prevista' && dose.momento === 'passado');
   const proxima = doses.find(dose => dose.estado === 'prevista' && dose.momento !== 'passado');
   const grupoProximo = proxima
     ? doses.filter(dose => dose.hora === proxima.hora && dose.estado === 'prevista')
     : [];
-  const ehAlerta = Boolean(ocorrencias.length);
+  const ehAlerta = Boolean(ocorrencias.length || atrasadas.length);
   const detalheMed = linha.querySelector('small');
 
   linha.classList.toggle('cartao-status__linha--alerta', ehAlerta);
   if (!doses.length) {
     linha.querySelector('strong').textContent = 'Nenhum remédio';
     detalheMed.textContent = '';
-  } else if (ehAlerta) {
+  } else if (ocorrencias.length) {
     linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'remédio para dar' : 'remédios para dar'}`;
     detalheMed.textContent = 'Não foi dado';
+  } else if (atrasadas.length) {
+    linha.querySelector('strong').textContent = `${atrasadas.length} ${atrasadas.length === 1 ? 'remédio atrasado' : 'remédios atrasados'}`;
+    detalheMed.textContent = `Previsto para ${atrasadas[0].hora}`;
   } else if (grupoProximo.length) {
     linha.querySelector('strong').textContent = 'Tem remédio para dar';
     detalheMed.textContent = `Próximo horário às ${proxima.hora.padStart(3, '0')}`;
