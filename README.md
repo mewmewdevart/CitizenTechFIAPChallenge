@@ -11,8 +11,8 @@
   </p>
   <p>
     <img src="https://img.shields.io/badge/Desafio-Citizen%20Tech-4B5DA9?style=for-the-badge" alt="Desafio Citizen Tech" />
-    <img src="https://img.shields.io/badge/HTML%20%7C%20CSS%20%7C%20JS-Nativo-146A3A?style=for-the-badge" alt="HTML, CSS e JS Nativos" />
-    <img src="https://img.shields.io/badge/Testes-17%20passando-235A38?style=for-the-badge" alt="17 testes passando" />
+    <img src="https://img.shields.io/badge/HTML%20%7C%20CSS%20%7C%20JS-Nativo-4B5DA9?style=for-the-badge" alt="HTML, CSS e JS Nativos" />
+    <img src="https://img.shields.io/badge/Testes-17%20passando-4B5DA9?style=for-the-badge" alt="17 testes passando" />
   </p>
 </div>
 
