@@ -78,7 +78,7 @@ window.MutiraoCuidadoPronto.then(core => {
           descricao: detalhe + turno,
           concluida: false,
           href: `medicamentos.html?dose=${encodeURIComponent(pendentes[0].chave)}`,
-          rotuloAcao: 'Marcar como dado'
+          rotuloAcao: pendentes.length === 1 ? 'Marcar como dado' : `Ver doses das ${hora}`
         });
       }
 
@@ -97,7 +97,9 @@ window.MutiraoCuidadoPronto.then(core => {
           id: (usarModeloGrupo && modeloGrupo.id) || `med-dados-${grupo.hora}`,
           dia,
           icone: (usarModeloGrupo && modeloGrupo.icone) || 'icone-medicamento.svg',
-          titulo: (usarModeloGrupo && modeloGrupo.titulo) || `${hora} · Remédios dados`,
+          titulo: !pendentes.length
+            ? ((usarModeloGrupo && modeloGrupo.titulo) || `${hora} · Remédios dados`)
+            : `${hora} · ${dados.length} de ${grupo.itens.length} doses registradas`,
           descricao: `${nomes} · ${resumoDoses}${turno}`,
           concluida: true,
           href: 'medicamentos.html#registros-de-hoje',
@@ -174,7 +176,7 @@ window.MutiraoCuidadoPronto.then(core => {
         const rotuloDia = obterRotuloLacuna(chave, estado);
         const temLacuna = rotuloDia === 'Parcial' || rotuloDia === 'Descoberto';
         const parcial = rotuloDia === 'Parcial';
-        const coberto = rotuloDia === 'Coberto' && chave >= inicioSemana && chave <= fimSemana;
+        const coberto = rotuloDia === 'Coberto' && ((chave >= inicioSemana && chave <= fimSemana) || !estado.escalaDemonstracao);
         const situacao = temLacuna ? (parcial ? 'parcial' : 'sem-ninguem') : coberto ? 'coberto' : '';
         const textos = {
           'sem-ninguem': ', sem ninguém em algum horário',
@@ -301,6 +303,13 @@ window.MutiraoCuidadoPronto.then(core => {
     const subtituloEscala = pagina.querySelector('[data-subtitulo-escala]');
     if (subtituloEscala) {
       subtituloEscala.textContent = `Quem cuida na semana · turnos de ${formatarDataCurta(diaSemana, true)}`;
+    }
+    const btnAdicionarCabecalho = pagina.querySelector('[data-adicionar-turno-cabecalho]');
+    if (btnAdicionarCabecalho) {
+      const livresCabecalho = core.obterHorariosLivres(diaSemana, estado);
+      btnAdicionarCabecalho.hidden = !livresCabecalho.length;
+      btnAdicionarCabecalho.dataset.dia = diaSemana;
+      btnAdicionarCabecalho.dataset.horario = livresCabecalho.map(f => f.horario).join(', ');
     }
 
     pagina.querySelector('[data-semana]').innerHTML = semana.map(dia => `
@@ -585,10 +594,34 @@ window.MutiraoCuidadoPronto.then(core => {
         popularOpcoesHorario(form.elements.inicio, limiteMinTurno, limiteMaxTurno - 1, atualInicio);
         popularOpcoesHorario(form.elements.fim, atualInicio + 1, limiteMaxTurno, atualFim);
         atualizarPreviaCobertura();
+        const blocoLote = dialogoEditarCobertura.querySelector('[data-bloco-cancelar-lote]');
+        if (blocoLote) {
+          const totalTurnos = core.contarParticipacoesUsuario();
+          blocoLote.hidden = totalTurnos <= 5;
+          const textoLote = blocoLote.querySelector('[data-texto-cancelar-lote]');
+          if (textoLote && totalTurnos > 5) {
+            textoLote.textContent = `Você está em ${totalTurnos} turnos. Se não puder participar, pode liberar todos de uma vez.`;
+          }
+        }
         snapshotsEdicao.set(form, serializarFormularioAgenda(form));
         atualizarBotaoSalvarAgenda(form);
         dialogoEditarCobertura.showModal();
       }
+      return;
+    }
+
+    if (botao.hasAttribute('data-cancelar-todas-coberturas')) {
+      const totalTurnos = core.contarParticipacoesUsuario();
+      const confirmado = await core.confirmarAcao({
+        titulo: 'Cancelar todas as participações?',
+        descricao: `Você vai sair de todos os seus ${totalTurnos} turnos cadastrados e deixá-los livres para a rede.`,
+        confirmarTexto: 'Cancelar todos'
+      });
+      if (!confirmado) return;
+      atualizarEstado(estado => core.cancelarTodasParticipacoesUsuario(estado));
+      botao.closest('dialog')?.close();
+      registrarStatus('Todas as suas participações em turnos foram canceladas e ficaram livres para a rede.');
+      renderizar();
       return;
     }
 
@@ -789,7 +822,7 @@ window.MutiraoCuidadoPronto.then(core => {
       const local = (campos.local || '').trim();
       const hora = (campos.hora || '').trim();
       const acompanhante = (campos.acompanhante || '').trim();
-      if (!titulo || !local || !campos.dia) {
+      if (!titulo || !local || !campos.dia || !hora) {
         registrarStatus('Preencha os campos que faltam.');
         return;
       }
@@ -829,15 +862,19 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     if (tipoFormulario === 'cobertura') {
-      const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
-      const { inicio, fim } = core.obterIntervaloFormularioTurno(formulario, horarioTurno);
+      const { inicio, fim, gapInicio, gapFim } = core.obterIntervaloFormularioTurno(formulario, horarioTurno);
       const escopoTurno = formulario.elements.escopoTurno.disabled ? core.ESCOPO_TURNO.pontual : formulario.elements.escopoTurno.value;
 
       if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
         titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
       })) return;
       atualizarEstado(estado => core.definirRotinaTurno(
-        aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim), diaTurno, inicio, fim, escopoTurno
+        aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim),
+        diaTurno,
+        inicio,
+        fim,
+        escopoTurno,
+        obterUsuarioAtual(estado).nomeComApelido
       ));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;

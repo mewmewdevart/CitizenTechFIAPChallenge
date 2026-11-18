@@ -21,7 +21,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
   const calcularIdade = nascimento => {
     if (!nascimento) return null;
-    const hoje = new Date('2026-11-10T12:00:00');
+    const hoje = new Date(`${core.HOJE}T12:00:00`);
     const nasc = new Date(`${nascimento}T12:00:00`);
     let idade = hoje.getFullYear() - nasc.getFullYear();
     const mesDiff = hoje.getMonth() - nasc.getMonth();

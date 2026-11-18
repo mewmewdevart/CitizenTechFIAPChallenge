@@ -66,7 +66,7 @@ CitizenTechFIAPChallenge/
 
 2. Sirva a pasta com a extensão **Live Server** do VS Code ou, se tiver Python, execute `python -m http.server 8000`. Abra `index.html` pelo endereço do servidor, por exemplo, `http://localhost:8000/`. O navegador carrega o JSON pelo servidor.
 
-3. Se tiver Node.js 22 ou mais recente, execute `node --test tests/estado-cuidado.test.mjs` para validar a seleção, o isolamento, a migração e a persistência das fichas.
+3. Se tiver Node.js 22 ou mais recente, execute `node --test tests/*.test.mjs` para rodar toda a suíte (11 testes cobrindo perfis fixos, isolamento, migração, turnos/escala, doses e compromissos).
 
 ## 👥 Integrantes — Grupo Ctrl + People
 

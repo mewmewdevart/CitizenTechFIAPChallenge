@@ -147,7 +147,8 @@
     <header class="apoio__cabecalho">
       <div>
         <h1>Cuidados de hoje</h1>
-        <p class="inicio__data"><time datetime="2026-11-10T11:58">Terça-feira, 10 de novembro de 2026 · 11h58</time></p>
+        <p class="inicio__data"><time datetime="2026-11-10T11:58">Cenário de demonstração | Terça-feira, 10 de novembro
+            de 2026 · 11h58</time></p>
       </div>
       <button type="button" class="botao botao--primario" data-dialogo="dialogo-registrar-cuidado"><i
           class="fa-solid fa-plus" aria-hidden="true"></i> Anotar o turno</button>
@@ -257,7 +258,10 @@
         <section class="apoio__painel" aria-labelledby="titulo-escala" data-aba-inicio="escala">
           <div class="painel__cartao-cabecalho">
             <h2 id="titulo-escala" data-titulo-escala>Quem cuida na semana · 9 a 15 nov.</h2>
-            <a class="botao botao--secundario" href="agenda.html#escala" data-inicio-link-escala>Ver na Agenda</a>
+            <div class="painel__acoes">
+              <button type="button" class="botao botao--secundario" data-adicionar-turno-cabecalho data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno hidden><i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar turno</button>
+              <a class="botao botao--secundario" href="agenda.html#escala" data-inicio-link-escala>Ver na Agenda</a>
+            </div>
           </div>
           <div class="agenda__semana" role="group" aria-label="Dias da semana" data-semana></div>
           <div aria-live="polite" data-turnos></div>
@@ -390,6 +394,11 @@
           <label>Saio às<select name="fim" required></select></label>
         </div>
         <p class="agenda__previa-turno" data-previa-cobertura></p>
+        <div class="dialogo-mvp__secao" data-bloco-cancelar-lote hidden>
+          <p class="dialogo-mvp__secao-titulo">Cancelamento em lote</p>
+          <p class="formulario-mvp__ajuda" data-texto-cancelar-lote></p>
+          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar todas as minhas participações</button>
+        </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>

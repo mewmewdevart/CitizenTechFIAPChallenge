@@ -687,8 +687,15 @@ body.menu-fechado .barra-topo {
   margin-left: var(--largura-menu-lateral);
   max-width: none;
   min-width: 0;
-  padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-xl)) 28px 32px 28px;
+  padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-xl)) 92px 96px 28px;
   transition: margin-left var(--transicao-padrao);
+}
+
+@media (width >= 1150px) {
+  ponto-bot:not([inline]) {
+    right: 16px;
+    bottom: 16px;
+  }
 }
 
 .conteudo-pagina h1 {
@@ -1203,7 +1210,7 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
 
   .conteudo-pagina {
     margin-left: 0;
-    padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-lg)) var(--espaco-lg) var(--espaco-xl);
+    padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-lg)) var(--espaco-lg) calc(var(--espaco-xl) + 84px);
   }
 
   .grade-painel__col-8,

@@ -348,7 +348,7 @@ window.MutiraoCuidadoPronto.then(core => {
     anunciarStatus(elementoStatus, `Pedido de folga salvo nesta demonstração: ${turno}.`);
   });
 
-  const SEMANA_ATUAL = ['2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15'];
+  const SEMANA_ATUAL = core.obterSemanaDe(HOJE);
 
   const renderizarPedidosFolga = () => {
     const bloco = pagina.querySelector('[data-pedidos-folga]');

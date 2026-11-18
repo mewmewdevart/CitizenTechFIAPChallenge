@@ -194,35 +194,35 @@ window.MutiraoCuidadoPronto.then(core => {
     return match ? `${match[3]}/${match[2]}/${match[1]} às ${match[4]}h${match[5]}` : String(valor || '');
   };
 
-  const simulacao = document.createElement('section');
-  simulacao.className = 'configuracoes__bloco configuracoes__simulacao';
-  simulacao.innerHTML = `<div class="configuracoes__bloco-cabecalho">
-    <h3>Testar lembretes</h3>
-  </div>
-  <p class="configuracoes__texto-apoio">Avance o horário para ver os lembretes chegando. É só um teste: nenhum e-mail é enviado.</p>
-  <div class="configuracoes__simulacao-controles">
-    <label>Avançar até
-      <input type="datetime-local" data-horario-lembretes>
-    </label>
-    <button type="button" class="botao botao--secundario" data-executar-lembretes>Executar lembretes</button>
-  </div>
-  <ul class="configuracoes__historico-lembretes" data-historico-lembretes></ul>`;
-  formulario.querySelector('#painel-notificacoes')?.append(simulacao);
-  const renderizarLembretes = () => {
-    simulacao.querySelector('input').value = core.obterEstado().relogioLembretes || `${core.HOJE}T11:58`;
-    const lista = core.obterEstado().lembretesExecutados || [];
-    simulacao.querySelector('ul').innerHTML = lista.length
-      ? lista.map(item => `<li><strong>${core.escaparHtml(item.texto)}</strong><small>${core.escaparHtml(formatarQuandoLembrete(item.quando))} · Canal simulado: ${core.escaparHtml(CANAIS_SIMULADOS[item.canal] || item.canal)}</small></li>`).join('')
-      : '<li class="configuracoes__historico-vazio">Nenhum lembrete enviado ainda.</li>';
-  };
-  simulacao.querySelector('button').addEventListener('click', () => {
-    try {
-      const novos = core.executarLembretes(simulacao.querySelector('input').value, core.obterPreferencias());
-      for (const item of novos) if (item.canal !== 'email') window.MutiraoNotificacoes?.registrar('Lembrete da simulação', item.texto, 'configuracoes.html');
-      renderizarLembretes(); mostrarStatus(`${novos.length} lembrete(s) executado(s). Consulte o histórico.`, 'sucesso');
-    } catch (erro) { mostrarStatus(erro.message, 'erro'); }
-  });
-  renderizarLembretes();
+  // const simulacao = document.createElement('section');
+  // simulacao.className = 'configuracoes__bloco configuracoes__simulacao';
+  // simulacao.innerHTML = `<div class="configuracoes__bloco-cabecalho">
+  //   <h3>Testar lembretes</h3>
+  // </div>
+  // <p class="configuracoes__texto-apoio">Avance o horário para ver os lembretes chegando. É só um teste: nenhum e-mail é enviado.</p>
+  // <div class="configuracoes__simulacao-controles">
+  //   <label>Avançar até
+  //     <input type="datetime-local" data-horario-lembretes>
+  //   </label>
+  //   <button type="button" class="botao botao--secundario" data-executar-lembretes>Executar lembretes</button>
+  // </div>
+  // <ul class="configuracoes__historico-lembretes" data-historico-lembretes></ul>`;
+  // formulario.querySelector('#painel-notificacoes')?.append(simulacao);
+  // const renderizarLembretes = () => {
+  //   simulacao.querySelector('input').value = core.obterEstado().relogioLembretes || `${core.HOJE}T11:58`;
+  //   const lista = core.obterEstado().lembretesExecutados || [];
+  //   simulacao.querySelector('ul').innerHTML = lista.length
+  //     ? lista.map(item => `<li><strong>${core.escaparHtml(item.texto)}</strong><small>${core.escaparHtml(formatarQuandoLembrete(item.quando))} · Canal simulado: ${core.escaparHtml(CANAIS_SIMULADOS[item.canal] || item.canal)}</small></li>`).join('')
+  //     : '<li class="configuracoes__historico-vazio">Nenhum lembrete enviado ainda.</li>';
+  // };
+  // simulacao.querySelector('button').addEventListener('click', () => {
+  //   try {
+  //     const novos = core.executarLembretes(simulacao.querySelector('input').value, core.obterPreferencias());
+  //     for (const item of novos) if (item.canal !== 'email') window.MutiraoNotificacoes?.registrar('Lembrete da simulação', item.texto, 'configuracoes.html');
+  //     renderizarLembretes(); mostrarStatus(`${novos.length} lembrete(s) executado(s). Consulte o histórico.`, 'sucesso');
+  //   } catch (erro) { mostrarStatus(erro.message, 'erro'); }
+  // });
+  // renderizarLembretes();
 
   botaoExportar?.addEventListener('click', async () => {
     const usuario = core.obterUsuarioAtual();

@@ -1009,7 +1009,14 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusCuidado);
     registrosDose: JSON.stringify(estado?.registrosDose || {}),
     estoque: JSON.stringify([estado?.estoqueBase || {}, estado?.historicoEstoque || []]),
     itens: JSON.stringify([estado?.itensExtras || [], estado?.itensEditados || {}, estado?.itensExcluidos || []]),
-    turnos: JSON.stringify([estado?.covered || {}, estado?.shiftEdits || {}, estado?.coberturasRede || [], estado?.atribuicoesTurno || {}]),
+    turnos: JSON.stringify([
+      estado?.covered || {},
+      estado?.shiftEdits || {},
+      estado?.coberturasRede || [],
+      estado?.atribuicoesTurno || {},
+      estado?.rotinasSemanais || [],
+      estado?.janelaAcompanhamento || null
+    ]),
     events: JSON.stringify(estado?.events || []),
     reports: JSON.stringify(estado?.reports || {}),
     documents: JSON.stringify(estado?.documents || []),

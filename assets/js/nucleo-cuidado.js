@@ -316,6 +316,18 @@ window.MutiraoCuidadoPronto = (async () => {
     String(dia).padStart(2, '0')
   ].join('-');
 
+  const obterSemanaDe = (chave = HOJE) => {
+    const base = new Date(`${chave}T12:00:00`);
+    const deslocamentoSegunda = (base.getDay() + 6) % 7;
+    const segunda = new Date(base);
+    segunda.setDate(base.getDate() - deslocamentoSegunda);
+    return Array.from({ length: 7 }, (_, indice) => {
+      const data = new Date(segunda);
+      data.setDate(segunda.getDate() + indice);
+      return gerarChaveData(data.getFullYear(), data.getMonth(), data.getDate());
+    });
+  };
+
   const formatarData = (chave, opcoes) =>
     new Intl.DateTimeFormat('pt-BR', opcoes).format(new Date(`${chave}T12:00:00`));
 
@@ -428,7 +440,7 @@ window.MutiraoCuidadoPronto = (async () => {
     return Object.values(ESCOPO_TURNO).includes(escopo) ? escopo : ESCOPO_TURNO.pontual;
   };
 
-  const definirRotinaTurno = (estado, dia, inicio, fim, escopoInformado) => {
+  const definirRotinaTurno = (estado, dia, inicio, fim, escopoInformado, responsavel = null) => {
     const escopo = normalizarEscopoTurno(escopoInformado);
     if (escopo === ESCOPO_TURNO.pontual || dia < HOJE || !(fim > inicio)) return estado;
     if (escopo === ESCOPO_TURNO.diario) {
@@ -436,24 +448,32 @@ window.MutiraoCuidadoPronto = (async () => {
       return {
         ...estado,
         person: { ...estado.person, cobertura: ACOMPANHAMENTO.diario },
-        janelaAcompanhamento: { desde: dia, inicio, fim }
+        janelaAcompanhamento: { desde: dia, inicio, fim, ...(responsavel ? { responsavel } : {}) }
       };
     }
     if (!podeDefinirRotinaSemanal(estado)) return estado;
     const diaSemana = obterDiaSemana(dia);
     const existentes = obterRotinasSemanais(estado);
-    const repetida = existentes.some(rotina => rotina.diaSemana === diaSemana && rotina.inicio === inicio && rotina.fim === fim);
+    const idxRepetida = existentes.findIndex(rotina => rotina.diaSemana === diaSemana && rotina.inicio === inicio && rotina.fim === fim);
     const necessidade = obterNecessidadeAcompanhamento(estado);
+    const novaRotina = {
+      id: `rotina-${diaSemana}-${inicio}-${fim}`,
+      diaSemana,
+      desde: dia,
+      inicio,
+      fim,
+      ...(responsavel ? { responsavel } : {})
+    };
+    const rotinasAtualizadas = idxRepetida === -1
+      ? [...existentes, novaRotina]
+      : existentes.map((rotina, idx) => (idx === idxRepetida && responsavel ? { ...rotina, responsavel } : rotina));
     return {
       ...estado,
       // Uma rotina semanal torna a escala visível no Início sem fingir acompanhamento diário.
       person: necessidade === ACOMPANHAMENTO.naoInformado
         ? { ...estado.person, cobertura: ACOMPANHAMENTO.eventual }
         : estado.person,
-      rotinasSemanais: repetida ? existentes : [
-        ...existentes,
-        { id: `rotina-${diaSemana}-${inicio}-${fim}`, diaSemana, desde: dia, inicio, fim }
-      ]
+      rotinasSemanais: rotinasAtualizadas
     };
   };
 
@@ -462,6 +482,69 @@ window.MutiraoCuidadoPronto = (async () => {
     rotinasSemanais: obterRotinasSemanais(estado).filter(rotina => rotina.id !== id)
   });
 
+  const contarParticipacoesUsuario = (estado = estadoAtual) => {
+    const datas = new Set([
+      ...obterSemanaDe(HOJE),
+      ...Object.keys(estado.escalasFixas || {}),
+      ...Object.keys(estado.covered || {})
+    ]);
+    const temRecorrencia = Boolean(
+      estado.janelaAcompanhamento?.responsavel
+      || obterRotinasSemanais(estado).some(rotina => rotina.responsavel)
+    );
+    if (temRecorrencia) {
+      const base = new Date(`${HOJE}T12:00:00`);
+      for (let i = 0; i < 28; i++) {
+        const d = new Date(base);
+        d.setDate(base.getDate() + i);
+        datas.add(gerarChaveData(d.getFullYear(), d.getMonth(), d.getDate()));
+      }
+    }
+    let total = 0;
+    for (const dia of datas) {
+      total += construirLinhaDoTempoDia(dia, estado)
+        .filter(seg => seg.tipo === 'turno' && seg.pessoa?.ehUsuarioAtual)
+        .length;
+    }
+    return total;
+  };
+
+  const cancelarTodasParticipacoesUsuario = (estado = estadoAtual) => {
+    const rotinasSemanais = obterRotinasSemanais(estado).map(rotina => {
+      if (!rotina.responsavel || !resolverPessoaRede(rotina.responsavel, estado).ehUsuarioAtual) return rotina;
+      const { responsavel, ...resto } = rotina;
+      return resto;
+    });
+    const janela = estado.janelaAcompanhamento;
+    const janelaAcompanhamento = janela?.responsavel && resolverPessoaRede(janela.responsavel, estado).ehUsuarioAtual
+      ? (({ responsavel, ...resto }) => resto)(janela)
+      : janela;
+    const estadoSemRecorrencia = {
+      ...estado,
+      rotinasSemanais,
+      ...(janelaAcompanhamento !== undefined ? { janelaAcompanhamento } : {})
+    };
+    const shiftEdits = { ...(estado.shiftEdits || {}) };
+    const datas = new Set([
+      ...obterSemanaDe(HOJE),
+      ...Object.keys(estado.escalasFixas || {}),
+      ...Object.keys(estado.covered || {})
+    ]);
+    for (const dia of datas) {
+      for (const item of obterEscalaDia(dia, estadoSemRecorrencia)) {
+        if (resolverPessoaRede(item.pessoa?.nome, estado).ehUsuarioAtual) {
+          shiftEdits[`${dia}|${item.horario}`] = { cancelado: true };
+        }
+      }
+    }
+    return {
+      ...estadoSemRecorrencia,
+      covered: {},
+      shiftEdits,
+      coberturasRede: (estado.coberturasRede || []).filter(c => !resolverPessoaRede(c.responsavel, estado).ehUsuarioAtual)
+    };
+  };
+
   const popularOpcoesHorario = (select, min, max, selecionado) => {
     select.replaceChildren(...Array.from({ length: max - min + 1 }, (_, i) => {
       const hora = min + i;
@@ -469,31 +552,45 @@ window.MutiraoCuidadoPronto = (async () => {
     }));
   };
 
+  const parsearFaixasTurno = horario => {
+    const faixas = String(horario || '')
+      .split(',')
+      .map(parte => parte.trim())
+      .filter(Boolean)
+      .map(extrairHorasTurno)
+      .filter(faixa => faixa.fim > faixa.inicio);
+    return faixas.length ? faixas : [extrairHorasTurno(horario)];
+  };
+
   const obterIntervaloFormularioTurno = (form, horario) => {
-    const faixa = extrairHorasTurno(horario);
-    if (form.elements.cobrirTudo.checked) return faixa;
+    const faixas = parsearFaixasTurno(horario);
+    if (form.elements.cobrirTudo.checked) {
+      const faixa = faixas[0];
+      return { ...faixa, gapInicio: faixa.inicio, gapFim: faixa.fim };
+    }
     const inicio = Number(form.elements.inicio.value);
     const fim = Number(form.elements.fim.value);
-    return { inicio, fim, duracao: fim - inicio };
+    const faixaAtiva = faixas.find(f => f.inicio <= inicio && inicio < f.fim) || faixas[0];
+    return { inicio, fim, duracao: fim - inicio, gapInicio: faixaAtiva.inicio, gapFim: faixaAtiva.fim };
   };
 
   const atualizarPreviaTurno = (dialogo, horario) => {
     const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
-    const faixa = extrairHorasTurno(horario);
-    const { inicio, fim } = obterIntervaloFormularioTurno(form, horario);
-    const fimValido = fim > inicio ? fim : Math.min(faixa.fim, inicio + 1);
-    popularOpcoesHorario(form.elements.fim, inicio + 1, faixa.fim, fimValido);
+    const faixas = parsearFaixasTurno(horario);
+    const { inicio, fim, gapFim } = obterIntervaloFormularioTurno(form, horario);
+    const fimValido = fim > inicio && fim <= gapFim ? fim : Math.min(gapFim, inicio + 1);
+    popularOpcoesHorario(form.elements.fim, inicio + 1, gapFim, fimValido);
     form.querySelector('[data-horarios-cobertura]').hidden = form.elements.cobrirTudo.checked;
     const duracao = fimValido - inicio;
     const horarioEscolhido = `${formatarIntervaloTurno(inicio, duracao)} (${duracao} ${duracao === 1 ? 'hora' : 'horas'})`;
     const dia = dialogo.dataset.diaTurno || HOJE;
     const escopo = form.elements.escopoTurno.disabled ? ESCOPO_TURNO.pontual : normalizarEscopoTurno(form.elements.escopoTurno.value);
     const explicacoes = {
-      [ESCOPO_TURNO.diario]: `Vale todos os dias a partir de ${formatarDataCurta(dia)}. Os próximos dias ficam como horário sem ninguém até alguém assumir.`,
-      [ESCOPO_TURNO.semanal]: `${descreverDiaSemana(obterDiaSemana(dia))} a partir de ${formatarDataCurta(dia)}. As próximas datas ficam como horário sem ninguém até alguém assumir.`,
+      [ESCOPO_TURNO.diario]: `Vale todos os dias a partir de ${formatarDataCurta(dia)} com você na escala. Se precisar faltar em algum dia, basta editar ou cancelar só aquela data.`,
+      [ESCOPO_TURNO.semanal]: `${descreverDiaSemana(obterDiaSemana(dia))} a partir de ${formatarDataCurta(dia)} com você na escala. Se precisar faltar em alguma data, é só editar aquele dia.`,
       [ESCOPO_TURNO.pontual]: dialogo.dataset.turnoPontual === 'true'
         ? `Vale só para ${formatarDataCurta(dia)}. Os outros dias continuam como estão.`
-        : duracao >= faixa.duracao
+        : duracao >= faixas[0].duracao
           ? 'Você assume todo este horário.'
           : 'O restante do horário previsto continua na escala.'
     };
@@ -502,7 +599,10 @@ window.MutiraoCuidadoPronto = (async () => {
 
   const prepararFormularioTurno = (dialogo, dia, horario, pontual) => {
     const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
-    const { inicio, fim } = extrairHorasTurno(horario);
+    const faixas = parsearFaixasTurno(horario);
+    const horasInicio = faixas.flatMap(faixa => Array.from({ length: faixa.fim - faixa.inicio }, (_, i) => faixa.inicio + i));
+    const unicaFaixaCurta = faixas.length === 1 && faixas[0].fim - faixas[0].inicio === 1;
+    const ocultarCobrirTudo = faixas.length > 1 || unicaFaixaCurta;
     dialogo.dataset.turnoPontual = String(pontual);
     dialogo.dataset.diaTurno = dia;
     dialogo.querySelector('h2').textContent = pontual ? 'Adicionar turno' : 'Ficar nesse horário';
@@ -519,13 +619,17 @@ window.MutiraoCuidadoPronto = (async () => {
     escopo.value = ESCOPO_TURNO.pontual;
     escopo.closest('label').hidden = opcoes.length === 1;
     escopo.disabled = escopo.closest('label').hidden;
-    form.elements.cobrirTudo.checked = !pontual || fim - inicio === 1;
+    form.elements.cobrirTudo.checked = !pontual || unicaFaixaCurta;
     const opcoesCobertura = form.elements.cobrirTudo.closest('.dialogo-mvp__opcoes');
-    if (opcoesCobertura) opcoesCobertura.hidden = fim - inicio === 1;
-    form.elements.cobrirTudo.closest('label').hidden = fim - inicio === 1;
-    const sugestao = pontual && dia === HOJE ? Math.max(inicio, Math.min(HORA_REFERENCIA, fim - 1)) : inicio;
-    popularOpcoesHorario(form.elements.inicio, inicio, fim - 1, sugestao);
-    popularOpcoesHorario(form.elements.fim, sugestao + 1, fim, pontual ? sugestao + 1 : fim);
+    if (opcoesCobertura) opcoesCobertura.hidden = ocultarCobrirTudo;
+    form.elements.cobrirTudo.closest('label').hidden = ocultarCobrirTudo;
+    const sugestao = pontual && dia === HOJE
+      ? (horasInicio.find(h => h >= HORA_REFERENCIA) ?? horasInicio[horasInicio.length - 1] ?? 0)
+      : (horasInicio[0] ?? 0);
+    const faixaSugestao = faixas.find(f => f.inicio <= sugestao && sugestao < f.fim) || faixas[0];
+    form.elements.inicio.replaceChildren(...horasInicio.map(hora =>
+      new Option(`${String(hora).padStart(2, '0')}h00`, hora, false, hora === sugestao)));
+    popularOpcoesHorario(form.elements.fim, sugestao + 1, faixaSugestao.fim, pontual ? sugestao + 1 : faixaSugestao.fim);
     atualizarPreviaTurno(dialogo, horario);
   };
 
@@ -674,11 +778,15 @@ window.MutiraoCuidadoPronto = (async () => {
     });
   };
 
-  // Compromisso com hora marcada fora de qualquer turno: sugere um turno curto em volta dele
-  // (1h antes até 2h depois), limitado ao trecho livre do dia. Não pinta a semana de vermelho.
+  // Compromisso com hora marcada fora de qualquer turno, apenas quando a ficha prevê
+  // acompanhamento naquele horário (ex.: rotina 24h, diária ou semanal).
   const obterSugestaoTurnoCompromisso = (compromisso, estado = estadoAtual) => {
-    const hora = Number(String(compromisso?.hora || '').split(':')[0]);
-    if (!compromisso?.dia || !Number.isInteger(hora) || compromisso.dia < HOJE) return null;
+    const horaTexto = String(compromisso?.hora || '').trim();
+    if (!compromisso?.dia || !/^\d{2}:\d{2}$/.test(horaTexto) || compromisso.dia < HOJE) return null;
+    const hora = Number(horaTexto.slice(0, 2));
+    const esperaCobertura = obterJanelasObrigatorias(compromisso.dia, estado)
+      .some(janela => janela.inicio <= hora && hora < janela.fim);
+    if (!esperaCobertura) return null;
     const trecho = construirLinhaDoTempoDia(compromisso.dia, estado, true)
       .find(seg => seg.inicio <= hora && hora < seg.fim);
     if (!trecho || trecho.tipo === 'turno') return null;
@@ -699,13 +807,31 @@ window.MutiraoCuidadoPronto = (async () => {
       if (cursor < faixa.fim) partes.push({ inicio: cursor, fim: faixa.fim });
       return partes;
     });
-    const botoes = livres.map(({ inicio, fim }) => {
+    if (!livres.length) return '';
+
+    const necessidade = obterNecessidadeAcompanhamento(estado);
+    const rotuloLivre = necessidade === ACOMPANHAMENTO.diario || necessidade === ACOMPANHAMENTO.parcial
+      ? 'Horário fora da rotina prevista'
+      : necessidade === ACOMPANHAMENTO.eventual
+        ? 'Horário livre'
+        : 'Horário sem turno';
+    const descricaoLivre = necessidade === ACOMPANHAMENTO.diario || necessidade === ACOMPANHAMENTO.parcial
+      ? 'Fora do horário habitual combinado. Adicione um turno extra se precisar.'
+      : necessidade === ACOMPANHAMENTO.eventual
+        ? 'Sem acompanhamento regular previsto. Adicione um turno pontual ou recorrente.'
+        : 'Nenhum acompanhamento obrigatório configurado. Adicione um turno se alguém for cuidar.';
+
+    return livres.map(({ inicio, fim }) => {
       const horario = formatarIntervaloTurno(inicio, fim - inicio);
-      const rotulo = livres.length === 1 ? 'Adicionar turno' : `Adicionar turno · ${horario}`;
-      return `<button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno data-dia="${dia}" data-horario="${horario}">${rotulo}</button>`;
+      return `<div class="agenda__lacuna">
+      <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+      <div>
+        <strong>${escaparHtml(horario)} · ${rotuloLivre}</strong>
+        <p>${descricaoLivre}</p>
+      </div>
+      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno data-dia="${dia}" data-horario="${escaparHtml(horario)}">Adicionar turno</button>
+    </div>`;
     }).join('');
-    if (linha.length || obterPedidosForaDaRotina(dia, estado).length) return botoes ? `<div class="painel__acoes">${botoes}</div>` : '';
-    return `<div class="estado-vazio"><strong>Nenhum turno cadastrado</strong><p>Ainda não há turnos registrados para este dia.</p>${botoes}</div>`;
   };
 
   const aplicarIntervaloZe = (estado, dia, janelaMin, janelaMax, novoInicio, novoFim) => {
@@ -925,7 +1051,7 @@ window.MutiraoCuidadoPronto = (async () => {
       const faixa = extrairHorasTurno(item.horario);
       adicionarFaixaLivre(cursor, faixa.inicio);
       itens.push(item);
-      cursor = faixa.fim;
+      cursor = Math.max(cursor, faixa.fim);
     }
     adicionarFaixaLivre(cursor, 24);
     return itens;
@@ -935,15 +1061,34 @@ window.MutiraoCuidadoPronto = (async () => {
     const fixas = estado?.escalasFixas;
     if (fixas?.[dia]) return fixas[dia];
     const equipe = estado?.equipeCuidado || [];
-    if (!estado.escalaDemonstracao || equipe.length < 4 ||
-        obterNecessidadeAcompanhamento(estado) !== ACOMPANHAMENTO.integral) return [];
-    const indiceBase = Number(dia.slice(-2)) || 1;
-    return [
-      { horario: '00h–07h', pessoa: equipe[indiceBase % 4] },
-      { horario: '07h–13h', pessoa: equipe[(indiceBase + 1) % 4] },
-      { horario: '13h–19h', pessoa: equipe[(indiceBase + 2) % 4] },
-      { horario: '19h–24h', pessoa: equipe[(indiceBase + 3) % 4] }
-    ];
+    if (estado.escalaDemonstracao && equipe.length >= 4 &&
+        obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.integral) {
+      const indiceBase = Number(dia.slice(-2)) || 1;
+      return [
+        { horario: '00h–07h', pessoa: equipe[indiceBase % 4] },
+        { horario: '07h–13h', pessoa: equipe[(indiceBase + 1) % 4] },
+        { horario: '13h–19h', pessoa: equipe[(indiceBase + 2) % 4] },
+        { horario: '19h–24h', pessoa: equipe[(indiceBase + 3) % 4] }
+      ];
+    }
+
+    const recorrentes = [];
+    const janela = estado.janelaAcompanhamento;
+    if (obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario && janela && dia >= janela.desde && janela.responsavel) {
+      recorrentes.push({ inicio: janela.inicio, fim: janela.fim, responsavel: janela.responsavel });
+    }
+    const diaSemana = obterDiaSemana(dia);
+    for (const rotina of obterRotinasSemanais(estado)) {
+      if (rotina.diaSemana === diaSemana && dia >= rotina.desde && rotina.responsavel) {
+        recorrentes.push({ inicio: rotina.inicio, fim: rotina.fim, responsavel: rotina.responsavel });
+      }
+    }
+    return recorrentes
+      .sort((a, b) => a.inicio - b.inicio)
+      .map(item => ({
+        horario: formatarIntervaloTurno(item.inicio, item.fim - item.inicio),
+        pessoa: resolverPessoaRede(item.responsavel, estado)
+      }));
   }
 
   function renderizarCalendarioMensal(container, { ano, mes, diaSelecionado, obterMetaDia }) {
@@ -1350,6 +1495,7 @@ window.MutiraoCuidadoPronto = (async () => {
     sanitizarHtmlEditor,
     inicializarEditoresRicos,
     gerarChaveData,
+    obterSemanaDe,
     formatarData,
     formatarDataCurta,
     capitalizarPrimeira,
@@ -1358,12 +1504,15 @@ window.MutiraoCuidadoPronto = (async () => {
     obterNecessidadeAcompanhamento,
     obterDescricaoAcompanhamento,
     obterPedidosForaDaRotina,
+    obterHorariosLivres,
     renderizarAdicionarTurnos,
     prepararFormularioTurno,
     atualizarPreviaTurno,
     obterIntervaloFormularioTurno,
     definirRotinaTurno,
     removerRotinaSemanal,
+    contarParticipacoesUsuario,
+    cancelarTodasParticipacoesUsuario,
     obterRotinasSemanais,
     descreverRotinaSemanal,
     obterJanelasObrigatorias,

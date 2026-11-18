@@ -81,6 +81,24 @@ body.menu-fechado .conteudo-pagina.agenda {
   margin-bottom: var(--espaco-md);
 }
 
+.agenda__painel-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-sm) var(--espaco-md);
+  border-bottom: var(--borda-padrao);
+  padding-bottom: var(--espaco-md);
+  margin-bottom: var(--espaco-md);
+}
+
+.agenda__painel-cabecalho>h2 {
+  font-size: var(--texto-titulo-cartao);
+  line-height: 1.4;
+  font-weight: var(--peso-semibold);
+  margin: 0;
+}
+
 .agenda__visao-geral {
   display: grid;
   grid-template-columns: minmax(280px, 387fr) minmax(0, 743fr);
@@ -525,6 +543,13 @@ html.acessibilidade--alto-contraste.tema--acolhedor [data-turnos] {
 
 .agenda__turno:last-child {
   border-bottom: 0;
+}
+
+[data-turnos] > .painel__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+  margin-top: var(--espaco-md);
 }
 
 .agenda__turno>div:not(.agenda__turno-acoes) {

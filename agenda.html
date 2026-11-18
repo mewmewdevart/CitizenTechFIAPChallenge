@@ -207,7 +207,12 @@
 
     <div class="agenda__inferior" id="escala">
       <section class="cartao agenda__painel">
-        <h2 data-titulo-escala tabindex="-1">Quem cuida na semana · 9 a 15 nov.</h2>
+        <div class="agenda__painel-cabecalho">
+          <h2 data-titulo-escala tabindex="-1">Quem cuida na semana · 9 a 15 nov.</h2>
+          <button type="button" class="botao botao--secundario" data-adicionar-turno-cabecalho data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno hidden>
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Adicionar turno
+          </button>
+        </div>
         <p class="agenda__subtitulo-escala" data-subtitulo-escala></p>
         <div class="agenda__semana" data-semana></div>
         <div data-turnos></div>
@@ -279,7 +284,7 @@
         <input type="hidden" name="id" value="">
         <label>Título<input type="text" name="titulo" value="" required></label>
         <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
-        <label>Horário (opcional)<input type="time" name="hora" value=""></label>
+        <label>Horário<input type="time" name="hora" value="" required></label>
         <label>Local<input type="text" name="local" value="" required></label>
         <label>Quem acompanha<select name="acompanhante" required></select></label>
         <div class="dialogo-mvp__acoes">
@@ -361,6 +366,11 @@
           <label>Saio às<select name="fim" required></select></label>
         </div>
         <p class="agenda__previa-turno" data-previa-cobertura></p>
+        <div class="dialogo-mvp__secao" data-bloco-cancelar-lote hidden>
+          <p class="dialogo-mvp__secao-titulo">Cancelamento em lote</p>
+          <p class="formulario-mvp__ajuda" data-texto-cancelar-lote></p>
+          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar todas as minhas participações</button>
+        </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
