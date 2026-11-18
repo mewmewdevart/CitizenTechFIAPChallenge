@@ -1,11 +1,10 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="agenda"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const {
     HOJE,
-    LACUNAS_TURNO,
     obterEstado,
     atualizarEstado,
     obterUsuarioAtual,
@@ -53,9 +52,11 @@
     const doses = core.obterDoses();
     const compartimentos = core.obterCompartimentos();
     return obterEstado().tasks.flatMap(tarefa => {
-      if (tarefa.id === 'tarefa-hoje-jejum-06') {
-        const grupo6h = compartimentos.find(g => g.hora === '6h');
-        if (!grupo6h) return [tarefa];
+      const medicacao = tarefa.medicacao;
+      if (!medicacao) return [tarefa];
+      if (!medicacao.itemId) {
+        const grupo6h = compartimentos.find(g => g.hora === medicacao.hora);
+        if (!grupo6h) return [];
         const administradas = grupo6h.itens.filter(item => item.estado === 'administrado');
         const horarios = [...new Set(administradas.map(item => item.horario).filter(Boolean))]
           .sort()
@@ -73,9 +74,8 @@
           : `Para as 06h${grupo6h.responsavel ? ` · Turno de ${grupo6h.responsavel}` : ''}`;
         return [{ ...tarefa, titulo, descricao, concluida: grupo6h.completo }];
       }
-      const hora = { 'tarefa-metformina-08': '8h', 'tarefa-metformina-20': '20h' }[tarefa.id];
-      if (!hora) return [tarefa];
-      const dose = doses.find(item => item.chave === core.chaveDose(hora, 'Metformina'));
+      const { hora, itemId } = medicacao;
+      const dose = doses.find(item => item.chave === core.chaveDose(hora, itemId));
       if (!dose) return [];
       const administrada = dose.estado === 'administrado';
       const naoAdministrada = dose.estado === 'nao-administrado';
@@ -278,9 +278,10 @@
 
     const linhaDescoberto = (horario, dia) => {
       const atribuicao = estado.atribuicoesTurno?.[`${dia}|${horario}`];
+      const apelido = estado.person?.apelido || estado.person?.nome || 'quem recebe cuidado';
       const detalhe = atribuicao
         ? `Pedido de teste para ${atribuicao.responsavel} · Esperando aceitar (o horário ainda está sem ninguém).`
-        : 'A Mari precisa de alguém com ela nesse horário.';
+        : `${apelido} precisa de alguém nesse horário.`;
       return `<div class="agenda__lacuna">
       <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div>
@@ -314,7 +315,7 @@
         : renderizarTurno(seg, diaSemana)
     )).join('');
 
-    const diasComLacuna = [...new Set([...semana, ...Object.keys(LACUNAS_TURNO)])]
+    const diasComLacuna = [...new Set([...semana, ...Object.keys(estado.lacunasTurno || {})])]
       .sort()
       .filter(dia => possuiLacuna(dia, estado));
 
@@ -634,7 +635,8 @@
 
     if (botao.hasAttribute('data-concluir-tarefa-ubs')) {
       const tarefaAtual = obterEstado().tasks.find(t => t.id === 'tarefa-ubs-retirada');
-      const novaConclusao = !tarefaAtual?.concluida;
+      if (!tarefaAtual) return;
+      const novaConclusao = !tarefaAtual.concluida;
       atualizarEstado(estado => ({
         ...estado,
         tasks: (estado.tasks || []).map(t => (t.id === 'tarefa-ubs-retirada'
@@ -642,8 +644,8 @@
             ...t,
             concluida: novaConclusao,
             descricao: novaConclusao
-              ? 'Medicamento retirado na UBS · Ana da Silva (Aninha)'
-              : 'Depois da consulta · Ana da Silva (Aninha) · Receita salva'
+              ? t.descricaoConcluida || t.descricao
+              : t.descricaoPendente || t.descricao
           }
           : t))
       }));
@@ -657,10 +659,17 @@
 
     if (botao.dataset.dialogo === 'dialogo-tarefa-ubs') {
       const tarefaAtual = obterEstado().tasks.find(t => t.id === 'tarefa-ubs-retirada');
-      const botaoConcluir = document.querySelector('[data-concluir-tarefa-ubs]');
-      if (botaoConcluir) {
-        botaoConcluir.textContent = tarefaAtual?.concluida ? 'Desfazer retirada' : 'Marcar como retirada';
-      }
+      const dialogo = document.getElementById('dialogo-tarefa-ubs');
+      const concluir = dialogo.querySelector('[data-concluir-tarefa-ubs]');
+      concluir.disabled = !tarefaAtual;
+      concluir.textContent = tarefaAtual?.concluida ? 'Desfazer retirada' : 'Marcar como retirada';
+      dialogo.querySelector('h2').textContent = tarefaAtual?.titulo || 'Tarefa indisponível';
+      dialogo.querySelector('[data-tarefa-ubs-contexto]').textContent = tarefaAtual?.contexto ||
+        tarefaAtual?.descricao || 'A tarefa não está cadastrada nesta ficha.';
+      const link = dialogo.querySelector('[data-documento-tarefa-ubs]');
+      const doc = obterEstado().documents.find(doc => doc.id === tarefaAtual?.documentoId);
+      link.hidden = !doc;
+      if (doc) link.href = 'documentos.html?documento=' + encodeURIComponent(doc.id);
     }
 
     if (botao.hasAttribute('data-abrir-atribuir-turno')) {
@@ -668,7 +677,7 @@
       const dialogoAtribuir = document.getElementById('dialogo-atribuir-turno');
       if (dialogoAtribuir) {
         const ctx = dialogoAtribuir.querySelector('[data-atribuir-contexto]');
-        if (ctx) ctx.textContent = `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)} · ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+        if (ctx) ctx.textContent = `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)} · ${horarioTurno || core.obterLacunasDia(diaTurno)[0]?.horario || ''}`;
         dialogoAtribuir.showModal();
       }
       return;
@@ -686,7 +695,7 @@
       const dialogo = document.getElementById(botao.dataset.dialogoDinamico);
       if (dialogo) {
         dialogo.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || core.obterLacunasDia(diaTurno)[0]?.horario || ''}`;
         if (dialogo.id === 'dialogo-cobrir-horario') {
           const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
           const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
@@ -836,15 +845,11 @@
     }
 
     if (tipoFormulario === 'atribuir-turno') {
-      const responsavel = campos.responsavel || 'Beatriz da Silva (Bea)';
-      const avatares = {
-        'Beatriz da Silva (Bea)': 'assets/media/mascotes/icone-mascote-trevo.svg',
-        'Ana da Silva (Aninha)': 'assets/media/mascotes/icone-mascote-espeto.svg',
-        'Paulo da Silva (Paul)': 'assets/media/mascotes/icone-mascote-pingo.svg'
-      };
+      const responsavel = campos.responsavel;
+      if (!core.obterParticipantesRede().some(pessoa => pessoa.nome === responsavel)) return;
       const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
-      const horarioAlvo = horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || '';
-      const avatar = avatares[responsavel] || 'assets/media/mascotes/icone-mascote-trevo.svg';
+      const horarioAlvo = horarioTurno || core.obterLacunasDia(diaTurno)[0]?.horario || '';
+      const avatar = core.resolverPessoaRede(responsavel).src;
       if (horarioAlvo) {
         atualizarEstado(estado => ({
           ...estado,
@@ -908,7 +913,7 @@
   inicializarCompartilhamento(
     dialogoCompartilhar,
     {
-      assuntoEmail: 'Mutirão · Agenda da Mari',
+      assuntoEmail: `Mutirão · Agenda de ${obterEstado().person?.apelido || obterEstado().person?.nome || 'cuidado'}`,
       gerarSecoes: () => {
         const estado = obterEstado();
         const semana = obterSemanaDe(diaSemana);
@@ -944,4 +949,4 @@
 
   renderizar();
   if (compromissoParam) abrirDetalhesEvento(compromissoParam);
-})();
+});

@@ -74,8 +74,8 @@
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
-      <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
+      <summary>Pessoa acompanhada</summary>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
@@ -91,41 +91,13 @@
 
             </div>
           </header>
-          <ul class="menu-notificacoes__lista">
-            <li class="notificacao notificacao--alerta">
-              <a class="notificacao__link" href="agenda.html">
-                <div>
-                  <h3>Horário sem ninguém</h3>
-                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="ficha.html#diario">
-                <div>
-                  <h3>Pedido para marcar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="medicamentos.html">
-                <div>
-                  <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
+          <ul class="menu-notificacoes__lista"></ul>
         </section>
       </details>
       <details class="menu-perfil">
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
-              Manga · Neto</strong><small>Administrador</small></span></summary>
+              Manga</strong><small>Administrador</small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html" aria-current="page"><i class="fa-regular fa-user"
               aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -157,13 +129,11 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
-          alt=""><span><strong>Beatriz
-            (Bea)</strong><small>07h–12h</small></span></div>
+      <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
+          alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
-          aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não foi dado</small></span></div>
+      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
@@ -195,22 +165,21 @@
     <div id="perfil-dados" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-dados">
     <section class="apoio__painel perfil__identidade" aria-labelledby="titulo-perfil">
       <div class="perfil__retrato">
-        <img class="avatar avatar--grande" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="Zé da Manga"
+        <img class="avatar avatar--grande" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
           data-perfil-avatar>
         <img class="perfil__mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" data-perfil-mascote
           hidden>
       </div>
       <div class="perfil__pessoa">
-        <span>Cuida da Mari · Organiza a rede</span>
-        <h2 id="titulo-perfil" data-perfil-nome>Zé da Manga (Zé)</h2>
-        <p>Rede de Maria das Dores (Mari)</p>
+        <span>Organiza a rede de cuidado</span>
+        <h2 id="titulo-perfil" data-perfil-nome>Meu perfil</h2>
+        <p>Rede de cuidado</p>
         <small>Dados de exemplo</small>
       </div>
       <div class="perfil__recado">
         <img class="perfil__recado-mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-        <strong><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> <span data-perfil-recado-titulo>Prefiro
-            mensagens</span></strong>
-        <p data-perfil-recado-texto>Para trocar de horário comigo, mande mensagem antes de ligar.</p>
+        <strong><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> <span data-perfil-recado-titulo></span></strong>
+        <p data-perfil-recado-texto></p>
       </div>
     </section>
 
@@ -219,27 +188,27 @@
       <dl class="perfil__dados">
         <div>
           <dt>Nome completo</dt>
-          <dd data-perfil-campo="nome">Zé da Manga</dd>
+          <dd data-perfil-campo="nome">Não informado</dd>
         </div>
         <div>
           <dt>Nascimento e idade</dt>
-          <dd data-perfil-campo="nascimento">17 de janeiro de 1997 · 29 anos</dd>
+          <dd data-perfil-campo="nascimento">Não informado</dd>
         </div>
         <div>
           <dt>E-mail</dt>
-          <dd data-perfil-campo="email">ze.manga@example.com</dd>
+          <dd data-perfil-campo="email">Não informado</dd>
         </div>
         <div>
           <dt>Celular</dt>
-          <dd data-perfil-campo="telefone">(11) 9XXXX-0142</dd>
+          <dd data-perfil-campo="telefone">Não informado</dd>
         </div>
         <div>
           <dt>Endereço</dt>
-          <dd data-perfil-campo="endereco">Rua das Acácias, 120 · Vila Aurora · São Paulo/SP</dd>
+          <dd data-perfil-campo="endereco">Não informado</dd>
         </div>
         <div>
           <dt>CPF</dt>
-          <dd data-perfil-campo="cpf">***.***.***-00</dd>
+          <dd data-perfil-campo="cpf">Não informado</dd>
         </div>
       </dl>
     </section>
@@ -247,7 +216,7 @@
     <section class="apoio__painel mural" aria-labelledby="titulo-recados">
       <div class="painel__cartao-cabecalho">
         <h2 id="titulo-recados">Recados para você</h2>
-        <small data-mural-total>3 esta semana</small>
+        <small data-mural-total></small>
       </div>
       <ul class="mural__quadro" data-mural></ul>
       <button type="button" class="botao botao--secundario mural__mandar" data-abrir-recado=""><i
@@ -271,14 +240,13 @@
           <fieldset class="escolhas" data-cuidar-humor>
             <legend>Como você está esta semana?</legend>
             <label><input type="radio" name="humor" value="bem"> Bem</label>
-            <label><input type="radio" name="humor" value="cansado" checked> Cansado</label>
+            <label><input type="radio" name="humor" value="cansado"> Cansado</label>
             <label><input type="radio" name="humor" value="sobrecarregado"> Sobrecarregado</label>
             <label><input type="radio" name="humor" value="nao-dizer"> Prefiro não dizer</label>
           </fieldset>
-          <div class="cuidar__retorno" aria-live="polite" data-cuidar-retorno>
+          <div class="cuidar__retorno" aria-live="polite" data-cuidar-retorno hidden>
             <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-            <p><strong data-cuidar-retorno-titulo>Obrigado por contar</strong><span data-cuidar-retorno-texto>Cinco
-                noites seguidas cansam mesmo. Que tal pedir para alguém ficar numa delas?</span></p>
+            <p><strong data-cuidar-retorno-titulo></strong><span data-cuidar-retorno-texto></span></p>
           </div>
           <button type="button" class="botao botao--primario painel__acao-larga" data-dialogo="dialogo-pedir-folga"><i
               class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
@@ -298,32 +266,14 @@
             <h2 id="titulo-sua-semana">Sua semana</h2>
             <small>9 a 15 de novembro</small>
           </div>
-          <p class="semana__total" data-semana-total><strong>25 horas</strong><span>em 5 noites, das 19h às 24h</span>
-          </p>
+          <p class="semana__total" data-semana-total><strong>Sem turnos nesta semana</strong></p>
           <h3 class="cuidar__rotulo">Horas de cada um na semana</h3>
-          <ul class="horas" data-horas-semana>
-            <li><img class="avatar" src="assets/media/mascotes/icone-mascote-espeto.svg" alt="">
-              <p><strong>Aninha</strong> 42 h · 6 madrugadas</p><span class="horas__barra horas__barra--alerta"
-                style="--horas: 100%"><span></span></span>
-            </li>
-            <li><img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
-              <p><strong>Bea · cuidadora</strong> 35 h · contratada</p><span class="horas__barra"
-                style="--horas: 83%"><span></span></span>
-            </li>
-            <li><img class="avatar" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-              <p><strong>Você</strong> 25 h · 5 noites</p><span class="horas__barra"
-                style="--horas: 60%"><span></span></span>
-            </li>
-            <li><img class="avatar" src="assets/media/mascotes/icone-mascote-pingo.svg" alt="">
-              <p><strong>Paul</strong> 18 h · 3 tardes</p><span class="horas__barra"
-                style="--horas: 43%"><span></span></span>
-            </li>
-          </ul>
+          <ul class="horas" data-horas-semana></ul>
           <div class="cuidar__alerta" data-cuidar-alerta>
-            <strong data-cuidar-alerta-titulo>A Aninha fez 6 madrugadas seguidas.</strong>
+            <strong data-cuidar-alerta-titulo></strong>
             <p data-cuidar-alerta-texto>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
             <div class="cuidar__acoes">
-              <button type="button" class="botao botao--secundario" data-abrir-recado="Aninha"
+              <button type="button" class="botao botao--secundario" data-abrir-recado
                 data-cuidar-alerta-recado><i class="fa-regular fa-message" aria-hidden="true"></i> Mandar um
                 recado</button>
               <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i
@@ -452,24 +402,23 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-perfil-dados">
           <h3 id="secao-perfil-dados" class="editar-ficha__subtitulo">Dados pessoais</h3>
           <div class="editar-ficha__grade">
-            <label>Nome completo<input type="text" name="nome" value="Zé da Manga" autocomplete="name"
+            <label>Nome completo<input type="text" name="nome" autocomplete="name"
                 required /></label>
-            <label>Apelido<input type="text" name="apelido" value="Zé" /></label>
-            <label>Data de nascimento<input type="date" name="nascimento" value="1997-01-17" /></label>
+            <label>Apelido<input type="text" name="apelido" /></label>
+            <label>Data de nascimento<input type="date" name="nascimento" /></label>
             <label>CPF
               <span class="editar-ficha__campo-icone">
-                <input type="text" name="cpf" value="***.***.***-00" />
+                <input type="text" name="cpf" />
                 <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="cpf" aria-pressed="false"
                   aria-label="Mostrar CPF">
                   <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
                 </button>
               </span>
             </label>
-            <label>E-mail<input type="email" name="email" value="ze.manga@example.com" autocomplete="email"
+            <label>E-mail<input type="email" name="email" autocomplete="email"
                 required /></label>
-            <label>Celular<input type="tel" name="telefone" value="(11) 9XXXX-0142" autocomplete="tel" /></label>
-            <label class="editar-ficha__campo--largo">Endereço<input type="text" name="endereco"
-                value="Rua das Acácias, 120 · Vila Aurora · São Paulo/SP" /></label>
+            <label>Celular<input type="tel" name="telefone" autocomplete="tel" /></label>
+            <label class="editar-ficha__campo--largo">Endereço<input type="text" name="endereco" /></label>
           </div>
         </section>
 
@@ -477,12 +426,12 @@
           <h3 id="secao-perfil-recado" class="editar-ficha__subtitulo">Recado do perfil</h3>
           <div class="editar-ficha__grade">
             <label class="editar-ficha__campo--largo">Título do recado
-              <input type="text" name="recadoTitulo" maxlength="20" value="Prefiro mensagens" />
+              <input type="text" name="recadoTitulo" maxlength="20" />
               <small class="formulario-mvp__ajuda" data-contador="recadoTitulo">17/20 caracteres</small>
             </label>
             <label class="editar-ficha__campo--largo">Texto do recado
               <textarea name="recadoTexto" rows="2"
-                maxlength="70">Para trocar de horário comigo, mande mensagem antes de ligar.</textarea>
+                maxlength="70"></textarea>
               <small class="formulario-mvp__ajuda" data-contador="recadoTexto">68/70 caracteres</small>
             </label>
           </div>
@@ -503,17 +452,12 @@
       </div>
       <p>Nesta demonstração, o recado fica salvo aqui e não é enviado.</p>
       <form class="formulario-mvp" data-formulario-mvp="recado">
-        <fieldset class="escolhas">
-          <legend>Para quem</legend>
-          <label><input type="radio" name="para" value="Aninha" checked> <img class="avatar"
-              src="assets/media/mascotes/icone-mascote-espeto.svg" alt="" width="24" height="24"> Aninha</label>
-          <label><input type="radio" name="para" value="Bea"> <img class="avatar"
-              src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" width="24" height="24"> Bea</label>
-          <label><input type="radio" name="para" value="Paul"> <img class="avatar"
-              src="assets/media/mascotes/icone-mascote-pingo.svg" alt="" width="24" height="24"> Paul</label>
-        </fieldset>
+        <label>Para quem
+          <select name="para" required></select>
+        </label>
+        <p data-recado-sem-destinatario hidden>Convide alguém na página Pessoas para ter a quem escrever.</p>
         <label>Seu recado<textarea name="recado" rows="4"
-            required>Aninha, obrigado por todas essas madrugadas. Nesta quinta eu fico pra você descansar.</textarea></label>
+            required></textarea></label>
         <div class="ideias" role="group" aria-label="Ideias para começar">
           <button type="button" class="botao botao--secundario botao--pequeno" data-ideia-recado>Obrigado por
             hoje</button>
@@ -582,7 +526,7 @@
   <!-- VLibras Widget -->
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>
-    new window.VLibras.Widget({
+    if (window.VLibras?.Widget) new window.VLibras.Widget({
       rootPath: 'https://vlibras.gov.br/app',
       personalization: 'https://vlibras.gov.br/config/default_logo.json',
       avatar: 'random',

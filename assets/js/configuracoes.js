@@ -1,4 +1,5 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   'use strict';
 
   const formulario = document.querySelector('#formulario-configuracoes');
@@ -160,45 +161,18 @@
     mostrarStatus('Ajustes salvos!', 'sucesso');
   });
 
-  const limparCookiesSessao = () => {
-    if (!document.cookie) return;
-    document.cookie.split(';').forEach(cookie => {
-      const nome = cookie.split('=')[0].trim();
-      if (!nome) return;
-      document.cookie = `${nome}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    });
-  };
-
   botaoRestaurar?.addEventListener('click', () => {
-    try {
-      sessionStorage.clear();
-    } catch {
-      // Ignora erro caso sessionStorage esteja indisponível
-    }
-    try {
-      localStorage.clear();
-    } catch {
-      // Ignora erro caso localStorage esteja indisponível
-    }
-    limparCookiesSessao();
-    if ('caches' in window) {
-      caches.keys().then(nomes => nomes.forEach(nome => caches.delete(nome))).catch(() => {});
-    }
-    document.getElementById('acessibilidade-restaurar')?.click();
-    window.MutiraoTema?.restaurar?.();
-    window.MutiraoNotificacoes?.limpar?.();
-    window.MutiraoCuidado?.restaurarEstadoPadrao?.();
-    try {
-      localStorage.clear();
-    } catch {
-      // Garante remoção de preferências gravadas ao restaurar acessibilidade
-    }
     formulario.reset();
+    if (!salvarPreferenciasSessao()) {
+      carregarPreferenciasSessao();
+      atualizarEstadoAntecedencia();
+      atualizarEstadoBotaoSalvar();
+      return;
+    }
     atualizarEstadoAntecedencia();
     snapshotSalvo = serializarEstadoFormulario();
     atualizarEstadoBotaoSalvar();
-    renderizarLembretes?.();
-    mostrarStatus('Tudo voltou ao começo.', 'sucesso');
+    mostrarStatus('As preferências desta tela voltaram ao padrão.', 'sucesso');
   });
 
   botaoAcessibilidade?.addEventListener('click', () => {
@@ -210,7 +184,6 @@
     }
   });
 
-  const core = window.MutiraoCuidado;
   const CANAIS_SIMULADOS = {
     'app-email': 'Aplicativo e e-mail',
     app: 'Só no aplicativo',
@@ -252,12 +225,13 @@
   renderizarLembretes();
 
   botaoExportar?.addEventListener('click', async () => {
+    const usuario = core.obterUsuarioAtual();
     const canal = formulario.querySelector('#config-canal-notificacao')?.selectedOptions?.[0]?.textContent || 'Aplicativo e e-mail';
     const antecedencia = selectAntecedencia?.selectedOptions?.[0]?.textContent || '30 minutos';
     const resumo = [
       'Mutirão — Resumo dos ajustes',
-      'Quem recebe cuidado: Maria das Dores (Mari)',
-      'Perfil: Zé da Manga · Neto (Administrador)',
+      `Quem recebe cuidado: ${window.MutiraoCuidado?.nomePessoaAcompanhada ? window.MutiraoCuidado.nomePessoaAcompanhada() : 'Pessoa acompanhada'}`,
+      `Perfil: ${usuario.nome} (${usuario.papel})`,
       `Onde recebe os avisos: ${canal}`,
       `Lembrete do remédio: ${toggleMedicacao?.checked ? antecedencia : 'Desativado'}`
     ].join('\n');
@@ -270,12 +244,29 @@
     }
   });
 
-  botaoAbrirSairRede?.addEventListener('click', () => {
-    const select = dialogoSairRede.querySelector('[data-sucessor-rede]');
-    select.innerHTML = core.obterParticipantesRede().filter(p => p.nome !== core.obterUsuarioAtual().nomeComApelido)
-      .map(p => `<option value="${core.escaparHtml(p.nome)}">${core.escaparHtml(p.nome)}</option>`).join('');
-    dialogoSairRede?.showModal();
-  });
+  const selectSucessor = dialogoSairRede?.querySelector('[data-sucessor-rede]');
+  const atualizarConfirmacaoSaida = () => {
+    const semSucessor = !selectSucessor?.value;
+    if (botaoConfirmarSair) {
+      botaoConfirmarSair.disabled = semSucessor;
+      botaoConfirmarSair.setAttribute('aria-disabled', String(semSucessor));
+    }
+  };
+  selectSucessor?.addEventListener('change', atualizarConfirmacaoSaida);
+
+  if (botaoAbrirSairRede) {
+    botaoAbrirSairRede.hidden = core.obterUsuarioAtual().papel !== 'Administrador';
+    botaoAbrirSairRede.addEventListener('click', () => {
+      const outros = core.obterParticipantesRede().filter(pessoa => !pessoa.ehUsuarioAtual);
+      const rotulo = outros.length ? 'Selecione um participante' : 'Nenhum outro participante nesta rede';
+      selectSucessor.replaceChildren(new Option(rotulo, ''));
+      outros.forEach(pessoa => selectSucessor.add(new Option(pessoa.nome, pessoa.nome)));
+      selectSucessor.disabled = !outros.length;
+      dialogoSairRede.querySelector('[data-rede-sem-sucessor]').hidden = Boolean(outros.length);
+      atualizarConfirmacaoSaida();
+      dialogoSairRede.showModal();
+    });
+  }
 
   botaoFecharDialogo?.addEventListener('click', () => {
     dialogoSairRede?.close();
@@ -288,4 +279,4 @@
       core.mostrarSaidaRede();
     } catch (erro) { mostrarStatus(erro.message, 'erro'); }
   });
-})();
+});

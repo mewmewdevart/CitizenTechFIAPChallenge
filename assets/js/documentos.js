@@ -1,11 +1,10 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="documentos"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const {
     HOJE,
-    EQUIPE_CUIDADO,
     obterEstado,
     atualizarEstado,
     obterUsuarioAtual,
@@ -26,7 +25,8 @@
   const tituloDialogoDoc = dialogoAdicionar?.querySelector('[data-titulo-dialogo-documento]');
   let documentoEmFocoId = null;
   let categoriaAtiva = 'Todos';
-  let compromissoFiltroId = new URLSearchParams(location.search).get('compromisso') || '';
+  const compromissoInicial = new URLSearchParams(location.search).get('compromisso');
+  let compromissoFiltroId = core.obterCompromissos().some(item => item.id === compromissoInicial) ? compromissoInicial : '';
 
   const limparErrosDocumento = () => {
     if (erroDocumento) erroDocumento.textContent = '';
@@ -38,9 +38,7 @@
     if (!select) return;
     const usuario = obterUsuarioAtual();
     const pessoasRede = core.obterParticipantesRede().map(pessoa => pessoa.nome);
-    const opcoes = [...new Set(pessoasRede)].filter(nome =>
-      nome && !/maria das dores|\(mari\)/i.test(nome)
-    );
+    const opcoes = [...new Set([usuario.nomeComApelido, ...pessoasRede])];
     if (valorSelecionado && !opcoes.includes(valorSelecionado)) {
       opcoes.push(valorSelecionado);
     }
@@ -128,7 +126,7 @@
       const filtrado = Boolean(termo || categoriaAtiva !== 'Todos' || compromissoFiltroId);
       lista.innerHTML = filtrado
         ? '<div class="estado-vazio"><strong>Nenhum documento encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros>Limpar filtros</button></div>'
-        : '<div class="estado-vazio"><strong>Nenhuma referência cadastrada</strong><p>Use Cadastrar referência para organizar um documento da Mari.</p></div>';
+        : `<div class="estado-vazio"><strong>Nenhuma referência cadastrada</strong><p>Use Cadastrar referência para organizar um documento de ${escaparHtml(obterEstado().person?.apelido || obterEstado().person?.nome || 'quem recebe cuidado')}.</p></div>`;
       return;
     }
 
@@ -372,4 +370,4 @@
   renderizar();
   const idInicial = new URLSearchParams(location.search).get('documento');
   if (idInicial) abrirDetalhes(idInicial);
-})();
+});

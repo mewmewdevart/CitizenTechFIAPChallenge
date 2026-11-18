@@ -1,7 +1,7 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const mural = document.querySelector('[data-mural]');
-  const core = window.MutiraoCuidado;
-  if (!mural || !core) return;
+  if (!mural) return;
 
   const { obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
 
@@ -41,38 +41,7 @@
     trevo: ['coracao', 'festa', 'tranquila', 'chateado', 'surpresa', 'apaixonado']
   };
 
-  const RECADOS = [
-    {
-      id: 'recado-aninha',
-      autor: 'Aninha',
-      data: '11/11',
-      texto: 'Zé, obrigada por segurar todas as noites. Graças a você eu consigo dormir um pouco.',
-      cor: 'manteiga',
-      pino: 'lilas',
-      giro: -2,
-      figurinhas: [{ id: 'mari-coracao', por: 'Aninha' }]
-    },
-    {
-      id: 'recado-paul',
-      autor: 'Paul',
-      data: '12/11',
-      texto: 'Zé, a vó fala de você com o maior carinho. Obrigado por cuidar dela com tanto amor!',
-      cor: 'branco',
-      pino: 'amarelo',
-      giro: 1.5,
-      figurinhas: [{ id: 'minhoca-flor', por: 'Paul' }]
-    },
-    {
-      id: 'recado-bea',
-      autor: 'Bea',
-      data: '9/11',
-      texto: 'A Dona Mari dormiu tranquila depois da sua visita. Obrigada!',
-      cor: 'manteiga',
-      pino: 'lilas',
-      giro: -1,
-      figurinhas: []
-    }
-  ];
+  const obterRecados = () => obterEstado().recadosMural || [];
 
   const LUGARES = ['esquerda', 'direita', 'base'];
   let recadoEmFoco = null;
@@ -101,8 +70,9 @@
     const reacoes = obterReacoes();
     const perfilUsuario = obterEstado().perfilUsuario;
     const quemReagiu = (perfilUsuario?.apelido || perfilUsuario?.nome || 'Zé').trim().split(/\s+/)[0] || 'Zé';
-    total.textContent = `${RECADOS.length} esta semana`;
-    mural.innerHTML = RECADOS.map(recado => {
+    const recados = obterRecados();
+    total.textContent = recados.length ? `${recados.length} esta semana` : '';
+    mural.innerHTML = recados.map(recado => {
       const coladas = recado.figurinhas.map((figurinha, indice) => montarFigurinha(figurinha, LUGARES[indice], false, recado));
       if (reacoes[recado.id]) {
         const lugarReacao = recado.figurinhas.length < 2 ? 'direita' : 'base';
@@ -118,7 +88,7 @@
           <button type="button" class="botao botao--terciario botao--pequeno" data-reagir="${escaparHtml(recado.id)}" aria-label="Reagir ao recado de ${escaparHtml(recado.autor)} com uma figurinha"><i class="fa-regular fa-face-smile" aria-hidden="true"></i> Reagir</button>
         </div>
       </li>`;
-    }).join('');
+    }).join('') || '<li class="estado-vazio">Nenhum recado nesta rede de cuidado.</li>';
     ultimaColada = null;
   };
 
@@ -137,7 +107,7 @@
   };
 
   const abrirSeletor = id => {
-    recadoEmFoco = RECADOS.find(recado => recado.id === id);
+    recadoEmFoco = obterRecados().find(recado => recado.id === id);
     if (!recadoEmFoco) return;
     contexto.textContent = `A figurinha fica colada no recado de ${recadoEmFoco.autor}.`;
     botaoTirar.hidden = !obterReacoes()[id];
@@ -201,4 +171,4 @@
   botaoTirar.addEventListener('click', tirar);
 
   renderizar();
-})();
+});

@@ -72,8 +72,8 @@
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
-      <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
+      <summary>Pessoa acompanhada</summary>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
@@ -88,41 +88,13 @@
               <h2 id="titulo-alertas">Avisos</h2>
             </div>
           </header>
-          <ul class="menu-notificacoes__lista">
-            <li class="notificacao notificacao--alerta">
-              <a class="notificacao__link" href="agenda.html">
-                <div>
-                  <h3>Horário sem ninguém</h3>
-                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="ficha.html#diario">
-                <div>
-                  <h3>Pedido para marcar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="medicamentos.html">
-                <div>
-                  <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
+          <ul class="menu-notificacoes__lista"></ul>
         </section>
       </details>
       <details class="menu-perfil">
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
-              Manga · Neto</strong><small>Administrador</small></span></summary>
+              Manga</strong><small>Administrador</small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -154,13 +126,11 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
-          alt=""><span><strong>Beatriz
-            (Bea)</strong><small>07h–12h</small></span></div>
+      <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
+          alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
-          aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não foi dado</small></span></div>
+      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
@@ -171,11 +141,11 @@
   </aside>
   <main class="conteudo-pagina ficha" id="conteudo" data-pagina-mvp="ficha">
     <nav class="ficha__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
-      Maria das Dores (Mari)</nav>
+      <span data-identidade-acompanhada>Pessoa acompanhada</span></nav>
     <header class="ficha__cabecalho">
       <div>
         <h1>Ficha de quem recebe cuidado</h1>
-        <p>Veja e atualize os dados da Mari para mostrar à família, aos cuidadores e aos médicos.</p>
+        <p>Veja e atualize os dados da ficha para mostrar à família, aos cuidadores e aos médicos.</p>
       </div>
       <div class="ficha__acoes">
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-editar-ficha"><i
@@ -189,17 +159,16 @@
       </div>
     </header>
     <section class="cartao ficha__identidade">
-      <div class="ficha__retrato"><img src="assets/media/fotos/foto-perfil-maria.png" alt="Maria das Dores"><img
+      <div class="ficha__retrato"><img src="assets/media/mascotes/icone-mascote-forma.svg" alt=""><img
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="ficha__mascote"></div>
       <div class="ficha__pessoa"><span>Quem recebe cuidado</span>
-        <h2 data-pessoa-nome>Maria das Dores (Mari)</h2>
-        <p data-pessoa-nascimento>79 anos · 18 de maio de 1947</p><small>Dados de exemplo</small>
+        <h2 data-pessoa-nome>Pessoa acompanhada</h2>
+        <p data-pessoa-nascimento>Nascimento não informado</p>
       </div>
-      <div class="ficha__aviso-alergia" data-aviso-alergia><img class="ficha__alerta-mascote"
+      <div class="ficha__aviso-alergia" data-aviso-alergia hidden><img class="ficha__alerta-mascote"
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt=""><strong><i
-            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo>Alergia à
-            dipirona</span></strong>
-        <p data-aviso-alergia-texto>Não dar. Se tiver dúvida, fale antes com o responsável.</p>
+            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo></span></strong>
+        <p data-aviso-alergia-texto></p>
       </div>
     </section>
     <section class="cartao ficha__cartao ficha__ultimo-relato" aria-labelledby="titulo-resumo-ultimo-relato"
@@ -216,28 +185,19 @@
         <dl>
           <div>
             <dt>Alergias</dt>
-            <dd data-pessoa-campo="alergias"><span class="ficha__etiqueta ficha__etiqueta--alerta">Dipirona</span></dd>
+            <dd data-pessoa-campo="alergias">Não informado</dd>
           </div>
           <div>
             <dt>Doenças e condições</dt>
-            <dd data-pessoa-campo="condicoes"><span class="ficha__etiqueta">Epilepsia</span>
-              <span class="ficha__etiqueta">Diabetes tipo 2</span> <span class="ficha__etiqueta">Asma</span> <span
-                class="ficha__etiqueta">Pressão alta</span>
-            </dd>
+            <dd data-pessoa-campo="condicoes">Não informado</dd>
           </div>
           <div>
             <dt>Remédios de todo dia</dt>
-            <dd data-pessoa-campo="medicamentos"><span
-                class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Losartana ·
-                08h</span> <span
-                class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">Metformina · 08h e
-                20h</span></dd>
+            <dd data-pessoa-campo="medicamentos">Não informado</span></dd>
           </div>
           <div>
             <dt>Cirurgias e problemas de saúde que já teve</dt>
-            <dd data-pessoa-campo="historicoSaude">Cirurgia na perna esquerda (2021) · Placa e parafusos após
-              fratura.<br>Histórico de trombose venosa
-              profunda (2022).</dd>
+            <dd data-pessoa-campo="historicoSaude">Não informado</dd>
           </div>
         </dl>
       </section>
@@ -245,69 +205,52 @@
         <div class="ficha__secao-cabecalho">
           <h2>Compromissos e exames</h2>
         </div>
-        <dl data-consultas-resumo>
-          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
-            <dt>Hoje · Consulta no posto às 14h</dt>
-            <dd>Ana da Silva (Aninha) vai junto · 1 arquivo</dd>
-          </div>
-          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-consulta.svg">
-            <dt>Consulta agendada · 18 de nov. de 2026</dt>
-            <dd>Geriatra (médico de idosos) · 14h · Ana da Silva (Aninha) vai junto</dd>
-          </div>
-          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-exame.svg">
-            <dt>Exame agendado · 21 de nov. de 2026</dt>
-            <dd>Hemoglobina glicada (exame do diabetes) · 08h · Coleta no posto do bairro</dd>
-          </div>
-          <div class="ficha__linha-icone"><img alt="" src="assets/media/icones/icone-documento.svg">
-            <dt>Exame cadastrado · 4 de nov. de 2026</dt>
-            <dd><a href="documentos.html?documento=doc-hemograma">Ver referência do hemograma</a></dd>
-          </div>
-        </dl>
+        <dl data-consultas-resumo><div><dt>Nenhum compromisso ou exame cadastrado</dt></div></dl>
       </section>
       <section class="cartao ficha__cartao">
         <h2>Identificação e contato</h2>
         <dl>
           <div>
             <dt>Nome completo</dt>
-            <dd><span data-pessoa-nome-completo>Maria das Dores</span></dd>
+            <dd><span data-pessoa-nome-completo>Não informado</span></dd>
           </div>
           <div>
             <dt>Data de nascimento e idade</dt>
-            <dd><span data-pessoa-campo="nascimento">18 de maio de 1947 · 79 anos</span></dd>
+            <dd><span data-pessoa-campo="nascimento">Não informado</span></dd>
           </div>
           <div>
             <dt>E-mail</dt>
-            <dd><span data-pessoa-campo="email">maria.dores@example.com</span></dd>
+            <dd><span data-pessoa-campo="email">Não informado</span></dd>
           </div>
           <div>
             <dt>Telefone fixo e celular</dt>
-            <dd><span data-pessoa-campo="telefones">Fixo (11) XXXX-0140 · Celular (11) 9XXXX-0142</span></dd>
+            <dd><span data-pessoa-campo="telefones">Não informado</span></dd>
           </div>
           <div>
             <dt>Endereço</dt>
-            <dd><span data-pessoa-campo="endereco">Rua das Acácias, 120 · Vila Aurora · São Paulo/SP</span></dd>
+            <dd><span data-pessoa-campo="endereco">Não informado</span></dd>
           </div>
           <div>
             <dt>Plano de saúde</dt>
-            <dd><span data-pessoa-campo="convenio">Convênio Vida Plena · Plano Familiar (fictício)</span></dd>
+            <dd><span data-pessoa-campo="convenio">Não informado</span></dd>
           </div>
           <div>
             <dt>Carteirinha do convênio</dt>
-            <dd><span data-pessoa-campo="carteira">•••• •••• •••• 2048</span></dd><button
+            <dd><span data-pessoa-campo="carteira">Não informado</span></dd><button
               class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="carteira"
               aria-pressed="false" aria-label="Mostrar carteirinha"><img alt=""
                 src="assets/media/icones/icone-dado-oculto.svg"></button>
           </div>
           <div>
             <dt>CPF</dt>
-            <dd><span data-pessoa-campo="cpf">***.***.***-**</span></dd><button
+            <dd><span data-pessoa-campo="cpf">Não informado</span></dd><button
               class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="cpf"
               aria-pressed="false" aria-label="Mostrar CPF"><img alt=""
                 src="assets/media/icones/icone-dado-oculto.svg"></button>
           </div>
           <div>
             <dt>RG</dt>
-            <dd><span data-pessoa-campo="rg">**.***.***-*</span></dd><button
+            <dd><span data-pessoa-campo="rg">Não informado</span></dd><button
               class="botao botao--secundario ficha__campo-oculto" type="button" data-alternar-oculto="rg"
               aria-pressed="false" aria-label="Mostrar RG"><img alt=""
                 src="assets/media/icones/icone-dado-oculto.svg"></button>
@@ -319,21 +262,19 @@
         <dl>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-espeto.svg">
             <dt>Ligar primeiro para</dt>
-            <dd data-pessoa-campo="referencia">Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186</dd>
+            <dd data-pessoa-campo="referencia">Não informado</dd>
           </div>
           <div class="ficha__linha-icone"><img alt="" src="assets/media/mascotes/icone-mascote-pingo.svg">
             <dt>Se não atender, ligar para</dt>
-            <dd data-pessoa-campo="alternativo">Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193</dd>
+            <dd data-pessoa-campo="alternativo">Não informado</dd>
           </div>
           <div>
             <dt>Precisa de alguém junto</dt>
-            <dd><span class="ficha__etiqueta" data-pessoa-campo="cobertura">24 horas por
-                dia</span></dd>
+            <dd><span class="ficha__etiqueta" data-pessoa-campo="cobertura">Sem turnos definidos</span></dd>
           </div>
           <div>
-            <dt>Do que ela gosta</dt>
-            <dd data-pessoa-campo="preferencias">Prefere consultas à tarde e gosta de conferir a agenda com a família.
-            </dd>
+            <dt>Preferências</dt>
+            <dd data-pessoa-campo="preferencias">Não informado</dd>
           </div>
         </dl>
       </section>
@@ -341,7 +282,7 @@
     <section class="cartao ficha__cartao" id="diario">
       <div class="ficha__diario-cabecalho">
         <h2>Diário de turno</h2>
-        <p>Veja o que cada pessoa anotou no seu turno: como a Mari passou, observações e recados para quem vem depois.</p>
+        <p>Veja o que cada pessoa anotou no seu turno: como a pessoa passou, observações e recados para quem vem depois.</p>
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-relato"><i class="fa-solid fa-plus"
             aria-hidden="true"></i> Anotar como foi</button>
       </div>
@@ -421,7 +362,7 @@
             Convênio</label>
           <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="alternativo" /> Contato
             alternativo</label>
-          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Do que ela gosta</label>
+          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Preferências</label>
         </div>
       </fieldset>
       <article class="dialogo-mvp__impressao folha-impressao">
@@ -430,15 +371,15 @@
             <img src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" class="folha-impressao__logo" height="34" />
             <span class="folha-impressao__caminho">Mutirão <span>/</span> Resumo para consulta</span>
           </div>
-          <h3 class="folha-impressao__nome" data-pessoa-nome>Maria das Dores (Mari)</h3>
+          <h3 class="folha-impressao__nome" data-pessoa-nome>Pessoa acompanhada</h3>
           <dl class="folha-impressao__identidade" data-impressao-identidade>
             <div>
               <dt>Idade</dt>
-              <dd data-impressao-idade>79 anos</dd>
+              <dd data-impressao-idade>Não informada</dd>
             </div>
             <div>
               <dt>Data de nascimento</dt>
-              <dd data-impressao-nascimento>18 de maio de 1947</dd>
+              <dd data-impressao-nascimento>Não informada</dd>
             </div>
           </dl>
         </header>
@@ -460,7 +401,7 @@
       <div class="dialogo-mvp__cabecalho">
         <div>
           <h2 id="titulo-editar-ficha">Editar ficha</h2>
-          <p id="subtitulo-editar-ficha" class="dialogo-mvp__subtitulo">Revise os dados de Maria das Dores (Mari).</p>
+          <p id="subtitulo-editar-ficha" class="dialogo-mvp__subtitulo">Revise os dados da pessoa acompanhada.</p>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -470,7 +411,7 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-foto-perfil">
           <h3 id="secao-foto-perfil" class="editar-ficha__subtitulo">Foto de Perfil</h3>
           <div class="editar-ficha__foto-linha">
-            <img src="assets/media/fotos/foto-perfil-maria.png" alt="Foto de perfil de Maria das Dores"
+            <img src="assets/media/mascotes/icone-mascote-forma.svg" alt=""
               class="editar-ficha__foto-previa" data-foto-previa />
             <div class="editar-ficha__foto-info">
               <strong>Foto de perfil</strong>
@@ -531,12 +472,12 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-dados-pessoais">
           <h3 id="secao-dados-pessoais" class="editar-ficha__subtitulo">Dados pessoais</h3>
           <div class="editar-ficha__grade">
-            <label>Nome completo<input type="text" name="nome" value="Maria das Dores" required /></label>
-            <label>Apelido ou parentesco<input type="text" name="apelido" value="Mari" required /></label>
-            <label>Data de nascimento<input type="date" name="nascimento" value="1947-05-18" /></label>
+            <label>Nome completo<input type="text" name="nome" required /></label>
+            <label>Apelido ou parentesco<input type="text" name="apelido" /></label>
+            <label>Data de nascimento<input type="date" name="nascimento" /></label>
             <label>CPF
               <span class="editar-ficha__campo-icone">
-                <input type="text" name="cpf" value="***.***.***-**" />
+                <input type="text" name="cpf" />
                 <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="cpf" aria-pressed="false"
                   aria-label="Mostrar CPF">
                   <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
@@ -545,18 +486,17 @@
             </label>
             <label>RG
               <span class="editar-ficha__campo-icone">
-                <input type="text" name="rg" value="**.***.***-*" />
+                <input type="text" name="rg" />
                 <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="rg" aria-pressed="false"
                   aria-label="Mostrar RG">
                   <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
                 </button>
               </span>
             </label>
-            <label>E-mail<input type="email" name="email" value="maria.dores@example.com" /></label>
-            <label>Telefone fixo<input type="text" name="telefoneFixo" value="(11) XXXX-0140" /></label>
-            <label>Celular<input type="text" name="celular" value="(11) 9XXXX-0142" /></label>
-            <label class="editar-ficha__campo--largo">Endereço<input type="text" name="endereco"
-                value="Rua das Acácias, 120 · Vila Aurora · São Paulo/SP" /></label>
+            <label>E-mail<input type="email" name="email" /></label>
+            <label>Telefone fixo<input type="text" name="telefoneFixo" /></label>
+            <label>Celular<input type="text" name="celular" /></label>
+            <label class="editar-ficha__campo--largo">Endereço<input type="text" name="endereco" /></label>
           </div>
         </section>
 
@@ -565,29 +505,16 @@
           <div class="editar-ficha__grade">
             <div>
               <span class="editar-ficha__rotulo-campo">Alergias</span>
-              <input type="hidden" name="alergias" value="Dipirona" data-input-etiquetas="alergias" />
+              <input type="hidden" name="alergias" data-input-etiquetas="alergias" />
               <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="alergias">
-                <span class="ficha__etiqueta ficha__etiqueta--alerta">Dipirona <button type="button"
-                    class="editar-ficha__remover-etiqueta" aria-label="Remover Dipirona"><i class="fa-solid fa-xmark"
-                      aria-hidden="true"></i></button></span>
                 <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar alergia" />
               </div>
             </div>
             <div>
               <span class="editar-ficha__rotulo-campo">Doenças e condições</span>
-              <input type="hidden" name="condicoes" value="Epilepsia, Diabetes tipo 2, Asma, Pressão alta"
+              <input type="hidden" name="condicoes"
                 data-input-etiquetas="condicoes" />
               <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="condicoes">
-                <span class="ficha__etiqueta">Epilepsia <button type="button" class="editar-ficha__remover-etiqueta"
-                    aria-label="Remover Epilepsia"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
-                <span class="ficha__etiqueta">Diabetes tipo 2 <button type="button"
-                    class="editar-ficha__remover-etiqueta" aria-label="Remover Diabetes tipo 2"><i
-                      class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
-                <span class="ficha__etiqueta">Asma <button type="button" class="editar-ficha__remover-etiqueta"
-                    aria-label="Remover Asma"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
-                <span class="ficha__etiqueta">Pressão alta <button type="button"
-                    class="editar-ficha__remover-etiqueta" aria-label="Remover Pressão alta"><i
-                      class="fa-solid fa-xmark" aria-hidden="true"></i></button></span>
                 <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar condição de saúde" />
               </div>
             </div>
@@ -595,7 +522,6 @@
             <div class="editar-ficha__campo--largo">
               <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e problemas de saúde que já teve</span>
               <input type="hidden" name="historicoSaude"
-                value="Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.&lt;br&gt;Já teve trombose venosa profunda, um coágulo na veia (2022)."
                 data-input-editor="historicoSaude" />
               <div class="editar-ficha__editor-rico" data-editor-rico="historicoSaude">
                 <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
@@ -613,8 +539,7 @@
                       class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
                 </div>
                 <div class="editar-ficha__editor-area" contenteditable="true" role="textbox" aria-multiline="true"
-                  aria-labelledby="rotulo-historico-saude" data-editor-alvo="historicoSaude">Cirurgia na perna esquerda
-                  (2021) · Placa e parafusos após fratura.<br>Já teve trombose venosa profunda, um coágulo na veia (2022).</div>
+                  aria-labelledby="rotulo-historico-saude" data-editor-alvo="historicoSaude"></div>
               </div>
             </div>
           </div>
@@ -623,24 +548,20 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-convenio-rede">
           <h3 id="secao-convenio-rede" class="editar-ficha__subtitulo">Convênio e família</h3>
           <div class="editar-ficha__grade">
-            <label>Plano de saúde<input type="text" name="convenio"
-                value="Convênio Vida Plena · Plano Familiar" /></label>
+            <label>Plano de saúde<input type="text" name="convenio" /></label>
             <label>Número da carteirinha
               <span class="editar-ficha__campo-icone">
-                <input type="text" name="carteira" value="•••• •••• •••• 2048" />
+                <input type="text" name="carteira" />
                 <button type="button" class="editar-ficha__botao-oculto" data-alternar-oculto="carteira"
                   aria-pressed="false" aria-label="Mostrar carteirinha">
                   <img src="assets/media/icones/icone-dado-oculto.svg" alt="" aria-hidden="true" />
                 </button>
               </span>
             </label>
-            <label>Contato principal<input type="text" name="referencia"
-                value="Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186" /></label>
-            <label>Segundo contato<input type="text" name="alternativo"
-                value="Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193" /></label>
-            <label>Precisa de alguém junto<input type="text" name="cobertura" value="24 horas por dia" /></label>
-            <label>Do que ela gosta<input type="text" name="preferencias"
-                value="Prefere consultas à tarde e gosta de conferir a agenda com a família." /></label>
+            <label>Contato principal<input type="text" name="referencia" /></label>
+            <label>Segundo contato<input type="text" name="alternativo" /></label>
+            <label>Precisa de alguém junto<input type="text" name="cobertura" /></label>
+            <label>Preferências<input type="text" name="preferencias" /></label>
           </div>
         </section>
 
@@ -648,13 +569,13 @@
           <h3 id="secao-aviso-destaque" class="editar-ficha__subtitulo">Aviso importante</h3>
           <div class="editar-ficha__grade">
             <label class="editar-ficha__campo--largo">Título do aviso
-              <input type="text" name="avisoTitulo" maxlength="24" value="Alergia à dipirona" />
-              <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTitulo">18/24 caracteres</small>
+              <input type="text" name="avisoTitulo" maxlength="24" />
+              <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTitulo">0/24 caracteres</small>
             </label>
             <label class="editar-ficha__campo--largo">Texto do aviso
               <textarea name="avisoTexto" rows="2"
-                maxlength="70">Não dar. Se tiver dúvida, fale antes com o responsável.</textarea>
-              <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTexto">67/70 caracteres</small>
+                maxlength="70"></textarea>
+              <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTexto">0/70 caracteres</small>
             </label>
           </div>
         </section>
@@ -675,15 +596,11 @@
         <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
         <label>Turno (opcional)
           <select name="turno">
-            <option value="">Sem turno (anotação geral)</option>
-            <option value="Turno 00h–07h">00h–07h</option>
-            <option value="Turno 07h–12h">07h–12h</option>
-            <option value="Turno 13h–19h">13h–19h</option>
-            <option value="Turno 19h–24h" selected>19h–24h</option>
-          </select>
+              <option value="">Sem turno (anotação geral)</option>
+            </select>
         </label>
         <label>Como foi o turno
-          <textarea name="relato" rows="3" placeholder="Como a Mari passou, como comeu, como estava o humor, se aconteceu algo..."
+          <textarea name="relato" rows="3" placeholder="Como a pessoa passou, como comeu, como estava o humor, se aconteceu algo..."
             required></textarea>
         </label>
         <label>Recado para o próximo turno (opcional)
@@ -708,7 +625,7 @@
   <!-- VLibras Widget -->
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>
-    new window.VLibras.Widget({
+    if (window.VLibras?.Widget) new window.VLibras.Widget({
       rootPath: 'https://vlibras.gov.br/app',
       personalization: 'https://vlibras.gov.br/config/default_logo.json',
       avatar: 'random',

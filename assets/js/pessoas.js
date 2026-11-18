@@ -1,7 +1,7 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="pessoas"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const { obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
 
@@ -12,13 +12,6 @@
   const dialogoEnviado = document.getElementById('dialogo-convite-enviado');
   const formConvite = pagina.querySelector('[data-formulario-mvp="convite"]');
   const erroConvite = pagina.querySelector('[data-erro-convite]');
-
-  const PARTICIPANTES = [
-    { nome: 'Zé da Manga (Zé)', vinculo: 'Neto', papel: 'Administrador', situacao: 'Você', avatar: 'icone-mascote-cubado.svg', perfil: 'meu-perfil.html' },
-    { nome: 'Ana da Silva (Aninha)', vinculo: 'Filha · Contato principal', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-espeto.svg' },
-    { nome: 'Beatriz da Silva (Bea)', vinculo: 'Cuidadora', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-trevo.svg' },
-    { nome: 'Paulo da Silva (Paul)', vinculo: 'Neto', papel: 'Participante', situacao: 'Ativo na rede', avatar: 'icone-mascote-pingo.svg' }
-  ];
 
   const obterConvites = () => obterEstado().convites || [];
 
@@ -40,25 +33,16 @@
         : '';
     return `<li class="painel__item">
       ${imagem}
-      <span class="painel__texto"><strong>${escaparHtml(pessoa.nome)}</strong><span>Vínculo: ${escaparHtml(pessoa.vinculo)} · Papel: ${escaparHtml(pessoa.papel)}</span>${situacao}</span>
+      <span class="painel__texto"><strong>${escaparHtml(pessoa.nome)}</strong><span>Vínculo: ${escaparHtml(pessoa.vinculo || 'Não informado')} · Papel: ${escaparHtml(pessoa.papel)}</span>${situacao}</span>
       ${acao}
     </li>`;
   };
 
   const renderizar = () => {
-    const perfil = obterEstado().perfilUsuario;
-    const participantes = PARTICIPANTES.map((pessoa, indice) => {
-      if (indice !== 0 || !perfil) return obterEstado().administradorRede === pessoa.nome ? { ...pessoa, papel: 'Administrador' } : pessoa;
-      const nome = `${perfil.nome || 'Zé da Manga'}${perfil.apelido ? ` (${perfil.apelido})` : ''}`;
-      return {
-        ...pessoa,
-        nome,
-        papel: perfil.papel || pessoa.papel,
-        foto: perfil.foto || '',
-        avatar: perfil.mascote ? perfil.mascote.split('/').pop() : pessoa.avatar
-      };
-    });
-
+    const participantes = core.obterParticipantesRede().map(pessoa => ({
+      ...pessoa,
+      situacao: pessoa.ehUsuarioAtual ? 'Você' : 'Ativo na rede'
+    }));
     const convites = obterConvites().map(convite => ({
       nome: convite.email,
       vinculo: convite.vinculo,
@@ -67,7 +51,10 @@
       pendente: true
     }));
 
-    lista.innerHTML = [...participantes, ...(obterEstado().participantesExtras || []).map(pessoa => ({ ...pessoa, situacao: 'Ativo na rede' }))].map(montarItemPessoa).join('');
+    lista.innerHTML = participantes.map(montarItemPessoa).join('');
+    if (!participantes.some(pessoa => !pessoa.ehUsuarioAtual)) {
+      lista.insertAdjacentHTML('beforeend', '<li class="estado-vazio">A rede ainda não tem outros participantes. Use “Convidar alguém” para incluir uma pessoa.</li>');
+    }
     if (secaoConvites && listaConvites) {
       secaoConvites.hidden = convites.length === 0;
       listaConvites.innerHTML = convites.map(montarItemPessoa).join('');
@@ -137,4 +124,4 @@
   });
 
   renderizar();
-})();
+});

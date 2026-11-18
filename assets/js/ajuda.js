@@ -1,4 +1,5 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   'use strict';
 
   const ASSUNTO_MIN = 5;
@@ -121,7 +122,6 @@
     atualizarContadorMensagem();
   }
 
-  const core = window.MutiraoCuidado;
   const historico = document.createElement('section');
   historico.className = 'apoio__painel';
   historico.setAttribute('aria-label', 'Seus chamados da simulação');
@@ -178,4 +178,4 @@
     window.MutiraoNotificacoes.registrar('Mensagem de teste enviada', 'Formulário de Ajuda concluído somente nesta aba.', 'ajuda.html#formulario-ajuda');
     mostrarStatus(`Chamado ${protocolo} salvo no histórico. Nenhum e-mail foi enviado.`, 'sucesso');
   });
-})();
+});

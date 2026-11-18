@@ -1,7 +1,7 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="medicamentos"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const {
     HOJE,
@@ -37,22 +37,20 @@
     item: document.getElementById('dialogo-adicionar-item')
   };
 
-  const NOMES_COMPLETOS = { Aninha: 'Ana da Silva (Aninha)', Bea: 'Beatriz (Bea)' };
   const SITUACOES = {
     dado: ['Tudo dado', 'fa-regular fa-circle-check'],
     falta: ['Falta', 'fa-solid fa-triangle-exclamation'],
     agora: ['Agora', 'fa-regular fa-clock'],
     depois: ['Mais tarde', 'fa-regular fa-clock']
   };
-  const INSUMOS = [{ nome: 'Fraldas', tipo: 'Insumo' }];
+  const apelidoPessoa = () => obterEstado().person?.apelido || obterEstado().person?.nome || 'a pessoa';
 
   let doseEmFoco = null;
-  let itemEmEstoque = 'Metformina';
-  let nomeEstoque = 'Metformina';
+  let itemEmEstoque = '';
+  let nomeEstoque = '';
   let itemEmFoco = null;
 
   const formatarHorario = valor => (valor ? valor.replace(':', 'h') : '');
-  const nomeCompleto = quem => NOMES_COMPLETOS[quem] || quem;
   const plural = (total, singular, varios) => `${total} ${total === 1 ? singular : varios}`;
 
   const juntarHorarios = lista => (lista.length > 1 ? `${lista.slice(0, -1).join(', ')} e ${lista[lista.length - 1]}` : lista[0] || '');
@@ -68,7 +66,7 @@
       const cadastro = estado.itensExtras?.find(item => (item.chave || item.nome) === nome) || {};
       return { chave: nome, nome, tipo: 'Medicamento', ...cadastro, horarios: juntarHorarios(horarios), consumoDia: horarios.length };
     });
-    const insumos = INSUMOS.map(item => ({ ...item, chave: item.nome }));
+    const insumos = (estado.insumos || []).map(item => ({ ...item, chave: item.nome }));
     const extras = (estado.itensExtras || [])
       .filter(item => !nomes.includes(item.chave || item.nome))
       .map(item => ({ ...item, chave: item.chave || item.nome }));
@@ -83,12 +81,12 @@
   };
 
   const descreverItem = item => {
-    if (item.tipo === 'Insumo') return `Material · ${item.estoque ?? 0} em casa`;
+    if (item.tipo === 'Insumo') return item.estoque === null ? 'Material · Saldo não informado' : `Material · ${item.estoque} em casa`;
     return `${item.tipo}${item.horarios ? ` · ${item.horarios}` : ''}`;
   };
 
   const detalharItem = item => {
-    if (item.tipo === 'Insumo') return `Material · ${item.estoque ?? 0} em casa.`;
+    if (item.tipo === 'Insumo') return descreverItem(item) + '.';
     const doseTexto = item.dose ? ` · ${item.dose}` : '';
     const horariosTexto = item.horarios ? ` · ${item.horarios}` : '';
     if (item.estoque === null) return `Medicamento${doseTexto}${horariosTexto}. Veja a dose na receita.`;
@@ -98,7 +96,7 @@
 
   const descreverRegistro = dose => {
     const usuario = obterUsuarioAtual();
-    const quem = dose.meu ? usuario.nomeComApelido : nomeCompleto(dose.quem);
+    const quem = dose.meu ? usuario.nomeComApelido : (dose.quem ? core.resolverPessoaRede(dose.quem).nome : 'Responsável não informado');
     if (dose.estado === 'administrado') return `Dado às ${formatarHorario(dose.horario)} · ${quem}${dose.origemExterna ? ` · Origem externa: ${dose.origemExterna}` : ''}`;
     return `Não foi dado · ${quem} · ${dose.motivo || 'Não disseram o motivo'}`;
   };
@@ -234,9 +232,11 @@
             <small>${plural(item.estoque, 'unidade', 'unidades')}${dias !== null ? ` · Dá para ${plural(dias, 'dia', 'dias')}` : ''}</small>
           </div>`;
         }).join('')
-        : '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nada está acabando.</p></div>';
+        : itens.some(item => item.estoque !== null)
+          ? '<div class="estado-vazio"><strong>Estoque em dia</strong><p>Nada está acabando.</p></div>'
+          : '<div class="estado-vazio"><strong>Nenhum saldo registrado</strong><p>Cadastre um item para acompanhar o estoque.</p></div>';
     }
-    itemEmEstoque = baixos[0]?.chave || itens.find(item => item.estoque !== null)?.chave || 'Metformina';
+    itemEmEstoque = baixos[0]?.chave || itens.find(item => item.estoque !== null)?.chave || '';
   };
 
   const controlesItens = pagina.querySelector('[data-itens-controles]');
@@ -297,29 +297,15 @@
     else renderizarPainel();
   };
 
-  const DESCRICOES_MEDICAMENTOS = {
-    Levotiroxina: 'para controle da tireoide (em jejum)',
-    Carbamazepina: 'para controle neurológico',
-    Bombinha: 'para aliviar e prevenir falta de ar',
-    Losartana: 'para controle da pressão arterial',
-    Metformina: 'para controle da glicemia',
-    Hidroclorotiazida: 'para controle da pressão e retenção de líquidos',
-    'Cálcio + vit. D': 'para fortalecimento dos ossos',
-    'Ácido fólico': 'como suplementação vitamínica',
-    Omeprazol: 'para proteção gástrica',
-    AAS: 'para proteção cardiovascular',
-    'Vitamina B12': 'para reposição vitamínica',
-    Colírio: 'para hidratação e cuidado ocular'
-  };
-
-  const descreverDoseMari = dose => {
+  const descreverDose = dose => {
     const item = obterItens().find(atual => atual.nome === dose.nome || atual.chave === dose.itemId);
     const detalheDose = item?.dose ? ` (${item.dose})` : '';
-    const finalidade = DESCRICOES_MEDICAMENTOS[dose.nome];
+    const finalidade = obterEstado().finalidadesMedicacao?.[dose.itemId];
+    const apelido = apelidoPessoa();
     if (finalidade) {
-      return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, ${finalidade}.`;
+      return `${apelido} toma ${dose.nome}${detalheDose} às ${dose.hora}, ${finalidade}.`;
     }
-    return `Mari toma ${dose.nome}${detalheDose} às ${dose.hora}, como o médico receitou.`;
+    return `${dose.nome}${detalheDose} · Horário registrado para ${apelido}: ${dose.hora}.`;
   };
 
   const prepararDialogos = dose => {
@@ -328,7 +314,7 @@
     const avatar = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     const horaAtual = `${dose.hora.replace('h', '').padStart(2, '0')}h10`;
     dialogos.registrar.querySelector('[data-dose-titulo]').textContent = `Marcar remédio - ${dose.nome}`;
-    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = descreverDoseMari(dose);
+    dialogos.registrar.querySelector('[data-dose-contexto]').textContent = descreverDose(dose);
     for (const dialogo of [dialogos.registrar, dialogos.confirmar, dialogos.naoAdministrada, dialogos.registrada]) {
       dialogo.querySelectorAll('[data-usuario-avatar]').forEach(img => { img.src = avatar; });
       dialogo.querySelectorAll('[data-usuario-registro]').forEach(el => {
@@ -341,7 +327,7 @@
     const horaEl = dialogos.naoAdministrada?.querySelector('[data-registro-hora-atual]');
     if (horaEl) horaEl.textContent = `Anotado às ${horaAtual}`;
     for (const dialogo of [dialogos.confirmar, dialogos.naoAdministrada]) {
-      dialogo.querySelector('[data-dose-previsto]').textContent = descreverDoseMari(dose);
+      dialogo.querySelector('[data-dose-previsto]').textContent = descreverDose(dose);
     }
     const estoqueAtual = obterEstoque(dose.itemId);
     const temEstadoAnterior = dose.estado === 'nao-administrado';
@@ -400,7 +386,7 @@
     }));
 
     dialogos.registrada.querySelector('[data-registro-titulo]').textContent = `${administrada ? 'Remédio dado' : 'Anotado: remédio não dado'} - ${dose.nome}`;
-    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${dose.nome} · Remédio das ${dose.hora} na rotina da Mari.`;
+    dialogos.registrada.querySelector('[data-registro-contexto]').textContent = `${dose.nome} · Remédio das ${dose.hora} na rotina de ${apelidoPessoa()}.`;
     dialogos.registrada.querySelector('[data-registro-agenda]').textContent = administrada
       ? `${dose.hora} · Dado às ${formatarHorario(detalhe)} · ${usuario.nomeComApelido}`
       : `${dose.hora} · Não foi dado · Anotado por ${usuario.nomeComApelido}`;
@@ -416,7 +402,9 @@
     itemEmEstoque = item.chave;
     nomeEstoque = item.nome;
     dialogos.estoque.querySelector('[data-estoque-titulo]').textContent = `Adicionar ao estoque de ${item.nome.toLocaleLowerCase('pt-BR')}`;
-    dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `Maria das Dores (Mari) · Tem em casa: ${plural(item.estoque ?? 0, 'unidade', 'unidades')}. Essa quantidade vai somar com o que já tem em casa.`;
+    const saldo = item.estoque === null ? 'Saldo não informado' : 'Tem em casa: ' + plural(item.estoque, 'unidade', 'unidades');
+    dialogos.estoque.querySelector('[data-estoque-contexto]').textContent = `${core.nomePessoaAcompanhada()} · ${saldo}. Informe a quantidade adicionada.`;
+    dialogos.estoque.querySelector('[data-formulario-mvp="estoque"]').reset();
     dialogos.estoque.querySelector('[name="item"]').value = item.nome;
     dialogos.estoque.showModal();
   };
@@ -605,7 +593,7 @@
       }));
       dialogos.detalhe?.close();
       itemEmFoco = null;
-      anunciarStatus(elementoStatus, `${nomeExibido} removido dos itens da Mari.`);
+      anunciarStatus(elementoStatus, `${nomeExibido} removido dos itens de ${apelidoPessoa()}.`);
       renderizar();
       return;
     }
@@ -684,7 +672,7 @@
         itensExtras: [...(estado.itensExtras || []), { ...dadosItem, chave }],
         estoqueBase: campos.estoque === '' ? estado.estoqueBase : core.definirSaldoEstoque(estado, chave, Number(campos.estoque))
       }));
-      anunciarStatus(elementoStatus, `${nome} adicionado aos itens da Mari.`);
+      anunciarStatus(elementoStatus, `${nome} adicionado aos itens de ${apelidoPessoa()}.`);
     }
 
     form.reset();
@@ -754,4 +742,4 @@
     history.replaceState(null, '', url);
     abrirEstoque(itemEmEstoque);
   }
-})();
+});

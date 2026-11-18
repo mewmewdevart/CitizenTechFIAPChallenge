@@ -69,13 +69,15 @@
   form.addEventListener('submit', evento => {
     evento.preventDefault();
     if (!validarLogin()) return;
-    const comemorar = mascotes && !reduzirMovimento.matches;
+    const comemorar = mascotes && !movimentoReduzido();
     if (comemorar) form.dispatchEvent(new CustomEvent('mutirao:entrando'));
     setTimeout(() => { window.location.href = 'home.html'; }, comemorar ? 700 : 0);
   });
 
   const mascotes = document.querySelector('[data-mascotes]');
   const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const movimentoReduzido = () =>
+    reduzirMovimento.matches || document.documentElement.classList.contains('acessibilidade--reduzir-animacoes');
   const botaoEntrar = form.querySelector('.login__entrar');
 
   if (mascotes) {
@@ -89,9 +91,27 @@
     let timerDigitando = 0;
     let timerReacao = 0;
 
-    const estado = (nome, ativo) => mascotes.classList.toggle(`mascotes--${nome}`, ativo);
+    const estado = (nome, ativo) => {
+      if (ativo && movimentoReduzido()) return;
+      mascotes.classList.toggle(`mascotes--${nome}`, ativo);
+    };
+
+    const limparAnimacoesMascotes = () => {
+      cancelAnimationFrame(quadro);
+      clearTimeout(timerDigitando);
+      clearTimeout(timerReacao);
+      clearTimeout(timerEspiada);
+      ['olhando-form', 'digitando', 'desviando', 'olhos-fechados', 'espiando', 'animados', 'surpresos', 'comemorando', 'piscando']
+        .forEach(nome => mascotes.classList.remove(`mascotes--${nome}`));
+      olhos.forEach(({ pupila }) => pupila.removeAttribute('transform'));
+    };
+
+    new MutationObserver(() => {
+      if (movimentoReduzido()) limparAnimacoesMascotes();
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     const olharPara = (x, y) => {
+      if (movimentoReduzido()) return;
       const matriz = mascotes.getScreenCTM();
       if (!matriz) return;
       const ponto = new DOMPoint(x, y).matrixTransform(matriz.inverse());
@@ -105,11 +125,13 @@
     };
 
     const olharParaElemento = elemento => {
+      if (movimentoReduzido()) return;
       const caixa = elemento.getBoundingClientRect();
       olharPara(caixa.left + caixa.width / 2, caixa.top + caixa.height / 2);
     };
 
     const reagir = (nome, duracao) => {
+      if (movimentoReduzido()) return;
       clearTimeout(timerReacao);
       ['surpresos', 'comemorando'].forEach(outro => estado(outro, false));
       void mascotes.getBoundingClientRect();
@@ -118,14 +140,14 @@
     };
 
     window.addEventListener('pointermove', evento => {
-      if (reduzirMovimento.matches || mascotes.classList.contains('mascotes--olhos-fechados')) return;
+      if (movimentoReduzido() || mascotes.classList.contains('mascotes--olhos-fechados')) return;
       cancelAnimationFrame(quadro);
       quadro = requestAnimationFrame(() => olharPara(evento.clientX, evento.clientY));
     });
 
     emailInput?.addEventListener('focus', () => {
       estado('olhando-form', true);
-      if (!reduzirMovimento.matches) olharParaElemento(emailInput);
+      if (!movimentoReduzido()) olharParaElemento(emailInput);
     });
     emailInput?.addEventListener('blur', () => estado('olhando-form', false));
     emailInput?.addEventListener('input', () => {
@@ -136,6 +158,10 @@
 
     let timerEspiada = 0;
     const atualizarSenha = () => {
+      if (movimentoReduzido()) {
+        limparAnimacoesMascotes();
+        return;
+      }
       const visivel = senhaInput?.type === 'text';
       const naSenha = document.activeElement === senhaInput || document.activeElement === botaoVerSenha;
       estado('desviando', visivel);
@@ -148,9 +174,9 @@
 
     const espiar = () => {
       clearTimeout(timerEspiada);
-      if (senhaInput?.type !== 'text') return;
+      if (senhaInput?.type !== 'text' || movimentoReduzido()) return;
       timerEspiada = setTimeout(() => {
-        if (senhaInput.type !== 'text' || reduzirMovimento.matches) return;
+        if (senhaInput.type !== 'text' || movimentoReduzido()) return;
         estado('espiando', true);
         setTimeout(() => {
           estado('espiando', false);
@@ -181,7 +207,7 @@
     form.addEventListener('mutirao:entrando', () => reagir('comemorando', 900));
 
     const piscar = () => {
-      if (!reduzirMovimento.matches && !mascotes.classList.contains('mascotes--olhos-fechados') && !document.hidden) {
+      if (!movimentoReduzido() && !mascotes.classList.contains('mascotes--olhos-fechados') && !document.hidden) {
         estado('piscando', true);
         setTimeout(() => estado('piscando', false), 160);
       }

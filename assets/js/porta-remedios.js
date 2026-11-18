@@ -1,5 +1,4 @@
-(() => {
-  const core = window.MutiraoCuidado;
+window.MutiraoCuidadoPronto.then(core => {
   if (!core) return;
 
   const {
@@ -14,6 +13,8 @@
   const HORA_REGISTRO = '11:58';
   const ESPERA_ANIMACAO = 900;
   const reduzirMovimento = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const movimentoReduzido = () =>
+    reduzirMovimento.matches || document.documentElement.classList.contains('acessibilidade--reduzir-animacoes');
 
   const ordenarGrupos = grupos => [...grupos.filter(grupo => !grupo.completo), ...grupos.filter(grupo => grupo.completo)];
 
@@ -117,6 +118,10 @@
       const total = grupos.reduce((soma, grupo) => soma + grupo.itens.length, 0);
       const dados = grupos.reduce((soma, grupo) => soma + grupo.itens.length - grupo.faltam, 0);
       if (!resumoPorta) return;
+      if (total === 0) {
+        resumoPorta.textContent = 'Nenhum remédio na rotina';
+        return;
+      }
       resumoPorta.textContent = dados === total
         ? `${total} de ${total} dados · tudo certo por hoje`
         : `${dados} de ${total} dados · arraste para o lado`;
@@ -133,6 +138,11 @@
       const ordenados = ordenarGrupos(grupos);
       atualizarResumo(grupos);
       aoMudar(grupos);
+      if (!grupos.length) {
+        trilho.innerHTML = '<div class="estado-vazio"><strong>Nenhum remédio cadastrado</strong><p>Adicione medicamentos na página Medicamentos para acompanhar as doses de hoje.</p></div>';
+        horas.innerHTML = '';
+        return;
+      }
       trilho.innerHTML = ordenados.map(montarGrupo).join('');
       horas.innerHTML = grupos.map(grupo => {
         const atributos = grupo.completo ? ' data-completo' : grupo.situacao === 'falta' ? ' data-falta' : '';
@@ -157,7 +167,7 @@
 
     const reposicionarGrupos = () => {
       const mover = () => renderizarPortaRemedios();
-      if (document.startViewTransition && !reduzirMovimento.matches) document.startViewTransition(mover);
+      if (document.startViewTransition && !movimentoReduzido()) document.startViewTransition(mover);
       else mover();
     };
 
@@ -213,8 +223,8 @@
         const secao = trilho.querySelector(`[data-hora="${hora}"]`);
         setTimeout(() => {
           if (secao) secao.dataset.saindo = 'true';
-          setTimeout(reposicionarGrupos, reduzirMovimento.matches ? 0 : 300);
-        }, reduzirMovimento.matches ? 0 : ESPERA_ANIMACAO);
+          setTimeout(reposicionarGrupos, movimentoReduzido() ? 0 : 300);
+        }, movimentoReduzido() ? 0 : ESPERA_ANIMACAO);
       }
     };
 
@@ -380,4 +390,4 @@
   };
 
   window.MutiraoPortaRemedios = { montar };
-})();
+});

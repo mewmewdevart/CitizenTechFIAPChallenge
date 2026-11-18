@@ -72,8 +72,8 @@
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
-      <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
+      <summary>Pessoa acompanhada</summary>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
@@ -89,41 +89,13 @@
 
             </div>
           </header>
-          <ul class="menu-notificacoes__lista">
-            <li class="notificacao notificacao--alerta">
-              <a class="notificacao__link" href="agenda.html">
-                <div>
-                  <h3>Horário sem ninguém</h3>
-                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="ficha.html#diario">
-                <div>
-                  <h3>Pedido para marcar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="medicamentos.html">
-                <div>
-                  <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
+          <ul class="menu-notificacoes__lista"></ul>
         </section>
       </details>
       <details class="menu-perfil">
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
-              Manga · Neto</strong><small>Administrador</small></span></summary>
+              Manga</strong><small>Administrador</small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -155,13 +127,11 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
-          alt=""><span><strong>Beatriz
-            (Bea)</strong><small>07h–12h</small></span></div>
+      <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
+          alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
-          aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não foi dado</small></span></div>
+      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
@@ -176,7 +146,7 @@
     <header class="agenda__cabecalho">
       <div>
         <h1>Agenda</h1>
-        <p>Veja as consultas e quem cuida da Mari em cada horário</p>
+        <p>Veja as consultas e quem cuida em cada horário</p>
       </div>
       <div class="agenda__acoes">
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-novo-compromisso"><i
@@ -221,35 +191,16 @@
             <h3>Tarefas do dia</h3>
             <p data-resumo-dia></p>
           </div>
-          <div class="agenda__lacuna" data-lacuna-dia>
+          <div class="agenda__lacuna" data-lacuna-dia hidden>
             <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
             <div>
               <strong data-titulo-lacuna></strong>
-              <p>A Mari precisa de alguém com ela nesse horário.</p>
+              <p>Esse horário precisa de cobertura.</p>
             </div>
             <a href="#escala" class="botao botao--secundario" data-ver-turno>Ver na escala</a>
           </div>
           <div data-eventos></div>
-          <div data-tarefas-diarias>
-            <div class="agenda__tarefa">
-              <span class="agenda__tarefa-icone"><img src="assets/media/icones/icone-receita.svg" alt="" width="20"
-                  height="20"></span>
-              <div>
-                <strong>Pegar remédio no posto (UBS)</strong>
-                <p>Depois da consulta · Ana da Silva (Aninha) · Receita salva</p>
-              </div>
-              <button class="botao botao--secundario" type="button" data-dialogo="dialogo-tarefa-ubs">Ver
-                tarefa</button>
-            </div>
-            <div class="agenda__tarefa">
-              <span class="agenda__tarefa-icone"><i class="bi bi-capsule" aria-hidden="true"></i></span>
-              <div>
-                <strong>20h · Metformina</strong>
-                <p>Para as 20h</p>
-              </div>
-              <a class="botao botao--secundario" href="medicamentos.html">Marcar como dado</a>
-            </div>
-          </div>
+          <div data-tarefas-diarias></div>
         </section>
       </div>
     </section>
@@ -372,13 +323,11 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p data-atribuir-contexto>Maria das Dores (Mari)</p>
+      <p data-atribuir-contexto>Pessoa acompanhada</p>
       <form class="formulario-mvp" data-formulario-mvp="atribuir-turno">
         <label>Responsável
-          <select name="responsavel">
-            <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
-            <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
-            <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
+          <select name="responsavel" data-opcoes-rede required>
+            <option value="">Selecione uma pessoa</option>
           </select>
         </label>
         <div class="dialogo-mvp__aviso-caixa">
@@ -420,7 +369,7 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p data-detalhes-compromisso-pessoa>Maria das Dores (Mari)</p>
+      <p data-detalhes-compromisso-pessoa>Pessoa acompanhada</p>
       <div class="dialogo-mvp__detalhe-texto" data-detalhes-compromisso></div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--perigo" data-excluir-compromisso>Excluir</button>
@@ -433,14 +382,14 @@
 
     <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-tarefa-ubs" aria-labelledby="titulo-tarefa-ubs">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-tarefa-ubs">Pegar remédio no posto (UBS)</h2>
+        <h2 id="titulo-tarefa-ubs">Detalhes da tarefa</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p class="dialogo-mvp__contexto">Pegar no posto de saúde o remédio da receita, depois da consulta das 14h. Quem vai: Ana da Silva (Aninha).</p>
+      <p class="dialogo-mvp__contexto" data-tarefa-ubs-contexto></p>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Fechar</button>
-        <a class="botao botao--secundario" href="documentos.html?documento=doc-receita-ubs">Ver receita em
+        <a class="botao botao--secundario" href="documentos.html" data-documento-tarefa-ubs hidden>Ver receita em
           Documentos</a>
         <button type="button" class="botao botao--primario" data-concluir-tarefa-ubs>Marcar como retirada</button>
       </div>
@@ -458,7 +407,7 @@
   <!-- VLibras Widget -->
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>
-    new window.VLibras.Widget({
+    if (window.VLibras?.Widget) new window.VLibras.Widget({
       rootPath: 'https://vlibras.gov.br/app',
       personalization: 'https://vlibras.gov.br/config/default_logo.json',
       avatar: 'random',

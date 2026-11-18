@@ -111,8 +111,16 @@
 }
 
 .avatar--medio {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
+  object-position: center 20%;
+}
+
+.inicio__resumo > .painel__item .avatar--medio,
+[data-pagina-mvp="pessoas"] #titulo-acompanhadas ~ .painel__lista .avatar {
+  width: 64px;
+  height: 64px;
+  object-position: center 20%;
 }
 
 .avatar--grande {
@@ -182,6 +190,11 @@ html:not(.tema--acolhedor) .inicio__resumo .painel__bloco {
   scroll-behavior: smooth;
   padding-bottom: var(--espaco-xs);
   overscroll-behavior-x: contain;
+}
+
+.porta-remedios__trilho > .estado-vazio {
+  flex: 1 1 100%;
+  width: 100%;
 }
 
 .porta-remedios__grupo {

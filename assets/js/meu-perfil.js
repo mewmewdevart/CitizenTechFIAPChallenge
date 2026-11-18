@@ -1,7 +1,7 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="meu-perfil"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const {
     HOJE,
@@ -26,12 +26,12 @@
 
   const RETORNOS_HUMOR = {
     bem: ['Que bom saber', 'Se a semana pesar, é só marcar de novo.'],
-    cansado: ['Obrigado por contar', 'Cinco noites seguidas cansam mesmo. Que tal pedir para alguém ficar numa delas?'],
+    cansado: ['Obrigado por contar', 'Se você precisar de uma pausa, tente combinar apoio com alguém da rede.'],
     sobrecarregado: ['Obrigado por contar', 'Você não precisa dar conta de tudo sozinho. Peça uma folga ou converse com alguém da família.']
   };
 
   const CUIDAR_INICIAL = {
-    humor: 'cansado',
+    humor: '',
     preferencias: { avisarFamilia: false, pausa: true, apoio: true, agradecer: false }
   };
 
@@ -61,14 +61,11 @@
   };
 
   const MASCOTE_PADRAO = 'assets/media/mascotes/icone-mascote-cubado.svg';
-  const CPF_MASCARADO = '***.***.***-00';
-  const CPF_EXEMPLO = '123.456.789-00';
-  const RECADO_TITULO_PADRAO = 'Prefiro mensagens';
-  const RECADO_TEXTO_PADRAO = 'Para trocar de horário comigo, mande mensagem antes de ligar.';
 
   const mascararCpf = valor => {
     const digitos = String(valor || '').replace(/\D/g, '');
-    const finais = digitos.length >= 2 ? digitos.slice(-2) : '00';
+    if (digitos.length < 2) return '';
+    const finais = digitos.slice(-2);
     return `***.***.***-${finais}`;
   };
 
@@ -126,7 +123,7 @@
     if (nomeCabecalho) nomeCabecalho.textContent = `${perfil.nome}${perfil.apelido ? ` (${perfil.apelido})` : ''}`;
 
     const avatarPrincipal = pagina.querySelector('[data-perfil-avatar]');
-    if (avatarPrincipal) avatarPrincipal.src = avatarExibido;
+    if (avatarPrincipal) { avatarPrincipal.src = avatarExibido; avatarPrincipal.alt = perfil.nome; }
 
     const mascoteMiniatura = pagina.querySelector('[data-perfil-mascote]');
     if (mascoteMiniatura) {
@@ -139,28 +136,38 @@
 
     for (const campo of ['nome', 'email', 'telefone', 'endereco']) {
       const destino = pagina.querySelector(`[data-perfil-campo="${campo}"]`);
-      if (destino && perfil[campo]) destino.textContent = perfil[campo];
+      if (destino) destino.textContent = perfil[campo] || 'Não informado';
       if (formPerfil?.elements[campo]) formPerfil.elements[campo].value = perfil[campo] || '';
     }
     const campoCpf = pagina.querySelector('[data-perfil-campo="cpf"]');
-    const cpfMascarado = mascararCpf(perfil.cpf);
-    if (campoCpf) campoCpf.textContent = cpfMascarado;
-    if (formPerfil?.elements.cpf) formPerfil.elements.cpf.value = cpfMascarado;
+    const cpfMascarado = mascararCpf(perfil.cpfReal || perfil.cpf);
+    if (campoCpf) campoCpf.textContent = cpfMascarado || 'Não informado';
+    if (formPerfil?.elements.cpf) {
+      delete formPerfil.elements.cpf.dataset.cpfRascunho;
+      formPerfil.elements.cpf.value = cpfMascarado;
+      formPerfil.elements.cpf.readOnly = Boolean(cpfMascarado);
+      const botaoCpf = formPerfil.querySelector('[data-alternar-oculto="cpf"]');
+      botaoCpf.setAttribute('aria-pressed', 'false');
+      botaoCpf.setAttribute('aria-label', 'Mostrar CPF');
+      botaoCpf.hidden = !cpfMascarado;
+    }
     const campoNasc = pagina.querySelector('[data-perfil-campo="nascimento"]');
-    if (campoNasc && perfil.nascimento) campoNasc.textContent = formatarNascimento(perfil.nascimento);
-    if (formPerfil?.elements.nascimento && perfil.nascimento) formPerfil.elements.nascimento.value = perfil.nascimento;
+    if (campoNasc) campoNasc.textContent = formatarNascimento(perfil.nascimento) || 'Não informado';
+    if (formPerfil?.elements.nascimento) formPerfil.elements.nascimento.value = perfil.nascimento || '';
     if (formPerfil?.elements.apelido) formPerfil.elements.apelido.value = perfil.apelido || '';
 
-    const tituloRecado = (perfil.recadoTitulo || RECADO_TITULO_PADRAO).slice(0, 20);
+    const tituloRecado = (perfil.recadoTitulo || '').slice(0, 20);
     const tituloRecadoEl = pagina.querySelector('[data-perfil-recado-titulo]');
     if (tituloRecadoEl) tituloRecadoEl.textContent = tituloRecado;
     if (formPerfil?.elements.recadoTitulo) formPerfil.elements.recadoTitulo.value = tituloRecado;
 
-    const textoRecado = (perfil.recadoTexto || RECADO_TEXTO_PADRAO).slice(0, 70);
+    const textoRecado = (perfil.recadoTexto || '').slice(0, 70);
     const textoRecadoEl = pagina.querySelector('[data-perfil-recado-texto]');
     if (textoRecadoEl) textoRecadoEl.textContent = textoRecado;
     if (formPerfil?.elements.recadoTexto) formPerfil.elements.recadoTexto.value = textoRecado;
 
+    const recado = pagina.querySelector('.perfil__recado');
+    if (recado) recado.hidden = !tituloRecado && !textoRecado;
     renderizarMascotesForm(mascote);
     renderizarFotoForm(perfil.foto || '', mascote);
     atualizarContadoresRecado();
@@ -215,11 +222,21 @@
 
   const abrirRecado = para => {
     if (!dialogoRecado || !formRecado) return;
+    const usuario = obterUsuarioAtual();
+    const pessoas = core.obterParticipantesRede().filter(pessoa => pessoa.nome !== usuario.nomeComApelido);
+    const select = formRecado.elements.para;
+    select.replaceChildren(new Option(pessoas.length ? 'Selecione uma pessoa' : 'Nenhum destinatário cadastrado', ''));
+    for (const pessoa of pessoas) select.add(new Option(pessoa.nome, pessoa.nome));
     if (para) {
-      const opcao = formRecado.querySelector(`input[name="para"][value="${para}"]`);
-      if (opcao) opcao.checked = true;
-      if (para !== 'Aninha') formRecado.elements.recado.value = '';
+      const nome = core.normalizarBusca(para);
+      const pessoa = pessoas.find(item => core.normalizarBusca(item.nome) === nome ||
+        core.normalizarBusca(item.nome.match(/\(([^)]+)\)/)?.[1]) === nome);
+      if (pessoa) select.value = pessoa.nome;
     }
+    select.disabled = !pessoas.length;
+    formRecado.querySelector('[data-recado-sem-destinatario]').hidden = Boolean(pessoas.length);
+    formRecado.querySelector('button[type="submit"]').disabled = !pessoas.length;
+    formRecado.elements.recado.value = '';
     dialogoRecado.showModal();
   };
 
@@ -264,8 +281,13 @@
       const visivel = botao.getAttribute('aria-pressed') === 'true';
       botao.setAttribute('aria-pressed', String(!visivel));
       botao.setAttribute('aria-label', visivel ? 'Mostrar CPF' : 'Ocultar CPF');
-      const salvo = obterEstado().perfilUsuario?.cpfReal || CPF_EXEMPLO;
-      formPerfil.elements.cpf.value = visivel ? mascararCpf(salvo) : salvo;
+      const campo = formPerfil.elements.cpf;
+      const dados = obterEstado().perfilUsuario;
+      const atual = campo.dataset.cpfRascunho ?? dados.cpfReal ?? '';
+      if (visivel) campo.dataset.cpfRascunho = campo.value;
+      campo.value = visivel ? mascararCpf(campo.dataset.cpfRascunho) : atual;
+      campo.readOnly = visivel;
+      if (!visivel) campo.focus();
     }
   });
 
@@ -293,7 +315,7 @@
     evento.preventDefault();
     const para = formRecado.elements.para.value;
     const texto = formRecado.elements.recado.value.trim();
-    if (!texto) return;
+    if (!para || !texto) return;
     atualizarEstado(estado => ({
       ...estado,
       recadosEnviados: [...(estado.recadosEnviados || []), { para, texto, em: new Date().toISOString() }]
@@ -414,6 +436,7 @@
     const dadosZe = resumoPorPessoa.get('ze');
 
     const totalEl = pagina.querySelector('[data-semana-total]');
+    if (totalEl) totalEl.innerHTML = '<strong>Você não tem turnos nesta semana</strong>';
     if (totalEl && dadosZe) {
       const rotuloTurno = dadosZe.noites === dadosZe.turnos
         ? `${dadosZe.noites} ${dadosZe.noites === 1 ? 'noite' : 'noites'}`
@@ -438,7 +461,7 @@
           <p><strong>${escaparHtml(titulo)}</strong> ${p.horas} h · ${escaparHtml(detalhe)}</p>
           <span class="horas__barra${alertaBarra}" style="--horas: ${pct}%"><span></span></span>
         </li>`;
-      }).join('');
+      }).join('') || '<li class="estado-vazio">Sem turnos cadastrados nesta semana.</li>';
     }
 
     const alertaEl = pagina.querySelector('[data-cuidar-alerta]');
@@ -473,11 +496,17 @@
     const fotoAtual = 'fotoTemp' in formPerfil.dataset
       ? formPerfil.dataset.fotoTemp
       : (obterEstado().perfilUsuario?.foto || '');
-    const cpfInformado = (campos.cpf || '').trim();
-    const cpfDigitos = cpfInformado.replace(/\D/g, '');
-    const cpfReal = cpfDigitos.length === 11
-      ? cpfInformado
-      : (obterEstado().perfilUsuario?.cpfReal || CPF_EXEMPLO);
+    const cpf = formPerfil.elements.cpf;
+    const cpfAnterior = obterEstado().perfilUsuario;
+    const cpfInformado = (cpf.readOnly ? cpf.dataset.cpfRascunho ?? cpfAnterior.cpfReal ?? '' : campos.cpf).trim();
+    if (cpfInformado && cpfInformado.replace(/\D/g, '').length !== 11) {
+      anunciarStatus(elementoStatus, 'Informe um CPF com 11 números ou deixe o campo vazio.');
+      return;
+    }
+    const cpfReal = cpfInformado;
+    const cpfExibido = cpf.readOnly && !('cpfRascunho' in cpf.dataset)
+      ? mascararCpf(cpfReal || cpfAnterior.cpf)
+      : mascararCpf(cpfReal);
     atualizarEstado(estado => ({
       ...estado,
       perfilUsuario: {
@@ -485,7 +514,7 @@
         nome,
         apelido: (campos.apelido || '').trim(),
         nascimento: (campos.nascimento || '').trim(),
-        cpf: mascararCpf(cpfReal),
+        cpf: cpfExibido,
         cpfReal,
         email: (campos.email || '').trim(),
         telefone: (campos.telefone || '').trim(),
@@ -545,4 +574,4 @@
   renderizarPedidosFolga();
   renderizarSemanaCuidar();
   iniciar();
-})();
+});

@@ -72,8 +72,8 @@
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
-      <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
+      <summary>Pessoa acompanhada</summary>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
@@ -89,41 +89,13 @@
 
             </div>
           </header>
-          <ul class="menu-notificacoes__lista">
-            <li class="notificacao notificacao--alerta">
-              <a class="notificacao__link" href="agenda.html">
-                <div>
-                  <h3>Horário sem ninguém</h3>
-                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="ficha.html#diario">
-                <div>
-                  <h3>Pedido para marcar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="medicamentos.html">
-                <div>
-                  <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
+          <ul class="menu-notificacoes__lista"></ul>
         </section>
       </details>
       <details class="menu-perfil">
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
-              Manga · Neto</strong><small>Administrador</small></span></summary>
+              Manga</strong><small>Administrador</small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -156,13 +128,11 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
-          alt=""><span><strong>Beatriz
-            (Bea)</strong><small>07h–12h</small></span></div>
+      <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
+          alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
-          aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não foi dado</small></span></div>
+      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
@@ -177,7 +147,7 @@
     <header class="apoio__cabecalho">
       <div>
         <h1>Documentos</h1>
-        <p>Consulte referências de receitas, exames e outros documentos do cuidado da Mari. Use dados fictícios nesta
+        <p>Consulte referências de receitas, exames e outros documentos do cuidado. Use dados fictícios nesta
           demonstração.</p>
       </div>
       <button type="button" class="botao botao--primario" data-dialogo="dialogo-adicionar-documento"><i
@@ -185,7 +155,7 @@
     </header>
 
     <section class="apoio__painel" aria-labelledby="titulo-arquivos">
-      <h2 id="titulo-arquivos">Referências da Mari</h2>
+      <h2 id="titulo-arquivos">Referências cadastradas</h2>
       <div class="documentos__busca">
         <label for="pesquisa-documentos">Buscar documentos</label>
         <div class="documentos__campo-busca">
@@ -213,7 +183,7 @@
       <p>Diga de qual consulta ou exame é o documento, para tudo ficar organizado.</p>
       <form class="formulario-mvp" data-formulario-mvp="documento" novalidate>
         <input type="hidden" name="id" value="">
-        <label>Título<input type="text" name="titulo" placeholder="Ex.: Receita de losartana" required></label>
+        <label>Título<input type="text" name="titulo" placeholder="Ex.: Receita da última consulta" required></label>
         <label>Tipo
           <select name="categoria">
             <option value="Receita">Receita</option>
@@ -224,16 +194,11 @@
         <div class="formulario-mvp__grade">
           <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
           <label>Adicionado por
-            <select name="autor" required>
-              <option value="Zé da Manga (Zé)">Zé da Manga (Zé)</option>
-              <option value="Ana da Silva (Aninha)">Ana da Silva (Aninha)</option>
-              <option value="Beatriz da Silva (Bea)">Beatriz da Silva (Bea)</option>
-              <option value="Paulo da Silva (Paul)">Paulo da Silva (Paul)</option>
-            </select>
+            <select name="autor" required></select>
           </label>
         </div>
         <label>Onde encontrar o original<input type="text" name="localOriginal"
-            placeholder="Ex.: Pasta azul na sala ou WhatsApp da Aninha"></label>
+            placeholder="Ex.: Pasta azul na sala"></label>
         <label>Compromisso associado na Agenda (opcional)
           <select name="compromissoId">
             <option value="">Nenhum compromisso vinculado</option>
@@ -267,7 +232,7 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p data-detalhes-pessoa>Maria das Dores (Mari)</p>
+      <p data-detalhes-pessoa>Pessoa acompanhada</p>
       <div class="dialogo-mvp__secao" data-detalhes-documento></div>
       <div class="dialogo-mvp__acoes dialogo-mvp__acoes--iguais">
         <button type="button" class="botao botao--perigo" data-excluir-documento>Excluir</button>
@@ -288,7 +253,7 @@
   <!-- VLibras Widget -->
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>
-    new window.VLibras.Widget({
+    if (window.VLibras?.Widget) new window.VLibras.Widget({
       rootPath: 'https://vlibras.gov.br/app',
       personalization: 'https://vlibras.gov.br/config/default_logo.json',
       avatar: 'random',

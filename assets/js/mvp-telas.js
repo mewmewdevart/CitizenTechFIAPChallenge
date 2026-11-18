@@ -1,7 +1,7 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const {
     HOJE,
@@ -47,7 +47,10 @@
     Object.values(camposSensiveis).forEach(info => { info.visivelFicha = true; });
   }
 
-  const obterValorRealSensivel = chave => obterEstado().person?.[chave] || '';
+  const obterValorRealSensivel = chave => {
+    const valor = String(obterEstado().person?.[chave] || '').trim();
+    return /^não informad[oa]$/i.test(valor) ? '' : valor;
+  };
 
   const obterValorMascarado = chave => {
     const info = camposSensiveis[chave];
@@ -74,15 +77,16 @@
     const valorReal = obterValorRealSensivel(chave);
     const textoFicha = pagina.querySelector(`[data-pessoa-campo="${chave}"]`);
     if (textoFicha) {
-      textoFicha.textContent = info.visivelFicha ? (valorReal || 'Não informado') : obterValorMascarado(chave);
+      textoFicha.textContent = !valorReal ? 'Não informado' : (info.visivelFicha ? valorReal : obterValorMascarado(chave));
     }
     const botaoFicha = pagina.querySelector(`.ficha__campo-oculto[data-alternar-oculto="${chave}"]`);
     atualizarBotaoOculto(botaoFicha, info.visivelFicha, info.rotulo);
+    if (botaoFicha) botaoFicha.hidden = !valorReal;
 
     const formulario = pagina.querySelector('[data-formulario-mvp="ficha"]');
     const inputForm = formulario?.elements?.[chave];
     if (inputForm) {
-      inputForm.value = info.visivelForm ? (rascunhoSensivel[chave] ?? valorReal) : obterValorMascarado(chave);
+      inputForm.value = info.visivelForm ? (rascunhoSensivel[chave] ?? valorReal) : (valorReal ? obterValorMascarado(chave) : '');
       inputForm.readOnly = !info.visivelForm;
       inputForm.title = info.visivelForm ? '' : `Clique no ícone para ver e mudar ${info.rotulo}`;
     }
@@ -340,7 +344,7 @@
         </div>`
       : `<div class="folha-impressao__cartao">
           <h4>Alergias</h4>
-          <p>Nenhuma alergia anotada.</p>
+          <p>Alergias não informadas.</p>
         </div>`;
 
     const medicamentosLista = core.obterResumoMedicamentos().join(', ')
@@ -361,7 +365,7 @@
     const cartaoCondicoes = incluirCondicoes
       ? `<section class="folha-impressao__cartao">
           <h4>Doenças e condições</h4>
-          <p>${escaparHtml(person.condicoes || 'Nenhuma registrada')}</p>
+          <p>${escaparHtml(person.condicoes || 'Não informado')}</p>
         </section>`
       : '';
 
@@ -396,7 +400,7 @@
 
     const secaoPreferencias = incluirPreferencias && person.preferencias
       ? `<section class="folha-impressao__secao">
-          <h4>Do que ela gosta</h4>
+          <h4>Preferências</h4>
           <p>${escaparHtml(person.preferencias)}</p>
         </section>`
       : '';
@@ -424,7 +428,6 @@
   });
 
   const renderizarPessoa = () => {
-    window.dispatchEvent(new Event('mutirao:pessoa-atualizada'));
     const person = obterEstado().person;
     if (!person) return;
 
@@ -436,6 +439,7 @@
     if (nomeCompletoEl) nomeCompletoEl.textContent = nome;
 
     atualizarAvisoAlergia(person);
+    core.popularTurnosRelato(pagina.querySelector('[data-formulario-mvp="relato"] select[name="turno"]'));
 
     const formulario = pagina.querySelector('[data-formulario-mvp="ficha"]');
     const campos = formulario?.elements;
@@ -444,8 +448,8 @@
       campos.apelido.value = apelido;
       if (campos.telefoneFixo) campos.telefoneFixo.value = person.telefoneFixo || '';
       if (campos.celular) campos.celular.value = person.celular || '';
-      if (campos.avisoTitulo) campos.avisoTitulo.value = (person.avisoTitulo || AVISO_TITULO_PADRAO).slice(0, 24);
-      if (campos.avisoTexto) campos.avisoTexto.value = (person.avisoTexto || AVISO_TEXTO_PADRAO).slice(0, 70);
+      if (campos.avisoTitulo) campos.avisoTitulo.value = (person.avisoTitulo || '').slice(0, 24);
+      if (campos.avisoTexto) campos.avisoTexto.value = (person.avisoTexto || '').slice(0, 70);
       atualizarContadoresAviso();
     }
 
@@ -511,7 +515,7 @@
         const classeEtiqueta = chave === 'alergias' ? 'ficha__etiqueta ficha__etiqueta--alerta' : 'ficha__etiqueta';
         no.innerHTML = itens.length
           ? itens.map(item => `<span class="${classeEtiqueta}">${escaparHtml(item)}</span>`).join(' ')
-          : 'Nenhuma registrada';
+          : 'Não informado';
         const listaModal = formulario?.querySelector(`[data-lista-etiquetas="${chave}"]`);
         if (listaModal) {
           listaModal.querySelectorAll('.ficha__etiqueta').forEach(etiqueta => etiqueta.remove());
@@ -527,7 +531,7 @@
         const itens = core.obterResumoMedicamentos();
         no.innerHTML = itens.length
           ? itens.map(item => `<span class="ficha__etiqueta ficha__etiqueta--atencao ficha__etiqueta--medicamento">${escaparHtml(item)}</span>`).join(' ')
-          : 'Nenhum registrado';
+          : 'Nenhum remédio cadastrado';
       } else if (chave === 'nascimento' && valor) {
         const nascimento = formatarData(valor, { day: 'numeric', month: 'long', year: 'numeric' });
         let anos = Number(HOJE.slice(0, 4)) - Number(valor.slice(0, 4));
@@ -536,13 +540,27 @@
         const elNascimento = pagina.querySelector('[data-pessoa-nascimento]');
         if (elNascimento) elNascimento.textContent = `${anos} anos · ${nascimento}`;
       } else {
-        no.textContent = valor || 'Não informado';
+        no.textContent = valor || (chave === 'cobertura' ? 'Sem turnos definidos' : 'Não informado');
         if (chave === 'nascimento') {
           const elNascimento = pagina.querySelector('[data-pessoa-nascimento]');
-          if (elNascimento) elNascimento.textContent = '';
+          if (elNascimento) elNascimento.textContent = 'Nascimento não informado';
         }
       }
     });
+
+    const cartaoRede = pagina.querySelector('.ficha__cartao--rede');
+    if (cartaoRede) {
+      let algumVisivel = false;
+      cartaoRede.querySelectorAll('dl > div').forEach(linha => {
+        const campoEl = linha.querySelector('[data-pessoa-campo]');
+        const chave = campoEl?.dataset.pessoaCampo;
+        const val = String(person[chave] || '').trim();
+        const vazio = !val || (chave === 'cobertura' && val === 'Sem turnos definidos');
+        linha.hidden = vazio;
+        if (!vazio) algumVisivel = true;
+      });
+      cartaoRede.hidden = !algumVisivel;
+    }
 
     renderizarImpressao();
     if (formulario) {
@@ -853,8 +871,8 @@
             .map(item => `${formatarData(item.dia, { day: 'numeric', month: 'short' })} · ${item.hora} · ${item.titulo}`)
             .join('\n') || 'Nenhum compromisso agendado.',
           'Informações de saúde': () => [
-            `Alergias: ${person.alergias || 'Nenhuma registrada'}`,
-            `Condições: ${person.condicoes || 'Nenhuma registrada'}`
+            `Alergias: ${person.alergias || 'Não informado'}`,
+            `Condições: ${person.condicoes || 'Não informado'}`
           ].join('\n'),
           'Remédios de todo dia': () => core.obterResumoMedicamentos().join('; ') || 'Nenhum registrado.'
         };
@@ -863,4 +881,4 @@
   );
 
   renderizar();
-})();
+});

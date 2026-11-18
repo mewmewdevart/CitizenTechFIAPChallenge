@@ -1,366 +1,64 @@
-(() => {
-  const CHAVE_ESTADO = 'mutirao-mvp-estado-v1';
+window.MutiraoCuidadoPronto = (async () => {
   const HOJE = '2026-11-10';
+  const main = document.querySelector('main');
+  const seletor = document.querySelector('.seletor-pessoa');
+  const status = document.createElement('div');
+  status.className = 'cartao cuidado-status-inicial';
+  status.setAttribute('data-status-inicial-cuidado', '');
+  status.setAttribute('role', 'status');
+  status.textContent = 'Carregando a ficha de cuidado…';
+  main?.before(status);
+  if (main) {
+    main.hidden = true;
+    main.setAttribute('aria-busy', 'true');
+  }
+  if (seletor) seletor.inert = true;
 
-  const EQUIPE_CUIDADO = [
-    { nome: 'Ana da Silva (Aninha)', avatar: 'icone-mascote-espeto.svg' },
-    { nome: 'Beatriz da Silva (Bea)', avatar: 'icone-mascote-trevo.svg' },
-    { nome: 'Paulo da Silva (Paul)', avatar: 'icone-mascote-pingo.svg' },
-    { nome: 'Zé da Manga', avatar: 'icone-mascote-cubado.svg' }
-  ];
-
-  const LACUNAS_TURNO = {
-    '2026-11-10': ['12h–13h', 'Descoberto'],
-    '2026-11-11': ['00h–24h', 'Descoberto'],
-    '2026-11-12': ['08h–14h', 'Parcial'],
-    '2026-11-13': ['14h–18h', 'Parcial']
-  };
-
-  const ESCALAS_FIXAS = {
-    '2026-11-09': [
-      { horario: '00h–07h', pessoa: EQUIPE_CUIDADO[0] },
-      { horario: '07h–13h', pessoa: EQUIPE_CUIDADO[1] },
-      { horario: '13h–19h', pessoa: EQUIPE_CUIDADO[2] },
-      { horario: '19h–24h', pessoa: EQUIPE_CUIDADO[3] }
-    ],
-    '2026-11-10': [
-      { horario: '00h–07h', pessoa: EQUIPE_CUIDADO[0] },
-      { horario: '07h–12h', pessoa: EQUIPE_CUIDADO[1] },
-      { horario: '12h–13h', pessoa: null, lacuna: true },
-      { horario: '13h–19h', pessoa: EQUIPE_CUIDADO[2] },
-      { horario: '19h–24h', pessoa: EQUIPE_CUIDADO[3] }
-    ],
-    '2026-11-11': [
-      { horario: '00h–24h', pessoa: null, lacuna: true }
-    ],
-    '2026-11-12': [
-      { horario: '00h–08h', pessoa: EQUIPE_CUIDADO[0] },
-      { horario: '08h–14h', pessoa: null, lacuna: true },
-      { horario: '14h–19h', pessoa: EQUIPE_CUIDADO[2] },
-      { horario: '19h–24h', pessoa: EQUIPE_CUIDADO[3] }
-    ],
-    '2026-11-13': [
-      { horario: '00h–07h', pessoa: EQUIPE_CUIDADO[1] },
-      { horario: '07h–14h', pessoa: EQUIPE_CUIDADO[0] },
-      { horario: '14h–18h', pessoa: null, lacuna: true },
-      { horario: '18h–24h', pessoa: EQUIPE_CUIDADO[3] }
-    ],
-    '2026-11-14': [
-      { horario: '00h–07h', pessoa: EQUIPE_CUIDADO[0] },
-      { horario: '07h–13h', pessoa: EQUIPE_CUIDADO[1] },
-      { horario: '13h–19h', pessoa: EQUIPE_CUIDADO[2] },
-      { horario: '19h–24h', pessoa: EQUIPE_CUIDADO[3] }
-    ],
-    '2026-11-15': [
-      { horario: '00h–07h', pessoa: EQUIPE_CUIDADO[2] },
-      { horario: '07h–13h', pessoa: EQUIPE_CUIDADO[1] },
-      { horario: '13h–19h', pessoa: EQUIPE_CUIDADO[0] },
-      { horario: '19h–24h', pessoa: EQUIPE_CUIDADO[3] }
-    ]
-  };
-
-  function criarEstadoInicial() {
-    return {
-      person: {
-        nome: 'Maria das Dores',
-        apelido: 'Mari',
-        nascimento: '1947-05-18',
-        cpf: '123.456.789-00',
-        rg: '12.345.678-9',
-        email: 'maria.dores@example.com',
-        telefoneFixo: '(11) XXXX-0140',
-        celular: '(11) 9XXXX-0142',
-        endereco: 'Rua das Acácias, 120 · Vila Aurora · São Paulo/SP',
-        convenio: 'Convênio Vida Plena · Plano Familiar (fictício)',
-        carteira: '4128 9910 3304 2048',
-        alergias: 'Dipirona',
-        condicoes: 'Epilepsia, Diabetes tipo 2, Asma, Pressão alta',
-        medicamentos: 'Losartana · 08h, Metformina · 08h e 20h',
-        historicoSaude: 'Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Já teve trombose venosa profunda, um coágulo na veia (2022).',
-        referencia: 'Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186',
-        alternativo: 'Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193',
-        cobertura: '24 horas por dia',
-        preferencias: 'Prefere consultas à tarde e gosta de conferir a agenda com a família.',
-        foto: 'assets/media/fotos/foto-perfil-maria.png',
-        mascote: 'assets/media/mascotes/icone-mascote-minhoca.svg'
-      },
-      events: [
-        {
-          id: 'evt-caminhada-09',
-          dia: '2026-11-09',
-          hora: '15:30',
-          titulo: 'Caminhada leve no quintal e hidratação',
-          local: 'Casa · Turno 13h–19h',
-          acompanhante: 'Paulo da Silva (Paul)',
-          criadoPor: 'Paulo da Silva (Paul)'
-        },
-        {
-          id: 'evt-ubs-10',
-          dia: HOJE,
-          hora: '14:00',
-          titulo: 'Consulta no posto (UBS)',
-          local: 'UBS do bairro',
-          acompanhante: 'Ana da Silva (Aninha)',
-          preparacao: [
-            'Levar a pasta da consulta · Ana da Silva (Aninha)',
-            'Volta combinada · Paulo da Silva (Paul)'
-          ]
-        },
-        {
-          id: 'evt-geriatria-18',
-          dia: '2026-11-18',
-          hora: '14:00',
-          titulo: 'Geriatria',
-          local: 'Consultório do geriatra (médico de idosos)',
-          acompanhante: 'Ana da Silva (Aninha)'
-        },
-        {
-          id: 'evt-hemoglobina-21',
-          dia: '2026-11-21',
-          hora: '08:00',
-          titulo: 'Hemoglobina glicada',
-          local: 'Coleta · UBS do bairro',
-          acompanhante: ''
-        }
-      ],
-      covered: {},
-      shiftEdits: {},
-      tasks: [
-        {
-          id: 'tarefa-ontem-06-08',
-          dia: '2026-11-09',
-          titulo: '06h e 08h · Remédios da manhã dados',
-          descricao: 'Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h',
-          icone: 'bi bi-capsule',
-          concluida: true,
-          href: 'ficha.html#diario',
-          rotuloAcao: 'Ver no Diário'
-        },
-        {
-          id: 'tarefa-ontem-otorrino',
-          dia: '2026-11-09',
-          titulo: '08h10 · Recado: marcar consulta no otorrino',
-          descricao: 'Ver se o Convênio Vida Plena paga antes de marcar · Beatriz da Silva (Bea)',
-          icone: 'icone-receita.svg',
-          concluida: true,
-          href: 'home.html#passagem-cuidado',
-          rotuloAcao: 'Ver passagem'
-        },
-        {
-          id: 'tarefa-ontem-retorno-ubs',
-          dia: '2026-11-09',
-          titulo: '16h · Retorno da consulta de terça combinado',
-          descricao: 'Paulo da Silva (Paul) confirmou buscar Mari e Ana na UBS após as 14h · Turno 13h–19h',
-          icone: 'icone-receita.svg',
-          concluida: true,
-          href: 'agenda.html?dia=2026-11-10',
-          rotuloAcao: 'Ver dia 10/11'
-        },
-        {
-          id: 'tarefa-ontem-20h-docs',
-          dia: '2026-11-09',
-          titulo: '20h · Metformina e separação de documentos',
-          descricao: 'Zé da Manga (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h',
-          icone: 'bi bi-capsule',
-          concluida: true,
-          href: 'documentos.html',
-          rotuloAcao: 'Ver Documentos'
-        },
-        {
-          id: 'tarefa-ubs-retirada',
-          dia: HOJE,
-          titulo: 'Pegar remédio no posto (UBS)',
-          descricao: 'Depois da consulta · Ana da Silva (Aninha) · Receita salva',
-          icone: 'icone-receita.svg',
-          concluida: false,
-          dialogo: 'dialogo-tarefa-ubs'
-        },
-        {
-          id: 'tarefa-metformina-08',
-          dia: HOJE,
-          titulo: '08h · Metformina',
-          descricao: 'Não foi dado · Bea anotou',
-          icone: 'bi bi-capsule',
-          concluida: false,
-          href: 'medicamentos.html',
-          rotuloAcao: 'Marcar como dado'
-        },
-        {
-          id: 'tarefa-metformina-20',
-          dia: HOJE,
-          titulo: '20h · Metformina',
-          descricao: 'Às 20h · Turno de Zé da Manga (Zé)',
-          icone: 'bi bi-capsule',
-          concluida: false,
-          href: 'medicamentos.html',
-          rotuloAcao: 'Marcar como dado'
-        },
-        {
-          id: 'tarefa-hoje-jejum-06',
-          dia: HOJE,
-          titulo: '06h · Remédios em jejum dados',
-          descricao: 'Aninha deu 3 remédios (06h10 e 06h12) · Turno de Ana da Silva (Aninha)',
-          icone: 'bi bi-capsule',
-          concluida: true,
-          href: 'medicamentos.html#registros-de-hoje',
-          rotuloAcao: 'Ver anotações'
-        }
-      ],
-      reports: {
-        [HOJE]: [
-          [
-            'Beatriz da Silva (Bea)',
-            'Cuidadora · Turno 07h–12h',
-            'Tarefa relacionada · Pegar remédio no posto (UBS) · Ocorrência · Metformina das 08h não foi dada',
-            'Confirmei a consulta das 14h. A metformina das 8h não foi dada, e ninguém disse por quê.',
-            'Falta marcar a consulta no otorrino (ouvido, nariz e garganta). Antes, confira se o convênio paga.'
-          ],
-          [
-            'Ana da Silva (Aninha)',
-            'Filha · Contato principal · Turno 00h–07h',
-            'Tarefa relacionada · Levar a pasta da consulta',
-            'Separei os documentos e deixei a pasta na bolsa azul.',
-            'Levar a pasta para a consulta das 14h.'
-          ]
-        ],
-        '2026-11-09': [
-          [
-            'Zé da Manga',
-            'Administrador · Turno 19h–24h',
-            'Tarefa relacionada · Conferir os remédios da noite',
-            'Maria jantou sopa de legumes e tomou a metformina das 20h sem problemas. Foi dormir por volta das 22h30.',
-            'Deixei o RG e a carteirinha do convênio separados em cima da cômoda para a consulta de amanhã.'
-          ],
-          [
-            'Paulo da Silva (Paul)',
-            'Neto · Segundo contato · Turno 13h–19h',
-            'Tarefa relacionada · Combinar a volta da consulta de terça',
-            'Fizemos uma caminhada leve no quintal à tarde e ela bebeu bastante água. Não reclamou de dor.',
-            'Confirmado que busco a Maria e a Ana na UBS amanhã após a consulta das 14h.'
-          ],
-          [
-            'Beatriz da Silva (Bea)',
-            'Cuidadora · Turno 07h–13h',
-            'Tarefa relacionada · Dar os remédios da manhã',
-            'Tomou todo o café da manhã. Losartana e metformina das 08h dadas certinho; pressão boa (12x8).',
-            'Lembrar de oferecer água ao longo da tarde.'
-          ],
-          [
-            'Ana da Silva (Aninha)',
-            'Filha · Contato principal · Turno 00h–07h',
-            'Tarefa relacionada · Ficar com ela à noite',
-            'Noite tranquila, dormiu direto e acordou bem às 06h40.',
-            'A receita do remédio de todo dia ficou na pasta azul.'
-          ]
-        ]
-      },
-      documents: [
-        {
-          id: 'doc-receita-ubs',
-          titulo: 'Receita para pegar remédio no posto',
-          categoria: 'Receita',
-          dia: '2026-11-10',
-          autor: 'Ana da Silva (Aninha)',
-          compromissoId: 'evt-ubs-10',
-          vinculo: 'Consulta no posto de 10 nov.',
-          localOriginal: 'Pasta azul da Mari (sala) · cópia no WhatsApp da Aninha',
-          observacoes: 'Receita para pegar o remédio no posto do bairro, depois da consulta das 14h.'
-        },
-        {
-          id: 'doc-hemograma',
-          titulo: 'Hemograma',
-          categoria: 'Exame',
-          dia: '2026-11-04',
-          autor: 'Paulo da Silva (Paul)',
-          vinculo: 'Exame salvo em 4 nov.',
-          localOriginal: 'Pasta de exames (gaveta do quarto) · PDF com o Paul',
-          observacoes: 'Resultado completo do hemograma (exame de sangue) feito em 4 de novembro de 2026.'
-        },
-        {
-          id: 'doc-ficha-atendimento',
-          titulo: 'Ficha de atendimento',
-          categoria: 'Documento',
-          dia: '2026-11-06',
-          autor: 'Beatriz da Silva (Bea)',
-          vinculo: 'Documento geral',
-          localOriginal: 'Pasta azul da Mari (sala)',
-          observacoes: 'Papel do atendimento e o que a equipe orientou.'
-        }
-      ]
-    };
+  let banco;
+  try {
+    const { carregarBaseCuidado, criarBancoCuidado } = await import('./estado-cuidado.mjs');
+    banco = criarBancoCuidado(await carregarBaseCuidado(), {
+      getItem: chave => sessionStorage.getItem(chave),
+      setItem: (chave, valor) => sessionStorage.setItem(chave, valor)
+    });
+  } catch {
+    status.setAttribute('role', 'alert');
+    status.textContent = 'Não foi possível carregar as fichas de cuidado. Abra o Mutirão pelo endereço do site ou por um servidor local.';
+    const tentar = document.createElement('button');
+    tentar.type = 'button';
+    tentar.className = 'botao botao--secundario';
+    tentar.textContent = 'Tentar novamente';
+    tentar.addEventListener('click', () => location.reload());
+    status.append(tentar);
+    main?.removeAttribute('aria-busy');
+    return null;
   }
 
-  function migrarRegistrosDose(anterior) {
-    const registros = { ...anterior };
-    const chaveAnterior = '18h|Metformina';
-    const chaveAtual = '20h|Metformina';
-    if (registros[chaveAnterior] && !registros[chaveAtual]) {
-      registros[chaveAtual] = registros[chaveAnterior];
-      delete registros[chaveAnterior];
-    }
-    return registros;
-  }
+  let estadoAtual = banco.obterEstado();
 
-  function carregarEstado() {
-    const base = criarEstadoInicial();
+  function alterarComAviso(operacao) {
     try {
-      const salvo = sessionStorage.getItem(CHAVE_ESTADO);
-      if (!salvo) return base;
-      const dados = JSON.parse(salvo);
-      return {
-        ...base,
-        ...dados,
-        registrosDose: migrarRegistrosDose(dados?.registrosDose),
-        person: { ...base.person, ...(dados?.person || {}) },
-        events: Array.isArray(dados?.events) ? dados.events : base.events,
-        covered: dados?.covered && typeof dados.covered === 'object' ? dados.covered : {},
-        shiftEdits: dados?.shiftEdits && typeof dados.shiftEdits === 'object' ? dados.shiftEdits : {},
-        tasks: Array.isArray(dados?.tasks) ? dados.tasks : base.tasks,
-        reports: dados?.reports && typeof dados.reports === 'object' ? dados.reports : base.reports,
-        documents: Array.isArray(dados?.documents) ? dados.documents : base.documents
-      };
-    } catch {
-      return base;
-    }
-  }
-
-  let estadoAtual = carregarEstado();
-
-  function atualizarEstado(transformador) {
-    const rascunho = JSON.parse(JSON.stringify(estadoAtual));
-    const proximo = typeof transformador === 'function' ? transformador(rascunho) : { ...rascunho, ...transformador };
-    try {
-      sessionStorage.setItem(CHAVE_ESTADO, JSON.stringify(proximo));
+      const resultado = operacao();
+      document.getElementById('erro-persistencia-mutirao')?.remove();
+      return resultado;
     } catch (causa) {
-      const mensagem = 'Não foi possível salvar. A alteração não foi aplicada. Mantenha esta tela aberta, revise o espaço disponível e tente novamente.';
       let aviso = document.getElementById('erro-persistencia-mutirao');
       if (!aviso) {
         aviso = document.createElement('p');
         aviso.id = 'erro-persistencia-mutirao';
         aviso.className = 'faixa-alerta faixa-alerta--atencao';
         aviso.setAttribute('role', 'alert');
-        document.querySelector('main')?.prepend(aviso);
+        aviso.tabIndex = -1;
+        main?.prepend(aviso);
       }
-      aviso.textContent = mensagem;
-      throw new Error(mensagem, { cause: causa });
+      aviso.textContent = 'Não foi possível salvar a alteração. Mantenha esta tela aberta e tente novamente.';
+      throw causa;
     }
-    document.getElementById('erro-persistencia-mutirao')?.remove();
-    estadoAtual = proximo;
-    window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
-    return estadoAtual;
   }
 
-  function restaurarEstadoPadrao() {
-    try {
-      sessionStorage.removeItem(CHAVE_ESTADO);
-      localStorage.removeItem(CHAVE_ESTADO);
-    } catch {
-      // Ignora erro caso o armazenamento esteja indisponível.
-    }
-    estadoAtual = criarEstadoInicial();
-    document.getElementById('erro-persistencia-mutirao')?.remove();
+  function atualizarEstado(transformar) {
+    estadoAtual = alterarComAviso(() => banco.atualizar(transformar));
     window.dispatchEvent(new Event('mutirao:cuidado-atualizado'));
-    window.dispatchEvent(new CustomEvent('mutirao:perfil-atualizado'));
     return estadoAtual;
   }
 
@@ -371,12 +69,14 @@
     const nomeComApelido = apelido ? `${nome} (${apelido})` : nome;
     const mascote = perfil.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     const foto = perfil.foto || '';
+    const integrante = estado.equipeCuidado.find(pessoa =>
+      pessoa.nome === 'Zé da Manga' || pessoa.nome === nomeComApelido);
     return {
       nome,
       apelido,
       nomeComApelido,
-      vinculo: (perfil.vinculo || 'Neto').trim(),
-      papel: (perfil.papel || 'Administrador').trim(),
+      vinculo: integrante?.vinculo?.trim() || '',
+      papel: estado.administradorRede ? 'Participante' : (perfil.papel || 'Administrador').trim(),
       mascote,
       foto,
       avatar: foto || mascote,
@@ -389,6 +89,19 @@
     return apelido ? `${nome} (${apelido})` : nome;
   };
 
+  const obterPerfisAcompanhados = () => banco.obterPerfis().map(perfil => ({
+    id: perfil.id,
+    nomeCompleto: nomePessoaAcompanhada(perfil),
+    administrador: perfil.administradorRede || obterUsuarioAtual().nomeComApelido,
+    ativo: perfil.id === estadoAtual.perfilAtivoId
+  }));
+
+  const selecionarPerfilAcompanhado = id => {
+    if (!alterarComAviso(() => banco.selecionar(id))) return false;
+    estadoAtual = banco.obterEstado();
+    return true;
+  };
+
   const obterCompromissos = (estado = estadoAtual) =>
     [...estado.events].sort((a, b) => `${a.dia}T${a.hora}`.localeCompare(`${b.dia}T${b.hora}`));
 
@@ -399,23 +112,37 @@
 
   const obterParticipantesRede = (estado = estadoAtual) => {
     const usuario = obterUsuarioAtual(estado);
-    const lista = EQUIPE_CUIDADO.map(pessoa => {
-      if (pessoa.nome === 'Zé da Manga') {
+    const equipe = Array.isArray(estado.equipeCuidado) ? estado.equipeCuidado : [];
+    const ehUsuario = pessoa => pessoa.nome === 'Zé da Manga' || pessoa.nome === usuario.nomeComApelido;
+    const adminItem = {
+      nome: usuario.nomeComApelido,
+      nomeBase: usuario.nome,
+      vinculo: usuario.vinculo,
+      papel: usuario.papel,
+      avatar: usuario.avatarArquivo,
+      foto: usuario.foto,
+      ehUsuarioAtual: true,
+      perfil: 'meu-perfil.html'
+    };
+    const lista = [
+      ...(equipe.some(ehUsuario) ? [] : [adminItem]),
+      ...equipe.map(pessoa => {
+        if (ehUsuario(pessoa)) return adminItem;
         return {
-          nome: usuario.nomeComApelido,
-          nomeBase: usuario.nome,
-          avatar: usuario.avatarArquivo,
-          foto: usuario.foto
+          nome: pessoa.nome,
+          nomeBase: pessoa.nome.split(' (')[0].trim(),
+          vinculo: pessoa.vinculo || '',
+          papel: estado.administradorRede === pessoa.nome ? 'Administrador' : pessoa.papel || 'Participante',
+          perfil: pessoa.perfil,
+          avatar: pessoa.avatar,
+          foto: ''
         };
-      }
-      return {
-        nome: pessoa.nome,
-        nomeBase: pessoa.nome.split(' (')[0].trim(),
-        avatar: pessoa.avatar,
-        foto: ''
-      };
-    });
-    return [...lista, ...(estado.participantesExtras || [])].filter(pessoa => !/maria das dores|\(mari\)/i.test(pessoa.nome));
+      })
+    ];
+    return [...lista, ...estado.participantesExtras.map(pessoa => ({
+      ...pessoa,
+      papel: estado.administradorRede === pessoa.nome ? 'Administrador' : pessoa.papel
+    }))];
   };
 
   const resolverConvite = (email, aceitar) => atualizarEstado(estado => {
@@ -432,27 +159,29 @@
   });
 
   const atualizarSeletoresRede = () => {
-    const pessoas = obterParticipantesRede();
-    document.querySelectorAll('select[name="responsavel"], select[name="acompanhante"], select[name="acompanhanteEvento"], select[name="para"]').forEach(select => {
-      for (const pessoa of pessoas) {
-        if (![...select.options].some(opcao => opcao.value === pessoa.nome)) {
-          const opcao = document.createElement('option');
-          opcao.value = pessoa.nome;
-          opcao.textContent = pessoa.nome;
-          select.append(opcao);
-        }
+    const participantes = obterParticipantesRede();
+    const admin = obterUsuarioAtual();
+    const nomes = [...new Set([admin.nomeComApelido, ...participantes.map(pessoa => pessoa.nome)])];
+    document.querySelectorAll('select[data-opcoes-rede]').forEach(select => {
+      const anterior = select.value;
+      select.querySelectorAll('option[data-opcao-rede]').forEach(opcao => opcao.remove());
+      for (const nome of nomes) {
+        const opcao = new Option(nome, nome);
+        opcao.dataset.opcaoRede = '';
+        select.add(opcao);
       }
+      if ([...select.options].some(opcao => opcao.value === anterior)) select.value = anterior;
     });
   };
-  document.addEventListener('DOMContentLoaded', atualizarSeletoresRede);
   window.addEventListener('mutirao:cuidado-atualizado', atualizarSeletoresRede);
 
   const resolverPessoaRede = (nome, estado = estadoAtual) => {
     const participantes = obterParticipantesRede(estado);
     const alvo = normalizarBusca(nome);
     const usuario = obterUsuarioAtual(estado);
-    let encontrada = participantes.find(pessoa =>
-      normalizarBusca(pessoa.nome) === alvo || normalizarBusca(pessoa.nomeBase) === alvo
+    let encontrada = alvo && participantes.find(pessoa =>
+      normalizarBusca(pessoa.nome) === alvo || normalizarBusca(pessoa.nomeBase) === alvo ||
+      normalizarBusca(pessoa.nome.match(/\(([^)]+)\)/)?.[1]) === alvo
     );
     if (!encontrada && alvo && (alvo.includes('ze da manga') || alvo === normalizarBusca(usuario.apelido))) {
       encontrada = participantes.find(pessoa => normalizarBusca(pessoa.nome) === normalizarBusca(usuario.nomeComApelido));
@@ -638,7 +367,7 @@
     .map(({ inicio, fim }) => ({ inicio, fim, horario: formatarIntervaloTurno(inicio, fim - inicio) }));
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual) => {
-    const escala = obterEscalaDia(dia);
+    const escala = obterEscalaDia(dia, estado);
     const usuario = obterUsuarioAtual(estado);
     const pessoaUsuario = { nome: usuario.nomeComApelido, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
     const segmentos = [];
@@ -758,7 +487,7 @@
   };
 
   const aplicarIntervaloZe = (estado, dia, janelaMin, janelaMax, novoInicio, novoFim) => {
-    const escala = obterEscalaDia(dia);
+    const escala = obterEscalaDia(dia, estado);
     const covered = { ...estado.covered };
     const shiftEdits = { ...estado.shiftEdits };
 
@@ -865,16 +594,18 @@
 
   const sairDaRede = responsavel => atualizarEstado(estado => {
     const usuario = obterUsuarioAtual(estado);
-    if (!obterParticipantesRede(estado).some(p => p.nome === responsavel) || responsavel === usuario.nomeComApelido) throw new Error('Escolha outro participante ativo.');
-    const dias = [...new Set([...Object.keys(ESCALAS_FIXAS), ...Object.keys(estado.covered || {}), ...Object.keys(estado.shiftEdits || {}).map(k => k.split('|')[0])])].filter(dia => dia >= HOJE);
+    if (usuario.papel !== 'Administrador') throw new Error('Apenas o administrador pode transferir a rede.');
+    if (!obterParticipantesRede(estado).some(p => p.nome === responsavel && !p.ehUsuarioAtual)) {
+      throw new Error('Escolha outro participante ativo.');
+    }
+    const dias = [...new Set([...Object.keys(estado.escalasFixas || {}), ...Object.keys(estado.covered || {}), ...Object.keys(estado.shiftEdits || {}).map(k => k.split('|')[0])])].filter(dia => dia >= HOJE);
     const transferencias = dias.flatMap(dia => construirLinhaDoTempoDia(dia, estado)
       .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
       .map(seg => ({ dia, inicio: seg.inicio, fim: seg.fim, responsavel })));
     if (transferencias.some(seg => !pessoaDisponivel(responsavel, seg.dia, seg.inicio, seg.fim, estado))) throw new Error('O substituto possui conflito de horários. Escolha outra pessoa.');
     return { ...estado, redeSaiu: true, administradorRede: responsavel,
       coberturasRede: [...(estado.coberturasRede || []), ...transferencias],
-      pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item),
-      perfilUsuario: { ...estado.perfilUsuario, papel: 'Participante' } };
+      pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item) };
   });
 
   const mostrarSaidaRede = () => {
@@ -892,7 +623,6 @@
     }
     if (!dialogo.open) dialogo.showModal();
   };
-  document.addEventListener('DOMContentLoaded', mostrarSaidaRede);
 
   const executarLembretes = (ate, preferencias = {}) => {
     if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(ate) || !Number.isFinite(Date.parse(ate))) throw new Error('Informe uma data e hora válidas.');
@@ -933,11 +663,27 @@
     return novos;
   };
 
+  const obterTurnoAtual = (estado = estadoAtual) =>
+    construirLinhaDoTempoDia(HOJE, estado)
+      .find(seg => seg.tipo === 'turno' && seg.inicio <= 11 && seg.fim > 11);
+
+  const popularTurnosRelato = (select, turnoSelecionado = '') => {
+    if (!select) return;
+    const turnos = construirLinhaDoTempoDia(HOJE).filter(seg => seg.tipo === 'turno');
+    select.replaceChildren(new Option('Sem turno (anotação geral)', ''));
+    for (const turno of turnos) {
+      select.add(new Option(turno.horario, 'Turno ' + turno.horario));
+    }
+    if ([...select.options].some(opcao => opcao.value === turnoSelecionado)) select.value = turnoSelecionado;
+  };
+
   const possuiLacuna = (dia, estado = estadoAtual) =>
     obterLacunasDia(dia, estado).length > 0;
 
   const obterRotuloLacuna = (dia, estado = estadoAtual) => {
-    const lacunas = obterLacunasDia(dia, estado);
+    const linha = construirLinhaDoTempoDia(dia, estado);
+    if (!linha.length) return 'Sem turnos';
+    const lacunas = linha.filter(item => item.tipo === 'lacuna');
     if (!lacunas.length) return 'Coberto';
     const totalHoras = lacunas.reduce((soma, l) => soma + (l.fim - l.inicio), 0);
     if (totalHoras >= 24) return 'Descoberto';
@@ -945,14 +691,17 @@
     return 'Parcial';
   };
 
-  function obterEscalaDia(dia) {
-    if (ESCALAS_FIXAS[dia]) return ESCALAS_FIXAS[dia];
+  function obterEscalaDia(dia, estado = estadoAtual) {
+    const fixas = estado?.escalasFixas;
+    if (fixas?.[dia]) return fixas[dia];
+    const equipe = estado?.equipeCuidado || [];
+    if (!estado.escalaDemonstracao || equipe.length < 4) return [];
     const indiceBase = Number(dia.slice(-2)) || 1;
     return [
-      { horario: '00h–07h', pessoa: EQUIPE_CUIDADO[indiceBase % 4] },
-      { horario: '07h–13h', pessoa: EQUIPE_CUIDADO[(indiceBase + 1) % 4] },
-      { horario: '13h–19h', pessoa: EQUIPE_CUIDADO[(indiceBase + 2) % 4] },
-      { horario: '19h–24h', pessoa: EQUIPE_CUIDADO[(indiceBase + 3) % 4] }
+      { horario: '00h–07h', pessoa: equipe[indiceBase % 4] },
+      { horario: '07h–13h', pessoa: equipe[(indiceBase + 1) % 4] },
+      { horario: '13h–19h', pessoa: equipe[(indiceBase + 2) % 4] },
+      { horario: '19h–24h', pessoa: equipe[(indiceBase + 3) % 4] }
     ];
   }
 
@@ -1151,38 +900,6 @@
     timerStatus = setTimeout(limpar, 6000);
   }
 
-  const PORTA_REMEDIOS = [
-    {
-      hora: '6h',
-      momento: 'passado',
-      responsavel: 'Ana da Silva (Aninha)',
-      itens: [
-        ['Levotiroxina', { estado: 'administrado', quem: 'Aninha', horario: '06:10' }],
-        ['Carbamazepina', { estado: 'administrado', quem: 'Aninha', horario: '06:10' }],
-        ['Bombinha', { estado: 'administrado', quem: 'Aninha', horario: '06:12' }]
-      ]
-    },
-    {
-      hora: '8h',
-      momento: 'passado',
-      responsavel: 'Beatriz da Silva (Bea)',
-      itens: [
-        ['Losartana', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
-        ['Metformina', { estado: 'nao-administrado', quem: 'Bea', motivo: 'Não disseram o motivo' }],
-        ['Hidroclorotiazida', { estado: 'administrado', quem: 'Bea', horario: '08:15' }],
-        ['Cálcio + vit. D', { estado: 'administrado', quem: 'Bea', horario: '08:16' }],
-        ['Ácido fólico', { estado: 'administrado', quem: 'Bea', horario: '08:16' }]
-      ]
-    },
-    { hora: '12h', momento: 'agora', responsavel: 'Zé da Manga (Zé)', itens: [['Omeprazol'], ['Metformina'], ['AAS'], ['Vitamina B12']] },
-    { hora: '14h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Carbamazepina'], ['Colírio']] },
-    { hora: '18h', momento: 'depois', responsavel: 'Paulo da Silva (Paul)', itens: [['Losartana'], ['Bombinha']] },
-    { hora: '20h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Metformina']] },
-    { hora: '22h', momento: 'depois', responsavel: 'Zé da Manga (Zé)', itens: [['Sinvastatina'], ['Carbamazepina'], ['Pomada']] }
-  ];
-
-  const ESTOQUE_INICIAL = { Metformina: 4, Fraldas: 23 };
-
   const chaveDose = (hora, nome) => `${hora}|${nome}`;
 
   const normalizarHoraPorta = hora => {
@@ -1193,7 +910,8 @@
   const obterGruposPortaRemedios = (estado = estadoAtual) => {
     const editados = estado.itensEditados || {};
     const registros = estado.registrosDose || {};
-    const grupos = PORTA_REMEDIOS.map(g => ({
+    const basePorta = Array.isArray(estado.portaRemedios) ? estado.portaRemedios : [];
+    const grupos = basePorta.map(g => ({
       ...g,
       itens: g.itens.filter(([id, inicial]) => {
         const edicao = editados[id];
@@ -1329,8 +1047,8 @@
   const obterEstoque = (id, estado = estadoAtual) => {
     const nomeAnterior = estado.itensEditados?.[id]?.nome
       || estado.itensExtras?.find(item => item.chave === id)?.nome;
-    const base = estado.estoqueBase?.[id] ?? estado.estoqueBase?.[nomeAnterior] ?? ESTOQUE_INICIAL[id];
-    return base === undefined ? null : Math.max(0, base - contarUnidadesUsadas(id, estado));
+    const base = estado.estoqueBase?.[id] ?? estado.estoqueBase?.[nomeAnterior] ?? estado.estoqueInicial?.[id];
+    return Number.isFinite(base) ? Math.max(0, base - contarUnidadesUsadas(id, estado)) : null;
   };
 
   const definirSaldoEstoque = (estado, id, quantidade) => ({
@@ -1357,13 +1075,11 @@
 
   window.addEventListener('pageshow', evento => {
     if (!evento.persisted) return;
-    if (JSON.stringify(carregarEstado()) !== JSON.stringify(estadoAtual)) location.reload();
+    if (banco.mudouNoHistorico()) location.reload();
   });
 
   window.MutiraoCuidado = {
     HOJE,
-    EQUIPE_CUIDADO,
-    LACUNAS_TURNO,
     obterEstado: () => estadoAtual,
     obterPreferencias: () => {
       try { return JSON.parse(sessionStorage.getItem('mutirao-configuracoes-sessao-v1') || '{}'); }
@@ -1371,6 +1087,9 @@
     },
     atualizarEstado,
     obterUsuarioAtual,
+    obterPerfisAcompanhados,
+    obterPerfilAtivoId: () => estadoAtual.perfilAtivoId,
+    selecionarPerfilAcompanhado,
     nomePessoaAcompanhada,
     obterCompromissos,
     obterCompromissosFuturos,
@@ -1402,6 +1121,8 @@
     formatarIntervaloTurno,
     extrairHorasTurno,
     obterEscalaDia,
+    obterTurnoAtual,
+    popularTurnosRelato,
     renderizarCalendarioMensal,
     inicializarCompartilhamento,
     confirmarAcao,
@@ -1415,7 +1136,16 @@
     desfazerDose,
     obterEstoque,
     definirSaldoEstoque,
-    reporEstoque,
-    restaurarEstadoPadrao
+    reporEstoque
   };
+  atualizarSeletoresRede();
+  mostrarSaidaRede();
+  if (seletor) seletor.inert = false;
+  if (main) {
+    main.hidden = false;
+    main.removeAttribute('aria-busy');
+  }
+  status.remove();
+  window.dispatchEvent(new Event('mutirao:cuidado-pronto'));
+  return window.MutiraoCuidado;
 })();

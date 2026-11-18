@@ -182,53 +182,17 @@ function tocarSomNotificacao() {
   }
 }
 
-const NOTIFICACOES_INICIAIS_REDE = [
-  { titulo: 'Horário sem ninguém', descricao: 'Ana pediu apoio para cobrir 12h–13h (10 nov.).', avatar: 'assets/media/mascotes/icone-mascote-espeto.svg' },
-  { titulo: 'Pedido para marcar consulta', descricao: 'Beatriz pediu ajuda para marcar o otorrino.', avatar: 'assets/media/mascotes/icone-mascote-trevo.svg' },
-  { titulo: 'Próxima medicação', descricao: 'Paulo lembrou: Metformina às 20h.', avatar: 'assets/media/mascotes/icone-mascote-pingo.svg' },
-  { titulo: 'Quiz em Direitos e serviços', descricao: 'Falta responder as perguntas que mostram os direitos da Mari.', avatar: 'assets/media/mascotes/icone-mascote-cubado.svg', destino: 'direitos.html#titulo-simulador-mari' }
-];
-
-function resolverAvatarNotificacao(avatarInformado, titulo, descricao) {
-  if (avatarInformado) return avatarInformado;
-  const texto = `${titulo || ''} ${descricao || ''}`.toLocaleLowerCase('pt-BR');
-  if (texto.includes('ana')) return 'assets/media/mascotes/icone-mascote-espeto.svg';
-  if (texto.includes('beatriz') || texto.includes('bea')) return 'assets/media/mascotes/icone-mascote-trevo.svg';
-  if (texto.includes('paulo') || texto.includes('paul')) return 'assets/media/mascotes/icone-mascote-pingo.svg';
-  const usuario = window.MutiraoCuidado?.obterUsuarioAtual?.();
-  return usuario?.avatar || 'assets/media/mascotes/icone-mascote-cubado.svg';
+function resolverAvatarNotificacao(avatar) {
+  return avatar || window.MutiraoCuidado?.obterUsuarioAtual().avatar || 'assets/media/mascotes/icone-mascote-cubado.svg';
 }
 
 function renderizarNotificacoes() {
-  if (!listaNotificacoes || !gatilhoNotificacoes) return;
-  listaNotificacoes.setAttribute('aria-live', 'polite');
   const core = window.MutiraoCuidado;
-  const lacunasHoje = core?.obterLacunasDia ? core.obterLacunasDia(core.HOJE) : [{ horario: '12h–13h' }];
-  listaNotificacoes.querySelectorAll('.notificacao:not([data-notificacao-local])').forEach((item, indice) => {
-    const padrao = NOTIFICACOES_INICIAIS_REDE[indice];
-    if (!padrao) return;
-    if (indice === 0) {
-      item.hidden = lacunasHoje.length === 0;
-    }
-    const h3 = item.querySelector('h3');
-    const p = item.querySelector('p');
-    const link = item.querySelector('.notificacao__link');
-    if (h3) h3.textContent = padrao.titulo;
-    if (p) p.textContent = padrao.descricao;
-    const avatarExistente = link?.querySelector('.notificacao__avatar');
-    if (avatarExistente) {
-      avatarExistente.src = padrao.avatar;
-    } else if (link) {
-      const img = document.createElement('img');
-      img.className = 'notificacao__avatar';
-      img.src = padrao.avatar;
-      img.alt = '';
-      img.setAttribute('aria-hidden', 'true');
-      link.prepend(img);
-    }
-  });
-  listaNotificacoes.querySelectorAll('[data-notificacao-local]').forEach(item => item.remove());
-  listaNotificacoes.prepend(...notificacoesLocais.map(({ titulo, descricao, destino, avatar, lida }) => {
+  if (!core || !listaNotificacoes || !gatilhoNotificacoes) return;
+  listaNotificacoes.setAttribute('aria-live', 'polite');
+  const locais = notificacoesLocais.filter(item => item.perfilId === core.obterPerfilAtivoId());
+  renderizarAvisosDaRotina(core);
+  listaNotificacoes.prepend(...locais.map(({ titulo, descricao, destino, avatar, lida }) => {
     const item = document.createElement('li');
     item.className = 'notificacao';
     item.dataset.notificacaoLocal = '';
@@ -238,7 +202,7 @@ function renderizarNotificacoes() {
     link.href = destino || 'home.html';
     const img = document.createElement('img');
     img.className = 'notificacao__avatar';
-    img.src = resolverAvatarNotificacao(avatar, titulo, descricao);
+    img.src = resolverAvatarNotificacao(avatar);
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
     const bloco = document.createElement('div');
@@ -255,8 +219,15 @@ function renderizarNotificacoes() {
     return item;
   }));
 
-  const novas = notificacoesLocais.filter(item => !item.lida).length;
-  const total = [...listaNotificacoes.children].filter(el => !el.hidden).length;
+  const novas = locais.filter(item => !item.lida).length;
+  const total = listaNotificacoes.children.length;
+  if (!total) {
+    const item = document.createElement('li');
+    item.className = 'notificacao__vazio';
+    item.textContent = 'Nenhum aviso para esta ficha.';
+    listaNotificacoes.append(item);
+  }
+  gatilhoNotificacoes.classList.toggle('botao-icone--notificacao', total > 0);
   gatilhoNotificacoes.setAttribute('aria-label', 'Notificações (' + total + ' itens' + (novas ? ', ' + novas + ' novas' : '') + ')');
   if (novas > 0) gatilhoNotificacoes.setAttribute('data-nova-notificacao', 'true');
   else gatilhoNotificacoes.removeAttribute('data-nova-notificacao');
@@ -264,9 +235,12 @@ function renderizarNotificacoes() {
 
 window.MutiraoNotificacoes = {
   registrar(titulo, descricao, destino, avatar) {
-    const foto = resolverAvatarNotificacao(avatar, titulo, descricao);
-    notificacoesLocais.unshift({ titulo, descricao, destino, avatar: foto, lida: false });
-    notificacoesLocais = notificacoesLocais.slice(0, 12);
+    const perfilId = window.MutiraoCuidado?.obterPerfilAtivoId();
+    if (!perfilId) return;
+    const outros = notificacoesLocais.filter(item => item.perfilId !== perfilId);
+    const locais = notificacoesLocais.filter(item => item.perfilId === perfilId);
+    locais.unshift({ perfilId, titulo, descricao, destino, avatar: resolverAvatarNotificacao(avatar), lida: false });
+    notificacoesLocais = [...locais.slice(0, 12), ...outros];
     salvarNotificacoes();
     renderizarNotificacoes();
     tocarSomNotificacao();
@@ -290,7 +264,10 @@ for (const menuSuspenso of document.querySelectorAll('.barra-topo details')) {
       if (menuSuspenso.open) {
         gatilhoNotificacoes?.removeAttribute('data-nova-notificacao');
       } else {
-        notificacoesLocais.forEach(item => { item.lida = true; });
+        const perfilId = window.MutiraoCuidado?.obterPerfilAtivoId();
+        notificacoesLocais.forEach(item => {
+          if (perfilId && item.perfilId === perfilId) item.lida = true;
+        });
         salvarNotificacoes();
         renderizarNotificacoes();
       }
@@ -383,7 +360,7 @@ const itensPesquisaveis = [
   { href: 'meu-perfil.html', rotulo: 'Meu perfil' },
   { href: 'configuracoes.html', rotulo: 'Configurações' },
   { href: 'privacidade.html', rotulo: 'Privacidade e regras de uso' },
-  { href: 'ficha.html', rotulo: 'Ficha de quem recebe cuidado · Maria das Dores (Mari)' }
+  { href: 'ficha.html', rotulo: 'Ficha de quem recebe cuidado' }
 ].filter((item, indice, lista) => item.href && lista.findIndex(entrada => entrada.href === item.href) === indice);
 
 const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-busca-topo], .barra-topo [data-dialogo="dialogo-busca"]');
@@ -391,15 +368,18 @@ const gatilhoBuscaTopo = document.querySelector('.barra-topo [data-busca-topo], 
 function inicializarBuscaTopo() {
   if (!gatilhoBuscaTopo) return;
 
-  const CHAVE_RECENTES = 'mutirao-buscas-recentes-v1';
+  const chaveRecentes = () => {
+    const id = window.MutiraoCuidado?.obterPerfilAtivoId();
+    return id ? 'mutirao-buscas-recentes-v2:' + id : null;
+  };
   const SINONIMOS = {
     remedio: ['medicamento', 'dose', 'pilula', 'comprimido'],
     remedios: ['medicamento', 'dose', 'pilula', 'comprimido'],
     medicamento: ['remedio', 'dose', 'estoque'],
-    estoque: ['fralda', 'fraldas', 'insumo', 'reposicao', 'metformina'],
+    estoque: ['fralda', 'fraldas', 'insumo', 'reposicao'],
     consulta: ['agenda', 'exame', 'medico', 'ubs'],
     calendario: ['agenda', 'turno', 'compromisso'],
-    alergia: ['dipirona', 'ficha'],
+    alergia: ['ficha'],
     emergencia: ['ficha', 'contato', 'ajuda'],
     tema: ['configuracoes', 'acolhedor', 'neutro', 'acessibilidade'],
     fonte: ['acessibilidade', 'contraste', 'configuracoes'],
@@ -457,8 +437,10 @@ function inicializarBuscaTopo() {
   container.append(gatilhoBuscaTopo, campo, botaoLimpar, atalho, painel);
 
   const obterRecentes = () => {
+    const chave = chaveRecentes();
+    if (!chave) return [];
     try {
-      const salvo = JSON.parse(sessionStorage.getItem(CHAVE_RECENTES) || '[]');
+      const salvo = JSON.parse(sessionStorage.getItem(chave) || '[]');
       return Array.isArray(salvo) ? salvo : [];
     } catch {
       return [];
@@ -467,11 +449,12 @@ function inicializarBuscaTopo() {
 
   const salvarRecente = termoBruto => {
     const limpo = termoBruto.trim();
-    if (limpo.length < 2) return;
+    const chave = chaveRecentes();
+    if (!chave || limpo.length < 2) return;
     const atual = obterRecentes().filter(item => item.toLowerCase() !== limpo.toLowerCase());
     atual.unshift(limpo);
     try {
-      sessionStorage.setItem(CHAVE_RECENTES, JSON.stringify(atual.slice(0, 4)));
+      sessionStorage.setItem(chave, JSON.stringify(atual.slice(0, 4)));
     } catch {
       // Ignora erro caso sessionStorage esteja indisponível
     }
@@ -525,8 +508,8 @@ function inicializarBuscaTopo() {
       busca: `${doc.titulo} ${doc.categoria || ''} documento receita exame ${doc.observacoes || ''}`
     }));
 
-    const equipe = (core.EQUIPE_CUIDADO || []).map(pessoa => ({
-      href: pessoa.nome.includes('Zé') ? 'meu-perfil.html' : 'pessoas.html',
+    const equipe = core.obterParticipantesRede(estado).map(pessoa => ({
+      href: pessoa.ehUsuarioAtual ? 'meu-perfil.html' : 'pessoas.html',
       rotulo: pessoa.nome,
       detalhe: `${pessoa.papel} · ${pessoa.turno || 'Rede de cuidado'}`,
       categoria: 'Pessoas da rede',
@@ -536,10 +519,10 @@ function inicializarBuscaTopo() {
 
     const extras = [
       { href: 'medicamentos.html', rotulo: 'Medicamentos e rotina de doses', detalhe: 'Remédios, horários e porta-remédios', categoria: 'Ações rápidas', icone: 'fa-solid fa-pills', busca: 'remedio remedios medicamento medicamentos pilula comprimido dose doses horario horarios rotina tomar administracao atrasado porta remedios' },
-      { href: 'medicamentos.html?estoque=1', rotulo: 'Materiais e o que tem em casa', detalhe: 'Fraldas, Metformina e reposição', categoria: 'Ações rápidas', icone: 'fa-solid fa-boxes-stacked', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
+      { href: 'medicamentos.html?estoque=1', rotulo: 'Materiais e o que tem em casa', detalhe: 'Materiais, remédios e reposição', categoria: 'Ações rápidas', icone: 'fa-solid fa-boxes-stacked', busca: 'insumo insumos fralda fraldas estoque reposicao repor acabando baixo unidade material materiais' },
       { href: 'direitos.html', rotulo: 'Direitos, benefícios e serviços', detalhe: 'SUS, BPC/LOAS, Farmácia Popular e CRAS', categoria: 'Páginas', icone: 'fa-solid fa-circle-info', busca: 'servico servicos direito direitos beneficio beneficios sus ubs farmacia popular bpc loas inss cras caps estatuto idoso transporte gratuidade auxilio lei guia' },
       { href: 'agenda.html', rotulo: 'Agenda e quem cuida em cada horário', detalhe: 'Escala semanal, consultas e exames', categoria: 'Ações rápidas', icone: 'fa-regular fa-calendar', busca: 'agenda turno turnos escala cobertura cobrir horario calendario compromisso consulta exame' },
-      { href: 'ficha.html', rotulo: 'Ficha de saúde, alergias e diário', detalhe: `${estado.person?.alergias || 'Dipirona'} e histórico clínico`, categoria: 'Ações rápidas', icone: 'fa-regular fa-id-card', busca: `alergia alergias dipirona ficha saude historico cirurgia trombose diario relato emergencia convenio imprimir resumo ${estado.person?.alergias || ''}` },
+      { href: 'ficha.html', rotulo: 'Ficha de saúde, alergias e diário', detalhe: `${estado.person.alergias ? estado.person.alergias + ' · Histórico de saúde' : 'Histórico de saúde e alergias'}`, categoria: 'Ações rápidas', icone: 'fa-regular fa-id-card', busca: `alergia alergias ficha saude historico cirurgia diario relato emergencia convenio imprimir resumo ${estado.person?.alergias || ''}` },
       { href: 'meu-perfil.html', rotulo: 'Cuidar de quem cuida e folgas', detalhe: 'Check-in emocional, horas e pedidos de folga', categoria: 'Ações rápidas', icone: 'fa-regular fa-heart', busca: 'cuidar folga descanso sobrecarga humor perfil recado' },
       { href: 'configuracoes.html', rotulo: 'Configurações, tema e acessibilidade', detalhe: 'Tema acolhedor, alto contraste e fonte', categoria: 'Páginas', icone: 'fa-solid fa-gear', busca: 'configuracao configuracoes tema acolhedor neutro contraste fonte acessibilidade som' },
       { href: 'ajuda.html', rotulo: 'Ajuda, dúvidas e suporte', detalhe: 'Perguntas frequentes e contato', categoria: 'Páginas', icone: 'fa-regular fa-circle-question', busca: 'ajuda suporte duvida duvidas orientacao contato' },
@@ -824,55 +807,154 @@ function inicializarPontoBot() {
 
 inicializarPontoBot();
 
-function sincronizarPerfilGlobal() {
+function renderizarSeletorPessoas() {
+  const core = window.MutiraoCuidado;
+  if (!core?.obterPerfisAcompanhados) return;
+  const perfis = core.obterPerfisAcompanhados();
+  document.querySelectorAll('.seletor-pessoa').forEach(seletor => {
+    const painel = seletor.querySelector('.painel-flutuante');
+    if (!painel) return;
+    painel.innerHTML = `
+      <div class="seletor-pessoa__lista" role="group" aria-label="Pessoas acompanhadas">
+        ${perfis.map(p => `
+          <button type="button" class="seletor-pessoa__opcao${p.ativo ? ' seletor-pessoa__opcao--ativo' : ''}" data-selecionar-perfil="${core.escaparHtml(p.id)}" aria-current="${p.ativo}">
+            <span>
+              <strong>${core.escaparHtml(p.nomeCompleto)}</strong>
+              <small>Admin: ${core.escaparHtml(p.administrador)}</small>
+            </span>
+            ${p.ativo ? '<i class="fa-solid fa-check" aria-hidden="true"></i>' : ''}
+          </button>
+        `).join('')}
+      </div>
+    `;
+  });
+}
+
+document.addEventListener('click', evento => {
+  const botao = evento.target.closest('[data-selecionar-perfil]');
+  if (!botao) return;
+  const core = window.MutiraoCuidado;
+  if (!core) return;
   try {
-    const bruto = sessionStorage.getItem('mutirao-mvp-estado-v1') || localStorage.getItem('mutirao-mvp-estado-v1');
-    if (!bruto) return;
-    const estado = JSON.parse(bruto);
-    const pessoa = estado?.person;
-    if (pessoa?.nome) {
-      const nome = pessoa.apelido ? `${pessoa.nome} (${pessoa.apelido})` : pessoa.nome;
-      document.querySelectorAll('.seletor-pessoa > summary, #titulo-pessoa, [data-identidade-acompanhada]').forEach(item => {
-        item.textContent = nome;
-      });
-    }
-    const perfil = estado?.perfilUsuario;
-    if (!perfil) return;
-
-    const avatar = perfil.foto || perfil.mascote;
-    if (avatar) {
-      document.querySelectorAll('.menu-perfil summary img, .barra-lateral__perfil-mobile img').forEach(img => {
-        img.src = avatar;
-      });
-    }
-
-    const nomeExibido = (perfil.nome || '').trim();
-    const vinculo = (perfil.vinculo || 'Neto').trim();
-    const papel = (perfil.papel || 'Administrador').trim();
-    if (nomeExibido) {
-      const resumoTopo = document.querySelector('.menu-perfil summary');
-      const nomeTopo = resumoTopo?.querySelector('strong');
-      const papelTopo = resumoTopo?.querySelector('small');
-      if (nomeTopo) nomeTopo.textContent = vinculo ? `${nomeExibido} · ${vinculo}` : nomeExibido;
-      if (papelTopo) papelTopo.textContent = papel;
-      if (resumoTopo) resumoTopo.setAttribute('aria-label', `Menu do perfil de ${nomeExibido}`);
-      const perfilMobile = document.querySelector('.barra-lateral__perfil-mobile');
-      const nomeMobile = perfilMobile?.querySelector('strong');
-      const papelMobile = perfilMobile?.querySelector('small');
-      if (nomeMobile) nomeMobile.textContent = nomeExibido;
-      if (papelMobile) papelMobile.textContent = `${papel} · Meu perfil`;
+    if (!core.selecionarPerfilAcompanhado(botao.dataset.selecionarPerfil)) {
+      const seletor = botao.closest('details');
+      seletor.open = false;
+      seletor.querySelector('summary')?.focus();
+      return;
     }
   } catch {
-    // Ignora estado ausente ou inválido
+    const seletor = botao.closest('details');
+    seletor.open = false;
+    document.getElementById('erro-persistencia-mutirao')?.focus();
+    return;
+  }
+
+  // O contexto de um compromisso, documento ou dose pertence à ficha anterior.
+  const destino = new URL(location.href);
+  for (const chave of ['compromisso', 'documento', 'dose']) destino.searchParams.delete(chave);
+  if (destino.href === location.href) location.reload();
+  else location.replace(destino.href);
+});
+
+function renderizarAvisosDaRotina(core) {
+  const estado = core.obterEstado();
+  const nome = core.nomePessoaAcompanhada(estado);
+  const avisos = [];
+  const lacunas = core.obterLacunasDia(core.HOJE, estado);
+  if (lacunas.length) {
+    avisos.push({
+      alerta: true,
+      href: 'agenda.html',
+      titulo: 'Horário sem ninguém',
+      texto: `${nome} · Hoje, das ${lacunas[0].horario}.`
+    });
+  }
+  const dosesPrevistas = core.obterDoses(estado).filter(d => d.estado === 'prevista' && d.momento !== 'passado');
+  if (dosesPrevistas.length) {
+    const proxima = dosesPrevistas[0];
+    avisos.push({
+      alerta: false,
+      href: 'medicamentos.html',
+      titulo: 'Próximo remédio',
+      texto: `${nome} · ${proxima.nome} às ${proxima.hora}.`
+    });
+  }
+  const relatorioHoje = (estado.reports?.[core.HOJE] || [])[0];
+  if (relatorioHoje?.[4]) {
+    avisos.push({
+      alerta: false,
+      href: 'ficha.html#diario',
+      titulo: 'Recado do turno',
+      texto: `${nome} · ${relatorioHoje[4]}`
+    });
+  }
+
+  listaNotificacoes.innerHTML = avisos.map(a => `
+      <li class="notificacao${a.alerta ? ' notificacao--alerta' : ''}">
+        <a class="notificacao__link" href="${a.href}">
+          <div>
+            <h3>${core.escaparHtml(a.titulo)}</h3>
+            <p>${core.escaparHtml(a.texto)}</p>
+          </div>
+          <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
+        </a>
+      </li>
+  `).join('');
+}
+
+function sincronizarPerfilGlobal() {
+  const core = window.MutiraoCuidado;
+  if (!core) return;
+  const pessoa = core.obterEstado().person;
+  const nome = core.nomePessoaAcompanhada();
+  document.querySelectorAll('.seletor-pessoa > summary, #titulo-pessoa, [data-identidade-acompanhada]').forEach(item => {
+    item.textContent = nome;
+  });
+  document.querySelectorAll('[data-avatar-acompanhada]').forEach(img => {
+    img.src = pessoa.foto || pessoa.mascote || 'assets/media/mascotes/icone-mascote-forma.svg';
+  });
+  document.querySelectorAll('[data-cobertura-acompanhada]').forEach(item => {
+    item.textContent = pessoa.cobertura || 'Sem turnos definidos';
+  });
+  renderizarSeletorPessoas();
+  renderizarNotificacoes();
+
+  const usuario = core.obterUsuarioAtual();
+  document.querySelectorAll('[data-usuario-rede-selo]').forEach(item => {
+    item.textContent = [usuario.nome, usuario.vinculo].filter(Boolean).join(' · ');
+  });
+  document.querySelectorAll('.menu-perfil summary img, .barra-lateral__perfil-mobile img').forEach(img => {
+    img.src = usuario.avatar;
+  });
+  const topo = document.querySelector('.menu-perfil summary');
+  if (topo) {
+    topo.querySelector('strong').textContent = [usuario.nome, usuario.vinculo].filter(Boolean).join(' · ');
+    topo.querySelector('small').textContent = usuario.papel;
+    topo.setAttribute('aria-label', `Menu do perfil de ${usuario.nome}`);
+  }
+  const mobile = document.querySelector('.barra-lateral__perfil-mobile');
+  if (mobile) {
+    mobile.querySelector('strong').textContent = usuario.nome;
+    mobile.querySelector('small').textContent = `${usuario.papel} · Meu perfil`;
   }
 }
 
-sincronizarPerfilGlobal();
-window.addEventListener('mutirao:perfil-atualizado', sincronizarPerfilGlobal);
-window.addEventListener('mutirao:pessoa-atualizada', sincronizarPerfilGlobal);
+window.addEventListener('mutirao:cuidado-pronto', sincronizarPerfilGlobal);
+window.addEventListener('mutirao:cuidado-atualizado', sincronizarPerfilGlobal);
 
-function sincronizarStatusMedicamentos() {
+function sincronizarStatusCuidado() {
   const core = window.MutiraoCuidado;
+  if (!core) return;
+  const linhaTurno = document.querySelector('[data-status-turno]');
+  if (linhaTurno) {
+    const turno = core.obterTurnoAtual();
+    const img = linhaTurno.querySelector('img');
+    img.hidden = !turno;
+    if (turno) img.src = turno.pessoa.foto || `assets/media/mascotes/${turno.pessoa.avatar}`;
+    linhaTurno.querySelector('strong').textContent = turno?.pessoa.nome || 'Sem turno em andamento';
+    linhaTurno.querySelector('small').textContent = turno?.horario ||
+      (core.construirLinhaDoTempoDia(core.HOJE).length ? 'Horário sem cobertura' : 'Nenhum turno cadastrado hoje');
+  }
   const linha = document.querySelector('.cartao-status [data-status-medicamento]');
   const cartao = linha?.closest('.cartao-status');
   if (!core || !linha || !cartao) return;
@@ -888,7 +970,10 @@ function sincronizarStatusMedicamentos() {
   const ehAlerta = Boolean(ocorrencias.length);
 
   linha.classList.toggle('cartao-status__linha--alerta', ehAlerta);
-  if (ehAlerta) {
+  if (!doses.length) {
+    linha.querySelector('strong').textContent = 'Nenhum remédio na rotina';
+    linha.querySelector('small').textContent = 'Cadastre em Medicamentos';
+  } else if (ehAlerta) {
     linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'remédio para dar' : 'remédios para dar'}`;
     linha.querySelector('small').textContent = 'Não foi dado';
   } else if (grupoProximo.length) {
@@ -900,11 +985,12 @@ function sincronizarStatusMedicamentos() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', sincronizarStatusMedicamentos);
-window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamentos);
+window.addEventListener('mutirao:cuidado-pronto', sincronizarStatusCuidado);
+window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusCuidado);
 
 (() => {
   const resumirEstado = estado => ({
+    perfilAtivoId: estado.perfilAtivoId,
     registrosDose: JSON.stringify(estado?.registrosDose || {}),
     estoque: JSON.stringify([estado?.estoqueBase || {}, estado?.historicoEstoque || []]),
     itens: JSON.stringify([estado?.itensExtras || [], estado?.itensEditados || {}, estado?.itensExcluidos || []]),
@@ -923,13 +1009,13 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
     if (core && !anterior) anterior = resumirEstado(core.obterEstado());
   };
 
-  document.addEventListener('DOMContentLoaded', inicializar);
+  window.addEventListener('mutirao:cuidado-pronto', inicializar);
   window.addEventListener('mutirao:cuidado-atualizado', () => {
     const core = window.MutiraoCuidado;
     if (!core) return;
     const estadoAtualObj = core.obterEstado();
     const atual = resumirEstado(estadoAtualObj);
-    if (!anterior) {
+    if (!anterior || anterior.perfilAtivoId !== atual.perfilAtivoId) {
       anterior = atual;
       return;
     }
@@ -960,7 +1046,8 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
       } catch {
         // Usa texto genérico se não for possível comparar as chaves.
       }
-      return ['Medicação atualizada', `${primeiroNome} atualizou uma medicação da Mari.`, 'medicamentos.html'];
+      const apelido = estadoAtualObj?.person?.apelido || estadoAtualObj?.person?.nome || 'quem recebe cuidado';
+      return ['Medicação atualizada', `${primeiroNome} atualizou uma medicação de ${apelido}.`, 'medicamentos.html'];
     };
 
     if (atual.registrosDose !== anterior.registrosDose) {
@@ -970,6 +1057,7 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
       }
     }
 
+    const apelidoPessoa = estadoAtualObj?.person?.apelido || estadoAtualObj?.person?.nome || 'quem recebe cuidado';
     const ultimoEstoque = estadoAtualObj.historicoEstoque?.[0]?.item;
     const permitirMedicacao = preferenciaAtiva('notificacoesMedicacao', true);
     const permitirRelatos = preferenciaAtiva('notificacoesRelatos', true);
@@ -979,10 +1067,10 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusMedicamen
       ['turnos', 'Turno atualizado', `${primeiroNome} mudou quem cuida num horário.`, 'agenda.html', permitirRelatos],
       ['events', 'Agenda atualizada', `${primeiroNome} atualizou um compromisso na agenda.`, 'agenda.html', permitirRelatos],
       ['reports', 'Novo relato no diário', `${primeiroNome} escreveu no diário.`, 'ficha.html#diario', permitirRelatos],
-      ['documents', 'Documentos atualizados', `${primeiroNome} atualizou os documentos da Mari.`, 'documentos.html', true],
+      ['documents', 'Documentos atualizados', `${primeiroNome} atualizou os documentos de ${apelidoPessoa}.`, 'documentos.html', true],
       ['convites', 'Rede atualizada', `${primeiroNome} atualizou os participantes da rede.`, 'pessoas.html', true],
       ['perfil', 'Perfil atualizado', `${primeiroNome} atualizou os dados do perfil.`, 'meu-perfil.html', true],
-      ['person', 'Ficha atualizada', `${primeiroNome} atualizou a ficha da Mari.`, 'ficha.html', true]
+      ['person', 'Ficha atualizada', `${primeiroNome} atualizou a ficha de ${apelidoPessoa}.`, 'ficha.html', true]
     ];
     for (const [chave, titulo, descricao, destino, ativo] of regras) {
       if (ativo && atual[chave] !== anterior[chave]) {

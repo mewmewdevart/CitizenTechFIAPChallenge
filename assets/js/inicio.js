@@ -1,11 +1,10 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="inicio"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const {
     HOJE,
-    LACUNAS_TURNO,
     obterEstado,
     atualizarEstado,
     obterUsuarioAtual,
@@ -54,7 +53,7 @@
       }
     }
     const insumosConhecidos = [
-      { id: 'Fraldas', nome: 'Fraldas' },
+      ...(estado.insumos || []).map(item => ({ id: item.chave || item.nome, nome: item.nome })),
       ...(estado.itensExtras || []).filter(item => item.tipo === 'Insumo').map(item => ({ id: item.chave || item.nome, nome: item.nome }))
     ];
     for (const insumo of insumosConhecidos) {
@@ -109,10 +108,11 @@
     };
 
     if (!compromissos.length) {
-      preencherBloco(modelo, null, 0);
+      modelo.hidden = true;
       return;
     }
 
+    modelo.hidden = false;
     preencherBloco(modelo, compromissos[0], 0);
     let referencia = modelo;
     for (let i = 1; i < compromissos.length; i++) {
@@ -132,6 +132,10 @@
     const responsavel = pagina.querySelector('[data-proxima-responsavel]');
     const bloco = titulo?.closest('.painel__bloco');
     if (!titulo || !responsavel) return;
+    if (!grupos.length) {
+      if (bloco) bloco.hidden = true;
+      return;
+    }
     if (bloco) bloco.hidden = false;
     if (!proximo) {
       titulo.textContent = 'Nenhum remédio para dar mais tarde';
@@ -161,9 +165,12 @@
     return `<img class="agenda__avatar" alt="" src="${escaparHtml(src)}" width="40" height="40">`;
   };
 
-  const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém' };
+  const ROTULO_COBERTURA = { Coberto: 'Com alguém', Parcial: 'Falta alguém', Descoberto: 'Sem ninguém', 'Sem turnos': 'Sem turnos' };
   const criarEtiquetaCobertura = (dia, estado) => {
     const rotulo = obterRotuloLacuna(dia, estado);
+    if (rotulo === 'Sem turnos') {
+      return '<span class="agenda__etiqueta agenda__etiqueta--neutro">Sem turnos</span>';
+    }
     const lacuna = rotulo !== 'Coberto';
     const parcial = rotulo === 'Parcial';
     const modificador = lacuna ? (parcial ? 'agenda__etiqueta--atencao' : 'agenda__etiqueta--alerta') : 'agenda__etiqueta--sucesso';
@@ -171,37 +178,124 @@
     return `<span class="agenda__etiqueta ${modificador}"><img alt="" src="assets/media/icones/${icone}">${ROTULO_COBERTURA[rotulo] || rotulo}</span>`;
   };
 
+  const atualizarResumoPessoa = () => {
+    const estado = obterEstado();
+    const person = estado.person || {};
+    const resumo = pagina.querySelector('.inicio__resumo > .painel__item');
+    if (!resumo) return;
+    const avatar = resumo.querySelector('.avatar');
+    if (avatar) {
+      avatar.src = person.foto || person.mascote || 'assets/media/mascotes/icone-mascote-forma.svg';
+    }
+    const titulo = resumo.querySelector('#titulo-pessoa');
+    if (titulo) titulo.textContent = core.nomePessoaAcompanhada(estado);
+    const subtitulo = resumo.querySelector('.painel__texto > span');
+    if (subtitulo) {
+      subtitulo.textContent = person.cobertura || 'Sem turnos definidos';
+    }
+  };
+
+  const obterUltimoRelato = estado => {
+    const dia = Object.keys(estado.reports || {})
+      .filter(data => estado.reports[data]?.length)
+      .sort().at(-1);
+    return dia ? { dia, relatorio: estado.reports[dia][0] } : null;
+  };
+
+  const atualizarPassagemInicio = () => {
+    const secao = pagina.querySelector('#titulo-passagem')?.closest('section');
+    if (!secao) return;
+    const estado = obterEstado();
+    const ultimo = obterUltimoRelato(estado);
+    const relatorio = ultimo?.relatorio;
+    const itemAutor = secao.querySelector('.painel__item');
+    const relatoEl = secao.querySelector('[data-passagem-relato]');
+    const notaEl = secao.querySelector('.passagem__nota');
+    const btnCompleto = secao.querySelector('[data-dialogo="dialogo-passagem-cuidado"]');
+
+    if (!relatorio) {
+      if (itemAutor) itemAutor.hidden = true;
+      if (relatoEl) relatoEl.innerHTML = '<div class="estado-vazio"><strong>Nenhum recado ainda</strong><p>Use "Anotar o turno" para registrar o primeiro relato desta ficha.</p></div>';
+      if (notaEl) notaEl.hidden = true;
+      if (btnCompleto) btnCompleto.hidden = true;
+      return;
+    }
+
+    if (itemAutor) {
+      itemAutor.hidden = false;
+      const pessoa = resolverPessoaRede(relatorio[0], estado);
+      const img = itemAutor.querySelector('.avatar');
+      if (img && pessoa) img.src = pessoa.src;
+      const strong = itemAutor.querySelector('.painel__texto strong');
+      if (strong) strong.textContent = relatorio[0];
+      const span = itemAutor.querySelector('.painel__texto span');
+      if (span) span.textContent = [relatorio[1], formatarDataCurta(ultimo.dia)].filter(Boolean).join(' · ');
+    }
+    if (relatoEl) relatoEl.innerHTML = sanitizarHtmlEditor(relatorio[3]);
+    if (notaEl) {
+      notaEl.hidden = !relatorio[4];
+      const spanNota = notaEl.querySelector('span');
+      if (spanNota) spanNota.innerHTML = sanitizarHtmlEditor(String(relatorio[4] || '').replaceAll('\n', '<br>'));
+    }
+    if (btnCompleto) btnCompleto.hidden = false;
+  };
+
+  const atualizarRedeInicio = () => {
+    const secao = pagina.querySelector('#titulo-rede')?.closest('section');
+    const lista = secao?.querySelector('.painel__lista');
+    if (!lista) return;
+    const estado = obterEstado();
+    const participantes = core.obterParticipantesRede(estado);
+    lista.innerHTML = participantes.map(p => {
+      const src = p.foto || `assets/media/mascotes/${escaparHtml(p.avatar || 'icone-mascote-cubado.svg')}`;
+      const subtitulo = p.vinculo || p.papel || 'Participante';
+      return `<li class="painel__item"><img class="avatar" src="${escaparHtml(src)}" alt=""><span class="painel__texto"><strong>${escaparHtml(p.nome)}</strong><span>${escaparHtml(subtitulo)}</span></span></li>`;
+    }).join('');
+    if (!participantes.some(pessoa => !pessoa.ehUsuarioAtual)) {
+      lista.insertAdjacentHTML('beforeend', '<li class="estado-vazio">Ainda não há outros participantes na rede.</li>');
+    }
+  };
+
   const atualizarTurnoAtual = () => {
     const bloco = pagina.querySelector('[data-turno-atual]');
     if (!bloco) return;
     const estado = obterEstado();
+    const apelido = estado.person?.apelido || estado.person?.nome || 'a pessoa';
     const linhaTempo = construirLinhaDoTempoDia(HOJE, estado);
-    const turnoAtual = linhaTempo.find(seg => seg.tipo === 'turno' && 11 >= seg.inicio && 11 < seg.fim);
+    const turnoAtual = core.obterTurnoAtual(estado);
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     const avatar = bloco.querySelector('.avatar');
     const titulo = bloco.querySelector('[data-turno-atual-titulo]');
     const detalhe = bloco.querySelector('[data-turno-atual-detalhe]');
     const link = bloco.querySelector('a');
 
+    if (!linhaTempo.length) {
+      bloco.hidden = true;
+      return;
+    }
+
+    bloco.hidden = false;
+    if (avatar) avatar.hidden = !turnoAtual;
     if (avatar && turnoAtual?.pessoa) {
       avatar.src = turnoAtual.pessoa.foto || `assets/media/mascotes/${turnoAtual.pessoa.avatar || 'icone-mascote-trevo.svg'}`;
     }
     if (titulo) {
       titulo.textContent = turnoAtual
         ? `${turnoAtual.horario} · ${turnoAtual.pessoa.nome}`
-        : '11h · Ninguém com a Mari agora';
+        : `11h · Ninguém com ${apelido} agora`;
     }
     if (detalhe) {
       const proximaLacuna = lacunasHoje[0];
-      detalhe.textContent = proximaLacuna
-        ? `Tem alguém com a Mari agora · Próximo horário sem ninguém: ${proximaLacuna.horario}`
-        : 'Tem alguém com a Mari agora · Todos os horários de hoje têm alguém';
+      detalhe.textContent = !turnoAtual ? 'Horário sem cobertura.' : proximaLacuna
+        ? `Tem alguém com ${apelido} agora · Próximo horário sem ninguém: ${proximaLacuna.horario}`
+        : `Tem alguém com ${apelido} agora · Todos os horários de hoje têm alguém`;
     }
     if (link) link.href = `agenda.html?dia=${encodeURIComponent(HOJE)}`;
   };
 
   const renderizarEscala = () => {
     const estado = obterEstado();
+    const apelido = estado.person?.apelido || estado.person?.nome || 'a pessoa';
     const inicioSemana = formatarData(DIAS_SEMANA[0], { day: 'numeric', month: 'short' });
     const fimSemana = formatarData(DIAS_SEMANA[6], { day: 'numeric', month: 'short' });
     const tituloEscala = pagina.querySelector('[data-titulo-escala]');
@@ -220,7 +314,7 @@
       <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div>
         <strong>${escaparHtml(horario)} · Horário sem ninguém</strong>
-        <p>A Mari precisa de alguém com ela nesse horário.</p>
+        <p>${escaparHtml(apelido)} precisa de alguém nesse horário.</p>
       </div>
       <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Ficar nesse horário</button>
     </div>`;
@@ -241,23 +335,32 @@
       </div>`;
     };
 
-    listaTurnos.innerHTML = construirLinhaDoTempoDia(diaSelecionado, estado).map(seg => (
-      seg.tipo === 'lacuna'
-        ? linhaDescoberto(seg.horario, diaSelecionado)
-        : renderizarTurno(seg, diaSelecionado)
-    )).join('');
+    const linhaDoDia = construirLinhaDoTempoDia(diaSelecionado, estado);
+    listaTurnos.innerHTML = linhaDoDia.length
+      ? linhaDoDia.map(seg => (
+        seg.tipo === 'lacuna'
+          ? linhaDescoberto(seg.horario, diaSelecionado)
+          : renderizarTurno(seg, diaSelecionado)
+      )).join('')
+      : '<div class="estado-vazio"><strong>Nenhum turno cadastrado</strong><p>Ainda não há rotina de turnos registrada para este dia.</p></div>';
 
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     faixaLacuna.hidden = !lacunasHoje.length;
     if (lacunasHoje.length) {
       tituloLacuna.textContent = `${lacunasHoje[0].horario} · Horário sem ninguém`;
+      const textoLacuna = faixaLacuna.querySelector('.faixa-alerta__texto > span');
+      if (textoLacuna) textoLacuna.textContent = `${apelido} precisa de alguém nesse horário.`;
       const botaoCobrirLacuna = faixaLacuna.querySelector('[data-inicio-cobrir-lacuna]');
       if (botaoCobrirLacuna) {
         botaoCobrirLacuna.dataset.dia = HOJE;
         botaoCobrirLacuna.dataset.horario = lacunasHoje[0].horario;
       }
     }
+    atualizarResumoPessoa();
     atualizarTurnoAtual();
+    atualizarPassagemInicio();
+    atualizarRedeInicio();
+    sincronizarContextoRelato();
   };
 
   const dialogoEditarCobertura = document.getElementById('dialogo-editar-cobertura');
@@ -389,6 +492,8 @@
     }
 
     if (botao.dataset.passagemEtapa) {
+      const pedido = obterEstado().consultaDaPassagem;
+      if (!pedido) return;
       botao.closest('dialog')?.close();
       const proximo = document.getElementById(botao.dataset.passagemEtapa);
       if (proximo) {
@@ -408,14 +513,14 @@
           const avatar = proximo.querySelector('[data-pedido-avatar]');
           const resp = proximo.querySelector('[data-pedido-responsavel]');
           const papel = proximo.querySelector('[data-pedido-papel]');
-          if (ctx) ctx.textContent = `Otorrino · ${pessoa}`;
+          if (ctx) ctx.textContent = `${pedido.titulo} · ${pessoa}`;
           if (avatar) avatar.src = usuarioAtual.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
           if (resp) resp.textContent = usuarioAtual.nomeComApelido;
-          if (papel) papel.textContent = `${usuarioAtual.papel} · ${usuarioAtual.vinculo || 'Neto'}`;
+          if (papel) papel.textContent = [usuarioAtual.papel, usuarioAtual.vinculo].filter(Boolean).join(' · ');
         }
         if (proximo.id === 'dialogo-cadastrar-consulta') {
           const ctx = proximo.querySelector('[data-consulta-contexto]');
-          if (ctx) ctx.textContent = `Otorrino · ${pessoa}`;
+          if (ctx) ctx.textContent = `${pedido.titulo} · ${pessoa}`;
         }
         proximo.showModal();
       }
@@ -428,7 +533,7 @@
       const dialogo = document.getElementById(botao.dataset.dialogoDinamico);
       if (dialogo) {
         dialogo.querySelector('[data-contexto-turno]').textContent =
-          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || LACUNAS_TURNO[diaTurno]?.[0] || ''}`;
+          `${formatarDataCurta(diaTurno)} · Horário livre: ${horarioTurno || obterLacunasDia(diaTurno)[0]?.horario || ''}`;
         if (dialogo.id === 'dialogo-cobrir-horario') {
           const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
           const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
@@ -492,17 +597,14 @@
     const compromissos = (core.obterCompromissos ? core.obterCompromissos(estado) : [])
       .slice(0, 4)
       .map(evt => `${evt.titulo} (${core.formatarDataCurta ? core.formatarDataCurta(evt.dia) : evt.dia})`);
-    const rotina = [
-      'Dar os remédios do turno',
-      'Acompanhar hidratação e alimentação',
-      'Pegar remédio no posto (UBS)',
-      'Conferir estoque de medicamentos',
-      'Organizar documentos da consulta'
-    ];
+    const tarefas = estado.tasks.map(tarefa => tarefa.titulo).filter(Boolean);
     const montarGrupoOpt = (rotulo, itens) => itens.length
       ? `<optgroup label="${escaparHtml(rotulo)}">${itens.map(item => `<option value="${escaparHtml(item)}">${escaparHtml(item)}</option>`).join('')}</optgroup>`
       : '';
-    select.innerHTML = `<option value="">Escolha uma tarefa</option>${montarGrupoOpt('Medicamentos de hoje', dosesHoje)}${montarGrupoOpt('Agenda e compromissos', compromissos)}${montarGrupoOpt('Cuidado do dia a dia', rotina)}`;
+    const temOpcoes = dosesHoje.length || compromissos.length || tarefas.length;
+    const rotulo = temOpcoes ? 'Selecione uma tarefa' : 'Nenhuma tarefa cadastrada';
+    select.disabled = !temOpcoes;
+    select.innerHTML = `<option value="">${rotulo}</option>${montarGrupoOpt('Medicamentos de hoje', dosesHoje)}${montarGrupoOpt('Agenda e compromissos', compromissos)}${montarGrupoOpt('Tarefas da ficha', tarefas)}`;
   };
 
   popularTarefasRelato();
@@ -610,7 +712,7 @@
       form.closest('dialog')?.close();
       atualizarProximoCompromisso();
       popularTarefasRelato();
-      if (espelharFicha) atualizarPassagemCuidado();
+      if (espelharFicha) atualizarPassagemInicio();
       abrirConfirmacao({
         titulo: 'Compromisso salvo na Agenda',
         contexto: `${pessoa} · Agenda de cuidado`,
@@ -650,7 +752,7 @@
     form.reset();
     alternarDestinoCuidado();
     form.closest('dialog')?.close();
-    atualizarPassagemCuidado();
+    atualizarPassagemInicio();
     abrirConfirmacao({
       titulo: 'Anotação salva',
       contexto: `${pessoa} · Diário de turno`,
@@ -673,6 +775,18 @@
     const tituloCaixa = dialogo.querySelector('[data-passagem-modal-titulo]');
     const textoCaixa = dialogo.querySelector('[data-passagem-modal-texto]');
 
+    const ultimo = obterUltimoRelato(estado);
+    const pedido = estado.consultaDaPassagem;
+    const origem = pedido ? estado.reports?.[pedido.dia]?.find(relato => relato[0] === pedido.autor) : null;
+    const relatorio = origem || ultimo?.relatorio;
+    const autoria = dialogo.querySelector('[data-passagem-modal-autoria]');
+    autoria.hidden = !relatorio;
+    if (relatorio) {
+      autoria.querySelector('img').src = resolverPessoaRede(relatorio[0], estado).src;
+      autoria.querySelector('strong').textContent = relatorio[0];
+      autoria.querySelector('small').textContent = formatarDataCurta(origem ? pedido.dia : ultimo.dia);
+    }
+
     if (consulta) {
       if (botaoAssumir) botaoAssumir.hidden = true;
       if (linkVerConsulta) {
@@ -686,11 +800,12 @@
         textoCaixa.textContent = `${consulta.titulo} agendada para ${dataFmt}${horaFmt ? ` às ${horaFmt}` : ''}${consulta.local ? ` · ${consulta.local}` : ''}.`;
       }
     } else {
-      if (botaoAssumir) botaoAssumir.hidden = false;
+      if (botaoAssumir) botaoAssumir.hidden = !pedido;
       if (linkVerConsulta) linkVerConsulta.hidden = true;
       if (tituloCaixa) tituloCaixa.textContent = 'Para o próximo turno';
       if (textoCaixa) {
-        textoCaixa.textContent = `Marcar consulta no otorrino (ouvido, nariz e garganta) para ${core.nomePessoaAcompanhada()}. Antes, confira se o convênio paga a consulta.`;
+        const texto = relatorio?.[4] || relatorio?.[3];
+        textoCaixa.innerHTML = texto ? sanitizarHtmlEditor(String(texto).replaceAll('\n', '<br>')) : 'Nenhum recado cadastrado.';
       }
     }
   };
@@ -710,11 +825,12 @@
     }
 
     const campos = Object.fromEntries(new FormData(form));
-    const dia = (campos.dia || '2026-11-23').trim();
-    const hora = (campos.hora || '14:00').trim();
-    const local = (campos.local || 'Clínica do convênio').trim();
+    const dia = (campos.dia || '').trim();
+    const hora = (campos.hora || '').trim();
+    const local = (campos.local || '').trim();
     const acompanhante = (campos.acompanhante || obterUsuarioAtual().nomeComApelido).trim();
-    const titulo = 'Consulta no otorrino';
+    const titulo = estadoAtual.consultaDaPassagem?.titulo;
+    if (!titulo || !dia || !hora || !local) return;
     const idEvento = `evt-${Date.now()}`;
 
     atualizarEstado(estado => ({
@@ -751,82 +867,18 @@
     }
   });
 
-  const sincronizarRedeInicio = () => {
-    const estado = obterEstado();
-    const usuario = obterUsuarioAtual(estado);
-    const listaRede = pagina.querySelector('#titulo-rede ~ ul');
-    const itensRede = listaRede?.querySelectorAll('.painel__item:not([data-convite-inicio])') || [];
-    const itemUsuario = itensRede[itensRede.length - 1];
-    if (itemUsuario) {
-      const img = itemUsuario.querySelector('img');
-      const nomeEl = itemUsuario.querySelector('strong');
-      const papelEl = itemUsuario.querySelector('.painel__texto > span');
-      if (img) img.src = usuario.avatar;
-      if (nomeEl) nomeEl.textContent = usuario.nomeComApelido;
-      if (papelEl) papelEl.textContent = `${usuario.papel} · ${usuario.vinculo}`;
+  const sincronizarContextoRelato = () => {
+    const usuario = obterUsuarioAtual();
+    const contexto = pagina.querySelector('[data-contexto-relato-inicio]');
+    const avatar = pagina.querySelector('[data-relato-avatar]');
+    if (avatar) avatar.src = usuario.avatar;
+    const turno = core.obterTurnoAtual();
+    if (contexto) {
+      const rotulo = turno ? `Turno de ${turno.pessoa.nome} · ${turno.horario}` : 'Anotação geral (sem turno)';
+      contexto.textContent = `${rotulo} · Anotado por ${usuario.nomeComApelido}`;
     }
-
-    if (listaRede) {
-      listaRede.querySelectorAll('[data-convite-inicio]').forEach(el => el.remove());
-      for (const convite of estado.convites || []) {
-        const li = document.createElement('li');
-        li.className = 'painel__item';
-        li.setAttribute('data-convite-inicio', '');
-        li.innerHTML = `<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span><span class="painel__texto"><strong>${escaparHtml(convite.email)}</strong><span>Vínculo: ${escaparHtml(convite.vinculo)} · Papel: ${escaparHtml(convite.papel)} · Convite simulado</span></span>`;
-        listaRede.append(li);
-      }
-    }
-
-    const contextoRelato = pagina.querySelector('[data-contexto-relato-inicio]');
-    const avatarRelato = pagina.querySelector('[data-relato-avatar]');
-    if (avatarRelato) avatarRelato.src = usuario.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
-    if (contextoRelato) {
-      const linhaTempo = construirLinhaDoTempoDia(HOJE, obterEstado());
-      const turnoAtual = linhaTempo.find(seg => seg.tipo === 'turno' && 11 >= seg.inicio && 11 < seg.fim);
-      const responsavelTurno = turnoAtual?.pessoa?.nome || 'Beatriz da Silva (Bea)';
-      const horarioTurnoAtual = turnoAtual?.horario || '07h–12h';
-      contextoRelato.textContent = `Turno de ${responsavelTurno} · ${horarioTurnoAtual} · Anotado por ${usuario.nomeComApelido}`;
-    }
-  };
-
-  const atualizarPassagemCuidado = () => {
-    const painelPassagem = pagina.querySelector('#titulo-passagem')?.closest('section');
-    if (!painelPassagem) return;
-
-    const estado = obterEstado();
-    const diasComRelato = Object.keys(estado.reports || {})
-      .filter(dia => Array.isArray(estado.reports[dia]) && estado.reports[dia].length > 0)
-      .sort((a, b) => b.localeCompare(a));
-    if (!diasComRelato.length) return;
-
-    const diaMaisRecente = diasComRelato[0];
-    const [nome, papel, , relato, proximo] = estado.reports[diaMaisRecente][0];
-    const pessoa = resolverPessoaRede(nome, estado);
-    const srcAvatar = pessoa?.foto || `assets/media/mascotes/${escaparHtml(pessoa?.avatar || 'icone-mascote-cubado.svg')}`;
-    const dataFormatada = formatarData(diaMaisRecente, { day: 'numeric', month: 'short', year: 'numeric' });
-
-    const imgAvatar = painelPassagem.querySelector('.painel__item img.avatar');
-    const nomeEl = painelPassagem.querySelector('.painel__texto strong');
-    const subtituloEl = painelPassagem.querySelector('.painel__texto span');
-    const relatoEl = painelPassagem.querySelector('[data-passagem-relato], :scope > p');
-    const notaEl = painelPassagem.querySelector('.passagem__nota');
-
-    if (imgAvatar) imgAvatar.src = srcAvatar;
-    if (nomeEl) nomeEl.textContent = nome;
-    if (subtituloEl) {
-      subtituloEl.innerHTML = `${escaparHtml(papel || '')}${papel ? ' - ' : ''}<time datetime="${escaparHtml(diaMaisRecente)}">${escaparHtml(dataFormatada)}</time>`;
-    }
-    if (relatoEl) relatoEl.innerHTML = sanitizarHtmlEditor(relato);
-    if (notaEl) {
-      const textoProximo = (proximo || '').trim();
-      notaEl.hidden = !textoProximo;
-      if (textoProximo) {
-        const tituloNota = notaEl.querySelector('strong');
-        const textoNota = notaEl.querySelector('span');
-        if (tituloNota) tituloNota.textContent = 'Para o próximo turno';
-        if (textoNota) textoNota.innerHTML = sanitizarHtmlEditor(textoProximo.replaceAll('\n', '<br>'));
-      }
-    }
+    const select = pagina.querySelector('[data-formulario-mvp="relato"] select[name="turno"]');
+    core.popularTurnosRelato(select, turno ? 'Turno ' + turno.horario : '');
   };
 
   window.MutiraoPortaRemedios?.montar({
@@ -835,11 +887,9 @@
     aoMudar: atualizarProximaMedicacao
   });
   renderizarEscala();
-  sincronizarRedeInicio();
-  atualizarPassagemCuidado();
   atualizarProximoCompromisso();
-  window.addEventListener('mutirao:perfil-atualizado', () => {
-    sincronizarRedeInicio();
-    atualizarPassagemCuidado();
+  window.addEventListener('mutirao:cuidado-atualizado', () => {
+    renderizarEscala();
+    atualizarProximoCompromisso();
   });
-})();
+});

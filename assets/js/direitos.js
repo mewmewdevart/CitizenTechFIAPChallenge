@@ -1,7 +1,7 @@
-(() => {
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
   const pagina = document.querySelector('[data-pagina-mvp="direitos"]');
-  const core = window.MutiraoCuidado;
-  if (!pagina || !core) return;
+  if (!pagina) return;
 
   const { anunciarStatus, escaparHtml, obterEstado } = core;
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
@@ -20,19 +20,19 @@
   let passoAtual = 0;
 
   const calcularIdade = nascimento => {
-    if (!nascimento) return 79;
+    if (!nascimento) return null;
     const hoje = new Date('2026-11-10T12:00:00');
     const nasc = new Date(`${nascimento}T12:00:00`);
     let idade = hoje.getFullYear() - nasc.getFullYear();
     const mesDiff = hoje.getMonth() - nasc.getMonth();
     if (mesDiff < 0 || (mesDiff === 0 && hoje.getDate() < nasc.getDate())) idade -= 1;
-    return idade;
+    return Number.isFinite(idade) && idade >= 0 ? idade : null;
   };
 
   const idadePessoa = calcularIdade(obterEstado().person?.nascimento);
   selosIdade.forEach(selo => {
-    const comOrigem = selo.textContent.includes('(da ficha)');
-    selo.textContent = comOrigem ? `${idadePessoa} anos (da ficha)` : `${idadePessoa} anos`;
+    const comOrigem = selo.hasAttribute('data-idade-da-ficha');
+    selo.textContent = idadePessoa === null ? 'Idade não informada' : comOrigem ? `${idadePessoa} anos (da ficha)` : `${idadePessoa} anos`;
   });
 
   const respostas = {
@@ -129,7 +129,7 @@
         detalhe: idosa60
           ? 'Pela lei (Estatuto da Pessoa Idosa), quem tem 60 anos ou mais pode ter alguém junto quando fica internado ou em observação no hospital.'
           : 'Pela lei, quem tem 60 anos ou mais pode ter alguém junto durante a internação.',
-        selo: idosa60 ? 'Pode se aplicar' : 'Consultar critérios oficiais',
+        selo: idadePessoa === null ? 'Falta informar a idade' : idosa60 ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: idosa60 ? 'selo--sucesso' : 'selo--neutro',
         elegivel: idosa60,
         link: 'https://www.planalto.gov.br/ccivil_03/leis/2003/l10.741.htm',
@@ -139,7 +139,7 @@
         titulo: 'BPC (1 salário mínimo por mês)',
         icone: 'fa-solid fa-hand-holding-heart',
         detalhe: 'Consulte o INSS para confirmar idade, renda familiar, CadÚnico e acumulação com outros benefícios.',
-        selo: rendaDesconhecida || respostas.aposentadoriaIncapacidade === 'nao-sei' ? 'Faltam informações' : bpcElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
+        selo: idadePessoa === null || rendaDesconhecida || respostas.aposentadoriaIncapacidade === 'nao-sei' ? 'Faltam informações' : bpcElegivel ? 'Pode se aplicar' : 'Consultar critérios oficiais',
         classeSelo: bpcElegivel ? 'selo--atencao' : 'selo--neutro',
         elegivel: bpcElegivel,
         link: 'https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-ao-idoso',
@@ -221,7 +221,8 @@
   const renderizarResultado = () => {
     const itens = calcularDireitos();
     if (tituloResultado) {
-      tituloResultado.textContent = 'Serviços e benefícios para a Mari consultar';
+      const apelido = obterEstado().person?.apelido || obterEstado().person?.nome || 'quem recebe cuidado';
+      tituloResultado.textContent = `Serviços e benefícios para ${apelido} consultar`;
     }
     const resumoRespostasEl = pagina.querySelector('[data-simulador-resumo-respostas]');
     if (resumoRespostasEl) {
@@ -291,7 +292,7 @@
     if (evento.target.closest('[data-simulador-copiar]')) {
       const itens = calcularDireitos();
       const texto = [
-        `Mutirão · Direitos da Mari (${idadePessoa} anos)`,
+        `Mutirão · Direitos de ${obterEstado().person?.apelido || obterEstado().person?.nome || 'cuidado'} (${idadePessoa === null ? 'idade não informada' : idadePessoa + ' anos'})`,
         ...itens.map(i => `• ${i.titulo} (${i.selo}): ${i.detalhe}`),
         'Confirme as regras no CRAS, no INSS ou no posto (UBS), de acordo com o serviço.'
       ].join('\n');
@@ -510,4 +511,4 @@
 
     carregarEstados();
   }
-})();
+});

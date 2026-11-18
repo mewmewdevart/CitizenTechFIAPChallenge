@@ -76,6 +76,7 @@ body.menu-fechado .conteudo-pagina.ficha {
   aspect-ratio: 1;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 20%;
 }
 
 .ficha__mascote {
@@ -126,6 +127,10 @@ body.menu-fechado .conteudo-pagina.ficha {
   border: 1.5px solid color-mix(in srgb, var(--cor-aviso-alerta-escuro) 35%, transparent);
   border-radius: var(--raio-xl);
   color: var(--cor-aviso-alerta-escuro);
+}
+
+.ficha__aviso-alergia[hidden] {
+  display: none;
 }
 
 .ficha__aviso-alergia::before,

@@ -33,12 +33,13 @@ A proposta centraliza essas informações em um único espaço compartilhado, fa
 
 O painel é uma aplicação multipágina em HTML, CSS e JavaScript. `home.html` abre o Início. As outras páginas ficam na raiz, e os estilos, scripts e imagens ficam em `assets/`.
 
-O cenário de demonstração usa 10 de novembro de 2026 como referência. Registros de cuidado e preferências da sessão ficam na aba atual. Convites e mensagens da Ajuda são simulados, e Documentos cadastra referências sem guardar anexos.
+O cenário de demonstração usa 10 de novembro de 2026 como referência. A base fixa de Mari e Flavio fica em `assets/data/perfis-acompanhados.json`. O navegador salva na aba atual a seleção e as alterações de cada ficha. A conta do Zé é comum, e os registros de cuidado e a administração de cada rede pertencem à ficha selecionada. Convites e mensagens da Ajuda são simulados, e Documentos cadastra referências sem guardar anexos.
 
 ```text
 CitizenTechFIAPChallenge/
 ├── assets/
 │   ├── css/       # Estilos compartilhados e por seção
+│   ├── data/      # Base dos perfis acompanhados
 │   ├── js/        # Scripts e interações da página
 │   └── media/     # Logos, ícones e imagens
 ├── home.html     # Página principal
@@ -63,7 +64,9 @@ CitizenTechFIAPChallenge/
    cd CitizenTechFIAPChallenge
    ```
 
-2. Abra o `home.html` no navegador. Se estiver usando o VS Code, você também pode abrir o arquivo com a extensão **Live Server**.
+2. Sirva a pasta com a extensão **Live Server** do VS Code ou, se tiver Python, execute `python -m http.server 8000`. Abra `index.html` pelo endereço do servidor, por exemplo, `http://localhost:8000/`. O navegador carrega o JSON pelo servidor.
+
+3. Se tiver Node.js 22 ou mais recente, execute `node --test tests/estado-cuidado.test.mjs` para validar a seleção, o isolamento, a migração e a persistência das fichas.
 
 ## 👥 Integrantes — Grupo Ctrl + People
 

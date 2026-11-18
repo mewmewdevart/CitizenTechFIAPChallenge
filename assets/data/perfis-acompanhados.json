@@ -1,0 +1,451 @@
+{
+  "perfilAtivoId": "flavio-pneu",
+  "perfilUsuario": {
+    "nome": "Zé da Manga",
+    "apelido": "Zé",
+    "papel": "Administrador",
+    "nascimento": "1997-01-17",
+    "email": "ze.manga@example.com",
+    "recadoTitulo": "Prefiro mensagens",
+    "recadoTexto": "Para trocar de horário comigo, mande mensagem antes de ligar.",
+    "mascote": "assets/media/mascotes/icone-mascote-cubado.svg",
+    "foto": ""
+  },
+  "perfis": {
+    "flavio-pneu": {
+      "id": "flavio-pneu",
+      "administrador": "Zé da Manga (Zé)",
+      "criadoEm": "2026-11-10",
+      "person": {
+        "nome": "Flavio Pneu",
+        "apelido": "Flavinho",
+        "nascimento": "1954-08-22",
+        "cpf": "234.567.890-11",
+        "rg": "23.456.789-0",
+        "email": "flavio.pneu@example.com",
+        "telefoneFixo": "(11) XXXX-0210",
+        "celular": "(11) 9XXXX-0215",
+        "endereco": "Rua dos Ipês, 45 · Jardim Primavera · São Paulo/SP",
+        "convenio": "SUS · Unidade Básica de Saúde",
+        "carteira": "",
+        "alergias": "",
+        "condicoes": "",
+        "medicamentos": "",
+        "historicoSaude": "",
+        "referencia": "",
+        "alternativo": "",
+        "cobertura": "",
+        "preferencias": "",
+        "foto": "assets/media/fotos/foto-perfil-flavinho.png",
+        "mascote": "assets/media/mascotes/icone-mascote-forma.svg"
+      },
+      "equipeCuidado": [],
+      "insumos": [],
+      "portaRemedios": [],
+      "estoqueInicial": {},
+      "escalasFixas": {},
+      "lacunasTurno": {},
+      "events": [],
+      "covered": {},
+      "shiftEdits": {},
+      "tasks": [],
+      "reports": {},
+      "documents": []
+    },
+    "mari": {
+      "id": "mari",
+      "administrador": "Zé da Manga (Zé)",
+      "criadoEm": "2026-11-01",
+      "person": {
+        "nome": "Maria das Dores",
+        "apelido": "Mari",
+        "nascimento": "1947-05-18",
+        "cpf": "123.456.789-00",
+        "rg": "12.345.678-9",
+        "email": "maria.dores@example.com",
+        "telefoneFixo": "(11) XXXX-0140",
+        "celular": "(11) 9XXXX-0142",
+        "endereco": "Rua das Acácias, 120 · Vila Aurora · São Paulo/SP",
+        "convenio": "Convênio Vida Plena · Plano Familiar (fictício)",
+        "carteira": "4128 9910 3304 2048",
+        "alergias": "Dipirona",
+        "condicoes": "Epilepsia, Diabetes tipo 2, Asma, Pressão alta",
+        "medicamentos": "Losartana · 08h, Metformina · 08h e 20h",
+        "historicoSaude": "Cirurgia na perna esquerda (2021) · Placa e parafusos após fratura.<br>Já teve trombose venosa profunda, um coágulo na veia (2022).",
+        "referencia": "Ana da Silva (Aninha) · Filha · +55 (11) 9XXXX-0186",
+        "alternativo": "Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193",
+        "cobertura": "24 horas por dia",
+        "preferencias": "Prefere consultas à tarde e gosta de conferir a agenda com a família.",
+        "foto": "assets/media/fotos/foto-perfil-maria.png",
+        "mascote": "assets/media/mascotes/icone-mascote-minhoca.svg"
+      },
+      "escalaDemonstracao": true,
+      "finalidadesMedicacao": {
+        "Levotiroxina": "para controle da tireoide (em jejum)",
+        "Carbamazepina": "para controle neurológico",
+        "Bombinha": "para aliviar e prevenir falta de ar",
+        "Losartana": "para controle da pressão arterial",
+        "Metformina": "para controle da glicemia",
+        "Hidroclorotiazida": "para controle da pressão e retenção de líquidos",
+        "Cálcio + vit. D": "para fortalecimento dos ossos",
+        "Ácido fólico": "como suplementação vitamínica",
+        "Omeprazol": "para proteção gástrica",
+        "AAS": "para proteção cardiovascular",
+        "Vitamina B12": "para reposição vitamínica",
+        "Colírio": "para hidratação e cuidado ocular"
+      },
+      "equipeCuidado": [
+        { "nome": "Ana da Silva (Aninha)", "vinculo": "Filha · Contato principal", "papel": "Participante", "avatar": "icone-mascote-espeto.svg" },
+        { "nome": "Beatriz da Silva (Bea)", "vinculo": "Cuidadora", "papel": "Participante", "avatar": "icone-mascote-trevo.svg" },
+        { "nome": "Paulo da Silva (Paul)", "vinculo": "Neto", "papel": "Participante", "avatar": "icone-mascote-pingo.svg" },
+        { "nome": "Zé da Manga", "vinculo": "Neto", "papel": "Administrador", "avatar": "icone-mascote-cubado.svg" }
+      ],
+      "insumos": [
+        { "nome": "Fraldas", "tipo": "Insumo" }
+      ],
+      "portaRemedios": [
+        {
+          "hora": "6h",
+          "momento": "passado",
+          "responsavel": "Ana da Silva (Aninha)",
+          "itens": [
+            ["Levotiroxina", { "estado": "administrado", "quem": "Aninha", "horario": "06:10" }],
+            ["Carbamazepina", { "estado": "administrado", "quem": "Aninha", "horario": "06:10" }],
+            ["Bombinha", { "estado": "administrado", "quem": "Aninha", "horario": "06:12" }]
+          ]
+        },
+        {
+          "hora": "8h",
+          "momento": "passado",
+          "responsavel": "Beatriz da Silva (Bea)",
+          "itens": [
+            ["Losartana", { "estado": "administrado", "quem": "Bea", "horario": "08:15" }],
+            ["Metformina", { "estado": "nao-administrado", "quem": "Bea", "motivo": "Não disseram o motivo" }],
+            ["Hidroclorotiazida", { "estado": "administrado", "quem": "Bea", "horario": "08:15" }],
+            ["Cálcio + vit. D", { "estado": "administrado", "quem": "Bea", "horario": "08:16" }],
+            ["Ácido fólico", { "estado": "administrado", "quem": "Bea", "horario": "08:16" }]
+          ]
+        },
+        { "hora": "12h", "momento": "agora", "responsavel": "Zé da Manga (Zé)", "itens": [["Omeprazol"], ["Metformina"], ["AAS"], ["Vitamina B12"]] },
+        { "hora": "14h", "momento": "depois", "responsavel": "Paulo da Silva (Paul)", "itens": [["Carbamazepina"], ["Colírio"]] },
+        { "hora": "18h", "momento": "depois", "responsavel": "Paulo da Silva (Paul)", "itens": [["Losartana"], ["Bombinha"]] },
+        { "hora": "20h", "momento": "depois", "responsavel": "Zé da Manga (Zé)", "itens": [["Metformina"]] },
+        { "hora": "22h", "momento": "depois", "responsavel": "Zé da Manga (Zé)", "itens": [["Sinvastatina"], ["Carbamazepina"], ["Pomada"]] }
+      ],
+      "estoqueInicial": { "Metformina": 4, "Fraldas": 23 },
+      "escalasFixas": {
+        "2026-11-09": [
+          { "horario": "00h–07h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
+          { "horario": "07h–13h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
+          { "horario": "13h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
+          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+        ],
+        "2026-11-10": [
+          { "horario": "00h–07h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
+          { "horario": "07h–12h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
+          { "horario": "12h–13h", "pessoa": null, "lacuna": true },
+          { "horario": "13h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
+          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+        ],
+        "2026-11-11": [
+          { "horario": "00h–24h", "pessoa": null, "lacuna": true }
+        ],
+        "2026-11-12": [
+          { "horario": "00h–08h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
+          { "horario": "08h–14h", "pessoa": null, "lacuna": true },
+          { "horario": "14h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
+          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+        ],
+        "2026-11-13": [
+          { "horario": "00h–07h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
+          { "horario": "07h–14h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
+          { "horario": "14h–18h", "pessoa": null, "lacuna": true },
+          { "horario": "18h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+        ],
+        "2026-11-14": [
+          { "horario": "00h–07h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
+          { "horario": "07h–13h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
+          { "horario": "13h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
+          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+        ],
+        "2026-11-15": [
+          { "horario": "00h–07h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
+          { "horario": "07h–13h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
+          { "horario": "13h–19h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
+          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+        ]
+      },
+      "lacunasTurno": {
+        "2026-11-10": ["12h–13h", "Descoberto"],
+        "2026-11-11": ["00h–24h", "Descoberto"],
+        "2026-11-12": ["08h–14h", "Parcial"],
+        "2026-11-13": ["14h–18h", "Parcial"]
+      },
+      "events": [
+        {
+          "id": "evt-caminhada-09",
+          "dia": "2026-11-09",
+          "hora": "15:30",
+          "titulo": "Caminhada leve no quintal e hidratação",
+          "local": "Casa · Turno 13h–19h",
+          "acompanhante": "Paulo da Silva (Paul)",
+          "criadoPor": "Paulo da Silva (Paul)"
+        },
+        {
+          "id": "evt-ubs-10",
+          "dia": "2026-11-10",
+          "hora": "14:00",
+          "titulo": "Consulta no posto (UBS)",
+          "local": "UBS do bairro",
+          "acompanhante": "Ana da Silva (Aninha)",
+          "preparacao": [
+            "Levar a pasta da consulta · Ana da Silva (Aninha)",
+            "Volta combinada · Paulo da Silva (Paul)"
+          ]
+        },
+        {
+          "id": "evt-geriatria-18",
+          "dia": "2026-11-18",
+          "hora": "14:00",
+          "titulo": "Geriatria",
+          "local": "Consultório do geriatra (médico de idosos)",
+          "acompanhante": "Ana da Silva (Aninha)"
+        },
+        {
+          "id": "evt-hemoglobina-21",
+          "dia": "2026-11-21",
+          "hora": "08:00",
+          "titulo": "Hemoglobina glicada",
+          "local": "Coleta · UBS do bairro",
+          "acompanhante": ""
+        }
+      ],
+      "covered": {},
+      "shiftEdits": {},
+      "tasks": [
+        {
+          "id": "tarefa-ontem-06-08",
+          "dia": "2026-11-09",
+          "titulo": "06h e 08h · Remédios da manhã dados",
+          "descricao": "Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h",
+          "icone": "bi bi-capsule",
+          "concluida": true,
+          "href": "ficha.html#diario",
+          "rotuloAcao": "Ver no Diário"
+        },
+        {
+          "id": "tarefa-ontem-otorrino",
+          "dia": "2026-11-09",
+          "titulo": "08h10 · Recado: marcar consulta no otorrino",
+          "descricao": "Ver se o Convênio Vida Plena paga antes de marcar · Beatriz da Silva (Bea)",
+          "icone": "icone-receita.svg",
+          "concluida": true,
+          "href": "home.html#passagem-cuidado",
+          "rotuloAcao": "Ver passagem"
+        },
+        {
+          "id": "tarefa-ontem-retorno-ubs",
+          "dia": "2026-11-09",
+          "titulo": "16h · Retorno da consulta de terça combinado",
+          "descricao": "Paulo da Silva (Paul) confirmou buscar Mari e Ana na UBS após as 14h · Turno 13h–19h",
+          "icone": "icone-receita.svg",
+          "concluida": true,
+          "href": "agenda.html?dia=2026-11-10",
+          "rotuloAcao": "Ver dia 10/11"
+        },
+        {
+          "id": "tarefa-ontem-20h-docs",
+          "dia": "2026-11-09",
+          "titulo": "20h · Metformina e separação de documentos",
+          "descricao": "Zé da Manga (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h",
+          "icone": "bi bi-capsule",
+          "concluida": true,
+          "href": "documentos.html",
+          "rotuloAcao": "Ver Documentos"
+        },
+        {
+          "id": "tarefa-ubs-retirada",
+          "descricaoPendente": "Depois da consulta · Ana da Silva (Aninha) · Receita salva",
+          "descricaoConcluida": "Medicamento retirado na UBS · Ana da Silva (Aninha)",
+          "contexto": "Pegar no posto de saúde o remédio da receita, depois da consulta das 14h. Quem vai: Ana da Silva (Aninha).",
+          "documentoId": "doc-receita-ubs",
+          "dia": "2026-11-10",
+          "titulo": "Pegar remédio no posto (UBS)",
+          "descricao": "Depois da consulta · Ana da Silva (Aninha) · Receita salva",
+          "icone": "icone-receita.svg",
+          "concluida": false,
+          "dialogo": "dialogo-tarefa-ubs"
+        },
+        {
+          "id": "tarefa-metformina-08",
+          "medicacao": {
+            "hora": "8h",
+            "itemId": "Metformina"
+          },
+          "dia": "2026-11-10",
+          "titulo": "08h · Metformina",
+          "descricao": "Não foi dado · Bea anotou",
+          "icone": "bi bi-capsule",
+          "concluida": false,
+          "href": "medicamentos.html",
+          "rotuloAcao": "Marcar como dado"
+        },
+        {
+          "id": "tarefa-metformina-20",
+          "medicacao": {
+            "hora": "20h",
+            "itemId": "Metformina"
+          },
+          "dia": "2026-11-10",
+          "titulo": "20h · Metformina",
+          "descricao": "Às 20h · Turno de Zé da Manga (Zé)",
+          "icone": "bi bi-capsule",
+          "concluida": false,
+          "href": "medicamentos.html",
+          "rotuloAcao": "Marcar como dado"
+        },
+        {
+          "id": "tarefa-hoje-jejum-06",
+          "medicacao": {
+            "hora": "6h"
+          },
+          "dia": "2026-11-10",
+          "titulo": "06h · Remédios em jejum dados",
+          "descricao": "Aninha deu 3 remédios (06h10 e 06h12) · Turno de Ana da Silva (Aninha)",
+          "icone": "bi bi-capsule",
+          "concluida": true,
+          "href": "medicamentos.html#registros-de-hoje",
+          "rotuloAcao": "Ver anotações"
+        }
+      ],
+      "reports": {
+        "2026-11-10": [
+          [
+            "Beatriz da Silva (Bea)",
+            "Cuidadora · Turno 07h–12h",
+            "Tarefa relacionada · Pegar remédio no posto (UBS) · Ocorrência · Metformina das 08h não foi dada",
+            "Confirmei a consulta das 14h. A metformina das 8h não foi dada, e ninguém disse por quê.",
+            "Falta marcar a consulta no otorrino (ouvido, nariz e garganta). Antes, confira se o convênio paga."
+          ],
+          [
+            "Ana da Silva (Aninha)",
+            "Filha · Contato principal · Turno 00h–07h",
+            "Tarefa relacionada · Levar a pasta da consulta",
+            "Separei os documentos e deixei a pasta na bolsa azul.",
+            "Levar a pasta para a consulta das 14h."
+          ]
+        ],
+        "2026-11-09": [
+          [
+            "Zé da Manga",
+            "Administrador · Turno 19h–24h",
+            "Tarefa relacionada · Conferir os remédios da noite",
+            "Maria jantou sopa de legumes e tomou a metformina das 20h sem problemas. Foi dormir por volta das 22h30.",
+            "Deixei o RG e a carteirinha do convênio separados em cima da cômoda para a consulta de amanhã."
+          ],
+          [
+            "Paulo da Silva (Paul)",
+            "Neto · Segundo contato · Turno 13h–19h",
+            "Tarefa relacionada · Combinar a volta da consulta de terça",
+            "Fizemos uma caminhada leve no quintal à tarde e ela bebeu bastante água. Não reclamou de dor.",
+            "Confirmado que busco a Maria e a Ana na UBS amanhã após a consulta das 14h."
+          ],
+          [
+            "Beatriz da Silva (Bea)",
+            "Cuidadora · Turno 07h–13h",
+            "Tarefa relacionada · Dar os remédios da manhã",
+            "Tomou todo o café da manhã. Losartana e metformina das 08h dadas certinho; pressão boa (12x8).",
+            "Lembrar de oferecer água ao longo da tarde."
+          ],
+          [
+            "Ana da Silva (Aninha)",
+            "Filha · Contato principal · Turno 00h–07h",
+            "Tarefa relacionada · Ficar com ela à noite",
+            "Noite tranquila, dormiu direto e acordou bem às 06h40.",
+            "A receita do remédio de todo dia ficou na pasta azul."
+          ]
+        ]
+      },
+      "recadosMural": [
+        {
+          "id": "recado-aninha",
+          "autor": "Aninha",
+          "data": "11/11",
+          "texto": "Zé, obrigada por segurar todas as noites. Graças a você eu consigo dormir um pouco.",
+          "cor": "manteiga",
+          "pino": "lilas",
+          "giro": -2,
+          "figurinhas": [
+            {
+              "id": "mari-coracao",
+              "por": "Aninha"
+            }
+          ]
+        },
+        {
+          "id": "recado-paul",
+          "autor": "Paul",
+          "data": "12/11",
+          "texto": "Zé, a vó fala de você com o maior carinho. Obrigado por cuidar dela com tanto amor!",
+          "cor": "branco",
+          "pino": "amarelo",
+          "giro": 1.5,
+          "figurinhas": [
+            {
+              "id": "minhoca-flor",
+              "por": "Paul"
+            }
+          ]
+        },
+        {
+          "id": "recado-bea",
+          "autor": "Bea",
+          "data": "9/11",
+          "texto": "A Dona Mari dormiu tranquila depois da sua visita. Obrigada!",
+          "cor": "manteiga",
+          "pino": "lilas",
+          "giro": -1,
+          "figurinhas": []
+        }
+      ],
+      "consultaDaPassagem": {
+        "titulo": "Consulta no otorrino",
+        "dia": "2026-11-10",
+        "autor": "Beatriz da Silva (Bea)"
+      },
+      "documents": [
+        {
+          "id": "doc-receita-ubs",
+          "titulo": "Receita para pegar remédio no posto",
+          "categoria": "Receita",
+          "dia": "2026-11-10",
+          "autor": "Ana da Silva (Aninha)",
+          "compromissoId": "evt-ubs-10",
+          "vinculo": "Consulta no posto de 10 nov.",
+          "localOriginal": "Pasta azul da Mari (sala) · cópia no WhatsApp da Aninha",
+          "observacoes": "Receita para pegar o remédio no posto do bairro, depois da consulta das 14h."
+        },
+        {
+          "id": "doc-hemograma",
+          "titulo": "Hemograma",
+          "categoria": "Exame",
+          "dia": "2026-11-04",
+          "autor": "Paulo da Silva (Paul)",
+          "vinculo": "Exame salvo em 4 nov.",
+          "localOriginal": "Pasta de exames (gaveta do quarto) · PDF com o Paul",
+          "observacoes": "Resultado completo do hemograma (exame de sangue) feito em 4 de novembro de 2026."
+        },
+        {
+          "id": "doc-ficha-atendimento",
+          "titulo": "Ficha de atendimento",
+          "categoria": "Documento",
+          "dia": "2026-11-06",
+          "autor": "Beatriz da Silva (Bea)",
+          "vinculo": "Documento geral",
+          "localOriginal": "Pasta azul da Mari (sala)",
+          "observacoes": "Papel do atendimento e o que a equipe orientou."
+        }
+      ]
+    }
+  }
+}

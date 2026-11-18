@@ -1352,3 +1352,72 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
 .notificacao--atencao .botao-contornado {
   color: var(--cor-aviso-atencao-escuro);
 }
+
+.notificacao__vazio {
+  padding: var(--espaco-md);
+  color: var(--cor-neutra-media);
+  text-align: center;
+}
+
+.seletor-pessoa .painel-flutuante {
+  min-width: 260px;
+  padding: 6px;
+}
+
+.seletor-pessoa__lista {
+  display: grid;
+  gap: 4px;
+}
+
+.seletor-pessoa__opcao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-sm);
+  padding: 8px 10px;
+  border-radius: var(--raio-md);
+  text-align: left;
+  background: transparent;
+  color: var(--cor-neutra-escura);
+}
+
+.seletor-pessoa__opcao span {
+  display: grid;
+  gap: 2px;
+}
+
+.seletor-pessoa__opcao strong {
+  font-size: var(--texto-interface);
+  font-weight: var(--peso-semibold);
+}
+
+.seletor-pessoa__opcao small {
+  font-size: var(--texto-legenda);
+  color: var(--cor-neutra-media);
+}
+
+.seletor-pessoa__opcao:hover {
+  background: var(--cor-neutra-clara-02);
+}
+
+.seletor-pessoa__opcao--ativo {
+  background: var(--cor-primaria-suave, rgba(132, 149, 225, 0.14));
+  color: var(--cor-primaria-escura, var(--cor-neutra-escura));
+}
+
+.cuidado-status-inicial {
+  grid-column: 2 / -1;
+  margin: var(--espaco-lg);
+  padding: var(--espaco-lg);
+}
+
+.cuidado-status-inicial button {
+  display: block;
+  margin-top: var(--espaco-md);
+}
+
+@media (max-width: 900px) {
+  .cuidado-status-inicial {
+    grid-column: 1 / -1;
+  }
+}

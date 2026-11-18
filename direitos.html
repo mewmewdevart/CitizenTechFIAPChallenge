@@ -72,8 +72,8 @@
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
     <details class="seletor-pessoa">
-      <summary>Maria das Dores (Mari)</summary>
-      <div class="painel-flutuante"><span data-identidade-acompanhada>Maria das Dores (Mari)</span></div>
+      <summary>Pessoa acompanhada</summary>
+      <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
     <div class="barra-topo__acoes">
       <button class="botao-icone" data-busca-topo aria-label="Buscar uma página"><i class="fa-solid fa-magnifying-glass"
@@ -89,41 +89,13 @@
 
             </div>
           </header>
-          <ul class="menu-notificacoes__lista">
-            <li class="notificacao notificacao--alerta">
-              <a class="notificacao__link" href="agenda.html">
-                <div>
-                  <h3>Horário sem ninguém</h3>
-                  <p>Maria das Dores (Mari) · Terça, 10 nov., das 12h às 13h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="ficha.html#diario">
-                <div>
-                  <h3>Pedido para marcar consulta</h3>
-                  <p>Maria das Dores (Mari) · Bea pediu ajuda para marcar consulta no otorrino (médico de ouvido, nariz e garganta).</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-            <li class="notificacao">
-              <a class="notificacao__link" href="medicamentos.html">
-                <div>
-                  <h3>Próxima medicação</h3>
-                  <p>Maria das Dores (Mari) · Metformina às 20h.</p>
-                </div>
-                <i class="fa-solid fa-chevron-right notificacao__seta" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
+          <ul class="menu-notificacoes__lista"></ul>
         </section>
       </details>
       <details class="menu-perfil">
         <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
-              Manga · Neto</strong><small>Administrador</small></span></summary>
+              Manga</strong><small>Administrador</small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -156,13 +128,11 @@
     <section class="cartao-status" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
-      <div class="cartao-status__linha"><img src="assets/media/mascotes/icone-mascote-trevo.svg"
-          alt=""><span><strong>Beatriz
-            (Bea)</strong><small>07h–12h</small></span></div>
+      <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
+          alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha cartao-status__linha--alerta" data-status-medicamento><i class="bi bi-capsule"
-          aria-hidden="true"></i><span><strong>08h ·
-            Metformina</strong><small>Não foi dado</small></span></div>
+      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+          aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
         class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
@@ -185,19 +155,19 @@
       <i class="fa-solid fa-triangle-exclamation apoio__aviso-icone" aria-hidden="true"></i>
       <div>
         <strong>Guia em construção</strong>
-        <p>Você já pode ver os direitos da Mari, achar serviços públicos na sua cidade e conferir as fontes oficiais abaixo.</p>
+        <p>Você já pode ver os direitos da pessoa acompanhada, achar serviços públicos na sua cidade e conferir as fontes oficiais abaixo.</p>
       </div>
     </div>
 
-    <section class="apoio__painel direitos-banner" aria-labelledby="titulo-simulador-mari" data-simulador-painel>
+    <section class="apoio__painel direitos-banner" aria-labelledby="titulo-simulador" data-simulador-painel>
       <div class="direitos-simulador__etapa direitos-simulador__inicial" data-etapa="inicial">
         <div class="direitos-banner__conteudo">
           <div class="direitos-simulador__inicial-etiquetas">
             <span class="selo selo--atencao">Ainda não feito</span>
-            <span class="selo selo--info">Maria das Dores</span>
-            <span class="selo selo--info" data-simulador-idade-selo>79 anos</span>
+            <span class="selo selo--info" data-identidade-acompanhada>Pessoa acompanhada</span>
+            <span class="selo selo--info" data-simulador-idade-selo>Idade não informada</span>
           </div>
-          <h2 id="titulo-simulador-mari">Veja quais serviços e benefícios podem apoiar a Mari</h2>
+          <h2 id="titulo-simulador">Veja quais serviços e benefícios podem apoiar a pessoa acompanhada</h2>
           <p class="direitos-banner__descricao">Responda 7 perguntas rápidas sobre o dia a dia, o dinheiro, a saúde e o cadastro dela. No final, você vê quais ajudas do governo e serviços do SUS ela pode ter.</p>
           <div class="direitos-simulador__acoes">
             <a class="botao direitos-banner__cta" href="#localidade-servicos"><i class="fa-solid fa-location-dot"
@@ -219,7 +189,7 @@
         <div class="direitos-simulador__progresso-cabecalho">
           <div class="direitos-simulador__progresso-meta">
             <span class="selo selo--info" data-simulador-progresso>Pergunta 1 de 7</span>
-            <span class="selo selo--neutro" data-simulador-idade-selo>79 anos (da ficha)</span>
+            <span class="selo selo--neutro" data-simulador-idade-selo data-idade-da-ficha>Idade não informada</span>
           </div>
           <div class="direitos-simulador__barra" aria-hidden="true">
             <span class="direitos-simulador__barra-preenchida" data-simulador-barra style="width: 14%"></span>
@@ -228,14 +198,14 @@
 
         <div class="direitos-simulador__palco">
           <article class="direitos-simulador__pergunta" data-passo="0">
-            <h3 id="pergunta-moradia" tabindex="-1">Com quem a Mari mora hoje?</h3>
+            <h3 id="pergunta-moradia" tabindex="-1">Com quem a pessoa acompanhada mora hoje?</h3>
             <div class="direitos-simulador__opcoes" role="group" aria-labelledby="pergunta-moradia"
               data-simulador-grupo="moradia">
               <button type="button" data-simulador-valor="sozinha" aria-pressed="false">Sozinha</button>
               <button type="button" data-simulador-valor="familia" aria-pressed="false">Com a família</button>
               <button type="button" data-simulador-valor="instituicao" aria-pressed="false">Casa de repouso</button>
             </div>
-            <p class="direitos-simulador__nota">A resposta descreve a moradia da Mari e aparece no resumo.</p>
+            <p class="direitos-simulador__nota">A resposta descreve a moradia da pessoa acompanhada e aparece no resumo.</p>
           </article>
 
           <article class="direitos-simulador__pergunta" data-passo="1" hidden>
@@ -323,7 +293,7 @@
 
       <div class="direitos-simulador__etapa" data-etapa="resultado" aria-live="polite" hidden>
         <div class="direitos-resumo__cabecalho">
-          <span class="selo selo--info">Resultado aproximado · Maria das Dores (Mari)</span>
+          <span class="selo selo--info">Resultado aproximado</span><span class="selo selo--info" data-identidade-acompanhada>Pessoa acompanhada</span>
           <h2 data-simulador-titulo tabindex="-1"></h2>
           <p class="direitos-simulador__nota">Triagem informativa. A concessão e os critérios devem ser confirmados nos
             canais oficiais.</p>
@@ -445,7 +415,7 @@
   <!-- VLibras Widget -->
   <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
   <script>
-    new window.VLibras.Widget({
+    if (window.VLibras?.Widget) new window.VLibras.Widget({
       rootPath: 'https://vlibras.gov.br/app',
       personalization: 'https://vlibras.gov.br/config/default_logo.json',
       avatar: 'random',
