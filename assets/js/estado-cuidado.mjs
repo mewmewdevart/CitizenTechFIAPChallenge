@@ -1,6 +1,6 @@
-/** @typedef {'mari' | 'flavio-pneu'} PerfilId */
+/** @typedef {'mari' | 'flavio-barbosa'} PerfilId */
 
-const IDS_PERFIS = /** @type {const} */ (['mari', 'flavio-pneu']);
+const IDS_PERFIS = /** @type {const} */ (['mari', 'flavio-barbosa']);
 const CHAVE_SESSAO = 'mutirao-mvp-estado-v2';
 const CHAVE_LEGADA = 'mutirao-mvp-estado-v1';
 const LISTAS = [
@@ -70,8 +70,8 @@ export async function carregarBaseCuidado() {
 /** Mantém a conta comum e aplica cada alteração à ficha selecionada na sessão. */
 export function criarBancoCuidado(base, armazenamento) {
   if (!perfilValido(base?.perfilAtivoId) || !objeto(base.perfilUsuario) ||
-      !IDS_PERFIS.every(id => base.perfis?.[id]?.id === id &&
-        typeof base.perfis[id].person?.nome === 'string' && base.perfis[id].person.nome.trim())) {
+    !IDS_PERFIS.every(id => base.perfis?.[id]?.id === id &&
+      typeof base.perfis[id].person?.nome === 'string' && base.perfis[id].person.nome.trim())) {
     throw new Error('A base deve declarar Mari, Flavio e o administrador.');
   }
 
@@ -136,7 +136,7 @@ export function criarBancoCuidado(base, armazenamento) {
       const rascunho = structuredClone(estado);
       const proximo = transformar(rascunho);
       if (!objeto(proximo) || proximo.id !== id || proximo.perfilAtivoId !== id ||
-          Object.hasOwn(proximo, 'perfis') || !objeto(proximo.person) || !objeto(proximo.perfilUsuario)) {
+        Object.hasOwn(proximo, 'perfis') || !objeto(proximo.person) || !objeto(proximo.perfilUsuario)) {
         throw new Error('A alteração precisa pertencer à ficha selecionada.');
       }
 

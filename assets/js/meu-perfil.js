@@ -398,7 +398,7 @@ window.MutiraoCuidadoPronto.then(core => {
     for (const dia of SEMANA_ATUAL) {
       for (const seg of construirLinhaDoTempoDia(dia, estado)) {
         if (seg.tipo !== 'turno' || !seg.pessoa) continue;
-        const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga');
+        const ehZe = Boolean(seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Silva');
         const chave = ehZe ? 'ze' : seg.pessoa.nome;
         const atual = resumoPorPessoa.get(chave) || {
           chave,

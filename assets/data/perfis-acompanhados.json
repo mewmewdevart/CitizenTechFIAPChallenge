@@ -1,28 +1,28 @@
 {
-  "perfilAtivoId": "flavio-pneu",
+  "perfilAtivoId": "flavio-barbosa",
   "perfilUsuario": {
-    "nome": "Zé da Manga",
+    "nome": "Zé da Silva",
     "apelido": "Zé",
     "papel": "Administrador",
     "nascimento": "1997-01-17",
-    "email": "ze.manga@example.com",
+    "email": "ze.silva@example.com",
     "recadoTitulo": "Prefiro mensagens",
     "recadoTexto": "Para trocar de horário comigo, mande mensagem antes de ligar.",
     "mascote": "assets/media/mascotes/icone-mascote-cubado.svg",
     "foto": ""
   },
   "perfis": {
-    "flavio-pneu": {
-      "id": "flavio-pneu",
-      "administrador": "Zé da Manga (Zé)",
+    "flavio-barbosa": {
+      "id": "flavio-barbosa",
+      "administrador": "Zé da Silva (Zé)",
       "criadoEm": "2026-11-10",
       "person": {
-        "nome": "Flavio Pneu",
+        "nome": "Flavio Barbosa",
         "apelido": "Flavinho",
         "nascimento": "1954-08-22",
         "cpf": "234.567.890-11",
         "rg": "23.456.789-0",
-        "email": "flavio.pneu@example.com",
+        "email": "flavio.barbosa@example.com",
         "telefoneFixo": "(11) XXXX-0210",
         "celular": "(11) 9XXXX-0215",
         "endereco": "Rua dos Ipês, 45 · Jardim Primavera · São Paulo/SP",
@@ -54,7 +54,7 @@
     },
     "mari": {
       "id": "mari",
-      "administrador": "Zé da Manga (Zé)",
+      "administrador": "Zé da Silva (Zé)",
       "criadoEm": "2026-11-01",
       "person": {
         "nome": "Maria das Dores",
@@ -95,13 +95,36 @@
         "Colírio": "para hidratação e cuidado ocular"
       },
       "equipeCuidado": [
-        { "nome": "Ana da Silva (Aninha)", "vinculo": "Filha · Contato principal", "papel": "Participante", "avatar": "icone-mascote-espeto.svg" },
-        { "nome": "Beatriz da Silva (Bea)", "vinculo": "Cuidadora", "papel": "Participante", "avatar": "icone-mascote-trevo.svg" },
-        { "nome": "Paulo da Silva (Paul)", "vinculo": "Neto", "papel": "Participante", "avatar": "icone-mascote-pingo.svg" },
-        { "nome": "Zé da Manga", "vinculo": "Neto", "papel": "Administrador", "avatar": "icone-mascote-cubado.svg" }
+        {
+          "nome": "Ana da Silva (Aninha)",
+          "vinculo": "Filha · Contato principal",
+          "papel": "Participante",
+          "avatar": "icone-mascote-espeto.svg"
+        },
+        {
+          "nome": "Beatriz da Silva (Bea)",
+          "vinculo": "Cuidadora",
+          "papel": "Participante",
+          "avatar": "icone-mascote-trevo.svg"
+        },
+        {
+          "nome": "Paulo da Silva (Paul)",
+          "vinculo": "Neto",
+          "papel": "Participante",
+          "avatar": "icone-mascote-pingo.svg"
+        },
+        {
+          "nome": "Zé da Silva",
+          "vinculo": "Neto",
+          "papel": "Administrador",
+          "avatar": "icone-mascote-cubado.svg"
+        }
       ],
       "insumos": [
-        { "nome": "Fraldas", "tipo": "Insumo" }
+        {
+          "nome": "Fraldas",
+          "tipo": "Insumo"
+        }
       ],
       "portaRemedios": [
         {
@@ -109,9 +132,30 @@
           "momento": "passado",
           "responsavel": "Ana da Silva (Aninha)",
           "itens": [
-            ["Levotiroxina", { "estado": "administrado", "quem": "Aninha", "horario": "06:10" }],
-            ["Carbamazepina", { "estado": "administrado", "quem": "Aninha", "horario": "06:10" }],
-            ["Bombinha", { "estado": "administrado", "quem": "Aninha", "horario": "06:12" }]
+            [
+              "Levotiroxina",
+              {
+                "estado": "administrado",
+                "quem": "Aninha",
+                "horario": "06:10"
+              }
+            ],
+            [
+              "Carbamazepina",
+              {
+                "estado": "administrado",
+                "quem": "Aninha",
+                "horario": "06:10"
+              }
+            ],
+            [
+              "Bombinha",
+              {
+                "estado": "administrado",
+                "quem": "Aninha",
+                "horario": "06:12"
+              }
+            ]
           ]
         },
         {
@@ -119,67 +163,331 @@
           "momento": "passado",
           "responsavel": "Beatriz da Silva (Bea)",
           "itens": [
-            ["Losartana", { "estado": "administrado", "quem": "Bea", "horario": "08:15" }],
-            ["Metformina", { "estado": "nao-administrado", "quem": "Bea", "motivo": "Não disseram o motivo" }],
-            ["Hidroclorotiazida", { "estado": "administrado", "quem": "Bea", "horario": "08:15" }],
-            ["Cálcio + vit. D", { "estado": "administrado", "quem": "Bea", "horario": "08:16" }],
-            ["Ácido fólico", { "estado": "administrado", "quem": "Bea", "horario": "08:16" }]
+            [
+              "Losartana",
+              {
+                "estado": "administrado",
+                "quem": "Bea",
+                "horario": "08:15"
+              }
+            ],
+            [
+              "Metformina",
+              {
+                "estado": "nao-administrado",
+                "quem": "Bea",
+                "motivo": "Não disseram o motivo"
+              }
+            ],
+            [
+              "Hidroclorotiazida",
+              {
+                "estado": "administrado",
+                "quem": "Bea",
+                "horario": "08:15"
+              }
+            ],
+            [
+              "Cálcio + vit. D",
+              {
+                "estado": "administrado",
+                "quem": "Bea",
+                "horario": "08:16"
+              }
+            ],
+            [
+              "Ácido fólico",
+              {
+                "estado": "administrado",
+                "quem": "Bea",
+                "horario": "08:16"
+              }
+            ]
           ]
         },
-        { "hora": "12h", "momento": "agora", "responsavel": "Zé da Manga (Zé)", "itens": [["Omeprazol"], ["Metformina"], ["AAS"], ["Vitamina B12"]] },
-        { "hora": "14h", "momento": "depois", "responsavel": "Paulo da Silva (Paul)", "itens": [["Carbamazepina"], ["Colírio"]] },
-        { "hora": "18h", "momento": "depois", "responsavel": "Paulo da Silva (Paul)", "itens": [["Losartana"], ["Bombinha"]] },
-        { "hora": "20h", "momento": "depois", "responsavel": "Zé da Manga (Zé)", "itens": [["Metformina"]] },
-        { "hora": "22h", "momento": "depois", "responsavel": "Zé da Manga (Zé)", "itens": [["Sinvastatina"], ["Carbamazepina"], ["Pomada"]] }
+        {
+          "hora": "12h",
+          "momento": "agora",
+          "responsavel": "Zé da Silva (Zé)",
+          "itens": [
+            [
+              "Omeprazol"
+            ],
+            [
+              "Metformina"
+            ],
+            [
+              "AAS"
+            ],
+            [
+              "Vitamina B12"
+            ]
+          ]
+        },
+        {
+          "hora": "14h",
+          "momento": "depois",
+          "responsavel": "Paulo da Silva (Paul)",
+          "itens": [
+            [
+              "Carbamazepina"
+            ],
+            [
+              "Colírio"
+            ]
+          ]
+        },
+        {
+          "hora": "18h",
+          "momento": "depois",
+          "responsavel": "Paulo da Silva (Paul)",
+          "itens": [
+            [
+              "Losartana"
+            ],
+            [
+              "Bombinha"
+            ]
+          ]
+        },
+        {
+          "hora": "20h",
+          "momento": "depois",
+          "responsavel": "Zé da Silva (Zé)",
+          "itens": [
+            [
+              "Metformina"
+            ]
+          ]
+        },
+        {
+          "hora": "22h",
+          "momento": "depois",
+          "responsavel": "Zé da Silva (Zé)",
+          "itens": [
+            [
+              "Sinvastatina"
+            ],
+            [
+              "Carbamazepina"
+            ],
+            [
+              "Pomada"
+            ]
+          ]
+        }
       ],
-      "estoqueInicial": { "Metformina": 4, "Fraldas": 23 },
+      "estoqueInicial": {
+        "Metformina": 4,
+        "Fraldas": 23
+      },
       "escalasFixas": {
         "2026-11-09": [
-          { "horario": "00h–07h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
-          { "horario": "07h–13h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
-          { "horario": "13h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
-          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+          {
+            "horario": "00h–07h",
+            "pessoa": {
+              "nome": "Ana da Silva (Aninha)",
+              "avatar": "icone-mascote-espeto.svg"
+            }
+          },
+          {
+            "horario": "07h–13h",
+            "pessoa": {
+              "nome": "Beatriz da Silva (Bea)",
+              "avatar": "icone-mascote-trevo.svg"
+            }
+          },
+          {
+            "horario": "13h–19h",
+            "pessoa": {
+              "nome": "Paulo da Silva (Paul)",
+              "avatar": "icone-mascote-pingo.svg"
+            }
+          },
+          {
+            "horario": "19h–24h",
+            "pessoa": {
+              "nome": "Zé da Silva",
+              "avatar": "icone-mascote-cubado.svg"
+            }
+          }
         ],
         "2026-11-10": [
-          { "horario": "00h–07h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
-          { "horario": "07h–12h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
-          { "horario": "12h–13h", "pessoa": null, "lacuna": true },
-          { "horario": "13h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
-          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+          {
+            "horario": "00h–07h",
+            "pessoa": {
+              "nome": "Ana da Silva (Aninha)",
+              "avatar": "icone-mascote-espeto.svg"
+            }
+          },
+          {
+            "horario": "07h–12h",
+            "pessoa": {
+              "nome": "Beatriz da Silva (Bea)",
+              "avatar": "icone-mascote-trevo.svg"
+            }
+          },
+          {
+            "horario": "12h–13h",
+            "pessoa": null,
+            "lacuna": true
+          },
+          {
+            "horario": "13h–19h",
+            "pessoa": {
+              "nome": "Paulo da Silva (Paul)",
+              "avatar": "icone-mascote-pingo.svg"
+            }
+          },
+          {
+            "horario": "19h–24h",
+            "pessoa": {
+              "nome": "Zé da Silva",
+              "avatar": "icone-mascote-cubado.svg"
+            }
+          }
         ],
         "2026-11-11": [
-          { "horario": "00h–24h", "pessoa": null, "lacuna": true }
+          {
+            "horario": "00h–24h",
+            "pessoa": null,
+            "lacuna": true
+          }
         ],
         "2026-11-12": [
-          { "horario": "00h–08h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
-          { "horario": "08h–14h", "pessoa": null, "lacuna": true },
-          { "horario": "14h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
-          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+          {
+            "horario": "00h–08h",
+            "pessoa": {
+              "nome": "Ana da Silva (Aninha)",
+              "avatar": "icone-mascote-espeto.svg"
+            }
+          },
+          {
+            "horario": "08h–14h",
+            "pessoa": null,
+            "lacuna": true
+          },
+          {
+            "horario": "14h–19h",
+            "pessoa": {
+              "nome": "Paulo da Silva (Paul)",
+              "avatar": "icone-mascote-pingo.svg"
+            }
+          },
+          {
+            "horario": "19h–24h",
+            "pessoa": {
+              "nome": "Zé da Silva",
+              "avatar": "icone-mascote-cubado.svg"
+            }
+          }
         ],
         "2026-11-13": [
-          { "horario": "00h–07h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
-          { "horario": "07h–14h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
-          { "horario": "14h–18h", "pessoa": null, "lacuna": true },
-          { "horario": "18h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+          {
+            "horario": "00h–07h",
+            "pessoa": {
+              "nome": "Beatriz da Silva (Bea)",
+              "avatar": "icone-mascote-trevo.svg"
+            }
+          },
+          {
+            "horario": "07h–14h",
+            "pessoa": {
+              "nome": "Ana da Silva (Aninha)",
+              "avatar": "icone-mascote-espeto.svg"
+            }
+          },
+          {
+            "horario": "14h–18h",
+            "pessoa": null,
+            "lacuna": true
+          },
+          {
+            "horario": "18h–24h",
+            "pessoa": {
+              "nome": "Zé da Silva",
+              "avatar": "icone-mascote-cubado.svg"
+            }
+          }
         ],
         "2026-11-14": [
-          { "horario": "00h–07h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
-          { "horario": "07h–13h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
-          { "horario": "13h–19h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
-          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+          {
+            "horario": "00h–07h",
+            "pessoa": {
+              "nome": "Ana da Silva (Aninha)",
+              "avatar": "icone-mascote-espeto.svg"
+            }
+          },
+          {
+            "horario": "07h–13h",
+            "pessoa": {
+              "nome": "Beatriz da Silva (Bea)",
+              "avatar": "icone-mascote-trevo.svg"
+            }
+          },
+          {
+            "horario": "13h–19h",
+            "pessoa": {
+              "nome": "Paulo da Silva (Paul)",
+              "avatar": "icone-mascote-pingo.svg"
+            }
+          },
+          {
+            "horario": "19h–24h",
+            "pessoa": {
+              "nome": "Zé da Silva",
+              "avatar": "icone-mascote-cubado.svg"
+            }
+          }
         ],
         "2026-11-15": [
-          { "horario": "00h–07h", "pessoa": { "nome": "Paulo da Silva (Paul)", "avatar": "icone-mascote-pingo.svg" } },
-          { "horario": "07h–13h", "pessoa": { "nome": "Beatriz da Silva (Bea)", "avatar": "icone-mascote-trevo.svg" } },
-          { "horario": "13h–19h", "pessoa": { "nome": "Ana da Silva (Aninha)", "avatar": "icone-mascote-espeto.svg" } },
-          { "horario": "19h–24h", "pessoa": { "nome": "Zé da Manga", "avatar": "icone-mascote-cubado.svg" } }
+          {
+            "horario": "00h–07h",
+            "pessoa": {
+              "nome": "Paulo da Silva (Paul)",
+              "avatar": "icone-mascote-pingo.svg"
+            }
+          },
+          {
+            "horario": "07h–13h",
+            "pessoa": {
+              "nome": "Beatriz da Silva (Bea)",
+              "avatar": "icone-mascote-trevo.svg"
+            }
+          },
+          {
+            "horario": "13h–19h",
+            "pessoa": {
+              "nome": "Ana da Silva (Aninha)",
+              "avatar": "icone-mascote-espeto.svg"
+            }
+          },
+          {
+            "horario": "19h–24h",
+            "pessoa": {
+              "nome": "Zé da Silva",
+              "avatar": "icone-mascote-cubado.svg"
+            }
+          }
         ]
       },
       "lacunasTurno": {
-        "2026-11-10": ["12h–13h", "Descoberto"],
-        "2026-11-11": ["00h–24h", "Descoberto"],
-        "2026-11-12": ["08h–14h", "Parcial"],
-        "2026-11-13": ["14h–18h", "Parcial"]
+        "2026-11-10": [
+          "12h–13h",
+          "Descoberto"
+        ],
+        "2026-11-11": [
+          "00h–24h",
+          "Descoberto"
+        ],
+        "2026-11-12": [
+          "08h–14h",
+          "Parcial"
+        ],
+        "2026-11-13": [
+          "14h–18h",
+          "Parcial"
+        ]
       },
       "events": [
         {
@@ -257,7 +565,7 @@
           "id": "tarefa-ontem-20h-docs",
           "dia": "2026-11-09",
           "titulo": "20h · Metformina e separação de documentos",
-          "descricao": "Zé da Manga (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h",
+          "descricao": "Zé da Silva (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h",
           "icone": "bi bi-capsule",
           "concluida": true,
           "href": "documentos.html",
@@ -298,7 +606,7 @@
           },
           "dia": "2026-11-10",
           "titulo": "20h · Metformina",
-          "descricao": "Às 20h · Turno de Zé da Manga (Zé)",
+          "descricao": "Às 20h · Turno de Zé da Silva (Zé)",
           "icone": "bi bi-capsule",
           "concluida": false,
           "href": "medicamentos.html",
@@ -337,7 +645,7 @@
         ],
         "2026-11-09": [
           [
-            "Zé da Manga",
+            "Zé da Silva",
             "Administrador · Turno 19h–24h",
             "Tarefa relacionada · Conferir os remédios da noite",
             "Maria jantou sopa de legumes e tomou a metformina das 20h sem problemas. Foi dormir por volta das 22h30.",

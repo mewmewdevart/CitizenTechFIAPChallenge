@@ -65,13 +65,13 @@ window.MutiraoCuidadoPronto = (async () => {
 
   const obterUsuarioAtual = (estado = estadoAtual) => {
     const perfil = estado?.perfilUsuario || {};
-    const nome = (perfil.nome ?? 'Zé da Manga').trim() || 'Zé da Manga';
+    const nome = (perfil.nome ?? 'Zé da Silva').trim() || 'Zé da Silva';
     const apelido = (perfil.apelido ?? 'Zé').trim();
     const nomeComApelido = apelido ? `${nome} (${apelido})` : nome;
     const mascote = perfil.mascote || 'assets/media/mascotes/icone-mascote-cubado.svg';
     const foto = perfil.foto || '';
     const integrante = estado.equipeCuidado.find(pessoa =>
-      pessoa.nome === 'Zé da Manga' || pessoa.nome === nomeComApelido);
+      pessoa.nome === 'Zé da Silva' || pessoa.nome === nomeComApelido);
     return {
       nome,
       apelido,
@@ -114,7 +114,7 @@ window.MutiraoCuidadoPronto = (async () => {
   const obterParticipantesRede = (estado = estadoAtual) => {
     const usuario = obterUsuarioAtual(estado);
     const equipe = Array.isArray(estado.equipeCuidado) ? estado.equipeCuidado : [];
-    const ehUsuario = pessoa => pessoa.nome === 'Zé da Manga' || pessoa.nome === usuario.nomeComApelido;
+    const ehUsuario = pessoa => pessoa.nome === 'Zé da Silva' || pessoa.nome === usuario.nomeComApelido;
     const adminItem = {
       nome: usuario.nomeComApelido,
       nomeBase: usuario.nome,
@@ -151,12 +151,16 @@ window.MutiraoCuidadoPronto = (async () => {
     if (!convite) throw new Error('Este convite já foi respondido.');
     const participantesExtras = [...(estado.participantesExtras || [])];
     if (aceitar && !participantesExtras.some(item => item.email === email)) {
-      participantesExtras.push({ ...convite, nome: email, nomeBase: email,
-        avatar: 'icone-mascote-cubado.svg', foto: '' });
+      participantesExtras.push({
+        ...convite, nome: email, nomeBase: email,
+        avatar: 'icone-mascote-cubado.svg', foto: ''
+      });
     }
-    return { ...estado, participantesExtras,
+    return {
+      ...estado, participantesExtras,
       convites: estado.convites.filter(item => item.email !== email),
-      historicoConvites: [...(estado.historicoConvites || []), { ...convite, status: aceitar ? 'Aceito' : 'Recusado' }] };
+      historicoConvites: [...(estado.historicoConvites || []), { ...convite, status: aceitar ? 'Aceito' : 'Recusado' }]
+    };
   });
 
   const atualizarSeletoresRede = () => {
@@ -184,7 +188,7 @@ window.MutiraoCuidadoPronto = (async () => {
       normalizarBusca(pessoa.nome) === alvo || normalizarBusca(pessoa.nomeBase) === alvo ||
       normalizarBusca(pessoa.nome.match(/\(([^)]+)\)/)?.[1]) === alvo
     );
-    if (!encontrada && alvo && (alvo.includes('ze da manga') || alvo === normalizarBusca(usuario.apelido))) {
+    if (!encontrada && alvo && (alvo.includes('ze da silva') || alvo === normalizarBusca(usuario.apelido))) {
       encontrada = participantes.find(pessoa => normalizarBusca(pessoa.nome) === normalizarBusca(usuario.nomeComApelido));
     }
     const avatar = encontrada?.avatar || 'icone-mascote-cubado.svg';
@@ -927,35 +931,37 @@ window.MutiraoCuidadoPronto = (async () => {
       }
     }
 
-    return { ...estado, covered, shiftEdits,
-      atribuicoesTurno: removerPedidosCobertos(estado, dia, novoInicio, novoFim) };
+    return {
+      ...estado, covered, shiftEdits,
+      atribuicoesTurno: removerPedidosCobertos(estado, dia, novoInicio, novoFim)
+    };
   };
 
   const removerPedidosCobertos = (estado, dia, novoInicio, novoFim) => {
     const atribuicoesTurno = estado.atribuicoesTurno || {};
     if (novoInicio >= novoFim) return atribuicoesTurno;
     const novasAtribuicoes = {};
-      for (const [chave, item] of Object.entries(atribuicoesTurno)) {
-        if (!item || item.dia !== dia) {
-          novasAtribuicoes[chave] = item;
-          continue;
-        }
-        const seg = extrairHorasTurno(item.horario);
-        if (!(seg.inicio < novoFim && seg.fim > novoInicio)) {
-          novasAtribuicoes[chave] = item;
-          continue;
-        }
-        const partesRestantes = [];
-        if (seg.inicio < novoInicio) partesRestantes.push({ inicio: seg.inicio, fim: novoInicio });
-        if (seg.fim > novoFim) partesRestantes.push({ inicio: novoFim, fim: seg.fim });
-        for (const parte of partesRestantes) {
-          const horarioParte = formatarIntervaloTurno(parte.inicio, parte.fim - parte.inicio);
-          novasAtribuicoes[`${dia}|${horarioParte}`] = {
-            ...item,
-            horario: horarioParte
-          };
-        }
+    for (const [chave, item] of Object.entries(atribuicoesTurno)) {
+      if (!item || item.dia !== dia) {
+        novasAtribuicoes[chave] = item;
+        continue;
       }
+      const seg = extrairHorasTurno(item.horario);
+      if (!(seg.inicio < novoFim && seg.fim > novoInicio)) {
+        novasAtribuicoes[chave] = item;
+        continue;
+      }
+      const partesRestantes = [];
+      if (seg.inicio < novoInicio) partesRestantes.push({ inicio: seg.inicio, fim: novoInicio });
+      if (seg.fim > novoFim) partesRestantes.push({ inicio: novoFim, fim: seg.fim });
+      for (const parte of partesRestantes) {
+        const horarioParte = formatarIntervaloTurno(parte.inicio, parte.fim - parte.inicio);
+        novasAtribuicoes[`${dia}|${horarioParte}`] = {
+          ...item,
+          horario: horarioParte
+        };
+      }
+    }
     return novasAtribuicoes;
   };
 
@@ -999,9 +1005,11 @@ window.MutiraoCuidadoPronto = (async () => {
     const atribuicoesTurno = { ...estado.atribuicoesTurno };
     delete atribuicoesTurno[chave];
     const salvarOcorrencia = aceitar && (!recorrente || estado.escalasFixas?.[item.dia]);
-    return { ...proximo, atribuicoesTurno,
+    return {
+      ...proximo, atribuicoesTurno,
       coberturasRede: [...(estado.coberturasRede || []), ...(salvarOcorrencia ? [{ dia: item.dia, inicio, fim, responsavel: item.responsavel }] : [])],
-      historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Recusada ou cancelada' }] };
+      historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Recusada ou cancelada' }]
+    };
   });
 
   const resolverFolga = (id, status, responsavel = '') => atualizarEstado(estado => {
@@ -1015,9 +1023,11 @@ window.MutiraoCuidadoPronto = (async () => {
         throw new Error('Escala alterada ou substituto indisponível. Revise o pedido.');
       }
     }
-    return { ...estado,
+    return {
+      ...estado,
       pedidosFolga: estado.pedidosFolga.map(item => item.id === id ? { ...item, status, responsavel } : item),
-      coberturasRede: [...(estado.coberturasRede || []), ...(status === 'Aceita' ? [{ dia: pedido.dia, inicio: pedido.inicio, fim: pedido.fim, responsavel }] : [])] };
+      coberturasRede: [...(estado.coberturasRede || []), ...(status === 'Aceita' ? [{ dia: pedido.dia, inicio: pedido.inicio, fim: pedido.fim, responsavel }] : [])]
+    };
   });
 
   const sairDaRede = responsavel => atualizarEstado(estado => {
@@ -1036,11 +1046,13 @@ window.MutiraoCuidadoPronto = (async () => {
         ? { ...rotina, responsavel, responsavelAnterior: rotina.responsavel, transferidoDesde: HOJE }
         : rotina;
     const janela = estado.janelaAcompanhamento;
-    return { ...estado, redeSaiu: true, administradorRede: responsavel,
+    return {
+      ...estado, redeSaiu: true, administradorRede: responsavel,
       rotinasSemanais: obterRotinasSemanais(estado).map(transferirRotina),
       ...(janela ? { janelaAcompanhamento: transferirRotina(janela) } : {}),
       coberturasRede: [...(estado.coberturasRede || []), ...transferencias],
-      pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item) };
+      pedidosFolga: (estado.pedidosFolga || []).map(item => item.status === 'Pendente' ? { ...item, status: 'Cancelada pela saída' } : item)
+    };
   });
 
   const mostrarSaidaRede = () => {
@@ -1149,7 +1161,7 @@ window.MutiraoCuidadoPronto = (async () => {
     if (fixas?.[dia]) return fixas[dia];
     const equipe = estado?.equipeCuidado || [];
     if (estado.escalaDemonstracao && equipe.length >= 4 &&
-        obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.integral) {
+      obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.integral) {
       const indiceBase = Number(dia.slice(-2)) || 1;
       return [
         { horario: '00h–07h', pessoa: equipe[indiceBase % 4] },

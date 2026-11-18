@@ -984,7 +984,7 @@ window.MutiraoCuidadoPronto.then(core => {
               const turnosDia = construirLinhaDoTempoDia(dia, estado)
                 .map(seg => {
                   if (seg.tipo === 'lacuna') return `  ${seg.horario}: SEM NINGUÉM`;
-                  const sufixo = (seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Manga') ? 'Você vai ficar nesse horário' : 'Vai ficar';
+                  const sufixo = (seg.pessoa.ehUsuarioAtual || seg.pessoa.nome === 'Zé da Silva') ? 'Você vai ficar nesse horário' : 'Vai ficar';
                   return `  ${seg.horario}: ${seg.pessoa.nome} · ${sufixo}`;
                 })
                 .join('\n');

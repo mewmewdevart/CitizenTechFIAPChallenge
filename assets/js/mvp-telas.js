@@ -177,19 +177,19 @@ window.MutiraoCuidadoPronto.then(core => {
       : ''}</div>`;
     const corpo = itens.length
       ? itens.map(([nome, papel, contexto, relato, proximo]) => {
-      const avatar = nome.startsWith('Ana')
-        ? 'icone-mascote-espeto.svg'
-        : nome.startsWith('Beatriz')
-          ? 'icone-mascote-trevo.svg'
-          : nome.startsWith('Paulo')
-            ? 'icone-mascote-pingo.svg'
-            : 'icone-mascote-cubado.svg';
-      const partes = String(papel || '').split(' · ');
-      const turno = partes.find(parte => parte.startsWith('Turno'));
-      const papelRestante = partes.filter(parte => parte !== turno).join(' · ');
-      const [tarefa, ocorrencia] = contexto ? contexto.split(' · Ocorrência') : ['', ''];
+        const avatar = nome.startsWith('Ana')
+          ? 'icone-mascote-espeto.svg'
+          : nome.startsWith('Beatriz')
+            ? 'icone-mascote-trevo.svg'
+            : nome.startsWith('Paulo')
+              ? 'icone-mascote-pingo.svg'
+              : 'icone-mascote-cubado.svg';
+        const partes = String(papel || '').split(' · ');
+        const turno = partes.find(parte => parte.startsWith('Turno'));
+        const papelRestante = partes.filter(parte => parte !== turno).join(' · ');
+        const [tarefa, ocorrencia] = contexto ? contexto.split(' · Ocorrência') : ['', ''];
 
-      return `<article class="ficha__relato">
+        return `<article class="ficha__relato">
         <div class="ficha__relato-autor">
           <img alt="" src="assets/media/mascotes/${avatar}">
           <div><strong>${escaparHtml(nome)}</strong><p>${escaparHtml(papelRestante)}</p></div>
@@ -200,7 +200,7 @@ window.MutiraoCuidadoPronto.then(core => {
         <div class="ficha__relato-conteudo">${sanitizarHtmlEditor(relato)}</div>
         ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><div class="ficha__relato-conteudo">${sanitizarHtmlEditor(String(proximo).replaceAll('\n', '<br>'))}</div></div>` : ''}
       </article>`;
-    }).join('')
+      }).join('')
       : '<p class="ficha__texto-suave">Ninguém anotou nada neste dia.</p>';
 
     containerRelatos.innerHTML = `${cabecalho}${corpo}`;
@@ -391,12 +391,12 @@ window.MutiraoCuidadoPronto.then(core => {
 
     const eventosHtml = (estado.events || []).length
       ? `<ul class="folha-impressao__lista">${estado.events.map(item => {
-          const dataItem = formatarData(item.dia, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '') + '.';
-          const horaItem = item.hora ? item.hora.replace(':00', 'h') : '';
-          const localTexto = item.local ? ` · ${item.local}` : '';
-          const respTexto = item.acompanhante ? ` · ${item.acompanhante} acompanha.` : '';
-          return `<li>${escaparHtml(`${dataItem}${horaItem ? `, ${horaItem}` : ''} · ${item.titulo}${localTexto}${respTexto}`)}</li>`;
-        }).join('')}</ul>`
+        const dataItem = formatarData(item.dia, { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '') + '.';
+        const horaItem = item.hora ? item.hora.replace(':00', 'h') : '';
+        const localTexto = item.local ? ` · ${item.local}` : '';
+        const respTexto = item.acompanhante ? ` · ${item.acompanhante} acompanha.` : '';
+        return `<li>${escaparHtml(`${dataItem}${horaItem ? `, ${horaItem}` : ''} · ${item.titulo}${localTexto}${respTexto}`)}</li>`;
+      }).join('')}</ul>`
       : '<p>Nenhum compromisso agendado</p>';
 
     const secaoEventos = incluirEventos
@@ -866,7 +866,7 @@ window.MutiraoCuidadoPronto.then(core => {
         return;
       }
       const turno = (campos.turno || '').trim();
-      const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Manga', papel: 'Administrador' };
+      const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Silva', papel: 'Administrador' };
       const cabecalhoPapel = turno ? `${usuario.papel} · ${turno}` : usuario.papel;
       atualizarEstado(estado => ({
         ...estado,

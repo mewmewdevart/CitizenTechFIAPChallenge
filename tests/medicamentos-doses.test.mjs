@@ -35,7 +35,7 @@ test('permite registrar e desfazer dose dada voltando ao estado prevista', () =>
     ...estado,
     registrosDose: {
       ...(estado.registrosDose || {}),
-      '12h|Omeprazol': { estado: 'administrado', quem: 'Zé da Manga (Zé)', horario: '12:05', origemExterna: '' }
+      '12h|Omeprazol': { estado: 'administrado', quem: 'Zé da Silva (Zé)', horario: '12:05', origemExterna: '' }
     }
   }));
   assert.equal(banco.obterEstado().registrosDose['12h|Omeprazol'].estado, 'administrado');

@@ -95,9 +95,9 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil de Zé da Manga"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
+        <summary aria-label="Menu do perfil de Zé da Silva"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
             alt=""><span><strong>Zé da
-              Manga</strong><small>Administrador</small></span></summary>
+              Silva</strong><small>Administrador</small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html" aria-current="page"><i class="fa-regular fa-user"
               aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -113,7 +113,7 @@
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html" aria-current="page">
       <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-      <span><strong>Zé da Manga</strong><small>Administrador · Meu perfil</small></span>
+      <span><strong>Zé da Silva</strong><small>Administrador · Meu perfil</small></span>
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
@@ -135,15 +135,15 @@
       <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
-        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
-          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button"
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
+        href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a
+        href="ajuda.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina apoio painel" id="conteudo" data-pagina-mvp="meu-perfil">
-    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
+    <nav class="apoio__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span
+        aria-hidden="true">›</span>
       Meu perfil</nav>
     <header class="apoio__cabecalho">
       <div>
@@ -163,168 +163,171 @@
         aria-controls="perfil-cuidar" tabindex="-1">Cuidar de quem cuida</button>
     </div>
     <div id="perfil-dados" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-dados">
-    <section class="apoio__painel perfil__identidade" aria-labelledby="titulo-perfil">
-      <div class="perfil__retrato">
-        <img class="avatar avatar--grande" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
-          data-perfil-avatar>
-        <img class="perfil__mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" data-perfil-mascote
-          hidden>
-      </div>
-      <div class="perfil__pessoa">
-        <span>Organiza a rede de cuidado</span>
-        <h2 id="titulo-perfil" data-perfil-nome>Meu perfil</h2>
-        <p>Rede de cuidado</p>
-        <small>Dados de exemplo</small>
-      </div>
-      <div class="perfil__recado">
-        <img class="perfil__recado-mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-        <strong><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> <span data-perfil-recado-titulo></span></strong>
-        <p data-perfil-recado-texto></p>
-      </div>
-    </section>
+      <section class="apoio__painel perfil__identidade" aria-labelledby="titulo-perfil">
+        <div class="perfil__retrato">
+          <img class="avatar avatar--grande" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
+            data-perfil-avatar>
+          <img class="perfil__mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" data-perfil-mascote
+            hidden>
+        </div>
+        <div class="perfil__pessoa">
+          <span>Organiza a rede de cuidado</span>
+          <h2 id="titulo-perfil" data-perfil-nome>Meu perfil</h2>
+          <p>Rede de cuidado</p>
+          <small>Dados de exemplo</small>
+        </div>
+        <div class="perfil__recado">
+          <img class="perfil__recado-mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
+          <strong><i class="fa-regular fa-comment-dots" aria-hidden="true"></i> <span
+              data-perfil-recado-titulo></span></strong>
+          <p data-perfil-recado-texto></p>
+        </div>
+      </section>
 
-    <section class="apoio__painel" aria-labelledby="titulo-identificacao">
-      <h2 id="titulo-identificacao">Identificação e contato</h2>
-      <dl class="perfil__dados">
-        <div>
-          <dt>Nome completo</dt>
-          <dd data-perfil-campo="nome">Não informado</dd>
-        </div>
-        <div>
-          <dt>Nascimento e idade</dt>
-          <dd data-perfil-campo="nascimento">Não informado</dd>
-        </div>
-        <div>
-          <dt>E-mail</dt>
-          <dd data-perfil-campo="email">Não informado</dd>
-        </div>
-        <div>
-          <dt>Celular</dt>
-          <dd data-perfil-campo="telefone">Não informado</dd>
-        </div>
-        <div>
-          <dt>Endereço</dt>
-          <dd data-perfil-campo="endereco">Não informado</dd>
-        </div>
-        <div>
-          <dt>CPF</dt>
-          <dd data-perfil-campo="cpf">Não informado</dd>
-        </div>
-      </dl>
-    </section>
+      <section class="apoio__painel" aria-labelledby="titulo-identificacao">
+        <h2 id="titulo-identificacao">Identificação e contato</h2>
+        <dl class="perfil__dados">
+          <div>
+            <dt>Nome completo</dt>
+            <dd data-perfil-campo="nome">Não informado</dd>
+          </div>
+          <div>
+            <dt>Nascimento e idade</dt>
+            <dd data-perfil-campo="nascimento">Não informado</dd>
+          </div>
+          <div>
+            <dt>E-mail</dt>
+            <dd data-perfil-campo="email">Não informado</dd>
+          </div>
+          <div>
+            <dt>Celular</dt>
+            <dd data-perfil-campo="telefone">Não informado</dd>
+          </div>
+          <div>
+            <dt>Endereço</dt>
+            <dd data-perfil-campo="endereco">Não informado</dd>
+          </div>
+          <div>
+            <dt>CPF</dt>
+            <dd data-perfil-campo="cpf">Não informado</dd>
+          </div>
+        </dl>
+      </section>
 
-    <section class="apoio__painel mural" aria-labelledby="titulo-recados">
-      <div class="painel__cartao-cabecalho">
-        <h2 id="titulo-recados">Recados para você</h2>
-        <small data-mural-total></small>
-      </div>
-      <ul class="mural__quadro" data-mural></ul>
-      <button type="button" class="botao botao--secundario mural__mandar" data-abrir-recado=""><i
-          class="fa-regular fa-message" aria-hidden="true"></i> Mandar um recado para alguém</button>
-      <div class="painel__bloco" data-recados-enviados hidden></div>
-    </section>
+      <section class="apoio__painel mural" aria-labelledby="titulo-recados">
+        <div class="painel__cartao-cabecalho">
+          <h2 id="titulo-recados">Recados para você</h2>
+          <small data-mural-total></small>
+        </div>
+        <ul class="mural__quadro" data-mural></ul>
+        <button type="button" class="botao botao--secundario mural__mandar" data-abrir-recado=""><i
+            class="fa-regular fa-message" aria-hidden="true"></i> Mandar um recado para alguém</button>
+        <div class="painel__bloco" data-recados-enviados hidden></div>
+      </section>
 
     </div>
     <div id="perfil-cuidar" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-cuidar" hidden>
-    <section class="cuidar__faixa" aria-labelledby="titulo-cuidar">
-      <span class="cuidar__rotulo">Cuidar de quem cuida</span>
-      <h2 id="titulo-cuidar">Quem cuida também precisa de cuidado. Este espaço é seu.</h2>
-      <p><i class="fa-solid fa-lock" aria-hidden="true"></i> O que você marca aqui só você vê, a não ser que escolha
-        contar.</p>
-    </section>
+      <section class="cuidar__faixa" aria-labelledby="titulo-cuidar">
+        <span class="cuidar__rotulo">Cuidar de quem cuida</span>
+        <h2 id="titulo-cuidar">Quem cuida também precisa de cuidado. Este espaço é seu.</h2>
+        <p><i class="fa-solid fa-lock" aria-hidden="true"></i> O que você marca aqui só você vê, a não ser que escolha
+          contar.</p>
+      </section>
 
-    <div class="cuidar__grade">
-      <div class="painel__coluna">
-        <section class="apoio__painel" aria-labelledby="titulo-semana-humor">
-          <h2 id="titulo-semana-humor">Como você está esta semana?</h2>
-          <fieldset class="escolhas" data-cuidar-humor>
-            <legend>Como você está esta semana?</legend>
-            <label><input type="radio" name="humor" value="bem"> Bem</label>
-            <label><input type="radio" name="humor" value="cansado"> Cansado</label>
-            <label><input type="radio" name="humor" value="sobrecarregado"> Sobrecarregado</label>
-            <label><input type="radio" name="humor" value="nao-dizer"> Prefiro não dizer</label>
-          </fieldset>
-          <div class="cuidar__retorno" aria-live="polite" data-cuidar-retorno hidden>
-            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-            <p><strong data-cuidar-retorno-titulo></strong><span data-cuidar-retorno-texto></span></p>
-          </div>
-          <button type="button" class="botao botao--primario painel__acao-larga" data-dialogo="dialogo-pedir-folga"><i
-              class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
-          <div class="cuidar__pedidos-folga" data-pedidos-folga hidden>
-            <h3 class="cuidar__rotulo">Pedidos de folga</h3>
-            <ul class="painel__lista" data-pedidos-folga-lista></ul>
-          </div>
-          <label class="interruptor">
-            <input type="checkbox" role="switch" data-cuidar-preferencia="avisarFamilia">
-            <span class="painel__texto"><strong>Simular aviso à família ao marcar “sobrecarregado”</strong><span
-                data-cuidar-aviso-familia>Desligado. Você decide se e quando contar.</span></span>
-          </label>
-        </section>
-
-        <section class="apoio__painel" aria-labelledby="titulo-sua-semana">
-          <div class="painel__cartao-cabecalho">
-            <h2 id="titulo-sua-semana">Sua semana</h2>
-            <small>9 a 15 de novembro</small>
-          </div>
-          <p class="semana__total" data-semana-total><strong>Sem turnos nesta semana</strong></p>
-          <h3 class="cuidar__rotulo">Horas de cada um na semana</h3>
-          <ul class="horas" data-horas-semana></ul>
-          <div class="cuidar__alerta" data-cuidar-alerta>
-            <strong data-cuidar-alerta-titulo></strong>
-            <p data-cuidar-alerta-texto>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
-            <div class="cuidar__acoes">
-              <button type="button" class="botao botao--secundario" data-abrir-recado
-                data-cuidar-alerta-recado><i class="fa-regular fa-message" aria-hidden="true"></i> Mandar um
-                recado</button>
-              <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i
-                  class="fa-regular fa-calendar" aria-hidden="true"></i> Ficar numa madrugada</a>
+      <div class="cuidar__grade">
+        <div class="painel__coluna">
+          <section class="apoio__painel" aria-labelledby="titulo-semana-humor">
+            <h2 id="titulo-semana-humor">Como você está esta semana?</h2>
+            <fieldset class="escolhas" data-cuidar-humor>
+              <legend>Como você está esta semana?</legend>
+              <label><input type="radio" name="humor" value="bem"> Bem</label>
+              <label><input type="radio" name="humor" value="cansado"> Cansado</label>
+              <label><input type="radio" name="humor" value="sobrecarregado"> Sobrecarregado</label>
+              <label><input type="radio" name="humor" value="nao-dizer"> Prefiro não dizer</label>
+            </fieldset>
+            <div class="cuidar__retorno" aria-live="polite" data-cuidar-retorno hidden>
+              <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+              <p><strong data-cuidar-retorno-titulo></strong><span data-cuidar-retorno-texto></span></p>
             </div>
-          </div>
-        </section>
-      </div>
+            <button type="button" class="botao botao--primario painel__acao-larga" data-dialogo="dialogo-pedir-folga"><i
+                class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
+            <div class="cuidar__pedidos-folga" data-pedidos-folga hidden>
+              <h3 class="cuidar__rotulo">Pedidos de folga</h3>
+              <ul class="painel__lista" data-pedidos-folga-lista></ul>
+            </div>
+            <label class="interruptor">
+              <input type="checkbox" role="switch" data-cuidar-preferencia="avisarFamilia">
+              <span class="painel__texto"><strong>Simular aviso à família ao marcar “sobrecarregado”</strong><span
+                  data-cuidar-aviso-familia>Desligado. Você decide se e quando contar.</span></span>
+            </label>
+          </section>
 
-      <div class="painel__coluna">
-        <section class="apoio__painel" aria-labelledby="titulo-pausas">
-          <div class="painel__cartao-cabecalho">
-            <h2 id="titulo-pausas">Pausas para você</h2>
-            <small>você escolhe</small>
-          </div>
-          <div>
-            <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="pausa"
-                checked><span class="painel__texto"><strong>Lembrar de fazer uma pausa</strong><span>Depois de turnos
-                  com mais de 5 horas</span></span></label>
-            <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="apoio"
-                checked><span class="painel__texto"><strong>Uma mensagem de apoio por semana</strong><span>Aos domingos,
-                  no fim do dia</span></span></label>
-            <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="agradecer"><span
-                class="painel__texto"><strong>Me lembrar de agradecer alguém</strong><span>Uma vez por
-                  semana</span></span></label>
-          </div>
-          <div class="cuidar__mensagem">
-            <span class="cuidar__rotulo">Mensagem desta semana</span>
-            <p>Cuidar cansa. Pedir ajuda também é cuidar.</p>
-          </div>
-        </section>
+          <section class="apoio__painel" aria-labelledby="titulo-sua-semana">
+            <div class="painel__cartao-cabecalho">
+              <h2 id="titulo-sua-semana">Sua semana</h2>
+              <small>9 a 15 de novembro</small>
+            </div>
+            <p class="semana__total" data-semana-total><strong>Sem turnos nesta semana</strong></p>
+            <h3 class="cuidar__rotulo">Horas de cada um na semana</h3>
+            <ul class="horas" data-horas-semana></ul>
+            <div class="cuidar__alerta" data-cuidar-alerta>
+              <strong data-cuidar-alerta-titulo></strong>
+              <p data-cuidar-alerta-texto>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
+              <div class="cuidar__acoes">
+                <button type="button" class="botao botao--secundario" data-abrir-recado data-cuidar-alerta-recado><i
+                    class="fa-regular fa-message" aria-hidden="true"></i> Mandar um
+                  recado</button>
+                <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i
+                    class="fa-regular fa-calendar" aria-hidden="true"></i> Ficar numa madrugada</a>
+              </div>
+            </div>
+          </section>
+        </div>
 
-        <section class="apoio__painel cuidar__apoio" aria-labelledby="titulo-pesado">
-          <h2 id="titulo-pesado">Se estiver pesado demais</h2>
-          <p>Você não precisa dar conta de tudo sozinho. Conversar ajuda.</p>
-          <ul class="painel__lista">
-            <li class="painel__item"><i class="fa-solid fa-phone" aria-hidden="true"></i><span
-                class="painel__texto"><strong>CVV · ligue 188</strong><span>Ligação gratuita, 24 horas, para conversar
-                  com alguém</span></span><a class="botao botao--secundario" href="tel:188"><i class="fa-solid fa-phone"
-                  aria-hidden="true"></i> Ligar</a></li>
-            <li class="painel__item"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span
-                class="painel__texto"><strong>Grupos de apoio para cuidadores</strong><span>Na UBS e no CRAS perto de
-                  você</span></span><a class="botao botao--secundario" href="direitos.html">Ver</a></li>
-            <li class="painel__item"><i class="fa-regular fa-message" aria-hidden="true"></i><span
-                class="painel__texto"><strong>Falar com alguém da família</strong><span>Uma mensagem só para uma pessoa,
-                  fora do grupo</span></span><button type="button" class="botao botao--secundario"
-                data-abrir-recado="">Escrever</button></li>
-          </ul>
-        </section>
+        <div class="painel__coluna">
+          <section class="apoio__painel" aria-labelledby="titulo-pausas">
+            <div class="painel__cartao-cabecalho">
+              <h2 id="titulo-pausas">Pausas para você</h2>
+              <small>você escolhe</small>
+            </div>
+            <div>
+              <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="pausa"
+                  checked><span class="painel__texto"><strong>Lembrar de fazer uma pausa</strong><span>Depois de turnos
+                    com mais de 5 horas</span></span></label>
+              <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="apoio"
+                  checked><span class="painel__texto"><strong>Uma mensagem de apoio por semana</strong><span>Aos
+                    domingos,
+                    no fim do dia</span></span></label>
+              <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="agradecer"><span
+                  class="painel__texto"><strong>Me lembrar de agradecer alguém</strong><span>Uma vez por
+                    semana</span></span></label>
+            </div>
+            <div class="cuidar__mensagem">
+              <span class="cuidar__rotulo">Mensagem desta semana</span>
+              <p>Cuidar cansa. Pedir ajuda também é cuidar.</p>
+            </div>
+          </section>
+
+          <section class="apoio__painel cuidar__apoio" aria-labelledby="titulo-pesado">
+            <h2 id="titulo-pesado">Se estiver pesado demais</h2>
+            <p>Você não precisa dar conta de tudo sozinho. Conversar ajuda.</p>
+            <ul class="painel__lista">
+              <li class="painel__item"><i class="fa-solid fa-phone" aria-hidden="true"></i><span
+                  class="painel__texto"><strong>CVV · ligue 188</strong><span>Ligação gratuita, 24 horas, para conversar
+                    com alguém</span></span><a class="botao botao--secundario" href="tel:188"><i
+                    class="fa-solid fa-phone" aria-hidden="true"></i> Ligar</a></li>
+              <li class="painel__item"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span
+                  class="painel__texto"><strong>Grupos de apoio para cuidadores</strong><span>Na UBS e no CRAS perto de
+                    você</span></span><a class="botao botao--secundario" href="direitos.html">Ver</a></li>
+              <li class="painel__item"><i class="fa-regular fa-message" aria-hidden="true"></i><span
+                  class="painel__texto"><strong>Falar com alguém da família</strong><span>Uma mensagem só para uma
+                    pessoa,
+                    fora do grupo</span></span><button type="button" class="botao botao--secundario"
+                  data-abrir-recado="">Escrever</button></li>
+            </ul>
+          </section>
+        </div>
       </div>
-    </div>
 
     </div>
     <dialog class="dialogo-mvp dialogo-mvp--largo" id="dialogo-editar-perfil" aria-labelledby="titulo-editar-perfil"
@@ -332,7 +335,8 @@
       <div class="dialogo-mvp__cabecalho">
         <div>
           <h2 id="titulo-editar-perfil">Editar meu perfil</h2>
-          <p id="subtitulo-editar-perfil" class="dialogo-mvp__subtitulo">Zé da Manga (Zé) · Só você pode mudar seus dados.</p>
+          <p id="subtitulo-editar-perfil" class="dialogo-mvp__subtitulo">Zé da Silva (Zé) · Só você pode mudar seus
+            dados.</p>
         </div>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
@@ -341,7 +345,7 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-perfil-foto">
           <h3 id="secao-perfil-foto" class="editar-ficha__subtitulo">Foto de Perfil</h3>
           <div class="editar-ficha__foto-linha">
-            <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="Foto de perfil de Zé da Manga"
+            <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="Foto de perfil de Zé da Silva"
               class="editar-ficha__foto-previa" data-foto-previa />
             <div class="editar-ficha__foto-info">
               <strong>Foto de perfil</strong>
@@ -402,8 +406,7 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-perfil-dados">
           <h3 id="secao-perfil-dados" class="editar-ficha__subtitulo">Dados pessoais</h3>
           <div class="editar-ficha__grade">
-            <label>Nome completo<input type="text" name="nome" autocomplete="name"
-                required /></label>
+            <label>Nome completo<input type="text" name="nome" autocomplete="name" required /></label>
             <label>Apelido<input type="text" name="apelido" /></label>
             <label>Data de nascimento<input type="date" name="nascimento" /></label>
             <label>CPF
@@ -415,8 +418,7 @@
                 </button>
               </span>
             </label>
-            <label>E-mail<input type="email" name="email" autocomplete="email"
-                required /></label>
+            <label>E-mail<input type="email" name="email" autocomplete="email" required /></label>
             <label>Celular<input type="tel" name="telefone" autocomplete="tel" /></label>
             <label class="editar-ficha__campo--largo">Endereço<input type="text" name="endereco" /></label>
           </div>
@@ -430,8 +432,7 @@
               <small class="formulario-mvp__ajuda" data-contador="recadoTitulo">17/20 caracteres</small>
             </label>
             <label class="editar-ficha__campo--largo">Texto do recado
-              <textarea name="recadoTexto" rows="2"
-                maxlength="70"></textarea>
+              <textarea name="recadoTexto" rows="2" maxlength="70"></textarea>
               <small class="formulario-mvp__ajuda" data-contador="recadoTexto">68/70 caracteres</small>
             </label>
           </div>
@@ -456,8 +457,7 @@
           <select name="para" required></select>
         </label>
         <p data-recado-sem-destinatario hidden>Convide alguém na página Pessoas para ter a quem escrever.</p>
-        <label>Seu recado<textarea name="recado" rows="4"
-            required></textarea></label>
+        <label>Seu recado<textarea name="recado" rows="4" required></textarea></label>
         <div class="ideias" role="group" aria-label="Ideias para começar">
           <button type="button" class="botao botao--secundario botao--pequeno" data-ideia-recado>Obrigado por
             hoje</button>
@@ -482,7 +482,9 @@
       </div>
       <p>Escolha o turno em que você precisa de ajuda. Nesta demonstração, o pedido fica salvo aqui.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga">
-        <fieldset class="dialogo-mvp__opcoes" data-opcoes-folga><legend>Qual turno você quer passar?</legend></fieldset>
+        <fieldset class="dialogo-mvp__opcoes" data-opcoes-folga>
+          <legend>Qual turno você quer passar?</legend>
+        </fieldset>
         <label>Recado (opcional)<textarea name="recado"
             rows="3">Preciso descansar esta semana. Alguém consegue ficar?</textarea></label>
         <div class="cuidar__retorno">

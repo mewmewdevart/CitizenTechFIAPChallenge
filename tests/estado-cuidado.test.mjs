@@ -18,9 +18,9 @@ function criarArmazenamento(dados) {
 test('abre no perfil configurado e expõe somente Mari e Flavio', () => {
   const sessao = criarArmazenamento();
   const banco = criarBancoCuidado(base, sessao);
-  assert.deepEqual(banco.obterPerfis().map(ficha => ficha.id), ['mari', 'flavio-pneu']);
-  assert.equal(banco.obterEstado().id, 'flavio-pneu');
-  assert.equal(banco.obterEstado().person.nome, base.perfis['flavio-pneu'].person.nome);
+  assert.deepEqual(banco.obterPerfis().map(ficha => ficha.id), ['mari', 'flavio-barbosa']);
+  assert.equal(banco.obterEstado().id, 'flavio-barbosa');
+  assert.equal(banco.obterEstado().person.nome, base.perfis['flavio-barbosa'].person.nome);
   for (const chave of ['events', 'tasks', 'documents', 'equipeCuidado', 'portaRemedios', 'recadosMural']) {
     assert.deepEqual(banco.obterEstado()[chave], []);
   }
@@ -44,7 +44,7 @@ test('edição, recarga e histórico preservam a ficha e distinguem saldo zero d
     events: [{ id: 'evento-flavio', titulo: 'Consulta de Flavio' }],
     estoqueBase: { material: 0 }
   }));
-  const alteracoes = JSON.parse(sessao.getItem(CHAVE_ATUAL)).perfis['flavio-pneu'];
+  const alteracoes = JSON.parse(sessao.getItem(CHAVE_ATUAL)).perfis['flavio-barbosa'];
   assert.deepEqual(alteracoes.person, { referencia: 'Contato de Flavio' });
   const reaberto = criarBancoCuidado(base, sessao);
   assert.equal(reaberto.obterEstado().person.referencia, 'Contato de Flavio');
@@ -69,7 +69,7 @@ test('migra dados antigos dos perfis fixos e mantém a sessão legada para recup
         tasks: [{ id: 'tarefa-metformina-20', concluida: true }],
         registrosDose: { '18h|Metformina': { estado: 'administrado' } }
       },
-      'flavio-pneu': { person: { referencia: 'Contato já existente' } }
+      'flavio-barbosa': { person: { referencia: 'Contato já existente' } }
     }
   });
   const sessao = criarArmazenamento([[CHAVE_LEGADA, legado]]);

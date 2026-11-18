@@ -1041,7 +1041,7 @@ window.addEventListener('mutirao:cuidado-atualizado', sincronizarStatusCuidado);
       anterior = atual;
       return;
     }
-    const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Manga' };
+    const usuario = core.obterUsuarioAtual ? core.obterUsuarioAtual() : { nome: 'Zé da Silva' };
     const primeiroNome = String(usuario.nome || 'Zé').trim().split(/\s+/)[0] || 'Zé';
 
     const descreverMudancaDose = () => {
