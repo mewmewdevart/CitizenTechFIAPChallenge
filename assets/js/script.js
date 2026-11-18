@@ -699,6 +699,7 @@ function inicializarBuscaTopo() {
     });
 
     lista.replaceChildren(...elementos);
+    lista.querySelectorAll('a').forEach(link => { link.tabIndex = -1; });
 
     status.textContent = palavras.length
       ? (correspondencias.length
@@ -766,6 +767,12 @@ function inicializarBuscaTopo() {
       evento.preventDefault();
       if (atual === 0) campo.focus();
       else links[atual - 1]?.focus();
+    }
+  });
+
+  container.addEventListener('focusout', evento => {
+    if (evento.relatedTarget && !container.contains(evento.relatedTarget) && container.classList.contains('busca-topo--aberta')) {
+      definirBuscaAberta(false);
     }
   });
 

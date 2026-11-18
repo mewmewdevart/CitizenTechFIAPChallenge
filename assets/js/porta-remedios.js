@@ -124,9 +124,69 @@
 
     const marcarHoraAtiva = hora => {
       horas.querySelectorAll('button').forEach(botao => {
-        botao.setAttribute('aria-pressed', String(botao.dataset.irCompartimento === hora));
+        const ativo = botao.dataset.irCompartimento === hora;
+        botao.setAttribute('aria-pressed', String(ativo));
+        botao.tabIndex = ativo ? 0 : -1;
       });
     };
+
+    let chaveComFoco = null;
+    const obterPotes = () => [...trilho.querySelectorAll('.pote__botao')];
+
+    const ativarPote = (botao, focar) => {
+      obterPotes().forEach(item => { item.tabIndex = item === botao ? 0 : -1; });
+      chaveComFoco = botao.closest('.pote')?.dataset.chave || null;
+      if (!focar) return;
+      botao.focus({ preventScroll: true });
+      botao.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: reduzirMovimento.matches ? 'auto' : 'smooth' });
+    };
+
+    const prepararTeclado = () => {
+      const potes = obterPotes();
+      if (!potes.length) return;
+      const anterior = chaveComFoco && trilho.querySelector(`.pote[data-chave="${CSS.escape(chaveComFoco)}"] .pote__botao`);
+      ativarPote(anterior || potes[0], false);
+      const primeiraHora = horas.querySelector('[aria-pressed="true"]') || horas.querySelector('button');
+      horas.querySelectorAll('button').forEach(botao => { botao.tabIndex = botao === primeiraHora ? 0 : -1; });
+    };
+
+    const TECLAS = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+
+    trilho.addEventListener('keydown', evento => {
+      const atual = evento.target.closest('.pote__botao');
+      if (!atual) return;
+      const potes = obterPotes();
+      const indice = potes.indexOf(atual);
+      let proximo = null;
+      if (evento.key in TECLAS) proximo = potes[Math.min(potes.length - 1, Math.max(0, indice + TECLAS[evento.key]))];
+      if (evento.key === 'Home') proximo = potes[0];
+      if (evento.key === 'End') proximo = potes[potes.length - 1];
+      if (!proximo) return;
+      evento.preventDefault();
+      ativarPote(proximo, true);
+      marcarHoraAtiva(proximo.closest('.porta-remedios__grupo')?.dataset.hora);
+    });
+
+    trilho.addEventListener('focusin', evento => {
+      const botao = evento.target.closest('.pote__botao');
+      if (botao && botao.tabIndex !== 0) ativarPote(botao, false);
+    });
+
+    horas.addEventListener('keydown', evento => {
+      const atual = evento.target.closest('[data-ir-compartimento]');
+      if (!atual) return;
+      const botoes = [...horas.querySelectorAll('[data-ir-compartimento]')];
+      const indice = botoes.indexOf(atual);
+      let proximo = null;
+      if (evento.key in TECLAS) proximo = botoes[Math.min(botoes.length - 1, Math.max(0, indice + TECLAS[evento.key]))];
+      if (evento.key === 'Home') proximo = botoes[0];
+      if (evento.key === 'End') proximo = botoes[botoes.length - 1];
+      if (!proximo) return;
+      evento.preventDefault();
+      botoes.forEach(botao => { botao.tabIndex = botao === proximo ? 0 : -1; });
+      proximo.focus();
+      proximo.click();
+    });
 
     const renderizarPortaRemedios = () => {
       const grupos = obterCompartimentos();
@@ -141,6 +201,7 @@
       }).join('');
       trilho.scrollLeft = 0;
       marcarHoraAtiva(ordenados[0]?.hora);
+      prepararTeclado();
     };
 
     const atualizarGrupoNaTela = hora => {
@@ -356,6 +417,8 @@
       if (!grupo) return;
       trilho.scrollTo({ left: grupo.offsetLeft });
       marcarHoraAtiva(botao.dataset.irCompartimento);
+      const primeiro = grupo.querySelector('.pote__botao');
+      if (primeiro) ativarPote(primeiro, false);
     });
 
     let quadroRolagem = 0;

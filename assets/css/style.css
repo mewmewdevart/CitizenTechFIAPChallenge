@@ -1352,3 +1352,7 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
 .notificacao--atencao .botao-contornado {
   color: var(--cor-aviso-atencao-escuro);
 }
+.busca-topo:has(:focus-visible) {
+  outline: var(--anel-foco);
+  outline-offset: 2px;
+}
