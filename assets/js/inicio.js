@@ -68,10 +68,12 @@ window.MutiraoCuidadoPronto.then(core => {
       baixos.sort((a, b) => a.estoque - b.estoque);
       const principal = baixos[0];
       const dias = principal.consumoDia ? Math.floor(principal.estoque / principal.consumoDia) : null;
-      alerta.querySelector('strong').textContent = `${baixos.length} item(ns) com estoque baixo · ${principal.nome}`;
+      alerta.querySelector('strong').textContent = baixos.length === 1
+        ? `${principal.nome} está acabando`
+        : `${baixos.length} itens estão acabando · ${principal.nome} primeiro`;
       alerta.querySelector('.faixa-alerta__texto > span').textContent = dias !== null
-        ? `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} · Dá para ${dias} ${dias === 1 ? 'dia' : 'dias'}`
-        : `${principal.estoque} ${principal.estoque === 1 ? 'unidade' : 'unidades'} em estoque`;
+        ? `Tem ${principal.estoque} em casa, dá para ${dias} ${dias === 1 ? 'dia' : 'dias'}`
+        : `Tem ${principal.estoque} em casa`;
     }
   };
 
@@ -892,4 +894,92 @@ window.MutiraoCuidadoPronto.then(core => {
     renderizarEscala();
     atualizarProximoCompromisso();
   });
+
+  const telaPequena = window.matchMedia('(width < 1150px)');
+  const secoesAbas = [...pagina.querySelectorAll('[data-aba-inicio]')];
+  if (secoesAbas.length) {
+    const ROTULOS_ABA = { passagem: 'Recado', escala: 'Semana', rede: 'Pessoas' };
+    const ICONE_ATENCAO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>';
+    const ICONE_OK = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>';
+    const ICONE_NEUTRO = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+
+    const aviso = document.createElement('div');
+    aviso.className = 'inicio__aviso-semana';
+    aviso.innerHTML = '<span class="inicio__aviso-icone" data-aviso-icone></span><p class="inicio__aviso-texto" data-aviso-texto></p><button type="button" class="inicio__aviso-acao">Ver semana</button>';
+
+    const listaAbas = document.createElement('div');
+    listaAbas.className = 'inicio__abas';
+    listaAbas.setAttribute('role', 'tablist');
+    listaAbas.setAttribute('aria-label', 'Mais sobre o cuidado');
+    listaAbas.innerHTML = secoesAbas.map(secao => `<button type="button" role="tab" id="aba-inicio-${secao.dataset.abaInicio}" aria-controls="${secao.id || (secao.id = `painel-inicio-${secao.dataset.abaInicio}`)}">${ROTULOS_ABA[secao.dataset.abaInicio]}</button>`).join('');
+    secoesAbas[0].before(aviso, listaAbas);
+    const botoesAba = [...listaAbas.querySelectorAll('[role="tab"]')];
+    const rotulosOriginais = secoesAbas.map(secao => secao.getAttribute('aria-labelledby'));
+
+    const escolherAba = (indice, focar) => {
+      const ativo = telaPequena.matches;
+      botoesAba.forEach((botao, i) => {
+        botao.setAttribute('aria-selected', String(i === indice));
+        botao.tabIndex = i === indice ? 0 : -1;
+      });
+      secoesAbas.forEach((secao, i) => {
+        if (ativo) {
+          secao.setAttribute('role', 'tabpanel');
+          secao.setAttribute('aria-labelledby', botoesAba[i].id);
+          secao.hidden = i !== indice;
+        } else {
+          secao.removeAttribute('role');
+          secao.setAttribute('aria-labelledby', rotulosOriginais[i]);
+          secao.hidden = false;
+        }
+      });
+      if (focar) botoesAba[indice].focus();
+    };
+
+    const abaAtual = () => Math.max(0, botoesAba.findIndex(botao => botao.getAttribute('aria-selected') === 'true'));
+
+    listaAbas.addEventListener('click', evento => {
+      const botao = evento.target.closest('[role="tab"]');
+      if (botao) escolherAba(botoesAba.indexOf(botao));
+    });
+
+    listaAbas.addEventListener('keydown', evento => {
+      const atual = botoesAba.indexOf(document.activeElement);
+      if (atual === -1) return;
+      const total = botoesAba.length;
+      const destino = { ArrowRight: (atual + 1) % total, ArrowLeft: (atual - 1 + total) % total, Home: 0, End: total - 1 }[evento.key];
+      if (destino === undefined) return;
+      evento.preventDefault();
+      escolherAba(destino, true);
+    });
+
+    const secaoEscala = secoesAbas.find(secao => secao.dataset.abaInicio === 'escala');
+    const atualizarAviso = () => {
+      if (!secaoEscala) return;
+      const comTurnos = secaoEscala.querySelectorAll('.agenda__etiqueta:not(.agenda__etiqueta--neutro)').length;
+      if (!comTurnos) {
+        aviso.dataset.tipo = 'neutro';
+        aviso.querySelector('[data-aviso-icone]').innerHTML = ICONE_NEUTRO;
+        aviso.querySelector('[data-aviso-texto]').textContent = 'Nenhum turno cadastrado na semana';
+        return;
+      }
+      const hoje = secaoEscala.querySelector(`[data-dia-semana="${HOJE}"] .agenda__etiqueta`);
+      const vazios = secaoEscala.querySelectorAll('.agenda__etiqueta--alerta, .agenda__etiqueta--atencao').length;
+      const partes = [];
+      if (hoje) partes.push(`Hoje: ${hoje.textContent.trim().toLowerCase()}`);
+      if (vazios) partes.push(`${vazios} ${vazios === 1 ? 'dia' : 'dias'} com horário vazio`);
+      aviso.dataset.tipo = vazios ? 'atencao' : 'ok';
+      aviso.querySelector('[data-aviso-icone]').innerHTML = vazios ? ICONE_ATENCAO : ICONE_OK;
+      aviso.querySelector('[data-aviso-texto]').textContent = partes.join(' · ') || 'Todos os horários da semana com alguém';
+    };
+
+    aviso.querySelector('.inicio__aviso-acao').addEventListener('click', () => {
+      escolherAba(secoesAbas.indexOf(secaoEscala), true);
+    });
+
+    if (secaoEscala) new MutationObserver(atualizarAviso).observe(secaoEscala, { childList: true, subtree: true });
+    atualizarAviso();
+    escolherAba(0);
+    telaPequena.addEventListener('change', () => escolherAba(abaAtual()));
+  }
 });

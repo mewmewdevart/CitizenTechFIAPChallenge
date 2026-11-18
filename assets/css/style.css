@@ -1352,7 +1352,6 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
 .notificacao--atencao .botao-contornado {
   color: var(--cor-aviso-atencao-escuro);
 }
-
 .notificacao__vazio {
   padding: var(--espaco-md);
   color: var(--cor-neutra-media);
@@ -1420,4 +1419,9 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
   .cuidado-status-inicial {
     grid-column: 1 / -1;
   }
+}
+
+.busca-topo:has(:focus-visible) {
+  outline: var(--anel-foco);
+  outline-offset: 2px;
 }
