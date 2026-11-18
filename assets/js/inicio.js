@@ -104,7 +104,7 @@ window.MutiraoCuidadoPronto.then(core => {
         rotulo.textContent = indice === 0 ? 'Próximo compromisso' : 'Compromisso marcado';
       }
       bloco.querySelector('strong').textContent = item
-        ? `${item.dia === HOJE ? '' : core.formatarDataCurta(item.dia) + ' · '}${item.hora.replace(':00', 'h')} · ${item.titulo}`
+        ? [item.dia === HOJE ? '' : core.formatarDataCurta(item.dia), item.hora ? item.hora.replace(':00', 'h') : '', item.titulo].filter(Boolean).join(' · ')
         : 'Nenhum compromisso marcado';
       bloco.querySelector('[data-compromisso-detalhes]').textContent = item
         ? [item.local, item.acompanhante && `${item.acompanhante} vai junto`].filter(Boolean).join(' · ')
@@ -501,13 +501,13 @@ window.MutiraoCuidadoPronto.then(core => {
     const form = evento.target;
     const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
     const { inicio, fim } = core.obterIntervaloFormularioTurno(form, horarioTurno);
-    const tornarDiario = form.elements.escopoTurno.value === 'diario';
+    const escopoTurno = form.elements.escopoTurno.disabled ? core.ESCOPO_TURNO.pontual : form.elements.escopoTurno.value;
 
     if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
       titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
     })) return;
     atualizarEstado(estado => core.definirRotinaTurno(
-      aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim), diaTurno, inicio, fim, tornarDiario
+      aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim), diaTurno, inicio, fim, escopoTurno
     ));
     diaSelecionado = diaTurno;
     form.closest('dialog')?.close();

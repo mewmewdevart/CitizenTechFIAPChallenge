@@ -438,7 +438,7 @@ html.tema--acolhedor .ficha__etiqueta {
   display: none;
 }
 
-.formulario-mvp :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select),
+.formulario-mvp :is(input:not([type="checkbox"]):not([type="radio"]):not(.editar-ficha__input-etiqueta), textarea, select),
 .dialogo-mvp textarea,
 .dialogo-mvp select {
   width: 100%;

@@ -126,14 +126,22 @@
 
 .login__campo i {
   flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  line-height: 1;
   color: var(--cor-texto-secundario);
   font-size: 0.9375rem;
 }
 
-.login__campo input {
+.login__campo input,
+html.tema--acolhedor .login__campo input,
+html.acessibilidade--alto-contraste.tema--acolhedor .login__campo input {
   width: 100%;
   min-width: 0;
   min-height: 40px;
+  margin: 0;
   border: 0;
   padding: 6px 0;
   background: transparent;
@@ -144,8 +152,11 @@
   line-height: 1.4;
 }
 
-.login__campo input:focus {
+.login__campo input:focus,
+html.tema--acolhedor .login__campo input:focus {
   outline: none;
+  border: 0;
+  box-shadow: none;
 }
 
 .login__opcoes {
@@ -329,6 +340,7 @@ html.acessibilidade--alto-contraste .login__social-icone--google {
     border-top: var(--borda-padrao);
   }
 }
+
 .login__ilustracao[data-mascotes] {
   overflow: visible;
 }
@@ -448,20 +460,47 @@ html.acessibilidade--alto-contraste .login__social-icone--google {
 }
 
 @keyframes mascote-susto {
-  0%, 100% { translate: 0 0; }
-  20% { translate: -2px -3px; }
-  40% { translate: 2px -3px; }
-  60% { translate: -1.5px -1px; }
-  80% { translate: 1.5px 0; }
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  20% {
+    translate: -2px -3px;
+  }
+
+  40% {
+    translate: 2px -3px;
+  }
+
+  60% {
+    translate: -1.5px -1px;
+  }
+
+  80% {
+    translate: 1.5px 0;
+  }
 }
 
 @keyframes mascote-pulo {
-  0%, 100% { translate: 0 0; }
-  45% { translate: 0 -9px; }
-  70% { translate: 0 1px; }
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  45% {
+    translate: 0 -9px;
+  }
+
+  70% {
+    translate: 0 1px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .mascote,
   .mascote-olho__fechado,
   .mascote-olho__aberto,
@@ -489,14 +528,15 @@ html.acessibilidade--alto-contraste .login__social-icone--google {
 }
 
 .login__ver-senha {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   align-self: center;
   flex: none;
-  width: 40px;
-  height: 40px;
-  margin-right: -8px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  margin: 0 -6px 6px 0;
   padding: 0;
   border: 0;
   border-radius: var(--raio-sm);
@@ -574,6 +614,7 @@ html.acessibilidade--alto-contraste .login__social-icone--google {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .mascotes--desviando .mascote,
   .mascotes--desviando .mascote--2,
   .mascotes--desviando .mascote--4,

@@ -60,42 +60,52 @@ window.MutiraoCuidadoPronto.then(core => {
       const modeloGrupo = modelos.find(({ medicacao }) => medicacao.hora === grupo.hora && !medicacao.itemId);
       const turno = grupo.responsavel ? ` · Turno de ${grupo.responsavel}` : '';
       const hora = grupo.hora.padStart(3, '0');
-      // O texto do grupo pertence às doses da rotina original. Novos itens ganham tarefas próprias.
-      const itensBase = estado.portaRemedios.find(item => item.hora === grupo.hora)?.itens || [];
-      const idsBase = new Set(itensBase.map(([id]) => id));
-      const dosesBase = grupo.itens.filter(dose => idsBase.has(dose.itemId));
-      const grupoConcluido = modeloGrupo && dosesBase.length && dosesBase.every(dose => dose.estado === 'administrado');
-      const tarefasGrupo = [];
-      if (grupoConcluido) {
-        const responsaveis = [...new Set(dosesBase.map(dose => dose.quem).filter(Boolean))];
-        const horarios = [...new Set(dosesBase.map(dose => dose.horario).filter(Boolean))].sort();
-        const detalhes = [
-          `${dosesBase.length} ${dosesBase.length === 1 ? 'dose dada' : 'doses dadas'}`,
+      const dados = grupo.itens.filter(dose => dose.estado === 'administrado');
+      const pendentes = grupo.itens.filter(dose => dose.estado !== 'administrado');
+      const resultado = [];
+
+      if (pendentes.length) {
+        const naoDados = pendentes.filter(dose => dose.estado === 'nao-administrado');
+        const nomes = pendentes.map(dose => dose.nome).join(', ');
+        const detalhe = pendentes.length === 1
+          ? (naoDados.length ? ['Não foi dado', naoDados[0].motivo].filter(Boolean).join(' · ') : `Às ${hora}`)
+          : [nomes, naoDados.length ? `${naoDados.length} sem registro` : ''].filter(Boolean).join(' · ');
+        resultado.push({
+          id: `med-pendente-${grupo.hora}`,
+          dia,
+          icone: 'icone-medicamento.svg',
+          titulo: pendentes.length === 1 ? `${hora} · ${pendentes[0].nome}` : `${hora} · Remédios das ${hora}`,
+          descricao: detalhe + turno,
+          concluida: false,
+          href: `medicamentos.html?dose=${encodeURIComponent(pendentes[0].chave)}`,
+          rotuloAcao: 'Marcar como dado'
+        });
+      }
+
+      if (dados.length) {
+        const responsaveis = [...new Set(dados.map(dose => dose.quem).filter(Boolean))];
+        const horarios = [...new Set(dados.map(dose => dose.horario).filter(Boolean))].sort();
+        const nomes = dados.map(dose => dose.nome).join(', ');
+        const resumoDoses = [
+          `${dados.length} ${dados.length === 1 ? 'dose dada' : 'doses dadas'}`,
           responsaveis.length ? `por ${responsaveis.join(', ')}` : '',
           horarios.length ? `(${horarios.join(', ')})` : ''
         ].filter(Boolean).join(' ');
-        tarefasGrupo.push({ ...modeloGrupo, descricao: detalhes + turno, concluida: true });
+        const usarModeloGrupo = modeloGrupo && !pendentes.length;
+        resultado.push({
+          ...(usarModeloGrupo ? modeloGrupo : {}),
+          id: (usarModeloGrupo && modeloGrupo.id) || `med-dados-${grupo.hora}`,
+          dia,
+          icone: (usarModeloGrupo && modeloGrupo.icone) || 'icone-medicamento.svg',
+          titulo: (usarModeloGrupo && modeloGrupo.titulo) || `${hora} · Remédios dados`,
+          descricao: `${nomes} · ${resumoDoses}${turno}`,
+          concluida: true,
+          href: 'medicamentos.html#registros-de-hoje',
+          rotuloAcao: 'Ver anotações'
+        });
       }
 
-      const dosesIndividuais = grupoConcluido ? grupo.itens.filter(dose => !idsBase.has(dose.itemId)) : grupo.itens;
-      return tarefasGrupo.concat(dosesIndividuais.map(dose => {
-        const modelo = modelos.find(({ medicacao }) => medicacao.hora === dose.hora && medicacao.itemId === dose.itemId);
-        const administrada = dose.estado === 'administrado';
-        const descricao = administrada
-          ? ['Administrada', dose.horario && `às ${dose.horario}`, dose.quem && `por ${dose.quem}`].filter(Boolean).join(' ')
-          : dose.estado === 'nao-administrado' ? ['Não foi dado', dose.motivo].filter(Boolean).join(' · ') : `Às ${hora}`;
-        return {
-          ...modelo,
-          id: modelo?.id || dose.chave,
-          dia,
-          icone: modelo?.icone || 'icone-medicamento.svg',
-          titulo: `${hora} · ${dose.nome}`,
-          descricao: descricao + turno,
-          concluida: administrada,
-          href: administrada ? 'medicamentos.html#registros-de-hoje' : `medicamentos.html?dose=${encodeURIComponent(dose.chave)}`,
-          rotuloAcao: administrada ? 'Ver anotações' : 'Marcar como dado'
-        };
-      }));
+      return resultado;
     });
     return [...tarefas.filter(tarefa => !tarefa.medicacao), ...tarefasDeDose];
   };
@@ -234,12 +244,14 @@ window.MutiraoCuidadoPronto.then(core => {
     const estado = obterEstado();
     const itens = obterEventosDia(diaSelecionado);
 
-    pagina.querySelector('[data-eventos]').innerHTML = itens.map(item => `
+    pagina.querySelector('[data-eventos]').innerHTML = itens.map(item => {
+      const sugestao = core.obterSugestaoTurnoCompromisso(item, estado);
+      return `
       <article class="agenda__evento">
         <div class="agenda__tarefa">
           ${avatarMascote(core.resolverPessoaRede(item.acompanhante || item.criadoPor))}
           <div>
-            <strong>${escaparHtml(item.hora.replace(':00', 'h'))} · ${escaparHtml(item.titulo)}</strong>
+            <strong>${escaparHtml([item.hora ? item.hora.replace(':00', 'h') : '', item.titulo].filter(Boolean).join(' · '))}</strong>
             <p>${escaparHtml([item.local, item.acompanhante].filter(Boolean).join(' · '))}</p>
             ${Array.isArray(item.preparacao) && item.preparacao.length ? `
               <div class="agenda__preparacao">
@@ -250,8 +262,15 @@ window.MutiraoCuidadoPronto.then(core => {
           </div>
           <button class="botao botao--secundario" type="button" data-ver-compromisso="${escaparHtml(item.id)}">Ver compromisso</button>
         </div>
+        ${sugestao ? `
+          <div class="agenda__aviso-compromisso">
+            <p><i class="fa-regular fa-clock" aria-hidden="true"></i> Ninguém na escala às ${escaparHtml(item.hora.replace(':00', 'h'))}. Sugestão de turno: ${escaparHtml(sugestao.horario)}.</p>
+            <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno data-dia="${escaparHtml(sugestao.dia)}" data-horario="${escaparHtml(sugestao.horario)}">Adicionar turno</button>
+          </div>
+        ` : ''}
       </article>
-    `).join('') || '<p class="agenda__vazio">Nenhum compromisso nesta data.</p>';
+    `;
+    }).join('') || '<p class="agenda__vazio">Nenhum compromisso nesta data.</p>';
 
     renderizarTarefasDiarias();
 
@@ -658,7 +677,7 @@ window.MutiraoCuidadoPronto.then(core => {
       const form = dialogoCobrirHorario.querySelector('[data-formulario-mvp="cobertura"]');
       const intervalo = core.obterIntervaloFormularioTurno(form, horarioTurno);
       horarioPedido = formatarIntervaloTurno(intervalo.inicio, intervalo.duracao);
-      criarRotinaComPedido = form.elements.escopoTurno.value === 'diario';
+      criarRotinaComPedido = form.elements.escopoTurno.disabled ? core.ESCOPO_TURNO.pontual : form.elements.escopoTurno.value;
       dialogoCobrirHorario.close();
       const dialogoAtribuir = document.getElementById('dialogo-atribuir-turno');
       if (dialogoAtribuir) {
@@ -760,8 +779,9 @@ window.MutiraoCuidadoPronto.then(core => {
     if (tipoFormulario === 'evento') {
       const titulo = (campos.titulo || '').trim();
       const local = (campos.local || '').trim();
+      const hora = (campos.hora || '').trim();
       const acompanhante = (campos.acompanhante || '').trim();
-      if (!titulo || !local || !campos.dia || !campos.hora) {
+      if (!titulo || !local || !campos.dia) {
         registrarStatus('Preencha os campos que faltam.');
         return;
       }
@@ -772,7 +792,7 @@ window.MutiraoCuidadoPronto.then(core => {
           return {
             ...estado,
             events: estado.events.map(e => (e.id === idEdicao
-              ? { ...e, titulo, dia: campos.dia, hora: campos.hora, local, acompanhante }
+              ? { ...e, titulo, dia: campos.dia, hora, local, acompanhante }
               : e))
           };
         }
@@ -784,7 +804,7 @@ window.MutiraoCuidadoPronto.then(core => {
               id: `evt-${Date.now()}`,
               titulo,
               dia: campos.dia,
-              hora: campos.hora,
+              hora,
               local,
               acompanhante,
               criadoPor: core.obterUsuarioAtual().nomeComApelido
@@ -803,13 +823,13 @@ window.MutiraoCuidadoPronto.then(core => {
     if (tipoFormulario === 'cobertura') {
       const { inicio: gapInicio, fim: gapFim } = extrairHorasTurno(horarioTurno);
       const { inicio, fim } = core.obterIntervaloFormularioTurno(formulario, horarioTurno);
-      const tornarDiario = formulario.elements.escopoTurno.value === 'diario';
+      const escopoTurno = formulario.elements.escopoTurno.disabled ? core.ESCOPO_TURNO.pontual : formulario.elements.escopoTurno.value;
 
       if (core.obterPreferencias().assumirTurnoDireto === false && !await core.confirmarAcao({
         titulo: 'Assumir este horário?', descricao: `${diaTurno} · ${inicio}h às ${fim}h`, confirmarTexto: 'Assumir', perigoso: false
       })) return;
       atualizarEstado(estado => core.definirRotinaTurno(
-        aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim), diaTurno, inicio, fim, tornarDiario
+        aplicarIntervaloZe(estado, diaTurno, gapInicio, gapFim, inicio, fim), diaTurno, inicio, fim, escopoTurno
       ));
       diaSemana = diaTurno;
       diaSelecionado = diaTurno;

@@ -377,21 +377,41 @@ window.MutiraoCuidadoPronto = (async () => {
     return Object.values(ACOMPANHAMENTO).includes(valor) ? valor : ACOMPANHAMENTO.naoInformado;
   };
 
+  // Escopo escolhido ao adicionar um turno: só a data, o mesmo dia da semana ou todos os dias.
+  const ESCOPO_TURNO = Object.freeze({ pontual: 'pontual', semanal: 'semanal', diario: 'diario' });
+  const NOMES_DIA_SEMANA = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+  const obterDiaSemana = dia => new Date(`${dia}T12:00:00`).getDay();
+  const descreverDiaSemana = diaSemana => `${diaSemana === 0 || diaSemana === 6 ? 'Todo' : 'Toda'} ${NOMES_DIA_SEMANA[diaSemana]}`;
+
+  const obterRotinasSemanais = (estado = estadoAtual) => (Array.isArray(estado.rotinasSemanais) ? estado.rotinasSemanais : [])
+    .filter(rotina => Number.isInteger(rotina?.diaSemana) && rotina.fim > rotina.inicio);
+
+  const descreverRotinaSemanal = rotina =>
+    `${descreverDiaSemana(rotina.diaSemana)}, ${formatarIntervaloTurno(rotina.inicio, rotina.fim - rotina.inicio)}`;
+
   const obterDescricaoAcompanhamento = (estado = estadoAtual) => {
     const necessidade = obterNecessidadeAcompanhamento(estado);
     const janela = estado.janelaAcompanhamento;
-    if (necessidade === ACOMPANHAMENTO.diario && janela) {
-      return `Todos os dias, ${formatarIntervaloTurno(janela.inicio, janela.fim - janela.inicio)}`;
-    }
-    return necessidade || 'Não informada';
+    const base = necessidade === ACOMPANHAMENTO.diario && janela
+      ? `Todos os dias, ${formatarIntervaloTurno(janela.inicio, janela.fim - janela.inicio)}`
+      : necessidade || 'Não informada';
+    const semanais = necessidade === ACOMPANHAMENTO.integral ? [] : obterRotinasSemanais(estado).map(descreverRotinaSemanal);
+    return [base, ...semanais].join(' · ');
   };
 
-  const obterJanelaObrigatoria = (dia, estado) => {
+  // Fonte única da expectativa de cuidado: quais faixas do dia precisam de alguém.
+  // Sem faixa esperada, o dia só mostra turnos combinados e nunca vira alerta.
+  const obterJanelasObrigatorias = (dia, estado = estadoAtual) => {
     const necessidade = obterNecessidadeAcompanhamento(estado);
-    if (necessidade === ACOMPANHAMENTO.integral) return { inicio: 0, fim: 24 };
+    if (necessidade === ACOMPANHAMENTO.integral) return [{ inicio: 0, fim: 24 }];
+    const janelas = [];
     const janela = estado.janelaAcompanhamento;
-    if (necessidade === ACOMPANHAMENTO.diario && janela && dia >= janela.desde) return janela;
-    return null;
+    if (necessidade === ACOMPANHAMENTO.diario && janela && dia >= janela.desde) janelas.push(janela);
+    const diaSemana = obterDiaSemana(dia);
+    for (const rotina of obterRotinasSemanais(estado)) {
+      if (rotina.diaSemana === diaSemana && dia >= rotina.desde) janelas.push(rotina);
+    }
+    return normalizarIntervalos(janelas, 0, 24);
   };
 
   const podeDefinirRotina = (estado = estadoAtual) => {
@@ -399,14 +419,47 @@ window.MutiraoCuidadoPronto = (async () => {
     return necessidade === ACOMPANHAMENTO.naoInformado || necessidade === ACOMPANHAMENTO.eventual;
   };
 
-  const definirRotinaTurno = (estado, dia, inicio, fim, tornarDiario) => {
-    if (!tornarDiario || !podeDefinirRotina(estado) || dia < HOJE) return estado;
+  const podeDefinirRotinaSemanal = (estado = estadoAtual) =>
+    obterNecessidadeAcompanhamento(estado) !== ACOMPANHAMENTO.integral;
+
+  const normalizarEscopoTurno = escopo => {
+    if (escopo === true) return ESCOPO_TURNO.diario;
+    return Object.values(ESCOPO_TURNO).includes(escopo) ? escopo : ESCOPO_TURNO.pontual;
+  };
+
+  const definirRotinaTurno = (estado, dia, inicio, fim, escopoInformado) => {
+    const escopo = normalizarEscopoTurno(escopoInformado);
+    if (escopo === ESCOPO_TURNO.pontual || dia < HOJE || !(fim > inicio)) return estado;
+    if (escopo === ESCOPO_TURNO.diario) {
+      if (!podeDefinirRotina(estado)) return estado;
+      return {
+        ...estado,
+        person: { ...estado.person, cobertura: ACOMPANHAMENTO.diario },
+        janelaAcompanhamento: { desde: dia, inicio, fim }
+      };
+    }
+    if (!podeDefinirRotinaSemanal(estado)) return estado;
+    const diaSemana = obterDiaSemana(dia);
+    const existentes = obterRotinasSemanais(estado);
+    const repetida = existentes.some(rotina => rotina.diaSemana === diaSemana && rotina.inicio === inicio && rotina.fim === fim);
+    const necessidade = obterNecessidadeAcompanhamento(estado);
     return {
       ...estado,
-      person: { ...estado.person, cobertura: ACOMPANHAMENTO.diario },
-      janelaAcompanhamento: { desde: dia, inicio, fim }
+      // Uma rotina semanal torna a escala visível no Início sem fingir acompanhamento diário.
+      person: necessidade === ACOMPANHAMENTO.naoInformado
+        ? { ...estado.person, cobertura: ACOMPANHAMENTO.eventual }
+        : estado.person,
+      rotinasSemanais: repetida ? existentes : [
+        ...existentes,
+        { id: `rotina-${diaSemana}-${inicio}-${fim}`, diaSemana, desde: dia, inicio, fim }
+      ]
     };
   };
+
+  const removerRotinaSemanal = (estado, id) => ({
+    ...estado,
+    rotinasSemanais: obterRotinasSemanais(estado).filter(rotina => rotina.id !== id)
+  });
 
   const popularOpcoesHorario = (select, min, max, selecionado) => {
     select.replaceChildren(...Array.from({ length: max - min + 1 }, (_, i) => {
@@ -430,27 +483,44 @@ window.MutiraoCuidadoPronto = (async () => {
     const fimValido = fim > inicio ? fim : Math.min(faixa.fim, inicio + 1);
     popularOpcoesHorario(form.elements.fim, inicio + 1, faixa.fim, fimValido);
     form.querySelector('[data-horarios-cobertura]').hidden = form.elements.cobrirTudo.checked;
-    const horarioEscolhido = formatarIntervaloTurno(inicio, fimValido - inicio);
-    const definirRotina = form.elements.escopoTurno.value === 'diario';
-    const explicacao = definirRotina
-      ? 'A Ficha passará a indicar esse horário todos os dias, a partir da data selecionada. Os próximos turnos ficam para combinar.'
-      : dialogo.dataset.turnoPontual === 'true'
-        ? 'O turno vale só para esta data. A necessidade de acompanhamento da Ficha fica como está.'
-        : 'O restante do horário previsto continua na escala.';
-    form.querySelector('[data-previa-nova-cobertura]').textContent = `${horarioEscolhido} · ${explicacao}`;
+    const duracao = fimValido - inicio;
+    const horarioEscolhido = `${formatarIntervaloTurno(inicio, duracao)} (${duracao} ${duracao === 1 ? 'hora' : 'horas'})`;
+    const dia = dialogo.dataset.diaTurno || HOJE;
+    const escopo = form.elements.escopoTurno.disabled ? ESCOPO_TURNO.pontual : normalizarEscopoTurno(form.elements.escopoTurno.value);
+    const explicacoes = {
+      [ESCOPO_TURNO.diario]: `Vale todos os dias a partir de ${formatarDataCurta(dia)}. Os próximos dias ficam como horário sem ninguém até alguém assumir.`,
+      [ESCOPO_TURNO.semanal]: `${descreverDiaSemana(obterDiaSemana(dia))} a partir de ${formatarDataCurta(dia)}. As próximas datas ficam como horário sem ninguém até alguém assumir.`,
+      [ESCOPO_TURNO.pontual]: dialogo.dataset.turnoPontual === 'true'
+        ? `Vale só para ${formatarDataCurta(dia)}. Os outros dias continuam como estão.`
+        : duracao >= faixa.duracao
+          ? 'Você assume todo este horário.'
+          : 'O restante do horário previsto continua na escala.'
+    };
+    form.querySelector('[data-previa-nova-cobertura]').textContent = `${horarioEscolhido} · ${explicacoes[escopo]}`;
   };
 
   const prepararFormularioTurno = (dialogo, dia, horario, pontual) => {
     const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
     const { inicio, fim } = extrairHorasTurno(horario);
     dialogo.dataset.turnoPontual = String(pontual);
+    dialogo.dataset.diaTurno = dia;
     dialogo.querySelector('h2').textContent = pontual ? 'Adicionar turno' : 'Ficar nesse horário';
     dialogo.querySelector('[data-contexto-turno]').textContent = `${formatarDataCurta(dia)} · ${horario}`;
     const escopo = form.elements.escopoTurno;
-    escopo.value = 'pontual';
-    escopo.closest('label').hidden = !pontual || !podeDefinirRotina() || dia < HOJE;
+    const opcoes = [new Option('Só nesta data', ESCOPO_TURNO.pontual)];
+    if (pontual && dia >= HOJE && podeDefinirRotinaSemanal()) {
+      opcoes.push(new Option(`Repetir ${descreverDiaSemana(obterDiaSemana(dia)).toLocaleLowerCase('pt-BR')}`, ESCOPO_TURNO.semanal));
+    }
+    if (pontual && dia >= HOJE && podeDefinirRotina()) {
+      opcoes.push(new Option('Repetir todos os dias', ESCOPO_TURNO.diario));
+    }
+    escopo.replaceChildren(...opcoes);
+    escopo.value = ESCOPO_TURNO.pontual;
+    escopo.closest('label').hidden = opcoes.length === 1;
     escopo.disabled = escopo.closest('label').hidden;
     form.elements.cobrirTudo.checked = !pontual || fim - inicio === 1;
+    const opcoesCobertura = form.elements.cobrirTudo.closest('.dialogo-mvp__opcoes');
+    if (opcoesCobertura) opcoesCobertura.hidden = fim - inicio === 1;
     form.elements.cobrirTudo.closest('label').hidden = fim - inicio === 1;
     const sugestao = pontual && dia === HOJE ? Math.max(inicio, Math.min(HORA_REFERENCIA, fim - 1)) : inicio;
     popularOpcoesHorario(form.elements.inicio, inicio, fim - 1, sugestao);
@@ -568,7 +638,7 @@ window.MutiraoCuidadoPronto = (async () => {
       }
     }
 
-    const janela = obterJanelaObrigatoria(dia, estado);
+    const janelas = obterJanelasObrigatorias(dia, estado);
     const manterLacunasDaEscala = obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.parcial;
     return mesclados.flatMap((seg, idx) => {
       const anterior = mesclados[idx - 1];
@@ -581,16 +651,13 @@ window.MutiraoCuidadoPronto = (async () => {
       });
       if (seg.tipo === 'turno') return [formato('turno', seg.inicio, seg.fim)];
       if (incluirHorariosLivres) return [formato('livre', seg.inicio, seg.fim)];
-      if (manterLacunasDaEscala) {
-        return obterEscalaDia(dia, estado).map(item => extrairHorasTurno(item.horario))
-          .map(faixa => ({ inicio: Math.max(seg.inicio, faixa.inicio), fim: Math.min(seg.fim, faixa.fim) }))
-          .filter(({ inicio, fim }) => inicio < fim)
-          .map(({ inicio, fim }) => formato('lacuna', inicio, fim));
-      }
-      if (!janela) return [];
-      const inicio = Math.max(seg.inicio, janela.inicio);
-      const fim = Math.min(seg.fim, janela.fim);
-      return inicio < fim ? [formato('lacuna', inicio, fim)] : [];
+      const faixasEsperadas = manterLacunasDaEscala
+        ? normalizarIntervalos([...obterEscalaDia(dia, estado).map(item => extrairHorasTurno(item.horario)), ...janelas], 0, 24)
+        : janelas;
+      return faixasEsperadas
+        .map(faixa => ({ inicio: Math.max(seg.inicio, faixa.inicio), fim: Math.min(seg.fim, faixa.fim) }))
+        .filter(({ inicio, fim }) => inicio < fim)
+        .map(({ inicio, fim }) => formato('lacuna', inicio, fim));
     });
   };
 
@@ -604,6 +671,19 @@ window.MutiraoCuidadoPronto = (async () => {
       const { inicio, fim } = extrairHorasTurno(pedido.horario);
       return !lacunas.some(lacuna => lacuna.inicio <= inicio && fim <= lacuna.fim);
     });
+  };
+
+  // Compromisso com hora marcada fora de qualquer turno: sugere um turno curto em volta dele
+  // (1h antes até 2h depois), limitado ao trecho livre do dia. Não pinta a semana de vermelho.
+  const obterSugestaoTurnoCompromisso = (compromisso, estado = estadoAtual) => {
+    const hora = Number(String(compromisso?.hora || '').split(':')[0]);
+    if (!compromisso?.dia || !Number.isInteger(hora) || compromisso.dia < HOJE) return null;
+    const trecho = construirLinhaDoTempoDia(compromisso.dia, estado, true)
+      .find(seg => seg.inicio <= hora && hora < seg.fim);
+    if (!trecho || trecho.tipo === 'turno') return null;
+    const inicio = Math.max(trecho.inicio, hora - 1);
+    const fim = Math.min(trecho.fim, hora + 2);
+    return { dia: compromisso.dia, horario: formatarIntervaloTurno(inicio, fim - inicio) };
   };
 
   const renderizarAdicionarTurnos = (dia, estado, linha) => {
@@ -1282,6 +1362,12 @@ window.MutiraoCuidadoPronto = (async () => {
     atualizarPreviaTurno,
     obterIntervaloFormularioTurno,
     definirRotinaTurno,
+    removerRotinaSemanal,
+    obterRotinasSemanais,
+    descreverRotinaSemanal,
+    obterJanelasObrigatorias,
+    obterSugestaoTurnoCompromisso,
+    ESCOPO_TURNO,
     obterLacunasDia,
     obterRotuloLacuna,
     construirLinhaDoTempoDia,

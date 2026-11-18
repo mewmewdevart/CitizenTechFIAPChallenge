@@ -886,12 +886,12 @@ dialog::backdrop {
   font-weight: var(--peso-semibold);
 }
 
-dialog input:not([hidden]):not([type="checkbox"]):not([type="radio"]) {
+dialog :not(.formulario-mvp)>label>input:not([hidden]):not([type="checkbox"]):not([type="radio"]):not(.editar-ficha__input-etiqueta),
+dialog form:not(.formulario-mvp) input:not([hidden]):not([type="checkbox"]):not([type="radio"]):not(.editar-ficha__input-etiqueta) {
   display: block;
   width: 100%;
   min-height: 40px;
   padding: 8px 12px;
-  margin-top: 6px;
   border-radius: var(--raio-md);
   border: var(--borda-controle);
   background: var(--cor-superficie);
@@ -1352,6 +1352,7 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
 .notificacao--atencao .botao-contornado {
   color: var(--cor-aviso-atencao-escuro);
 }
+
 .notificacao__vazio {
   padding: var(--espaco-md);
   color: var(--cor-neutra-media);

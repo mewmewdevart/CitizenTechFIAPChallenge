@@ -132,16 +132,17 @@
       <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
-        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
-          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button"
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
+        href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a
+        href="ajuda.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
   <main class="conteudo-pagina ficha" id="conteudo" data-pagina-mvp="ficha">
-    <nav class="ficha__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span aria-hidden="true">›</span>
-      <span data-identidade-acompanhada>Pessoa acompanhada</span></nav>
+    <nav class="ficha__trilha" aria-label="Você está em"><a href="home.html">Início</a> <span
+        aria-hidden="true">›</span>
+      <span data-identidade-acompanhada>Pessoa acompanhada</span>
+    </nav>
     <header class="ficha__cabecalho">
       <div>
         <h1>Ficha de quem recebe cuidado</h1>
@@ -167,7 +168,8 @@
       </div>
       <div class="ficha__aviso-alergia" data-aviso-alergia hidden><img class="ficha__alerta-mascote"
           src="assets/media/mascotes/icone-mascote-minhoca.svg" alt=""><strong><i
-            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span data-aviso-alergia-titulo></span></strong>
+            class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> <span
+            data-aviso-alergia-titulo></span></strong>
         <p data-aviso-alergia-texto></p>
       </div>
     </section>
@@ -205,7 +207,11 @@
         <div class="ficha__secao-cabecalho">
           <h2>Compromissos e exames</h2>
         </div>
-        <dl data-consultas-resumo><div><dt>Nenhum compromisso ou exame cadastrado</dt></div></dl>
+        <dl data-consultas-resumo>
+          <div>
+            <dt>Nenhum compromisso ou exame cadastrado</dt>
+          </div>
+        </dl>
       </section>
       <section class="cartao ficha__cartao">
         <h2>Identificação e contato</h2>
@@ -282,7 +288,8 @@
     <section class="cartao ficha__cartao" id="diario">
       <div class="ficha__diario-cabecalho">
         <h2>Diário de turno</h2>
-        <p>Veja o que cada pessoa anotou no seu turno: como a pessoa passou, observações e recados para quem vem depois.</p>
+        <p>Veja o que cada pessoa anotou no seu turno: como a pessoa passou, observações e recados para quem vem depois.
+        </p>
         <button type="button" class="botao botao--primario" data-dialogo="dialogo-relato"><i class="fa-solid fa-plus"
             aria-hidden="true"></i> Anotar como foi</button>
       </div>
@@ -301,9 +308,19 @@
             </div>
           </div>
           <div class="ficha__legenda-calendario">
-            <p><span class="ficha__legenda-selecionado" aria-hidden="true">□</span> Dia escolhido</p>
-            <p><span class="ficha__legenda-sucesso" aria-hidden="true">✓</span> Todos os turnos com anotação</p>
-            <p><span class="ficha__legenda-atencao" aria-hidden="true">•</span> Alguns turnos com anotação</p>
+            <p><span class="ficha__amostra ficha__amostra--selecionado" aria-hidden="true">10</span> Dia escolhido</p>
+            <p><span class="ficha__amostra calendario-mensal__dia--coberto" aria-hidden="true">13<span
+                  class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16">
+                    <circle cx="12" cy="12" r="10" fill="currentColor"></circle>
+                    <path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg></span></span> Todos os turnos com anotação</p>
+            <p><span class="ficha__amostra calendario-mensal__dia--parcial" aria-hidden="true">12<span
+                  class="calendario-mensal__simbolo"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                    stroke="currentColor" stroke-width="2.4">
+                    <circle cx="12" cy="12" r="8.5"></circle>
+                    <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"></path>
+                  </svg></span></span> Alguns turnos com anotação</p>
           </div>
         </div>
         <div class="ficha__relatos" data-relatos></div>
@@ -322,11 +339,12 @@
       </div>
       <p>Escolha o que da ficha você quer mandar para os médicos ou para a família.</p>
       <fieldset class="dialogo-mvp__opcoes">
-        <legend>O que vai no resumo</legend><label><input type="checkbox" value="Compromissos e exames" checked> Consultas e
+        <legend>O que vai no resumo</legend><label><input type="checkbox" value="Compromissos e exames" checked>
+          Consultas e
           exames</label><label><input type="checkbox" value="Informações de saúde"> Informações de
           saúde</label><label><input type="checkbox" value="Remédios de todo dia"> Remédios de todo dia</label>
-      </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Como a mensagem vai ficar<textarea data-previa-compartilhar
-          readonly rows="6"></textarea></label>
+      </fieldset><label class="dialogo-mvp__rotulo-compartilhar">Como a mensagem vai ficar<textarea
+          data-previa-compartilhar readonly rows="6"></textarea></label>
       <p class="dialogo-mvp__retorno" data-retorno-compartilhar role="status" aria-live="polite"></p>
       <div class="dialogo-mvp__acoes"><button class="botao botao--secundario" type="button" data-compartilhar="copy"><i
             class="fa-regular fa-copy" aria-hidden="true"></i> Copiar</button><button class="botao botao--secundario"
@@ -349,7 +367,8 @@
         <div class="impressao__opcoes-grade">
           <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Identidade e
             alergias <span class="impressao__badge-fixo">Sempre vai</span></label>
-          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Remédios de todo dia <span class="impressao__badge-fixo">Sempre vai</span></label>
+          <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Remédios de
+            todo dia <span class="impressao__badge-fixo">Sempre vai</span></label>
           <label class="impressao__opcao impressao__opcao--fixa"><input type="checkbox" checked disabled /> Contato de
             referência <span class="impressao__badge-fixo">Sempre vai</span></label>
           <label class="impressao__opcao"><input type="checkbox" checked data-impressao-opcao="condicoes" /> Condições
@@ -362,7 +381,8 @@
             Convênio</label>
           <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="alternativo" /> Contato
             alternativo</label>
-          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" /> Preferências</label>
+          <label class="impressao__opcao"><input type="checkbox" data-impressao-opcao="preferencias" />
+            Preferências</label>
         </div>
       </fieldset>
       <article class="dialogo-mvp__impressao folha-impressao">
@@ -411,8 +431,8 @@
         <section class="editar-ficha__secao" aria-labelledby="secao-foto-perfil">
           <h3 id="secao-foto-perfil" class="editar-ficha__subtitulo">Foto de Perfil</h3>
           <div class="editar-ficha__foto-linha">
-            <img src="assets/media/mascotes/icone-mascote-forma.svg" alt=""
-              class="editar-ficha__foto-previa" data-foto-previa />
+            <img src="assets/media/mascotes/icone-mascote-forma.svg" alt="" class="editar-ficha__foto-previa"
+              data-foto-previa />
             <div class="editar-ficha__foto-info">
               <strong>Foto de perfil</strong>
               <small>Opcional · foto JPG ou PNG</small>
@@ -512,17 +532,17 @@
             </div>
             <div>
               <span class="editar-ficha__rotulo-campo">Doenças e condições</span>
-              <input type="hidden" name="condicoes"
-                data-input-etiquetas="condicoes" />
+              <input type="hidden" name="condicoes" data-input-etiquetas="condicoes" />
               <div class="editar-ficha__caixa-etiquetas" data-lista-etiquetas="condicoes">
                 <input type="text" class="editar-ficha__input-etiqueta" aria-label="Adicionar condição de saúde" />
               </div>
             </div>
-            <p class="editar-ficha__campo--largo">A lista de uso diário é atualizada pela rotina de <a href="medicamentos.html">Medicamentos</a>.</p>
+            <p class="editar-ficha__campo--largo">A lista de uso diário é atualizada pela rotina de <a
+                href="medicamentos.html">Medicamentos</a>.</p>
             <div class="editar-ficha__campo--largo">
-              <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e problemas de saúde que já teve</span>
-              <input type="hidden" name="historicoSaude"
-                data-input-editor="historicoSaude" />
+              <span id="rotulo-historico-saude" class="editar-ficha__rotulo-campo">Cirurgias e problemas de saúde que já
+                teve</span>
+              <input type="hidden" name="historicoSaude" data-input-editor="historicoSaude" />
               <div class="editar-ficha__editor-rico" data-editor-rico="historicoSaude">
                 <div class="editar-ficha__editor-barra" role="toolbar" aria-label="Formatação de texto">
                   <button type="button" class="editar-ficha__editor-botao" data-comando-editor="bold"
@@ -568,9 +588,17 @@
           <div class="editar-ficha__grade">
             <label>Necessidade de acompanhamento
               <select name="cobertura"></select>
-              <small class="formulario-mvp__ajuda">Indique a necessidade habitual. Pela Agenda, você pode marcar um turno só para uma data ou combinar um horário diário.</small>
+              <small class="formulario-mvp__ajuda">Indique a necessidade habitual. Pela Agenda, você pode marcar um
+                turno só para uma data, repetir toda semana ou combinar um horário diário.</small>
             </label>
-            <label>Preferências de cuidado<input type="text" name="preferencias" /></label>
+            <label>Preferências de cuidado<input type="text" name="preferencias" />
+              <small class="formulario-mvp__ajuda">Indique as preferências de cuidado para o usuario.
+              </small></label>
+            <fieldset class="editar-ficha__campo--largo editar-ficha__rotinas" data-rotinas-semanais hidden>
+              <legend class="editar-ficha__rotulo-campo">Turnos que se repetem toda semana</legend>
+              <div data-lista-rotinas></div>
+              <small class="formulario-mvp__ajuda">Marque para encerrar a repetição. Os turnos já assumidos continuam na Agenda.</small>
+            </fieldset>
           </div>
         </section>
 
@@ -582,8 +610,7 @@
               <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTitulo">0/24 caracteres</small>
             </label>
             <label class="editar-ficha__campo--largo">Texto do aviso
-              <textarea name="avisoTexto" rows="2"
-                maxlength="70"></textarea>
+              <textarea name="avisoTexto" rows="2" maxlength="70"></textarea>
               <small class="formulario-mvp__ajuda" data-contador-aviso="avisoTexto">0/70 caracteres</small>
             </label>
           </div>
@@ -605,11 +632,12 @@
         <label>Data<input type="date" name="dia" value="2026-11-10" required></label>
         <label>Turno (opcional)
           <select name="turno">
-              <option value="">Sem turno (anotação geral)</option>
-            </select>
+            <option value="">Sem turno (anotação geral)</option>
+          </select>
         </label>
         <label>Como foi o turno
-          <textarea name="relato" rows="3" placeholder="Como a pessoa passou, como comeu, como estava o humor, se aconteceu algo..."
+          <textarea name="relato" rows="3"
+            placeholder="Como a pessoa passou, como comeu, como estava o humor, se aconteceu algo..."
             required></textarea>
         </label>
         <label>Recado para o próximo turno (opcional)

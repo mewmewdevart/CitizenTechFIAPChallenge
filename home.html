@@ -136,10 +136,9 @@
       <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
-    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a
-        class="barra-lateral__link--apenas-mobile" href="configuracoes.html"><i class="fa-solid fa-gear"
-          aria-hidden="true"></i>Configurações</a><a href="ajuda.html"><i class="fa-solid fa-circle-info"
-          aria-hidden="true"></i>Ajuda</a><button type="button"
+    <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
+        href="configuracoes.html"><i class="fa-solid fa-gear" aria-hidden="true"></i>Configurações</a><a
+        href="ajuda.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Ajuda</a><button type="button"
         class="barra-lateral__link--apenas-mobile barra-lateral__link--sair" data-acao="sair"><i
           class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>Sair</button></nav>
   </aside>
@@ -224,7 +223,8 @@
             <h2 id="titulo-porta-remedios">Porta remédios de hoje</h2>
             <small data-porta-remedios-resumo>Nenhum remédio na rotina</small>
           </div>
-          <div class="porta-remedios__trilho" role="group" aria-label="Porta-remédios por horário. Use as setas para passar de um remédio para outro"
+          <div class="porta-remedios__trilho" role="group"
+            aria-label="Porta-remédios por horário. Use as setas para passar de um remédio para outro"
             data-porta-remedios-trilho></div>
           <div class="porta-remedios__horas" role="group" aria-label="Ir para o horário" data-porta-remedios-horas>
           </div>
@@ -243,7 +243,7 @@
           </div>
           <div class="passagem__conteudo" data-passagem-relato>Nenhum recado ainda</div>
           <div class="passagem__nota" hidden>
-            <strong>Antes de marcar</strong>
+            <strong>Para o próximo turno</strong>
             <span>Confirme se o convênio cobre a consulta.</span>
           </div>
           <button type="button" class="botao botao--secundario painel__acao-larga"
@@ -306,7 +306,8 @@
             </select>
           </label>
           <label>Como foi o turno
-            <textarea name="relato" rows="3" placeholder="Como a pessoa passou, como comeu, como estava o humor, se aconteceu algo..."
+            <textarea name="relato" rows="3"
+              placeholder="Como a pessoa passou, como comeu, como estava o humor, se aconteceu algo..."
               required></textarea>
           </label>
           <label>Tarefa relacionada (opcional)
@@ -354,10 +355,11 @@
       </div>
       <p class="dialogo-mvp__contexto dialogo-mvp__contexto--alerta" data-contexto-turno></p>
       <form class="formulario-mvp" data-formulario-mvp="cobertura">
-        <label hidden>Como será este acompanhamento?
+        <label hidden>Com que frequência?
           <select name="escopoTurno" disabled>
-            <option value="pontual">Só para a data selecionada</option>
-            <option value="diario">Tornar este horário uma rotina diária na Ficha</option>
+            <option value="pontual">Só nesta data</option>
+            <option value="semanal">Repetir toda semana neste dia</option>
+            <option value="diario">Repetir todos os dias</option>
           </select>
         </label>
         <div class="dialogo-mvp__opcoes">
@@ -456,7 +458,8 @@
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario" data-fechar-dialogo>Voltar</button>
-        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-pedido-andamento">Eu resolvo</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-pedido-andamento">Eu
+          resolvo</button>
         <a class="botao botao--primario" href="agenda.html" data-passagem-ver-consulta hidden>Ver consulta
           cadastrada</a>
       </div>
@@ -483,12 +486,14 @@
       </div>
       <div class="dialogo-mvp__secao">
         <p class="dialogo-mvp__secao-titulo">O que fazer agora</p>
-        <p style="color: var(--cor-texto-secundario); font-size: var(--texto-interface);">Depois de combinar a data com a clínica, coloque a consulta na Agenda.</p>
+        <p style="color: var(--cor-texto-secundario); font-size: var(--texto-interface);">Depois de combinar a data com
+          a clínica, coloque a consulta na Agenda.</p>
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--secundario"
           data-passagem-etapa="dialogo-passagem-cuidado">Voltar</button>
-        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-cadastrar-consulta">Colocar na Agenda</button>
+        <button type="button" class="botao botao--primario" data-passagem-etapa="dialogo-cadastrar-consulta">Colocar na
+          Agenda</button>
       </div>
     </dialog>
 
@@ -507,8 +512,8 @@
         <label>Local<input type="text" name="local" required></label>
         <label>Quem vai junto
           <select name="acompanhante" data-opcoes-rede>
-              <option value="">Selecione uma pessoa</option>
-            </select>
+            <option value="">Selecione uma pessoa</option>
+          </select>
         </label>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario"

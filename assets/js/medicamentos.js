@@ -94,6 +94,23 @@ window.MutiraoCuidadoPronto.then(core => {
     return `Medicamento${doseTexto}${horariosTexto}. Estoque: ${item.estoque} unidades${dias !== null ? `; estimativa de ${plural(dias, 'dia', 'dias')}` : ''}.`;
   };
 
+  const converterMinutos = texto => {
+    const match = String(texto || '').match(/(\d{1,2})[:h](\d{2})?/i);
+    if (!match) return null;
+    return Number(match[1]) * 60 + Number(match[2] || 0);
+  };
+
+  const descreverDesvioHorario = dose => {
+    if (dose.estado !== 'administrado') return '';
+    const previsto = converterMinutos(dose.hora);
+    const dado = converterMinutos(dose.horario);
+    if (previsto === null || dado === null) return '';
+    const diferenca = dado - previsto;
+    if (diferenca >= 30) return ` (Tomado atrasado às ${formatarHorario(dose.horario)})`;
+    if (diferenca <= -30) return ` (Tomado adiantado às ${formatarHorario(dose.horario)})`;
+    return '';
+  };
+
   const descreverRegistro = dose => {
     const usuario = obterUsuarioAtual();
     const quem = dose.meu ? usuario.nomeComApelido : (dose.quem ? core.resolverPessoaRede(dose.quem).nome : 'Responsável não informado');
@@ -124,11 +141,13 @@ window.MutiraoCuidadoPronto.then(core => {
 
     const administradas = doses.filter(dose => dose.estado === 'administrado').length;
     const naoAdministradas = doses.filter(dose => dose.estado === 'nao-administrado').length;
-    const agora = grupos.filter(grupo => grupo.situacao === 'agora').flatMap(grupo => grupo.itens).filter(dose => dose.estado === 'prevista').length;
-    const previstas = doses.length - administradas - naoAdministradas - agora;
+    const atrasadas = doses.filter(dose => dose.estado === 'prevista' && dose.momento === 'passado').length;
+    const agora = doses.filter(dose => dose.estado === 'prevista' && dose.momento === 'agora').length;
+    const previstas = doses.length - administradas - naoAdministradas - atrasadas - agora;
     contagem.innerHTML = [
       administradas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--dado"></span>${plural(administradas, 'dada', 'dadas')}</span>`,
       naoAdministradas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--falta"></span>${plural(naoAdministradas, 'não dada', 'não dadas')}</span>`,
+      atrasadas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--falta"></span>${plural(atrasadas, 'atrasada', 'atrasadas')}</span>`,
       agora && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--agora"></span>${plural(agora, 'para agora', 'para agora')}</span>`,
       previstas && `<span class="rotina__legenda"><span class="frasco-resumo__bloco frasco-resumo__bloco--depois"></span>${plural(previstas, 'para mais tarde', 'para mais tarde')}</span>`
     ].filter(Boolean).join('');
@@ -146,16 +165,29 @@ window.MutiraoCuidadoPronto.then(core => {
   };
 
   const renderizarProxima = grupos => {
-    const grupo = grupos.find(item => !item.completo && item.momento !== 'passado');
-    if (!grupo) {
+    const atrasadas = grupos.flatMap(grupo => (
+      grupo.momento === 'passado'
+        ? grupo.itens.filter(dose => dose.estado === 'prevista').map(dose => ({ dose, grupo }))
+        : []
+    ));
+    const proximoGrupo = grupos.find(item => !item.completo && item.momento !== 'passado');
+    const proximas = proximoGrupo
+      ? proximoGrupo.itens.filter(dose => dose.estado === 'prevista').map(dose => ({ dose, grupo: proximoGrupo }))
+      : [];
+    const itens = [...atrasadas, ...proximas];
+    if (!itens.length) {
       proxima.innerHTML = '<p class="estoque__texto">Todos os remédios de hoje já foram marcados.</p>';
       return;
     }
-    proxima.innerHTML = `<ul class="painel__lista">${grupo.itens.filter(dose => dose.estado === 'prevista').map(dose => `<li class="painel__item">
-      <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
-      <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>Às ${escaparHtml(dose.hora)} · ${escaparHtml(grupo.responsavel || 'Horário sem ninguém')}</span></span>
-      <button type="button" class="botao botao--primario" data-registrar-dose="${escaparHtml(dose.chave)}">Marcar como dado</button>
-    </li>`).join('')}</ul>`;
+    proxima.innerHTML = `<ul class="painel__lista">${itens.map(({ dose, grupo }) => {
+      const atrasado = grupo.momento === 'passado';
+      const detalhe = [atrasado && 'Atrasado', `Às ${dose.hora}`, grupo.responsavel || 'Horário sem ninguém'].filter(Boolean).join(' · ');
+      return `<li class="painel__item">
+        <span class="painel__icone${atrasado ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
+        <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(detalhe)}</span></span>
+        <button type="button" class="botao botao--primario" data-registrar-dose="${escaparHtml(dose.chave)}">Marcar como dado</button>
+      </li>`;
+    }).join('')}</ul>`;
   };
 
   const controlesRegistros = pagina.querySelector('[data-registros-controles]');
@@ -196,8 +228,10 @@ window.MutiraoCuidadoPronto.then(core => {
     listaRegistros.innerHTML = visiveis.length
       ? visiveis.map(dose => `<li class="painel__item${dose.estado === 'administrado' ? ' meds__registro--concluido' : ''}">
         <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
-        <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
-        ${dose.estado === 'nao-administrado' ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Corrigir</button>` : ''}
+        <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}${escaparHtml(descreverDesvioHorario(dose))}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
+        ${dose.estado === 'nao-administrado'
+          ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Corrigir</button>`
+          : `<button type="button" class="botao botao--secundario botao--pequeno" data-desfazer-dose="${escaparHtml(dose.chave)}">Desfazer</button>`}
       </li>`).join('')
       : (filtroAtivo
         ? '<li class="estado-vazio"><strong>Nada encontrado</strong><button type="button" class="botao botao--secundario" data-limpar-filtros-registros>Limpar filtros</button></li>'
@@ -435,17 +469,19 @@ window.MutiraoCuidadoPronto.then(core => {
     }
     if (secaoEstoque && estoqueEl) {
       const temEstoque = item.estoque !== null && item.estoque !== undefined;
-      secaoEstoque.hidden = !temEstoque;
+      secaoEstoque.hidden = false;
       if (temEstoque) {
         const dias = item.consumoDia ? Math.floor(item.estoque / item.consumoDia) : null;
         estoqueEl.textContent = `${plural(item.estoque, 'unidade', 'unidades')} em estoque${dias !== null ? ` · Dá para ${plural(dias, 'dia', 'dias')}` : ''}`;
+      } else {
+        estoqueEl.textContent = 'Quantidade não informada';
       }
     }
     if (secaoOrientacao && orientacaoEl) {
       const ehInsumo = item.tipo === 'Insumo';
       secaoOrientacao.hidden = ehInsumo;
       if (!ehInsumo) {
-        const finalidade = DESCRICOES_MEDICAMENTOS[item.nome];
+        const finalidade = obterEstado().descricoesMedicamentos?.[item.nome] || item.finalidade || '';
         orientacaoEl.textContent = finalidade
           ? `Indicado ${finalidade}. Veja a dose na receita.`
           : 'Confira a dose na receita.';
@@ -546,6 +582,17 @@ window.MutiraoCuidadoPronto.then(core => {
     }
     if (botao.dataset.registrarDose) {
       abrirRegistro(botao.dataset.registrarDose);
+      return;
+    }
+    if (botao.dataset.desfazerDose) {
+      const chave = botao.dataset.desfazerDose;
+      const dose = obterDoses().find(item => item.chave === chave);
+      atualizarEstado(estadoAtual => ({
+        ...estadoAtual,
+        registrosDose: { ...(estadoAtual.registrosDose || {}), [chave]: { estado: 'prevista' } }
+      }));
+      anunciarStatus(elementoStatus, dose ? `Registro de ${dose.nome} (${dose.hora}) removido.` : 'Registro removido.');
+      renderizar();
       return;
     }
     if (botao.dataset.etapaAdministracao) {

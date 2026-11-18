@@ -55,16 +55,16 @@ for (const botao of document.querySelectorAll('[data-tema]')) {
 window.addEventListener('storage', evento => {
   if (evento.key === CHAVE_TEMA) aplicarTema(obterTemaSalvo());
 
-window.MutiraoTema = {
-  restaurar() {
-    try {
-      localStorage.removeItem(CHAVE_TEMA);
-    } catch {
-      // Ignora erro caso localStorage esteja indisponível.
+  window.MutiraoTema = {
+    restaurar() {
+      try {
+        localStorage.removeItem(CHAVE_TEMA);
+      } catch {
+        // Ignora erro caso localStorage esteja indisponível.
+      }
+      return aplicarTema('neutro');
     }
-    return aplicarTema('neutro');
-  }
-};
+  };
 });
 
 const alternarMenu = document.querySelector('#alternar-menu');
@@ -955,12 +955,14 @@ function sincronizarStatusCuidado() {
   const linhaTurno = document.querySelector('[data-status-turno]');
   if (linhaTurno) {
     const turno = core.obterTurnoAtual();
+    const lacunaAtual = !turno && core.obterLacunaAtual();
     const img = linhaTurno.querySelector('img');
+    const detalheTurno = linhaTurno.querySelector('small');
     img.hidden = !turno;
     if (turno) img.src = turno.pessoa.foto || `assets/media/mascotes/${turno.pessoa.avatar}`;
-    linhaTurno.querySelector('strong').textContent = turno?.pessoa.nome || 'Sem turno em andamento';
-    linhaTurno.querySelector('small').textContent = turno?.horario ||
-      (core.obterLacunaAtual() ? 'Horário previsto sem cobertura' : 'Sem acompanhamento agendado para agora');
+    linhaTurno.querySelector('strong').textContent = turno?.pessoa.nome || (lacunaAtual ? 'Horário sem ninguém' : 'Sem turno agora');
+    detalheTurno.textContent = turno?.horario || (lacunaAtual ? 'Veja na Agenda' : '');
+    detalheTurno.hidden = !detalheTurno.textContent;
   }
   const linha = document.querySelector('.cartao-status [data-status-medicamento]');
   const cartao = linha?.closest('.cartao-status');
@@ -975,21 +977,23 @@ function sincronizarStatusCuidado() {
     ? doses.filter(dose => dose.hora === proxima.hora && dose.estado === 'prevista')
     : [];
   const ehAlerta = Boolean(ocorrencias.length);
+  const detalheMed = linha.querySelector('small');
 
   linha.classList.toggle('cartao-status__linha--alerta', ehAlerta);
   if (!doses.length) {
-    linha.querySelector('strong').textContent = 'Nenhum remédio na rotina';
-    linha.querySelector('small').textContent = 'Cadastre em Medicamentos';
+    linha.querySelector('strong').textContent = 'Nenhum remédio';
+    detalheMed.textContent = '';
   } else if (ehAlerta) {
     linha.querySelector('strong').textContent = `${ocorrencias.length} ${ocorrencias.length === 1 ? 'remédio para dar' : 'remédios para dar'}`;
-    linha.querySelector('small').textContent = 'Não foi dado';
+    detalheMed.textContent = 'Não foi dado';
   } else if (grupoProximo.length) {
     linha.querySelector('strong').textContent = 'Tem remédio para dar';
-    linha.querySelector('small').textContent = `Próximo horário às ${proxima.hora.padStart(3, '0')}`;
+    detalheMed.textContent = `Próximo horário às ${proxima.hora.padStart(3, '0')}`;
   } else {
     linha.querySelector('strong').textContent = 'Nenhum remédio para mais tarde';
-    linha.querySelector('small').textContent = 'Veja o que já foi anotado hoje';
+    detalheMed.textContent = 'Veja o que já foi anotado hoje';
   }
+  detalheMed.hidden = !detalheMed.textContent;
 }
 
 window.addEventListener('mutirao:cuidado-pronto', sincronizarStatusCuidado);

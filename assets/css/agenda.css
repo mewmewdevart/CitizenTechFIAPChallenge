@@ -374,6 +374,9 @@ html.tema--acolhedor .agenda__etiqueta {
   min-width: 0;
   padding: var(--espaco-xs) 6px;
   box-sizing: border-box;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
 }
 
 .agenda__etiqueta img,
@@ -406,6 +409,37 @@ html.tema--acolhedor .agenda__etiqueta {
 .agenda__etiqueta--neutro {
   background: var(--cor-neutra-clara-04);
   color: var(--cor-texto-secundario);
+}
+
+.agenda__aviso-compromisso {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-sm) var(--espaco-md);
+  margin: 0 0 var(--espaco-sm) 52px;
+  padding: var(--espaco-sm) var(--espaco-md);
+  border-radius: var(--raio-md);
+  background: var(--cor-aviso-atencao-claro);
+  color: var(--cor-aviso-atencao-escuro);
+  font-size: var(--texto-legenda);
+}
+
+.agenda__aviso-compromisso p {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-xs);
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .agenda__aviso-compromisso {
+    margin-left: 0;
+  }
+
+  .agenda__aviso-compromisso .botao {
+    width: 100%;
+  }
 }
 
 .agenda__tarefa--concluida .agenda__etiqueta {

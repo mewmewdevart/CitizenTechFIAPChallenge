@@ -445,33 +445,120 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia::after {
   scroll-margin-top: 104px;
 }
 
+.ficha__diario {
+  --dia-sucesso-fundo: var(--cor-aviso-sucesso-claro);
+  --dia-sucesso: var(--cor-aviso-sucesso);
+  --dia-parcial: var(--cor-aviso-atencao-claro);
+}
+
+.ficha__diario .calendario-mensal__dias {
+  gap: 6px;
+}
+
+.ficha__diario .calendario-mensal__dias button,
+.ficha__amostra {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 54px;
+  padding: 6px 2px;
+  border: 1.5px solid transparent;
+  border-radius: var(--raio-md);
+  background: var(--cor-superficie);
+  color: var(--cor-texto-principal);
+  font-size: var(--texto-titulo-cartao);
+  font-weight: var(--peso-semibold);
+  line-height: 1;
+}
+
+.ficha__diario .calendario-mensal__dias button:hover {
+  border-color: var(--cor-borda-sutil);
+}
+
+.ficha__diario .calendario-mensal__indicadores {
+  position: static;
+  display: contents;
+  font-size: 0;
+}
+
+.ficha__diario .calendario-mensal__simbolo {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+
+.ficha__diario .calendario-mensal__dias button.calendario-mensal__dia--parcial,
+.ficha__amostra.calendario-mensal__dia--parcial {
+  border-color: color-mix(in srgb, var(--cor-aviso-atencao-escuro) 42%, transparent);
+  border-style: dashed;
+  background: linear-gradient(to top, var(--dia-parcial) 50%, var(--cor-superficie) 50%);
+  color: var(--cor-aviso-atencao-escuro);
+}
+
+.ficha__diario .calendario-mensal__dias button.calendario-mensal__dia--coberto,
+.ficha__amostra.calendario-mensal__dia--coberto {
+  border-color: transparent;
+  background: var(--dia-sucesso-fundo);
+  color: var(--cor-texto-principal);
+}
+
+.ficha__diario .calendario-mensal__dia--coberto .calendario-mensal__simbolo {
+  color: var(--dia-sucesso);
+}
+
+.ficha__diario .calendario-mensal__dias button[aria-pressed="true"],
+.ficha__amostra--selecionado {
+  border: 2px solid var(--cor-primaria);
+  font-weight: var(--peso-negrito);
+}
+
+.ficha__diario .calendario-mensal__dias button[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top-color: var(--cor-primaria);
+  transform: translateX(-50%);
+}
+
+html.acessibilidade--alto-contraste .ficha__diario .calendario-mensal__dias button[aria-pressed="true"],
+html.acessibilidade--alto-contraste .ficha__amostra--selecionado {
+  border: 3px solid var(--cor-texto-principal);
+}
+
+html.acessibilidade--alto-contraste .ficha__diario .calendario-mensal__dias button[aria-pressed="true"]::after {
+  border-top-color: var(--cor-texto-principal);
+}
+
 .ficha__legenda-calendario {
   margin-top: var(--espaco-md);
   border: var(--borda-padrao);
   border-radius: var(--raio-lg);
   padding: var(--espaco-md);
   display: grid;
-  gap: var(--espaco-xs);
+  gap: var(--espaco-sm);
 }
 
 .ficha__legenda-calendario p {
   display: flex;
   align-items: center;
   gap: var(--espaco-sm);
-  font-size: var(--texto-legenda);
-  font-weight: var(--peso-semibold);
+  font-size: var(--texto-interface);
+  line-height: 1.35;
 }
 
-.ficha__legenda-selecionado {
-  color: var(--cor-primaria);
-}
-
-.ficha__legenda-sucesso {
-  color: var(--cor-aviso-sucesso);
-}
-
-.ficha__legenda-atencao {
-  color: var(--cor-aviso-atencao-escuro);
+.ficha__amostra {
+  flex: none;
+  width: 48px;
+  min-height: 48px;
+  padding: 4px 2px;
+  font-size: var(--texto-interface);
 }
 
 .ficha__relatos {
@@ -481,14 +568,24 @@ html.acessibilidade--alto-contraste .ficha__aviso-alergia::after {
   min-height: 420px;
 }
 
-.ficha__relatos>h3 {
-  font-size: var(--texto-interface);
+.ficha__relatos-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-xs) var(--espaco-md);
+  margin-bottom: var(--espaco-md);
+  padding-bottom: var(--espaco-sm);
+  border-bottom: var(--borda-padrao);
+}
+
+.ficha__relatos-cabecalho h3 {
+  font-size: var(--texto-titulo-cartao);
   font-weight: var(--peso-semibold);
-  margin-top: var(--espaco-xs);
 }
 
 .ficha__relatos-resumo {
-  color: var(--cor-aviso-atencao-escuro);
+  color: var(--cor-texto-secundario);
   font-size: var(--texto-legenda);
   font-weight: var(--peso-semibold);
 }

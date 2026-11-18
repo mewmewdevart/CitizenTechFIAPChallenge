@@ -103,6 +103,11 @@ window.MutiraoCuidadoPronto.then(core => {
 
   const obterRelatosDia = dia => obterEstado().reports?.[dia] || [];
 
+  const ICONES_DIARIO = {
+    parcial: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>',
+    coberto: '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  };
+
   const renderizarMes = () => {
     renderizarCalendarioMensal(pagina.querySelector('[data-mes]'), {
       ano: anoAtual,
@@ -112,11 +117,11 @@ window.MutiraoCuidadoPronto.then(core => {
         const total = obterRelatosDia(chave).length;
         const completo = total >= 4;
         const parcial = total > 0 && !completo;
-        const simbolo = completo ? '✓' : parcial ? '•' : '';
-        const classe = completo ? 'calendario-mensal__indicador--sucesso' : 'calendario-mensal__indicador--atencao';
+        const situacao = completo ? 'coberto' : parcial ? 'parcial' : '';
         return {
-          indicadores: simbolo ? [`<span class="${classe}">${simbolo}</span>`] : [],
-          sufixoRotulo: completo ? ', todos com anotação' : parcial ? ', com anotações' : ''
+          classes: [situacao && `calendario-mensal__dia--${situacao}`],
+          indicadores: situacao ? [`<span class="calendario-mensal__simbolo">${ICONES_DIARIO[situacao]}</span>`] : [],
+          sufixoRotulo: completo ? ', todos os turnos com anotação' : parcial ? ', alguns turnos com anotação' : ''
         };
       }
     });
@@ -167,11 +172,11 @@ window.MutiraoCuidadoPronto.then(core => {
     if (!containerRelatos) return;
 
     const itens = obterRelatosDia(diaSelecionado);
-    const resumo = itens.length
-      ? `<p class="ficha__relatos-resumo">${itens.length >= 4 ? 'Todos os turnos com anotação · ' : 'Algumas anotações · '}${itens.length} ${itens.length === 1 ? 'turno anotado' : 'turnos anotados'}</p>`
-      : '<p class="ficha__relatos-resumo">Ninguém anotou nada neste dia.</p>';
-
-    containerRelatos.innerHTML = `${resumo}<h3>${formatarDataCurta(diaSelecionado, true)}</h3>${itens.map(([nome, papel, contexto, relato, proximo]) => {
+    const cabecalho = `<div class="ficha__relatos-cabecalho"><h3>${formatarDataCurta(diaSelecionado, true)}</h3>${itens.length
+      ? `<p class="ficha__relatos-resumo">${itens.length >= 4 ? 'Todos os turnos com anotação · ' : ''}${itens.length} ${itens.length === 1 ? 'anotação' : 'anotações'}</p>`
+      : ''}</div>`;
+    const corpo = itens.length
+      ? itens.map(([nome, papel, contexto, relato, proximo]) => {
       const avatar = nome.startsWith('Ana')
         ? 'icone-mascote-espeto.svg'
         : nome.startsWith('Beatriz')
@@ -195,7 +200,10 @@ window.MutiraoCuidadoPronto.then(core => {
         <div class="ficha__relato-conteudo">${sanitizarHtmlEditor(relato)}</div>
         ${proximo ? `<div class="ficha__proximo-turno"><strong>Para o próximo turno</strong><div class="ficha__relato-conteudo">${sanitizarHtmlEditor(String(proximo).replaceAll('\n', '<br>'))}</div></div>` : ''}
       </article>`;
-    }).join('')}`;
+    }).join('')
+      : '<p class="ficha__texto-suave">Ninguém anotou nada neste dia.</p>';
+
+    containerRelatos.innerHTML = `${cabecalho}${corpo}`;
   };
 
   const renderizarConsultas = () => {
@@ -510,6 +518,16 @@ window.MutiraoCuidadoPronto.then(core => {
         );
         if (atual === diario) campos.cobertura.add(new Option(core.obterDescricaoAcompanhamento(estado), diario));
         campos.cobertura.value = atual;
+        const blocoRotinas = formulario.querySelector('[data-rotinas-semanais]');
+        if (blocoRotinas) {
+          const rotinas = core.obterRotinasSemanais(estado);
+          blocoRotinas.hidden = !rotinas.length;
+          blocoRotinas.querySelector('[data-lista-rotinas]').innerHTML = rotinas.map(rotina => `
+            <label class="dialogo-mvp__opcao-inline">
+              <input type="checkbox" name="encerrarRotina" value="${escaparHtml(rotina.id)}">
+              Encerrar · ${escaparHtml(core.descreverRotinaSemanal(rotina))}
+            </label>`).join('');
+        }
       } else if (campos?.[chave]) {
         campos[chave].value = valor ?? '';
       }
@@ -826,11 +844,13 @@ window.MutiraoCuidadoPronto.then(core => {
 
       campos.avisoTitulo = (campos.avisoTitulo || '').trim().slice(0, 24);
       campos.avisoTexto = (campos.avisoTexto || '').trim().slice(0, 70);
+      const rotinasEncerradas = new FormData(formulario).getAll('encerrarRotina');
+      delete campos.encerrarRotina;
 
-      atualizarEstado(estado => ({
-        ...estado,
-        person: { ...estado.person, ...campos }
-      }));
+      atualizarEstado(estado => rotinasEncerradas.reduce(
+        (proximo, id) => core.removerRotinaSemanal(proximo, id),
+        { ...estado, person: { ...estado.person, ...campos } }
+      ));
       mensagem = {
         titulo: 'Ficha atualizada',
         descricao: `Cadastro de ${core.nomePessoaAcompanhada()} atualizado.`
