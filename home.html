@@ -254,7 +254,7 @@
             <h2 id="titulo-porta-remedios">Porta remédios de hoje</h2>
             <small data-porta-remedios-resumo>7 de 20 dados · arraste para o lado</small>
           </div>
-          <div class="porta-remedios__trilho" tabindex="0" aria-label="Compartimentos do porta-remédios por horário"
+          <div class="porta-remedios__trilho" role="group" aria-label="Porta-remédios por horário. Use as setas para passar de um remédio para outro"
             data-porta-remedios-trilho></div>
           <div class="porta-remedios__horas" role="group" aria-label="Ir para o horário" data-porta-remedios-horas>
           </div>
@@ -262,7 +262,7 @@
       </div>
 
       <div class="painel__coluna">
-        <section class="apoio__painel" aria-labelledby="titulo-passagem">
+        <section class="apoio__painel" aria-labelledby="titulo-passagem" data-aba-inicio="passagem">
           <h2 id="titulo-passagem" class="painel__subtitulo">Recado de quem cuidou antes</h2>
           <div class="painel__item">
             <img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg" alt="">
@@ -284,7 +284,7 @@
 
     <div class="painel__grade">
       <div class="painel__coluna">
-        <section class="apoio__painel" aria-labelledby="titulo-escala">
+        <section class="apoio__painel" aria-labelledby="titulo-escala" data-aba-inicio="escala">
           <div class="painel__cartao-cabecalho">
             <h2 id="titulo-escala" data-titulo-escala>Quem cuida na semana · 9 a 15 nov.</h2>
             <a class="botao botao--secundario" href="agenda.html">Ver escala</a>
@@ -295,7 +295,7 @@
       </div>
 
       <div class="painel__coluna">
-        <section class="apoio__painel" aria-labelledby="titulo-rede">
+        <section class="apoio__painel" aria-labelledby="titulo-rede" data-aba-inicio="rede">
           <h2 id="titulo-rede" class="painel__subtitulo">Pessoas da rede</h2>
           <ul class="painel__lista">
             <li class="painel__item"><img class="avatar" src="assets/media/mascotes/icone-mascote-trevo.svg"
