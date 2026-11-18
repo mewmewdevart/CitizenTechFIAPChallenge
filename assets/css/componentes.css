@@ -688,3 +688,43 @@ html.tema--acolhedor .filtros__opcao:active {
 .faixa-alerta[hidden] {
   display: none;
 }
+
+.rodape-site {
+  margin-left: var(--largura-menu-lateral);
+  padding: var(--espaco-lg) 28px;
+  border-top: var(--borda-padrao);
+  background: var(--cor-superficie);
+  color: var(--cor-texto-secundario);
+  font-size: var(--texto-legenda);
+  line-height: 1.5;
+  text-align: center;
+  transition: margin-left var(--transicao-padrao);
+}
+
+.rodape-site p {
+  margin: 0;
+}
+
+.rodape-site strong {
+  color: var(--cor-texto-principal);
+  font-weight: var(--peso-semibold);
+}
+
+body.menu-fechado .rodape-site,
+body.pagina-login .rodape-site {
+  margin-left: 0;
+}
+
+@media (width < 1150px) {
+  .rodape-site {
+    margin-left: 0;
+    padding: var(--espaco-md) var(--espaco-lg);
+    transition: none;
+  }
+}
+
+@media print {
+  .rodape-site {
+    display: none;
+  }
+}

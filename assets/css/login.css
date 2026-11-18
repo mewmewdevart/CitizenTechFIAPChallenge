@@ -9,11 +9,10 @@
 }
 
 .login {
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 0;
 }
 
 .login__apresentacao {
@@ -339,7 +338,7 @@ html.acessibilidade--alto-contraste .login__social-icone--google {
   .login {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(min-content, 1fr) minmax(min-content, 1fr);
-    min-height: 100dvh;
+    min-height: 0;
   }
 
   .login__formulario-painel {
