@@ -31,8 +31,6 @@ A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript n
 <img width="2858" height="1604" alt="mutirao-citizen-tech vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
 
 
----
-
 ## ✨ Principais Soluções e Diferenciais
 
 - **Passagem de cuidado integrada:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e na **Ficha**.
@@ -42,7 +40,6 @@ A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript n
 - **Acessibilidade e dois temas visuais:** Temas **Neutro** (`Inter`, `#4B5DA9`) e **Acolhedor** (neobrutalismo suave com `Onest`, `Gloock`, `Gochi Hand` e `#146A3A`), além de painel de recursos assistivos (alto contraste, escala de fonte, espaçamento de texto, destaque de links, redução de animações e VLibras).
 - **Assistente PontoBOT:** Web Component integrado para orientação de navegação em linguagem natural, com contingência local e backend dedicado.
 
----
 
 ## 📁 Estrutura do Projeto
 
@@ -93,7 +90,6 @@ CitizenTechFIAPChallenge/
 | Ajuda | `ajuda.html` | Perguntas frequentes e atendimento demonstrativo (`ajuda.js`) |
 | Privacidade | `privacidade.html` | Transparência sobre dados simulados, armazenamento local e integrações (`script.js`) |
 
----
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -103,7 +99,6 @@ CitizenTechFIAPChallenge/
 - **Node.js (`node:test`)** — executor nativo para validação automatizada das regras de negócio e persistência.
 - **Integrações externas:** Google Fonts, Font Awesome, Bootstrap Icons, VLibras, APIs IBGE/ViaCEP e assistente [PontoBOT](https://github.com/mewmewdevart/PontoBOT).
 
----
 
 ## 🚀 Como Executar Localmente
 
@@ -124,7 +119,6 @@ CitizenTechFIAPChallenge/
 
    Acesse `http://127.0.0.1:8000/` no navegador.
 
----
 
 ## 🧪 Qualidade e Testes Automatizados
 
@@ -144,7 +138,6 @@ Atualmente a suíte conta com **17 testes** distribuídos em **5 arquivos**:
 | `tests/turnos-escala.test.mjs` | 2 | Normalização de rotinas semanais, janela diária e cobertura pontual |
 | `tests/recorrencias-escala.test.mjs` | 6 | Exceções por data, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
 
----
 
 ## 👥 Integrantes — Grupo Ctrl + People
 
@@ -152,7 +145,10 @@ Atualmente a suíte conta com **17 testes** distribuídos em **5 arquivos**:
 - **Larissa Cristina Benedito** — RM 570970 — [rm570970@fiap.com.br](mailto:rm570970@fiap.com.br)
 - **Mayla Mayumi Motobe** — RM 571213 — [rm571213@fiap.com.br](mailto:rm571213@fiap.com.br)
 
----
+
+<div align="center">
+  <img  alt="Icone da Mari" src="https://github.com/user-attachments/assets/227e3796-35ed-431a-a4f0-d03852637bc9" />
+</div>
 
 ## 🔗 Referências e Publicação
 
