@@ -151,6 +151,19 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   min-height: var(--tamanho-alvo-toque);
 }
 
+.landing-final .botao--primario {
+  background: var(--cor-superficie);
+  border-color: var(--cor-superficie);
+  color: var(--cor-primaria);
+}
+
+.landing-final .botao--primario:hover,
+.landing-final .botao--primario:focus-visible {
+  background: var(--cor-superficie-suave);
+  border-color: var(--cor-superficie-suave);
+  color: var(--cor-primaria-hover);
+}
+
 .landing-conteudo {
   display: flex;
   flex-direction: column;
@@ -394,7 +407,7 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
 
 .landing-mensagem__figurinha {
   position: absolute;
-  inset: auto -4px 0 auto;
+  inset: auto 10px 0 auto;
   width: clamp(76px, 7.15vw, 103px);
   height: auto;
 }
@@ -606,7 +619,7 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   z-index: -1;
   inset: auto 0 0;
   height: clamp(180px, 21vw, 300px);
-  background: var(--landing-destaque-superficie);
+  background: var(--cor-primaria);
 }
 
 .landing-final__onda {
@@ -616,7 +629,7 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   display: block;
   width: 100%;
   height: clamp(110px, 22vw, 310px);
-  fill: var(--landing-destaque-superficie);
+  fill: var(--cor-primaria);
 }
 
 .landing-final__conteudo {
@@ -625,25 +638,50 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   display: grid;
   justify-items: center;
   gap: clamp(20px, 2.5vw, 32px);
-  width: min(100% - 32px, 290px);
+  width: min(860px, 78vw, 100% - 2 * clamp(16px, 2.7vw, 40px));
+}
+
+.landing-final__tablet {
+  position: relative;
+  width: 100%;
+  filter: drop-shadow(0 16px 32px color-mix(in srgb, var(--cor-neutra-escura-01) 18%, transparent));
+}
+
+.landing-final__moldura {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.landing-final__tela {
+  position: absolute;
+  inset: 4.05% 3.25% 4.15% 3.18%;
+  width: 93.57%;
+  height: 91.8%;
+  object-fit: cover;
+  border-radius: 1.5% / 2%;
+}
+
+.landing-final__tela--estatica {
+  display: none;
 }
 
 .landing-final__celular {
-  display: block;
+  display: none;
   width: min(100%, 260px);
   height: auto;
   filter: drop-shadow(0 14px 28px color-mix(in srgb, var(--cor-neutra-escura-01) 20%, transparent));
 }
 
 .landing-braco--verde {
-  inset: clamp(16px, 3vw, 48px) auto auto 0;
-  width: min(32vw, 460px);
+  inset: clamp(12px, 2.5vw, 36px) auto auto 0;
+  width: min(23vw, 340px);
   z-index: 0;
 }
 
 .landing-braco--amarelo {
-  inset: clamp(80px, 11vw, 160px) 0 auto auto;
-  width: min(30vw, 420px);
+  inset: clamp(72px, 10vw, 144px) 0 auto auto;
+  width: min(22vw, 320px);
   z-index: 0;
 }
 
@@ -684,6 +722,7 @@ html.acessibilidade--alto-contraste .landing-rolar {
 }
 
 html.acessibilidade--alto-contraste .landing-vitrine__celular,
+html.acessibilidade--alto-contraste .landing-final__tablet,
 html.acessibilidade--alto-contraste .landing-final__celular {
   filter: none;
 }
@@ -789,11 +828,27 @@ html.acessibilidade--alto-contraste .landing-final__celular {
   .landing-rolar {
     animation: none;
   }
+
+  .landing-final__tela--animada {
+    display: none;
+  }
+
+  .landing-final__tela--estatica {
+    display: block;
+  }
 }
 
 html.acessibilidade--reduzir-animacoes .landing-topo__menu.esta-aberto,
 html.acessibilidade--reduzir-animacoes .landing-rolar {
   animation: none;
+}
+
+html.acessibilidade--reduzir-animacoes .landing-final__tela--animada {
+  display: none;
+}
+
+html.acessibilidade--reduzir-animacoes .landing-final__tela--estatica {
+  display: block;
 }
 
 @media (max-width: 1100px) {
@@ -906,7 +961,16 @@ html.acessibilidade--reduzir-animacoes .landing-rolar {
     padding-block-end: 40px;
   }
 
+  .landing-final__conteudo {
+    width: min(100% - 32px, 290px);
+  }
+
+  .landing-final__tablet {
+    display: none;
+  }
+
   .landing-final__celular {
+    display: block;
     width: min(64vw, 230px);
   }
 
