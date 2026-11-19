@@ -115,4 +115,84 @@
   );
 
   atualizarSecaoAtiva();
+
+  const dialogoImagem = document.getElementById('dialogo-imagem-landing');
+  const tituloModal = document.getElementById('titulo-dialogo-imagem');
+  const palcoImagem = dialogoImagem?.querySelector('[data-dialogo-imagem-palco]');
+  const imagemModal = dialogoImagem?.querySelector('[data-dialogo-imagem-conteudo]');
+  const botaoFecharImagem = dialogoImagem?.querySelector('form[method="dialog"] button');
+  const gatilhosImagem = [...document.querySelectorAll('.landing-imagem-gatilho')];
+
+  if (dialogoImagem && palcoImagem && imagemModal && gatilhosImagem.length) {
+    let ultimoGatilhoImagem = null;
+    const tituloPadraoModal = tituloModal?.textContent.trim() || 'Visualização ampliada da tela';
+
+    const obterImagemVisivel = (gatilho) => {
+      const imagens = [...gatilho.querySelectorAll('img')];
+      return imagens.find((img) => getComputedStyle(img).display !== 'none') || imagens[0] || null;
+    };
+
+    const abrirModalImagem = (gatilho) => {
+      const origem = obterImagemVisivel(gatilho);
+      if (!origem) return;
+
+      const fonte = origem.currentSrc || origem.getAttribute('src');
+      if (!fonte) return;
+
+      if (botaoMenu.getAttribute('aria-expanded') === 'true') {
+        atualizarEstadoMenu(false);
+      }
+
+      ultimoGatilhoImagem = gatilho;
+      if (tituloModal) {
+        tituloModal.textContent = gatilho.dataset.tituloImagem || origem.alt || tituloPadraoModal;
+      }
+      imagemModal.src = fonte;
+      imagemModal.alt = origem.alt || '';
+      palcoImagem.classList.toggle(
+        'dialogo-mvp__imagem-palco--sem-moldura',
+        gatilho.classList.contains('landing-imagem-gatilho--sem-moldura')
+      );
+
+      if (!dialogoImagem.open && typeof dialogoImagem.showModal === 'function') {
+        dialogoImagem.showModal();
+      }
+      botaoFecharImagem?.focus({ preventScroll: true });
+    };
+
+    for (const gatilho of gatilhosImagem) {
+      gatilho.addEventListener('click', () => abrirModalImagem(gatilho));
+    }
+
+    const molduraTablet = document.querySelector('.landing-final__moldura');
+    const gatilhoTablet = document.querySelector('.landing-final__gatilho-tablet');
+    if (molduraTablet && gatilhoTablet) {
+      molduraTablet.addEventListener('click', () => abrirModalImagem(gatilhoTablet));
+    }
+
+    dialogoImagem.addEventListener('click', (evento) => {
+      if (evento.target === dialogoImagem) {
+        dialogoImagem.close();
+      }
+    });
+
+    dialogoImagem.addEventListener('close', () => {
+      if (tituloModal) {
+        tituloModal.textContent = tituloPadraoModal;
+      }
+      imagemModal.removeAttribute('src');
+      imagemModal.alt = '';
+      palcoImagem.classList.remove('dialogo-mvp__imagem-palco--sem-moldura');
+
+      const destino = ultimoGatilhoImagem;
+      ultimoGatilhoImagem = null;
+      if (destino && document.contains(destino) && destino.offsetParent !== null) {
+        requestAnimationFrame(() => {
+          if (!dialogoImagem.open) {
+            destino.focus({ preventScroll: true });
+          }
+        });
+      }
+    });
+  }
 })();

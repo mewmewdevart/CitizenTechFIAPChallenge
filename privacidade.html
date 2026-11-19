@@ -149,7 +149,8 @@
     <header class="apoio__cabecalho">
       <div>
         <h1>Como cuidamos dos seus dados</h1>
-        <p>Aqui explicamos, de um jeito simples, como o Mutirão cuida dos seus dados.</p>
+        <p>Aqui explicamos, de um jeito simples, como o Mutirão trata informações, armazenamento local e recursos
+          externos em toda a plataforma.</p>
       </div>
       <a class="botao botao--secundario" href="configuracoes.html">
         <i class="fa-solid fa-gear" aria-hidden="true"></i> Voltar às configurações
@@ -161,9 +162,10 @@
       <i class="fa-solid fa-shield-halved apoio__aviso-icone" aria-hidden="true"></i>
       <div>
         <strong>Use dados fictícios neste protótipo</strong>
-        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People. Esta versão roda
-          localmente no navegador, sem servidor próprio para cadastro ou compartilhamento real: não informe CPF, Cartão
-          SUS, exames ou dados sensíveis verdadeiros.</p>
+        <p>O Mutirão é um projeto acadêmico e de impacto social desenvolvido pelo Grupo Ctrl + People para a Global
+          Solution 2026 da FIAP (desafio Citizen Tech). Esta versão roda localmente no navegador, sem servidor próprio
+          para cadastro, autenticação ou compartilhamento real: não informe CPF, RG, Cartão SUS, convênio, diagnósticos,
+          exames ou dados sensíveis verdadeiros.</p>
       </div>
     </div>
 
@@ -173,31 +175,48 @@
           informação fica</h2>
       </div>
       <ul class="privacidade__lista">
-        <li><strong>Fica nesta aba (sessão e memória):</strong> alterações simuladas na ficha, agenda, medicamentos,
-          referências de documentos, perfil, convites e registros do formulário de Ajuda ficam disponíveis nesta sessão.
-        </li>
-        <li><strong>Permanece no navegador entre visitas:</strong> preferências de acessibilidade, tema visual e
-          respostas
-          concluídas do questionário de Direitos e serviços, guardadas por ficha acompanhada.</li>
-        <li><strong>Consulta serviços externos:</strong> a busca por CEP ou cidade em <a href="direitos.html">Direitos
-            e serviços</a> usa ViaCEP e IBGE. Ao enviar uma pergunta ao PontoBOT, o serviço do assistente recebe o texto
-          da conversa.</li>
+        <li><strong>Fica nesta aba (<code>sessionStorage</code> e memória):</strong> alterações simuladas na <a
+            href="ficha.html">Ficha</a> da pessoa acompanhada (inclusive foto ajustada no navegador), escala e
+          compromissos da <a href="agenda.html">Agenda</a>, doses e estoque de <a
+            href="medicamentos.html">Medicamentos</a>, relatos do Diário de passagem, referências de <a
+            href="documentos.html">Documentos</a>, <a href="pessoas.html">Pessoas da rede</a>, convites, <a
+            href="meu-perfil.html">Meu perfil</a> (mural de recados e pedidos de folga), preferências de avisos da
+          sessão, buscas recentes e registros do formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a>.</li>
+        <li><strong>Permanece no navegador entre visitas (<code>localStorage</code>):</strong> preferências de
+          acessibilidade, tema visual escolhido (Neutro ou Acolhedor) e resultados concluídos do questionário de <a
+            href="direitos.html">Direitos e serviços</a>, separados por ficha acompanhada.</li>
+        <li><strong>Consultas e recursos externos:</strong> a busca por CEP ou cidade/UF em <a
+            href="direitos.html">Direitos e serviços</a> consulta ViaCEP e IBGE (com atalhos ao Google Maps e portais
+          oficiais); nas telas internas, o assistente PontoBOT envia a pergunta ao serviço do chat; o widget VLibras, as
+          fontes e os ícones são carregados de serviços externos.</li>
+        <li><strong>Exportações e compartilhamentos sob demanda:</strong> exportação de calendário em <code>.ics</code>
+          na <a href="agenda.html">Agenda</a>, impressão da <a href="ficha.html">Ficha</a>, cópia de resumo e atalhos
+          para WhatsApp ou e-mail acontecem apenas quando você aciona essas opções.</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-dados">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos e
-          papéis na demonstração</h2>
+        <h2 id="titulo-privacidade-dados"><i class="fa-solid fa-database" aria-hidden="true"></i> 1. Dados exibidos,
+          entrada e papéis na demonstração</h2>
       </div>
-      <p>As informações exibidas na rotina de cuidado (turnos, medicações, referências de documentos e ficha da pessoa
-        acompanhada) representam um cenário fictício de organização familiar.</p>
+      <p>As informações apresentadas na rotina de cuidado pertencem a um cenário fictício carregado localmente (Zé da
+        Silva, Flavio Barbosa/Flavinho e Maria das Dores/Mari) para demonstrar turnos, medicações, referências de
+        documentos e ficha de saúde.</p>
       <ul class="privacidade__lista">
-        <li><strong>Papéis simulados localmente:</strong> os papéis exibidos na rede (como Administrador e Participante)
-          demonstram como a divisão de acesso funciona no produto, mas todos os dados desta versão ficam apenas na sua
-          sessão local.</li>
-        <li><strong>Formulário de Ajuda:</strong> não inclua diagnósticos, exames ou números de documentos pessoais na
-          demonstração de Ajuda.</li>
+        <li><strong>Entrada demonstrativa (login):</strong> a tela de entrada valida os campos apenas no navegador, sem
+          autenticação ou criação de conta em servidor. Os botões de acesso social (Facebook, Google e Apple) são apenas
+          ilustrativos e permanecem desabilitados.</li>
+        <li><strong>Papéis simulados localmente:</strong> os papéis exibidos na rede (Administrador e Participante)
+          demonstram a divisão de permissões para editar turnos, convidar pessoas e transferir a administração, mas todas
+          as ações ocorrem apenas na sua sessão local.</li>
+        <li><strong>Fotos e referências de documentos:</strong> fotos enviadas na edição da <a
+            href="ficha.html">Ficha</a> ou de <a href="meu-perfil.html">Meu perfil</a> são redimensionadas localmente no
+          próprio navegador (sem envio a servidor). O catálogo de <a href="documentos.html">Documentos</a> guarda apenas
+          título, observações, vínculo e nome do arquivo como referência, sem upload real de arquivos.</li>
+        <li><strong>Formulário de Ajuda:</strong> as mensagens enviadas em <a href="ajuda.html#formulario-ajuda">Ajuda</a>
+          ficam registradas apenas na sessão atual; não inclua diagnósticos, exames ou números de documentos pessoais.
+        </li>
       </ul>
     </section>
 
@@ -206,41 +225,57 @@
         <h2 id="titulo-privacidade-storage"><i class="fa-solid fa-hard-drive" aria-hidden="true"></i> 2. O que fica
           salvo no seu aparelho</h2>
       </div>
-      <p>O Mutirão não usa cookies de propaganda nem fica seguindo o que você faz. Só guarda no seu aparelho o que ajuda
-        a usar o site:</p>
+      <p>O Mutirão não utiliza cookies de publicidade, rastreamento ou ferramentas de analytics. O navegador armazena
+        apenas o necessário para que a demonstração e seus ajustes de uso funcionem:</p>
       <ul class="privacidade__lista">
-        <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas preferências assistivas
-          (tamanho de fonte, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave
-          <code>mutirao-acessibilidade-preferencias</code> e o tema visual escolhido (neutro ou acolhedor) na chave
-          <code>mutirao-tema</code>.
+        <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas escolhas assistivas
+          (tamanho do texto, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave
+          <code>mutirao-acessibilidade-preferencias</code> e o tema visual (Neutro ou Acolhedor) na chave
+          <code>mutirao-tema</code>, aplicados tanto na área pública quanto nas telas internas.</li>
+        <li><strong>Questionário de Direitos e serviços (<code>localStorage</code>):</strong> as respostas concluídas em
+          <a href="direitos.html">Direitos e serviços</a> ficam salvas por ficha na chave
+          <code>mutirao-direitos-simulador-v1</code>, mesmo após fechar a aba. Ao iniciar uma nova simulação na mesma
+          ficha, o resultado anterior é removido.</li>
+        <li><strong>Estado da rotina na sessão (<code>sessionStorage</code>):</strong> alterações na ficha, escala,
+          compromissos, doses, estoque, diário, documentos, perfil, recados, pedidos de folga, convites e chamados de
+          Ajuda ficam na chave <code>mutirao-mvp-estado-v2</code> (com leitura compatível da chave legada
+          <code>mutirao-mvp-estado-v1</code> quando presente), isolados por ficha acompanhada até o encerramento da aba.
         </li>
-        <li><strong>Estado da sessão (<code>sessionStorage</code>):</strong> guarda se o menu lateral está aberto ou
-          recolhido (<code>mutirao-menu-aberto</code>), avisos locais de Ajuda e Configurações, preferências de
-          configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha,
-          agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v2</code>). Os registros ficam
-          vinculados à ficha selecionada e permanecem no navegador até o encerramento da sessão.</li>
-        <li><strong>Questionário de Direitos e serviços (<code>localStorage</code>):</strong> as respostas concluídas
-          ficam na chave <code>mutirao-direitos-simulador-v1</code> por ficha, mesmo após fechar a aba. Ao começar
-          a refazer o questionário, o resultado anterior da ficha é removido.</li>
-        <li><strong>Formulário de Ajuda:</strong> as mensagens registradas ficam na sessão da aba.</li>
+        <li><strong>Interface e preferências da aba (<code>sessionStorage</code>):</strong> guarda as preferências de
+          avisos no sino e sons (<code>mutirao-configuracoes-sessao-v1</code>), notificações locais do sino
+          (<code>mutirao-notificacoes-sessao-v1</code>), estado aberto ou recolhido do menu lateral
+          (<code>mutirao-menu-aberto</code>) e termos recentes da busca global por ficha
+          (<code>mutirao-buscas-recentes-v2</code>).</li>
       </ul>
     </section>
 
     <section class="apoio__painel privacidade__secao" aria-labelledby="titulo-privacidade-apis">
       <div class="privacidade__cabecalho-card">
-        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas e serviços
-          externos</h2>
+        <h2 id="titulo-privacidade-apis"><i class="fa-solid fa-globe" aria-hidden="true"></i> 3. Consultas externas,
+          recursos de apoio e exportações</h2>
       </div>
-      <p>O Mutirão utiliza recursos externos apenas em funcionalidades específicas de apoio:</p>
+      <p>O Mutirão realiza conexões externas apenas em recursos específicos de apoio, acessibilidade e ações acionadas
+        por você:</p>
       <ul class="privacidade__lista">
-        <li><strong>Localização de serviços públicos (ViaCEP e IBGE):</strong> na página <a
-            href="direitos.html">Direitos e serviços</a>, caso você opte por buscar unidades por CEP ou cidade/UF, o
-          navegador realiza requisições diretas às APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong>
-          para identificar o município e exibir links oficiais do SUS, CRAS e Farmácia Popular.</li>
-        <li><strong>PontoBOT:</strong> o assistente é carregado junto com o Mutirão. Ao enviar uma pergunta, o
-          serviço externo do PontoBOT recebe a mensagem e o histórico recente do chat. A ficha e os registros do
-          cuidado ficam fora da requisição. Use o chat para dúvidas de navegação e evite incluir dados pessoais,
-          informações de saúde ou documentos.</li>
+        <li><strong>Localização de serviços públicos (ViaCEP, IBGE e atalhos externos):</strong> na página <a
+            href="direitos.html">Direitos e serviços</a>, ao buscar por CEP ou cidade/UF, o navegador consulta diretamente
+          as APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong> para identificar o município e montar
+          atalhos externos de busca de UBS e CRAS no <strong>Google Maps</strong> e páginas oficiais (SUS, Farmácia
+          Popular, INSS, BPC/LOAS e programas públicos).</li>
+        <li><strong>Assistente PontoBOT:</strong> disponível nas telas internas da plataforma para tirar dúvidas de
+          navegação. Ao enviar uma pergunta, o serviço externo do PontoBOT recebe apenas o texto enviado e o histórico
+          recente da conversa; a ficha acompanhada, medicações, documentos e registros de cuidado ficam fora da
+          requisição. Quando o serviço estiver indisponível, o assistente responde localmente com base de contingência.
+          Não informe dados pessoais ou de saúde no chat.</li>
+        <li><strong>Acessibilidade e recursos visuais (VLibras, fontes e ícones):</strong> todas as páginas carregam o
+          widget oficial de tradução em Libras (<strong>VLibras</strong>), além de folhas de estilo de tipografia
+          (<strong>Google Fonts</strong>, inclusive ao ativar o tema Acolhedor) e ícones (<strong>Font Awesome</strong>).
+        </li>
+        <li><strong>Exportações e compartilhamentos sob demanda:</strong> a exportação da agenda em arquivo
+          <code>.ics</code>, a impressão da ficha, a cópia de resumos em <a href="configuracoes.html">Configurações</a>
+          ou <a href="direitos.html">Direitos e serviços</a> e o compartilhamento via WhatsApp (<code>wa.me</code>),
+          e-mail (<code>mailto:</code>) ou compartilhamento nativo do navegador só ocorrem quando você clica nessas
+          opções.</li>
       </ul>
     </section>
 
@@ -250,11 +285,14 @@
           é só orientação</h2>
       </div>
       <ul class="privacidade__lista">
-        <li><strong>Orientação sobre benefícios e saúde:</strong> o resultado sobre direitos e os lembretes de remédio
-          só ajudam no dia a dia. Eles não substituem o médico nem o atendimento oficial do SUS, do INSS ou do CRAS.
-        </li>
-        <li><strong>Cuidado da família:</strong> quem administra a rede deve manter contatos, alergias e permissões em
-          dia antes de convidar alguém novo.</li>
+        <li><strong>Caráter orientativo sobre benefícios e saúde:</strong> o resultado do questionário de <a
+            href="direitos.html">Direitos e serviços</a>, os lembretes e saldos de <a
+            href="medicamentos.html">Medicamentos</a> e as respostas do PontoBOT têm finalidade exclusivamente educativa e
+          de apoio à organização; eles não substituem orientação médica, prescrição profissional nem atendimento oficial
+          do SUS, INSS, CRAS ou demais órgãos públicos.</li>
+        <li><strong>Responsabilidade no cuidado em família:</strong> em um uso real de apoio compartilhado, quem
+          administra a rede deve manter contatos de emergência, alergias, medicações e permissões atualizados antes de
+          compartilhar resumos ou convidar novos participantes.</li>
       </ul>
     </section>
 
@@ -264,10 +302,14 @@
           dados e limitações do protótipo</h2>
       </div>
       <p>O formulário de <a href="ajuda.html#formulario-ajuda">Ajuda</a> é apenas uma simulação de interface e
-        <strong>não envia nem processa solicitações reais de privacidade</strong>. Como os dados da rotina ficam apenas
-        no seu navegador, basta fechar a aba para encerrar a sessão; a opção “Restaurar preferências desta tela” em
-        Configurações redefine apenas as escolhas daquele formulário.
+        <strong>não envia nem processa solicitações reais de suporte ou privacidade</strong>. Como os dados da rotina
+        ficam apenas no seu navegador, fechar a aba encerra e descarta o estado da sessão (<code>sessionStorage</code>);
+        clicar em “Sair” volta para a tela de entrada mantendo os dados da demonstração naquela aba até ela ser fechada.
       </p>
+      <p>Para apagar também o tema visual, os ajustes de acessibilidade e os resultados do questionário de Direitos
+        (<code>localStorage</code>), limpe os dados de navegação do site no seu navegador. Na tela de <a
+          href="configuracoes.html">Configurações</a>, o botão “Restaurar preferências desta tela” redefine apenas as
+        escolhas daquele formulário.</p>
       <div class="privacidade__acoes">
         <a class="botao botao--primario" href="configuracoes.html">
           <i class="fa-solid fa-sliders" aria-hidden="true"></i> Ver configurações

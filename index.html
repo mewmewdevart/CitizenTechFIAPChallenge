@@ -104,8 +104,8 @@
       <section class="landing-hero" aria-labelledby="titulo-principal">
         <div class="landing-hero__texto">
           <h1 id="titulo-principal">O cuidar fica mais leve quando formamos um mutirão</h1>
-          <p>O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos
-            de quem recebe cuidado.</p>
+          <p>Cuidar de quem você ama não precisa pesar nos ombros de uma pessoa só. O Mutirão reúne, em um único lugar,
+            quem assume cada horário, os remédios, os recados da família e os direitos de quem recebe cuidado.</p>
           <div class="landing-hero__acoes">
             <a class="botao botao--primario" href="login.html">Acessar a demonstração</a>
             <a class="botao botao--secundario" href="#recursos">Ver funcionalidades</a>
@@ -113,23 +113,36 @@
         </div>
         <div class="landing-hero__vitrine" aria-label="Prévia das telas do Mutirão no celular e no computador">
           <figure class="landing-vitrine__janela landing-vitrine__janela--inicio">
-            <img src="assets/media/aplicacao/home.png"
-              alt="Tela de Início do Mutirão com os cuidados de hoje, alertas de horário e porta-remédios" width="1920"
-              height="911" />
+            <button type="button" class="landing-imagem-gatilho" data-titulo-imagem="Tela de Início"
+              aria-label="Ampliar imagem: Tela de Início do Mutirão com os cuidados de hoje, alertas de horário e porta-remédios">
+              <img src="assets/media/aplicacao/home.png"
+                alt="Tela de Início do Mutirão com os cuidados de hoje, alertas de horário e porta-remédios" width="1920"
+                height="911" />
+            </button>
           </figure>
           <figure class="landing-vitrine__janela landing-vitrine__janela--ficha">
-            <img src="assets/media/aplicacao/ficha.png"
-              alt="Ficha da pessoa acompanhada com alerta de alergia, último relato do diário e informações de saúde"
-              width="1920" height="911" loading="lazy" />
+            <button type="button" class="landing-imagem-gatilho" data-titulo-imagem="Ficha da pessoa acompanhada"
+              aria-label="Ampliar imagem: Ficha da pessoa acompanhada com alerta de alergia, último relato do diário e informações de saúde">
+              <img src="assets/media/aplicacao/ficha.png"
+                alt="Ficha da pessoa acompanhada com alerta de alergia, último relato do diário e informações de saúde"
+                width="1920" height="911" loading="lazy" />
+            </button>
           </figure>
           <figure class="landing-vitrine__janela landing-vitrine__janela--direitos">
-            <img src="assets/media/aplicacao/direitos.png"
-              alt="Tela de Direitos e serviços com questionário orientativo e busca por CEP" width="1920" height="911"
-              loading="lazy" />
+            <button type="button" class="landing-imagem-gatilho" data-titulo-imagem="Direitos e serviços"
+              aria-label="Ampliar imagem: Tela de Direitos e serviços com questionário orientativo e busca por CEP">
+              <img src="assets/media/aplicacao/direitos.png"
+                alt="Tela de Direitos e serviços com questionário orientativo e busca por CEP" width="1920" height="911"
+                loading="lazy" />
+            </button>
           </figure>
           <figure class="landing-vitrine__celular">
-            <img src="assets/media/aplicacao/mobile-home.png"
-              alt="Versão mobile do Mutirão exibindo a tela de Início no celular" width="389" height="705" />
+            <button type="button" class="landing-imagem-gatilho landing-imagem-gatilho--sem-moldura"
+              data-titulo-imagem="Mutirão no celular"
+              aria-label="Ampliar imagem: Versão mobile do Mutirão exibindo a tela de Início no celular">
+              <img src="assets/media/aplicacao/mobile-home.png"
+                alt="Versão mobile do Mutirão exibindo a tela de Início no celular" width="389" height="705" />
+            </button>
           </figure>
         </div>
       </section>
@@ -171,26 +184,26 @@
     <section class="landing-passos landing-container" id="como-funciona" aria-labelledby="titulo-passos">
       <div class="landing-passos__cabecalho">
         <h2 id="titulo-passos">Como o Mutirão organiza o cuidado em 3 passos</h2>
-        <p>Do cadastro inicial da ficha à divisão da rotina entre familiares e cuidadores.</p>
+        <p>Do primeiro registro de saúde até o combinado tranquilo entre familiares e cuidadores.</p>
       </div>
       <ol class="landing-passos__lista">
         <li class="landing-passo">
           <span class="landing-passo__numero" aria-hidden="true">1</span>
           <h3>Centralize a ficha e a rede</h3>
-          <p>Reúna alergias, condições de saúde, contatos e quem participa do cuidado sem depender de mensagens
-            perdidas.</p>
+          <p>Reúna alergias, condições de saúde, contatos de emergência e quem ajuda no dia a dia, sem precisar garimpar
+            mensagens perdidas.</p>
         </li>
         <li class="landing-passo">
           <span class="landing-passo__numero" aria-hidden="true">2</span>
           <h3>Combine turnos e remédios</h3>
-          <p>Assuma horários descobertos na agenda compartilhada e acompanhe doses e estoque no porta-remédios por
+          <p>Assuma horários descobertos na agenda compartilhada e acompanhe doses e estoque no porta-remédios de cada
             horário.</p>
         </li>
         <li class="landing-passo">
           <span class="landing-passo__numero" aria-hidden="true">3</span>
           <h3>Passe o turno e consulte direitos</h3>
-          <p>Registre recados no diário, organize referências de receitas e encontre serviços do SUS e benefícios na sua
-            cidade.</p>
+          <p>Deixe recados no diário para quem chega depois, organize onde ficam as receitas e encontre serviços do SUS
+            e benefícios na sua cidade.</p>
         </li>
       </ol>
     </section>
@@ -202,32 +215,41 @@
         <article class="landing-bloco">
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/recurso-agenda.png"
-                alt="Tela de Agenda exibindo calendário mensal com indicadores de cobertura, tarefas do dia, consulta na UBS e botões para baixar ou compartilhar"
-                width="1366" height="780" />
+              <button type="button" class="landing-imagem-gatilho"
+                data-titulo-imagem="Agenda do mês, tarefas e escala combinada"
+                aria-label="Ampliar imagem: Tela de Agenda exibindo calendário mensal com indicadores de cobertura, tarefas do dia, consulta na UBS e botões para baixar ou compartilhar">
+                <img src="assets/media/aplicacao/recurso-agenda.png"
+                  alt="Tela de Agenda exibindo calendário mensal com indicadores de cobertura, tarefas do dia, consulta na UBS e botões para baixar ou compartilhar"
+                  width="1366" height="780" />
+              </button>
             </figure>
             <img class="landing-braco landing-braco--azul" src="assets/media/ilustracoes/braco-esquerdo-1.svg" alt=""
               width="267" height="379" aria-hidden="true" />
           </div>
           <div class="landing-bloco__texto">
             <h3>Agenda do mês, tarefas e escala combinada</h3>
-            <p>Acompanhe o calendário mensal com o status de cada dia, veja os compromissos e tarefas de hoje em um só
-              lugar e assuma horários descobertos pontuais ou recorrentes sem depender de mensagens soltas no grupo.</p>
+            <p>Acompanhe no calendário como está a cobertura de cada dia, veja os compromissos e tarefas de hoje em um
+              só lugar e assuma horários descobertos pontuais ou recorrentes, sem depender de mensagens soltas no grupo.
+            </p>
           </div>
         </article>
 
         <article class="landing-bloco landing-bloco--invertido">
           <div class="landing-bloco__texto">
             <h3>Porta-remédios por horário e controle de estoque</h3>
-            <p>Confira rapidamente quais doses já foram dadas, quem registrou e o que ainda falta no dia, com opção de
-              desfazer sem medo, alerta de alergias em destaque e aviso antecipado quando algum item estiver acabando.
+            <p>Confira com tranquilidade quais doses já foram dadas, quem registrou e o que ainda falta no dia, com
+              opção de desfazer sem medo se errar, alerta de alergias em destaque e aviso antes que algum item acabe.
             </p>
           </div>
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/recurso-medicamentos.png"
-                alt="Tela de Medicamentos exibindo alerta de alergia, estoque baixo de Metformina e porta-remédios agrupado por horário"
-                width="1366" height="780" />
+              <button type="button" class="landing-imagem-gatilho"
+                data-titulo-imagem="Porta-remédios por horário e controle de estoque"
+                aria-label="Ampliar imagem: Tela de Medicamentos exibindo alerta de alergia, estoque baixo de Metformina e porta-remédios agrupado por horário">
+                <img src="assets/media/aplicacao/recurso-medicamentos.png"
+                  alt="Tela de Medicamentos exibindo alerta de alergia, estoque baixo de Metformina e porta-remédios agrupado por horário"
+                  width="1366" height="780" />
+              </button>
             </figure>
             <img class="landing-braco landing-braco--vermelho" src="assets/media/ilustracoes/braco-direito-1.svg" alt=""
               width="377" height="267" aria-hidden="true" />
@@ -237,30 +259,39 @@
         <article class="landing-bloco">
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/recurso-compartilhar.png"
-                alt="Janela Compartilhar resumo na Ficha permitindo escolher seções e enviar por cópia, WhatsApp ou e-mail"
-                width="1366" height="780" />
+              <button type="button" class="landing-imagem-gatilho"
+                data-titulo-imagem="Compartilhar resumo da ficha e agenda"
+                aria-label="Ampliar imagem: Janela Compartilhar resumo na Ficha permitindo escolher seções e enviar por cópia, WhatsApp ou e-mail">
+                <img src="assets/media/aplicacao/recurso-compartilhar.png"
+                  alt="Janela Compartilhar resumo na Ficha permitindo escolher seções e enviar por cópia, WhatsApp ou e-mail"
+                  width="1366" height="780" />
+              </button>
             </figure>
           </div>
           <div class="landing-bloco__texto">
             <h3>Compartilhe resumos e exporte compromissos</h3>
-            <p>Monte em segundos um resumo da ficha — escolhendo consultas, alergias, remédios de todo dia e relatos do
-              diário — para enviar por WhatsApp, e-mail ou cópia rápida, imprima a ficha completa e baixe a agenda em
-              arquivo <code>.ics</code> para o celular.</p>
+            <p>Monte em segundos um resumo da ficha escolhendo consultas, alergias, remédios de todo dia e relatos do
+              diário. Envie por WhatsApp, e-mail ou cópia rápida, imprima a ficha completa para levar à consulta e
+              baixe a agenda em arquivo <code>.ics</code> para o celular.</p>
           </div>
         </article>
 
         <article class="landing-bloco landing-bloco--invertido">
           <div class="landing-bloco__texto">
             <h3>Receitas, exames e rede organizada</h3>
-            <p>Guarde onde estão receitas, exames e laudos — na pasta de casa ou no celular de alguém da família —,
-              filtre por categoria em segundos e mantenha cada participante ciente dos papéis e permissões da rede.</p>
+            <p>Anote onde cada receita, exame ou laudo está guardado, seja na pasta de casa ou no celular de alguém da
+              família. Filtre por categoria em segundos e deixe claros os papéis e as permissões de quem participa do
+              cuidado.</p>
           </div>
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/recurso-documentos.png"
-                alt="Tela de Documentos mostrando receitas, ficha de atendimento, hemograma, campo de busca e filtros por tipo"
-                width="1366" height="780" />
+              <button type="button" class="landing-imagem-gatilho"
+                data-titulo-imagem="Documentos, receitas e exames"
+                aria-label="Ampliar imagem: Tela de Documentos mostrando receitas, ficha de atendimento, hemograma, campo de busca e filtros por tipo">
+                <img src="assets/media/aplicacao/recurso-documentos.png"
+                  alt="Tela de Documentos mostrando receitas, ficha de atendimento, hemograma, campo de busca e filtros por tipo"
+                  width="1366" height="780" />
+              </button>
             </figure>
           </div>
         </article>
@@ -268,30 +299,38 @@
         <article class="landing-bloco">
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/recurso-direitos.png"
-                alt="Tela de Direitos e serviços com banner orientativo de benefícios e busca de unidades por CEP ou cidade"
-                width="1366" height="780" />
+              <button type="button" class="landing-imagem-gatilho"
+                data-titulo-imagem="Direitos, benefícios e serviços públicos"
+                aria-label="Ampliar imagem: Tela de Direitos e serviços com banner orientativo de benefícios e busca de unidades por CEP ou cidade">
+                <img src="assets/media/aplicacao/recurso-direitos.png"
+                  alt="Tela de Direitos e serviços com banner orientativo de benefícios e busca de unidades por CEP ou cidade"
+                  width="1366" height="780" />
+              </button>
             </figure>
           </div>
           <div class="landing-bloco__texto">
             <h3>Direitos, benefícios e serviços públicos por perto</h3>
-            <p>Responda a 7 perguntas rápidas para descobrir possíveis apoios governamentais e localize postos de saúde
-              (UBS), CRAS e Farmácia Popular na sua cidade usando dados públicos do IBGE e ViaCEP.</p>
+            <p>Responda a 7 perguntas simples para conhecer possíveis apoios governamentais e localize postos de saúde
+              (UBS), CRAS e Farmácia Popular perto da família usando dados públicos do IBGE e do ViaCEP.</p>
           </div>
         </article>
 
         <article class="landing-bloco landing-bloco--invertido">
           <div class="landing-bloco__texto">
             <h3>Acessibilidade, leitura confortável e dois temas</h3>
-            <p>Cada pessoa pode adaptar o Mutirão ao seu ritmo de leitura: aumente o tamanho da fonte, ative alto
-              contraste, destaque links, reduza animações, aumente o espaçamento entre linhas, use o tradutor em Libras
-              (VLibras) ou alterne entre os temas Neutro e Acolhedor.</p>
+            <p>Cada pessoa cuida melhor quando a tela respeita o seu ritmo. Aumente o tamanho da fonte, ative alto
+              contraste, destaque links, reduza animações, amplie o espaçamento das linhas, use o tradutor em Libras
+              (VLibras) ou escolha entre os temas Neutro e Acolhedor.</p>
           </div>
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/recurso-acessibilidade.png"
-                alt="Painel Ajustes de leitura aberto no tema Acolhedor exibindo tamanho de texto, alto contraste, destaque de links e troca de tema"
-                width="1366" height="780" />
+              <button type="button" class="landing-imagem-gatilho"
+                data-titulo-imagem="Ajustes de leitura e acessibilidade"
+                aria-label="Ampliar imagem: Painel Ajustes de leitura aberto no tema Acolhedor exibindo tamanho de texto, alto contraste, destaque de links e troca de tema">
+                <img src="assets/media/aplicacao/recurso-acessibilidade.png"
+                  alt="Painel Ajustes de leitura aberto no tema Acolhedor exibindo tamanho de texto, alto contraste, destaque de links e troca de tema"
+                  width="1366" height="780" />
+              </button>
             </figure>
           </div>
         </article>
@@ -377,8 +416,8 @@
     <section class="landing-final" id="demonstracao" aria-labelledby="titulo-demonstracao">
       <div class="landing-final__cabecalho landing-container">
         <h2 id="titulo-demonstracao">Veja o Mutirão funcionando na prática</h2>
-        <p>Explore os fluxos reais no tablet ou entre agora na demonstração com os perfis de exemplo, sem criar conta.
-        </p>
+        <p>Explore os fluxos reais da plataforma ou entre agora na demonstração com os perfis de exemplo, sem precisar
+          criar conta.</p>
       </div>
 
       <div class="landing-final__palco">
@@ -395,27 +434,47 @@
           <div class="landing-final__tablet">
             <img class="landing-final__moldura" src="assets/media/aplicacao/tablet-template.png" alt="" width="1175"
               height="900" aria-hidden="true" />
-            <img class="landing-final__tela landing-final__tela--animada" src="assets/media/aplicacao/tablet-demo.webp"
-              alt="Demonstração animada do Mutirão navegando por turnos, agenda, medicamentos, direitos e PontoBOT"
-              width="1080" height="810" />
-            <img class="landing-final__tela landing-final__tela--estatica" src="assets/media/aplicacao/tablet-home.png"
-              alt="Tela inicial do Mutirão no computador e tablet exibindo os cuidados de hoje" width="1280"
-              height="960" loading="lazy" />
+            <button type="button" class="landing-imagem-gatilho landing-final__gatilho-tablet"
+              data-titulo-imagem="Demonstração do Mutirão no tablet"
+              aria-label="Ampliar demonstração do Mutirão no tablet">
+              <img class="landing-final__tela landing-final__tela--animada" src="assets/media/aplicacao/tablet-demo.webp"
+                alt="Demonstração animada do Mutirão navegando por turnos, agenda, medicamentos, direitos e PontoBOT"
+                width="1080" height="810" />
+              <img class="landing-final__tela landing-final__tela--estatica" src="assets/media/aplicacao/tablet-home.png"
+                alt="Tela inicial do Mutirão no computador e tablet exibindo os cuidados de hoje" width="1280"
+                height="960" loading="lazy" />
+            </button>
           </div>
-          <img class="landing-final__celular" src="assets/media/aplicacao/mobile-home.png"
-            alt="Tela inicial do Mutirão no celular mostrando os cuidados de hoje" width="290" height="605"
-            loading="lazy" />
+          <button type="button"
+            class="landing-imagem-gatilho landing-imagem-gatilho--sem-moldura landing-final__gatilho-celular"
+            data-titulo-imagem="Tela inicial do Mutirão no celular"
+            aria-label="Ampliar imagem: Tela inicial do Mutirão no celular mostrando os cuidados de hoje">
+            <img class="landing-final__celular" src="assets/media/aplicacao/mobile-home.png"
+              alt="Tela inicial do Mutirão no celular mostrando os cuidados de hoje" width="290" height="605"
+              loading="lazy" />
+          </button>
           <a class="botao botao--primario" href="login.html">Acessar a demonstração</a>
         </div>
       </div>
     </section>
+
+    <dialog class="dialogo-mvp dialogo-mvp--imagem" id="dialogo-imagem-landing" aria-labelledby="titulo-dialogo-imagem">
+      <div class="dialogo-mvp__cabecalho">
+        <h2 id="titulo-dialogo-imagem" class="dialogo-mvp__imagem-titulo">Visualização ampliada da tela</h2>
+        <form method="dialog"><button class="botao-icone" aria-label="Fechar visualização ampliada"><i
+              class="fa-solid fa-xmark" aria-hidden="true"></i></button></form>
+      </div>
+      <div class="dialogo-mvp__imagem-palco" data-dialogo-imagem-palco>
+        <img src="" alt="" data-dialogo-imagem-conteudo />
+      </div>
+    </dialog>
   </main>
 
   <footer class="rodape-site">
     <p>
-      <strong>Mutirão</strong> — Demonstração de protótipo criado para o desafio da FIAP, desenvolvido pela equipe
+      <strong>Mutirão</strong>: demonstração de protótipo criada para o desafio da FIAP pela equipe
       <strong>Ctrl + People</strong> (Ingrid Silva de Lima, Larissa Cristina Benedito e Mayla Mayumi Motobe) · 2026 ·
-      <a href="privacidade.html">Política de privacidade e dados</a>.
+      <a href="politica-de-privacidade.html" target="_blank" rel="noopener noreferrer">Política de privacidade e dados</a>.
     </p>
   </footer>
   <script src="assets/js/landing.js" defer></script>

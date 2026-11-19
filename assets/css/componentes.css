@@ -712,7 +712,8 @@ html.tema--acolhedor .filtros__opcao:active {
 
 body.menu-fechado .rodape-site,
 body.pagina-login .rodape-site,
-body.pagina-landing .rodape-site {
+body.pagina-landing .rodape-site,
+body.pagina-privacidade-publica .rodape-site {
   margin-left: 0;
 }
 

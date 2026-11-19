@@ -983,6 +983,18 @@ html .privacidade__secao:is(.apoio__painel) {
   color: var(--cor-texto-secundario);
 }
 
+.privacidade__secao :is(p, li) a {
+  color: var(--cor-primaria);
+  font-weight: var(--peso-semibold);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.privacidade__secao :is(p, li) a:hover,
+.privacidade__secao :is(p, li) a:focus-visible {
+  color: var(--cor-primaria-hover);
+}
+
 .privacidade__lista {
   margin: 0;
   padding-left: 1.25rem;
