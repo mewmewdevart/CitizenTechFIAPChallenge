@@ -23,7 +23,7 @@
 
 O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
 
-A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
+A plataforma reúne **13 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
 - **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
 - **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
@@ -59,6 +59,7 @@ CitizenTechFIAPChallenge/
 │   │   ├── configuracoes.css    # Preferências de avisos e seleção de tema
 │   │   ├── ajuda.css            # Perguntas frequentes e formulário demonstrativo
 │   │   ├── login.css            # Tela de entrada e mascotes interativos
+│   │   ├── landing.css          # Página inicial de apresentação do projeto
 │   │   └── mvp-telas.css        # Complementos de telas e calendário mensal
 │   ├── data/
 │   │   └── perfis-acompanhados.json  # Base fictícia de Mari e Flavio (referência 10/11/2026)
@@ -71,15 +72,16 @@ CitizenTechFIAPChallenge/
 │   ├── media/                   # Mascotes SVG, ícones, stickers, avatares e sons
 │   └── pontobot/                # Cópia local do Web Component PontoBOT e base de contingência
 ├── tests/                       # Suíte automatizada com node:test (26 testes)
-├── *.html                       # 12 páginas HTML semânticas na raiz
+├── *.html                       # 13 páginas HTML semânticas na raiz
 └── README.md                    # Documentação do projeto
 ```
 
-### Páginas do Protótipo (12 telas)
+### Páginas do Protótipo (13 telas)
 
 | Página | Arquivo | Responsabilidade |
 | :--- | :--- | :--- |
-| Entrada | `index.html` | Acesso demonstrativo, validação e mascotes (`login.js`) |
+| Apresentação | `index.html` | Landing page de boas-vindas e acesso à demonstração (`landing.css`) |
+| Entrada | `login.html` | Acesso demonstrativo, validação e mascotes (`login.js`) |
 | Início | `home.html` | Prioridades do turno, porta-remédios, próximos compromissos e passagem (`inicio.js`, `porta-remedios.js`) |
 | Agenda | `agenda.html` | Calendário mensal, exportação ICS, tarefas e escala (`agenda.js`) |
 | Medicamentos | `medicamentos.html` | Doses por horário, anotações, itens e estoque (`medicamentos.js`, `porta-remedios.js`) |

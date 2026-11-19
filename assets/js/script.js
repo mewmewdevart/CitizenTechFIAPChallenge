@@ -395,7 +395,7 @@ const criarDialogoSair = () => {
     } catch {
       // Ignora erro caso o navegador bloqueie storage local
     }
-    location.href = 'index.html';
+    location.href = 'login.html';
   });
   document.body.append(dialogo);
   return dialogo;

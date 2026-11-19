@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- SEO Principal -->
-  <title>Mutirão | Entrar na Plataforma de Cuidado Compartilhado</title>
+  <title>Mutirão | Plataforma de Cuidado Compartilhado</title>
   <meta name="description"
-    content="Acesse o Mutirão para organizar a rotina, dividir responsabilidades e acompanhar quem precisa de cuidado junto de familiares e cuidadores." />
+    content="O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos de quem recebe cuidado." />
   <meta name="robots" content="index, follow" />
   <meta name="application-name" content="Mutirão" />
   <meta name="author"
@@ -19,15 +19,15 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:site_name" content="Mutirão" />
-  <meta property="og:title" content="Mutirão | Entrar na Plataforma de Cuidado Compartilhado" />
+  <meta property="og:title" content="Mutirão | Plataforma de Cuidado Compartilhado" />
   <meta property="og:description"
-    content="Acesse o Mutirão para organizar a rotina, dividir responsabilidades e acompanhar quem precisa de cuidado junto de familiares e cuidadores." />
+    content="O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos de quem recebe cuidado." />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Mutirão | Entrar na Plataforma de Cuidado Compartilhado" />
+  <meta name="twitter:title" content="Mutirão | Plataforma de Cuidado Compartilhado" />
   <meta name="twitter:description"
-    content="Acesse o Mutirão para organizar a rotina, dividir responsabilidades e acompanhar quem precisa de cuidado junto de familiares e cuidadores." />
+    content="O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos de quem recebe cuidado." />
 
   <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/" />
   <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/" />
@@ -56,351 +56,248 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <link rel="stylesheet" href="assets/css/componentes.css" />
-  <link rel="stylesheet" href="assets/css/login.css" />
+  <link rel="stylesheet" href="assets/css/landing.css" />
   <script src="assets/js/acessibilidade.js" defer></script>
-  <script src="assets/js/login.js" defer></script>
 </head>
 
-<body class="pagina-login">
+<body class="pagina-landing" id="topo">
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
 
-  <main class="login">
-    <section class="login__apresentacao" aria-labelledby="titulo-boas-vindas">
-      <div class="login__apresentacao-conteudo">
-        <svg class="login__ilustracao" data-mascotes role="img" aria-labelledby="titulo-mascotes" overflow="visible"
-          width="490" height="120" viewBox="0 0 490 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <title id="titulo-mascotes">Ilustração dos mascotes do Mutirão de mãos dadas</title>
-          <g class="mascote mascote--1" style="transform-origin: 62px 112px">
-            <path
-              d="M32.9998 61.5C27.6665 66.1667 26.3332 71.8333 28.9998 78.5M49.4998 85C49.4998 93 47.8332 100.5 44.4998 107.5H38.4998M71.4998 85C71.4998 93 72.9998 100.5 75.9998 107.5H82.4998"
-              stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke="#8495E1" />
-            <path
-              d="M29 81L34 73.5L24 56L39 49L35.5 34.5L50 36.5L56.5 23.5L63.5 29.5L73.5 20L85 30.5L95 21.5L97 52C100.333 69.6667 95.8333 82.5 83.5 90.5C60.8333 98.5 42.6667 95.3333 29 81Z"
-              fill="#8495E1" />
-            <path class="mascote-boca mascote-boca--normal" d="M54 64C57.3333 67.6667 60.6667 67.6667 64 64H54Z"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M48.5 54C50.5 56 52.5 56 54.5 54" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="51.5" data-cy="54.6">
-                  <circle cx="51.5" cy="54.6" r="2.5" fill="#423651" />
-                  <circle cx="50.7" cy="53.7" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M62 54C64 56 66 56 68 54" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="65" data-cy="54.6">
-                  <circle cx="65" cy="54.6" r="2.5" fill="#423651" />
-                  <circle cx="64.2" cy="53.7" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <rect x="78" y="54" width="8" height="16" fill="#8495E1" />
-            <ellipse class="mascote-bochecha" cx="48.3" cy="59.800000000000004" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-bochecha" cx="68.2" cy="59.800000000000004" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-boca mascote-boca--o" cx="59" cy="66.19999999999999" rx="2.3" ry="2.9"
-              fill="#423651" />
-            <path class="mascote-boca mascote-boca--sorriso"
-              d="M54.4 64.39999999999999H63.6C63.2 69.39999999999999 54.8 69.39999999999999 54.4 64.39999999999999Z"
-              fill="#423651" stroke="#423651" stroke-width="1.4" stroke-linejoin="round" />
-          </g>
-          <g class="mascote mascote--2" style="transform-origin: 135px 112px">
-            <path
-              d="M107.5 65.9996C100.5 61.6663 93 60.333 85 61.9996M124 89.4996C124 97.4996 122.333 105 119 112H113M146 89.4996C146 97.4996 147.5 105 150.5 112H157"
-              stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke="#FFB7DA" />
-            <path
-              d="M118.5 93C116 77.9998 134 83.8331 146 83.4998C151 83.1664 152.167 81.3331 149.5 77.9998C129.5 80.4998 110.5 72.4998 104 57.4998C98.0002 42.4998 102 27.4998 112 25.9998C122 23.9998 128 30.9998 128 40.9998C128 47.9998 134 49.9998 144.5 49.4998C163.5 47.9998 176.5 57.9998 175.5 71.4998C174.834 85.4998 167.667 93.9998 154 96.9998C141.334 99.6664 130.5 97.6667 118.5 93Z"
-              fill="#FFB7DA" />
-            <path class="mascote-boca mascote-boca--normal" d="M111.5 44.5C114.5 47.1667 117.333 47.1667 120 44.5"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M106.4 38.9C107.7 36.9 110.3 36.9 111.6 38.9" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="109" data-cy="38.5">
-                  <circle cx="109" cy="38.5" r="2.5" fill="#423651" />
-                  <circle cx="108.2" cy="37.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M119.4 38.9C120.7 36.9 123.3 36.9 124.6 38.9" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="122" data-cy="38.5">
-                  <circle cx="122" cy="38.5" r="2.5" fill="#423651" />
-                  <circle cx="121.2" cy="37.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <rect x="158.082" y="45" width="29" height="27.5956" rx="13.7978" transform="rotate(46.6961 158.082 45)"
-              fill="#FFB7DA" />
-            <ellipse class="mascote-bochecha" cx="105.8" cy="43.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-bochecha" cx="125.2" cy="43.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-boca mascote-boca--o" cx="115.75" cy="46.6" rx="2.3" ry="2.9" fill="#423651" />
-            <path class="mascote-boca mascote-boca--sorriso"
-              d="M111.15 44.8H120.35C119.95 49.8 111.55 49.8 111.15 44.8Z" fill="#423651" stroke="#423651"
-              stroke-width="1.4" stroke-linejoin="round" />
-          </g>
-          <g class="mascote mascote--3" style="transform-origin: 210px 112px">
-            <path
-              d="M182 61.9996C175 57.6663 167.5 56.333 159.5 57.9996M198.5 85.4996C198.5 93.4996 196.833 101 193.5 108H187.5M220.5 85.4996C220.5 93.4996 222 101 225 108H231.5"
-              stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke="#19BDB7" />
-            <path
-              d="M175.5 77.9998C175 59.4998 178 44.4998 188.5 32.9998C200.5 19.4998 218.5 14.9998 236.5 16.4998C242.833 16.8331 246.667 19.9998 248 25.9998V66.4998C248.333 84.8331 238.833 94.3331 219.5 94.9998H204.5C190.167 94.9998 180.5 89.3331 175.5 77.9998Z"
-              fill="#19BDB7" />
-            <path class="mascote-boca mascote-boca--normal" d="M206 60.5L210.5 63.5L215.5 60" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M198.9 49.9C200.2 47.9 202.8 47.9 204.1 49.9" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="201.5" data-cy="49.5">
-                  <circle cx="201.5" cy="49.5" r="2.5" fill="#423651" />
-                  <circle cx="200.7" cy="48.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M217.9 49.9C219.2 47.9 221.8 47.9 223.1 49.9" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="220.5" data-cy="49.5">
-                  <circle cx="220.5" cy="49.5" r="2.5" fill="#423651" />
-                  <circle cx="219.7" cy="48.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <rect x="229.079" y="49" width="20.1498" height="19.6245" rx="9.81223" transform="rotate(15 229.079 49)"
-              fill="#19BDB7" />
-            <ellipse class="mascote-bochecha" cx="198.3" cy="54.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-bochecha" cx="223.7" cy="54.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-boca mascote-boca--o" cx="210.7" cy="62.6" rx="2.3" ry="2.9" fill="#423651" />
-            <path class="mascote-boca mascote-boca--sorriso"
-              d="M206.1 60.8H215.29999999999998C214.89999999999998 65.8 206.5 65.8 206.1 60.8Z" fill="#423651"
-              stroke="#423651" stroke-width="1.4" stroke-linejoin="round" />
-          </g>
-          <g class="mascote mascote--4" style="transform-origin: 285px 112px">
-            <path
-              d="M256.5 64.0001C249.5 59.6668 242 58.3334 234 60.0001M273 87.5001C273 95.5001 271.333 103 268 110H262M295 87.5001C295 95.5001 296.5 103 299.5 110H306"
-              stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke="#FFBA14" />
-            <path
-              d="M266 25.5H301L320 79.5C321.667 85.5 319.167 89.6667 312.5 92C293.833 98.3333 274.667 98.3333 255 92C249.667 90 247.833 86 249.5 80L266 25.5Z"
-              fill="#FFBA14" />
-            <path class="mascote-boca mascote-boca--normal"
-              d="M277.5 62.5H289C285.333 66.8333 281.5 66.8333 277.5 62.5Z" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" stroke="#423651" />
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M273 54C275 51.3333 277 51.3333 279 54" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="276" data-cy="53.5">
-                  <circle cx="276" cy="53.5" r="2.5" fill="#423651" />
-                  <circle cx="275.2" cy="52.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M287.5 54C289.5 51.3333 291.5 51.3333 293.5 54" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="290.5" data-cy="53.5">
-                  <circle cx="290.5" cy="53.5" r="2.5" fill="#423651" />
-                  <circle cx="289.7" cy="52.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <rect x="308.153" y="46.7588" width="20.1498" height="11.4898" transform="rotate(63.4466 308.153 46.7588)"
-              fill="#FFBA14" />
-            <ellipse class="mascote-bochecha" cx="272.8" cy="58.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-bochecha" cx="293.7" cy="58.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-boca mascote-boca--o" cx="283.2" cy="64.8" rx="2.3" ry="2.9" fill="#423651" />
-            <path class="mascote-boca mascote-boca--sorriso"
-              d="M278.59999999999997 63.0H287.8C287.4 68.0 279.0 68.0 278.59999999999997 63.0Z" fill="#423651"
-              stroke="#423651" stroke-width="1.4" stroke-linejoin="round" />
-          </g>
-          <g class="mascote mascote--5" style="transform-origin: 360px 112px">
-            <path
-              d="M331 60.0001C324 55.6668 316.5 54.3334 308.5 56.0001M347.5 83.5001C347.5 91.5001 345.833 99.0001 342.5 106H336.5M369.5 83.5001C369.5 91.5001 371 99.0001 374 106H380.5"
-              stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke="#FF435A" />
-            <path
-              d="M352 92.5C349.5 83.5 343.5 81 337 82C325 84 320 76 321 66.5C322 57 329 50.5 339 49C334 38 335.5 26.5 343.5 20C355 10.5 371.5 17.5 374 37C387 32.5 398.5 39.5 401 51C403.5 62.5 395.5 72 384.5 76C378.167 79.3333 373.833 84.1667 375.5 90.5C367.5 95.8333 361 96.5 352 92.5Z"
-              fill="#FF435A" />
-            <path class="mascote-boca mascote-boca--normal"
-              d="M352.5 65.5C356.167 67.1667 359.667 66.6667 363 64C362.667 69.3333 360.667 71.8333 357 71.5C354.667 71.1667 353.167 69.1667 352.5 65.5Z"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M344 58C346.333 60.3333 348.667 60.1667 351 57.5" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="347.5" data-cy="58.6">
-                  <circle cx="347.5" cy="58.6" r="2.5" fill="#423651" />
-                  <circle cx="346.7" cy="57.7" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M360.5 56.5C362.833 58.5 365.167 58.1667 367.5 55.5"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="364" data-cy="56.8">
-                  <circle cx="364" cy="56.8" r="2.5" fill="#423651" />
-                  <circle cx="363.2" cy="55.9" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <rect x="376.079" y="50" width="20.1498" height="19.6245" rx="9.81223" transform="rotate(15 376.079 50)"
-              fill="#FF435A" />
-            <ellipse class="mascote-bochecha" cx="344.3" cy="63.800000000000004" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-bochecha" cx="367.2" cy="62.0" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-boca mascote-boca--o" cx="357.7" cy="68.1" rx="2.3" ry="2.9" fill="#423651" />
-            <path class="mascote-boca mascote-boca--sorriso"
-              d="M353.09999999999997 66.3H362.3C361.9 71.3 353.5 71.3 353.09999999999997 66.3Z" fill="#423651"
-              stroke="#423651" stroke-width="1.4" stroke-linejoin="round" />
-          </g>
-          <g class="mascote mascote--6" style="transform-origin: 435px 112px">
-            <path
-              d="M405.5 65.0001C398.5 60.6668 391 59.3334 383 61.0001M422 88.5001C422 96.5001 420.333 104 417 111H411M444 88.5001C444 96.5001 445.5 104 448.5 111H455"
-              stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke="#FF811F" />
-            <path
-              d="M399.5 81.0001V49.5001C399.5 36.0001 411 31.5001 421 37.5001L433 44.5001L445.5 37.5001C455.5 31.5001 467 36.5001 467 49.5001V81.0001C467 90.0001 462.333 95.1668 453 96.5001H414C404.333 95.1668 399.5 90.0001 399.5 81.0001Z"
-              fill="#FF811F" />
-            <path class="mascote-boca mascote-boca--normal" d="M425.5 63C430.5 68 435.5 67.6667 440.5 62"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M421.4 56.4C422.7 54.4 425.3 54.4 426.6 56.4" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="424" data-cy="56">
-                  <circle cx="424" cy="56" r="2.5" fill="#423651" />
-                  <circle cx="423.2" cy="55.1" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <g class="mascote-olho">
-              <path class="mascote-olho__fechado" d="M436.9 54.9C438.2 52.9 440.8 52.9 442.1 54.9" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" stroke="#423651" />
-              <g class="mascote-olho__aberto">
-                <g class="mascote-olho__pupila" data-cx="439.5" data-cy="54.5">
-                  <circle cx="439.5" cy="54.5" r="2.5" fill="#423651" />
-                  <circle cx="438.7" cy="53.6" r="0.85" fill="#FFFFFF" />
-                </g>
-              </g>
-            </g>
-            <ellipse class="mascote-bochecha" cx="420.8" cy="61.2" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-bochecha" cx="442.7" cy="59.7" rx="2.8" ry="1.6" fill="#FF6F91" />
-            <ellipse class="mascote-boca mascote-boca--o" cx="433" cy="65.6" rx="2.3" ry="2.9" fill="#423651" />
-            <path class="mascote-boca mascote-boca--sorriso" d="M428.4 63.8H437.6C437.2 68.8 428.8 68.8 428.4 63.8Z"
-              fill="#423651" stroke="#423651" stroke-width="1.4" stroke-linejoin="round" />
-          </g>
-          <g class="mascote mascote--1" style="transform-origin: 62px 112px">
-            <path d="M88.5 61C92.8333 68.3333 99.1667 69.5 107.5 64.5" stroke-width="13" stroke-linecap="round"
-              stroke="#8495E1" />
-          </g>
-          <g class="mascote mascote--2" style="transform-origin: 135px 112px">
-            <path d="M163 65.5C167.333 72.8333 173.667 74 182 69" stroke-width="13" stroke-linecap="round"
-              stroke="#FFB7DA" />
-          </g>
-          <g class="mascote mascote--3" style="transform-origin: 210px 112px">
-            <path d="M237.5 61.5C241.833 68.8333 248.167 70 256.5 65" stroke-width="13" stroke-linecap="round"
-              stroke="#19BDB7" />
-          </g>
-          <g class="mascote mascote--4" style="transform-origin: 285px 112px">
-            <path d="M312 63.5C316.333 70.8333 322.667 72 331 67" stroke-width="13" stroke-linecap="round"
-              stroke="#FFBA14" />
-          </g>
-          <g class="mascote mascote--5" style="transform-origin: 360px 112px">
-            <path d="M386.5 59.5C390.833 66.8333 397.167 68 405.5 63" stroke-width="13" stroke-linecap="round"
-              stroke="#FF435A" />
-          </g>
-          <g class="mascote mascote--6" style="transform-origin: 435px 112px">
-            <path d="M462.5 64.5C469.167 68.5 471 74.3333 468 82" stroke-width="13" stroke-linecap="round"
-              stroke="#FF811F" />
-          </g>
-        </svg>
-        <h1 id="titulo-boas-vindas">O cuidar fica mais leve quando formamos um mutirão.</h1>
-        <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir tarefas e acompanhar a saúde no
-          cuidado compartilhado.</p>
+  <header class="landing-topo">
+    <div class="landing-topo__conteudo landing-container">
+      <a class="landing-topo__marca" href="#topo" aria-label="Mutirão — Voltar ao topo">
+        <img src="assets/media/marca/logo-mutirao.svg" alt="" width="44" height="44" aria-hidden="true" />
+        <span>Mutirão</span>
+      </a>
+      <nav class="landing-topo__nav" aria-label="Seções da página">
+        <a href="#topo">Início</a>
+        <a href="#conversa">Para quem é</a>
+        <a href="#recursos">Funcionalidades</a>
+        <a href="#faq">FAQ</a>
+        <a href="#demonstracao">Demonstração</a>
+      </nav>
+      <a class="botao botao--primario landing-topo__cta" href="login.html">Acessar a demonstração</a>
+    </div>
+  </header>
+
+  <main class="landing-conteudo" id="conteudo" tabindex="-1">
+    <section class="landing-hero landing-container" aria-labelledby="titulo-principal">
+      <div class="landing-hero__texto">
+        <h1 id="titulo-principal">O cuidar fica mais leve quando formamos um mutirão</h1>
+        <p>O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos de
+          quem recebe cuidado.</p>
+      </div>
+      <div class="landing-hero__vitrine" aria-label="Prévia das telas do Mutirão no celular e no computador">
+        <figure class="landing-vitrine__janela landing-vitrine__janela--inicio">
+          <img src="assets/media/aplicacao/home.png"
+            alt="Tela de Início do Mutirão com os cuidados de hoje, alertas de horário e porta-remédios" width="1920"
+            height="911" />
+        </figure>
+        <figure class="landing-vitrine__janela landing-vitrine__janela--ficha">
+          <img src="assets/media/aplicacao/ficha.png"
+            alt="Ficha da pessoa acompanhada com alerta de alergia, último relato do diário e informações de saúde"
+            width="1920" height="911" loading="lazy" />
+        </figure>
+        <figure class="landing-vitrine__janela landing-vitrine__janela--direitos">
+          <img src="assets/media/aplicacao/direitos.png"
+            alt="Tela de Direitos e serviços com questionário orientativo e busca por CEP" width="1920" height="911"
+            loading="lazy" />
+        </figure>
+        <figure class="landing-vitrine__celular">
+          <img src="assets/media/aplicacao/mobile-home.png"
+            alt="Versão mobile do Mutirão exibindo a tela de Início no celular" width="389" height="705" />
+        </figure>
       </div>
     </section>
 
-    <section class="login__formulario-painel" id="conteudo" tabindex="-1" aria-labelledby="titulo-login">
-      <div class="login__caixa">
-        <img class="login__marca" src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" />
-        <h2 class="login__titulo" id="titulo-login">Experimente o Mutirão</h2>
-        <p class="login__descricao">Entre no protótipo do Mutirão para organizar a rotina de cuidado.</p>
-        <form class="login__form" data-login-form novalidate>
-          <fieldset class="login__campo">
-            <legend>E-mail</legend>
-            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
-            <input type="email" name="email" value="ze.silva@example.com" autocomplete="email" aria-label="E-mail"
-              required />
-          </fieldset>
+    <section class="landing-grupo landing-container" id="conversa" aria-label="Conversa no grupo da família">
+      <ol class="landing-grupo__mensagens">
+        <li class="landing-mensagem landing-mensagem--mae">
+          <img src="assets/media/mascotes/icone-mascote-espeto.svg" alt="" width="48" height="48" aria-hidden="true" />
+          <p class="landing-mensagem__balao"><strong>~ Mãe</strong> Alguém ficou de buscar o remédio?</p>
+        </li>
+        <li class="landing-mensagem landing-mensagem--cuidadora">
+          <img src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" width="48" height="48" aria-hidden="true" />
+          <p class="landing-mensagem__balao"><strong>~ Cuidadora</strong> Quem fica com a vó depois do almoço?</p>
+        </li>
+        <li class="landing-mensagem landing-mensagem--primo">
+          <img src="assets/media/mascotes/icone-mascote-pingo.svg" alt="" width="48" height="48" aria-hidden="true" />
+          <p class="landing-mensagem__balao"><strong>~ Primo</strong> Cadê a receita do cardiologista?</p>
+        </li>
+        <li class="landing-mensagem landing-mensagem--vizinho">
+          <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" width="48" height="48" aria-hidden="true" />
+          <p class="landing-mensagem__balao"><strong>~ Vizinho</strong> Ela já tomou o remédio das 8h?</p>
+        </li>
+        <li class="landing-mensagem landing-mensagem--resposta">
+          <p class="landing-mensagem__balao">Deixei tudo no Mutirão!</p>
+          <img class="landing-mensagem__figurinha" src="assets/media/figurinhas/mari-cafe.webp" alt="" width="103"
+            height="98" aria-hidden="true" />
+        </li>
+      </ol>
+    </section>
 
-          <fieldset class="login__campo">
-            <legend>Senha</legend>
-            <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            <input type="password" name="senha" value="mutirao1234567890" autocomplete="current-password"
-              aria-label="Senha" minlength="4" required />
-            <button type="button" class="login__ver-senha" data-ver-senha aria-pressed="false"
-              aria-label="Mostrar senha">
-              <svg class="login__icone-olho" data-icone="mostrar" viewBox="0 0 24 24" width="20" height="20" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true">
-                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <svg class="login__icone-olho" data-icone="esconder" viewBox="0 0 24 24" width="20" height="20"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true" hidden>
-                <path
-                  d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-2.9 3.9M6.6 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6" />
-                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-                <path d="m3 3 18 18" />
-              </svg>
-            </button>
-          </fieldset>
+    <section class="landing-recursos" id="recursos" aria-labelledby="titulo-recursos">
+      <div class="landing-container">
+        <h2 id="titulo-recursos">Tudo o que a rede precisa em um só lugar</h2>
 
-          <div class="login__opcoes">
-            <label class="login__lembrar">
-              <input type="checkbox" name="manterConectado" />
-              <span>Manter-me conectado</span>
-            </label>
-            <a class="login__link" href="#esqueceu-senha" data-login-esqueci aria-disabled="true" tabindex="-1">Esqueceu
-              a senha?</a>
+        <article class="landing-bloco">
+          <div class="landing-bloco__visual">
+            <figure class="landing-bloco__previa">
+              <img src="assets/media/aplicacao/home.png"
+                alt="Tela de Início mostrando quem cuida no horário, alertas de cobertura e próximos compromissos"
+                width="1920" height="911" loading="lazy" />
+            </figure>
+            <img class="landing-braco landing-braco--azul" src="assets/media/ilustracoes/braco-esquerdo-1.svg" alt=""
+              width="267" height="379" aria-hidden="true" />
           </div>
+          <div class="landing-bloco__texto">
+            <h3>Escala clara e avisos do turno</h3>
+            <p>Veja quem está cuidando agora, identifique rapidamente qualquer horário sem ninguém e assuma turnos
+              pontuais ou recorrentes sem depender de mensagens soltas no grupo.</p>
+          </div>
+        </article>
 
-          <button type="submit" class="botao botao--primario login__entrar">Entrar na demonstração</button>
-        </form>
+        <article class="landing-bloco landing-bloco--invertido">
+          <div class="landing-bloco__texto">
+            <h3>Porta-remédios e controle de estoque</h3>
+            <p>Acompanhe as doses organizadas por horário, registre o que já foi dado com autoria e receba alertas
+              antecipados quando algum medicamento estiver acabando.</p>
+          </div>
+          <div class="landing-bloco__visual">
+            <figure class="landing-bloco__previa">
+              <img src="assets/media/aplicacao/medicamentos.png"
+                alt="Tela de Medicamentos exibindo o porta-remédios por horário, doses dadas e alerta de estoque baixo"
+                width="1920" height="911" loading="lazy" />
+            </figure>
+            <img class="landing-braco landing-braco--vermelho" src="assets/media/ilustracoes/braco-direito-1.svg" alt=""
+              width="377" height="267" aria-hidden="true" />
+          </div>
+        </article>
 
-        <p class="login__cadastro">Ainda não tem uma conta? <a class="login__link" href="#cadastre-se"
-            data-login-cadastro aria-disabled="true" tabindex="-1">Cadastre-se</a></p>
+        <article class="landing-bloco">
+          <div class="landing-bloco__visual">
+            <figure class="landing-bloco__previa">
+              <img src="assets/media/aplicacao/ficha.png"
+                alt="Ficha da pessoa acompanhada com alergia à dipirona, último relato do diário e dados de saúde"
+                width="1920" height="911" loading="lazy" />
+            </figure>
+          </div>
+          <div class="landing-bloco__texto">
+            <h3>Ficha única e diário da passagem de turno</h3>
+            <p>Reúna alergias, condições de saúde, contatos e o relato de quem cuidou antes para que a próxima pessoa
+              assuma o turno com todo o contexto em mãos.</p>
+          </div>
+        </article>
 
-        <div class="login__divisor" aria-hidden="true"><span>Ou entre com</span></div>
+        <article class="landing-bloco landing-bloco--invertido">
+          <div class="landing-bloco__texto">
+            <h3>Direitos, serviços públicos e rede de apoio</h3>
+            <p>Consulte benefícios e serviços próximos pelo CEP ou cidade e organize os dados e preferências de quem
+              cuida para dividir responsabilidades com mais leveza.</p>
+          </div>
+          <div class="landing-bloco__visual">
+            <figure class="landing-bloco__previa">
+              <img src="assets/media/aplicacao/direitos.png"
+                alt="Tela de Direitos e serviços com questionário orientativo e busca de unidades por CEP" width="1920"
+                height="911" loading="lazy" />
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
 
-        <div class="login__social" role="group" aria-label="Entrar com outra conta">
-          <button type="button" class="login__social-botao" data-login-social="facebook"
-            aria-label="Entrar com Facebook (indisponível)" disabled>
-            <i class="fa-brands fa-facebook login__social-icone--facebook" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="login__social-botao" data-login-social="google"
-            aria-label="Entrar com Google (indisponível)" disabled>
-            <i class="fa-brands fa-google login__social-icone--google" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="login__social-botao" data-login-social="apple"
-            aria-label="Entrar com Apple (indisponível)" disabled>
-            <i class="fa-brands fa-apple" aria-hidden="true"></i>
-          </button>
-        </div>
+    <section class="landing-faq landing-container" id="faq" aria-labelledby="titulo-faq">
+      <div class="landing-faq__cabecalho">
+        <h2 id="titulo-faq">Perguntas frequentes sobre o projeto</h2>
+        <p>Tire dúvidas rápidas sobre como o Mutirão funciona e o que você pode experimentar nesta demonstração.</p>
+      </div>
 
-        <p class="login__status" role="status" data-login-status></p>
+      <div class="landing-faq__lista">
+        <details class="landing-faq__item">
+          <summary>O que é o Mutirão e para quem ele foi criado?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="landing-faq__resposta">
+            <p>O <strong>Mutirão</strong> é um protótipo web criado pela equipe <strong>Ctrl + People</strong> para a
+              Global Solution 2026 da FIAP (desafio Citizen Tech). Ele ajuda familiares e cuidadores que dividem a rotina
+              de alguém a reunir escala de turnos, porta-remédios, documentos, diário de passagem e orientação sobre
+              direitos e serviços públicos em um só lugar.</p>
+          </div>
+        </details>
+
+        <details class="landing-faq__item">
+          <summary>Preciso criar uma conta real ou meus dados são enviados para algum servidor?<i
+              class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <div class="landing-faq__resposta">
+            <p>Não. A entrada é uma demonstração navegável com dados fictícios (Zé, Mari e Flavinho). As alterações
+              feitas na rotina ficam salvas apenas na sessão do navegador (<code>sessionStorage</code>), enquanto o tema
+              visual, os ajustes de leitura e o resultado concluído do questionário de direitos permanecem em
+              <code>localStorage</code>.</p>
+          </div>
+        </details>
+
+        <details class="landing-faq__item">
+          <summary>Como experimentar o cenário de revezamento na demonstração?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="landing-faq__resposta">
+            <p>Clique em <strong>Acessar a demonstração</strong> e entre com os dados preenchidos de exemplo. A aplicação
+              abre na ficha inicial do <strong>Flavinho</strong>; pelo seletor <strong>Quem recebe cuidado</strong> no
+              topo, você pode alternar para a ficha da <strong>Mari</strong> (acompanhamento 24h) para assumir horários
+              sem ninguém, registrar doses no porta-remédios e anotar o turno no Diário.</p>
+          </div>
+        </details>
+
+        <details class="landing-faq__item">
+          <summary>Posso assumir turnos recorrentes ou cancelar meus horários futuros?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="landing-faq__resposta">
+            <p>Sim. Na <strong>Agenda</strong> e no <strong>Início</strong>, você pode cobrir uma janela só naquela
+              data, toda semana ou todos os dias, além de cancelar suas participações futuras em lote mantendo todo o
+              histórico anterior preservado.</p>
+          </div>
+        </details>
+
+        <details class="landing-faq__item">
+          <summary>Como funcionam o assistente PontoBOT e a busca de direitos e serviços?<i
+              class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <div class="landing-faq__resposta">
+            <p>O <strong>PontoBOT</strong> ajuda a encontrar telas e funções do Mutirão em linguagem simples, sem
+              acessar os dados da ficha ativa e com respostas locais de contingência quando a API estiver indisponível.
+              Já a área de <strong>Direitos e serviços</strong> consulta as APIs públicas do IBGE e ViaCEP para montar
+              atalhos de UBS, CRAS e Farmácia Popular perto da família.</p>
+          </div>
+        </details>
+
+        <details class="landing-faq__item">
+          <summary>Quais recursos de acessibilidade estão disponíveis no projeto?<i class="fa-solid fa-chevron-down"
+              aria-hidden="true"></i></summary>
+          <div class="landing-faq__resposta">
+            <p>Todas as telas contam com navegação por teclado, atalho para pular ao conteúdo, ajuste de tamanho e
+              espaçamento do texto, alto contraste, destaque de links, redução de animações, VLibras e alternância entre
+              os temas visuais <strong>Neutro</strong> e <strong>Acolhedor</strong> pelo botão flutuante lateral.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="landing-final" id="demonstracao" aria-label="Acesse a demonstração do Mutirão">
+      <svg class="landing-final__onda" viewBox="0 0 1440 338" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M0 112C130 62 248 28 360 112C482 204 590 286 720 286C850 286 942 184 1072 118C1202 52 1320 12 1440 58V338H0V112Z" />
+      </svg>
+      <img class="landing-braco landing-braco--verde" src="assets/media/ilustracoes/braco-esquerdo-2.svg" alt=""
+        width="522" height="267" aria-hidden="true" />
+      <img class="landing-braco landing-braco--amarelo" src="assets/media/ilustracoes/braco-direito-2.svg" alt=""
+        width="466" height="267" aria-hidden="true" />
+
+      <div class="landing-final__conteudo">
+        <img class="landing-final__celular" src="assets/media/aplicacao/mobile-home.png"
+          alt="Tela inicial do Mutirão no celular mostrando os cuidados de hoje" width="389" height="705"
+          loading="lazy" />
+        <a class="botao botao--primario" href="login.html">Acessar a demonstração</a>
       </div>
     </section>
   </main>
+
   <footer class="rodape-site">
     <p>
       <strong>Mutirão</strong> — Demonstração de protótipo criado para o desafio da FIAP, desenvolvido pela equipe
