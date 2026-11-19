@@ -12,7 +12,7 @@
   <p>
     <img src="https://img.shields.io/badge/Desafio-Citizen%20Tech-4B5DA9?style=for-the-badge" alt="Desafio Citizen Tech" />
     <img src="https://img.shields.io/badge/HTML%20%7C%20CSS%20%7C%20JS-Nativo-4B5DA9?style=for-the-badge" alt="HTML, CSS e JS Nativos" />
-    <img src="https://img.shields.io/badge/Testes-17%20passando-4B5DA9?style=for-the-badge" alt="17 testes passando" />
+    <img src="https://img.shields.io/badge/Testes-26%20passando-4B5DA9?style=for-the-badge" alt="26 testes passando" />
   </p>
 </div>
 
@@ -23,7 +23,7 @@
 
 O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
 
-A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
+A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
 - **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
 - **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
@@ -68,8 +68,9 @@ CitizenTechFIAPChallenge/
 │   │   ├── script.js            # Navegação, seletor de perfil, busca global e PontoBOT
 │   │   ├── acessibilidade.js    # Preferências de leitura e alternância de temas
 │   │   └── *.js                 # Controladores específicos de cada página
-│   └── media/                   # Mascotes SVG, ícones, stickers, avatares e sons
-├── tests/                       # Suíte automatizada com node:test (17 testes)
+│   ├── media/                   # Mascotes SVG, ícones, stickers, avatares e sons
+│   └── pontobot/                # Cópia local do Web Component PontoBOT e base de contingência
+├── tests/                       # Suíte automatizada com node:test (26 testes)
 ├── *.html                       # 12 páginas HTML semânticas na raiz
 └── README.md                    # Documentação do projeto
 ```
@@ -98,7 +99,7 @@ CitizenTechFIAPChallenge/
 - **CSS3** — design tokens em variáveis CSS, temas **Neutro**, **Acolhedor** e **Alto Contraste**, Grid/Flexbox e breakpoints responsivos.
 - **JavaScript nativo (ES Modules e IIFE)** — gerenciamento de estado imutável por ficha (`estado-cuidado.mjs`), regras de negócio (`nucleo-cuidado.js`) e manipulação do DOM.
 - **Node.js (`node:test`)** — executor nativo para validação automatizada das regras de negócio e persistência.
-- **Integrações externas:** Google Fonts, Font Awesome, Bootstrap Icons, VLibras, APIs IBGE/ViaCEP e assistente [PontoBOT](https://github.com/mewmewdevart/PontoBOT).
+- **Integrações externas:** Google Fonts, Font Awesome, VLibras, APIs IBGE/ViaCEP e assistente [PontoBOT](https://github.com/mewmewdevart/PontoBOT).
 
 
 ## 🚀 Como Executar Localmente
@@ -129,7 +130,7 @@ Execute a suíte completa na raiz do projeto com o executor nativo do Node.js:
 node --test tests/*.test.mjs
 ```
 
-Atualmente a suíte conta com **19 testes** distribuídos em **5 arquivos**:
+Atualmente a suíte conta com **26 testes** distribuídos em **6 arquivos**:
 
 | Arquivo | Casos | Cobertura |
 | :--- | :---: | :--- |
@@ -137,7 +138,8 @@ Atualmente a suíte conta com **19 testes** distribuídos em **5 arquivos**:
 | `tests/compromissos-agenda.test.mjs` | 2 | Compromissos com horário opcional, isolamento entre perfis e exportação ICS |
 | `tests/medicamentos-doses.test.mjs` | 2 | Preservação de finalidades da base, registro de dose e ação de desfazer |
 | `tests/turnos-escala.test.mjs` | 2 | Normalização de rotinas semanais, janela diária e cobertura pontual |
-| `tests/recorrencias-escala.test.mjs` | 8 | Inicialização com atraso ou falha, exceções por data, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
+| `tests/recorrencias-escala.test.mjs` | 14 | Inicialização com atraso ou falha, exceções por data, cancelamento em lote preservando histórico, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
+| `tests/integracao-telas.test.mjs` | 1 | Percurso integrado entre Agenda, Medicamentos, Início e Diário com recarga da sessão |
 
 
 ## 👥 Integrantes — Grupo Ctrl + People
