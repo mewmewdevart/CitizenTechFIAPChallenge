@@ -81,7 +81,6 @@
         "fotoMiniatura": "assets/media/fotos/foto-perfil-maria-mini.webp",
         "mascote": "assets/media/mascotes/icone-mascote-minhoca.svg"
       },
-      "escalaDemonstracao": true,
       "finalidadesMedicacao": {
         "Levotiroxina": "para controle da tireoide (em jejum)",
         "Carbamazepina": "para controle neurológico",

@@ -337,6 +337,14 @@ window.MutiraoCuidadoPronto.then(core => {
     }
     const [dia, inicioTexto, fimTexto] = valor.split('|');
     const inicio = Number(inicioTexto), fim = Number(fimTexto);
+    const turnoDisponivel = core.diaEditavelNaEscala(dia) && construirLinhaDoTempoDia(dia)
+      .some(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual && seg.inicio === inicio && seg.fim === fim);
+    if (!turnoDisponivel) {
+      const mensagem = 'Este turno já passou ou mudou na escala. Escolha outro horário.';
+      core.marcarErroFormulario?.(form, form.querySelector('[name="turno"]:checked'), mensagem);
+      anunciarStatus(elementoStatus, mensagem);
+      return;
+    }
     if ((obterEstado().pedidosFolga || []).some(item => item.status === 'Pendente' && item.dia === dia && item.inicio === inicio && item.fim === fim)) {
       core.marcarErroFormulario?.(form, form.querySelector('[name="turno"]:checked'), 'Você já pediu folga para este turno.');
       anunciarStatus(elementoStatus, 'Você já pediu folga para este turno.');
@@ -363,17 +371,36 @@ window.MutiraoCuidadoPronto.then(core => {
     if (!bloco || !lista) return;
     const pedidos = [...(obterEstado().pedidosFolga || [])].reverse();
     bloco.hidden = pedidos.length === 0;
-    lista.innerHTML = pedidos.map(item => `
-      <li class="painel__item">
-        <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
-        <span class="painel__texto">
-          <strong>${escaparHtml(item.turno)}</strong>
-          <span>${escaparHtml([item.data ? `Registrado em ${item.data}` : 'Salvo nesta aba', item.recado].filter(Boolean).join(' · '))}</span>
-        </span>
-        <div class="painel__acoes"><span class="selo selo--info">${escaparHtml(item.status || 'Pedido antigo sem turno')}</span>
-        ${item.status === 'Pendente' ? `<label>Substituto na simulação<select data-substituto-folga="${escaparHtml(item.id)}">${core.obterParticipantesRede().filter(p => p.nome !== obterUsuarioAtual().nomeComApelido && core.pessoaDisponivel(p.nome, item.dia, item.inicio, item.fim)).map(p => `<option value="${escaparHtml(p.nome)}">${escaparHtml(p.nome)}</option>`).join('')}</select></label><button type="button" class="botao botao--secundario" data-decidir-folga="Aceita" data-id="${escaparHtml(item.id)}">Simular aceite e transferir</button><button type="button" class="botao botao--secundario" data-decidir-folga="Recusada" data-id="${escaparHtml(item.id)}">Simular recusa</button><button type="button" class="botao botao--secundario" data-decidir-folga="Cancelada" data-id="${escaparHtml(item.id)}">Cancelar pedido</button>` : item.responsavel ? `<span>Responsável: ${escaparHtml(item.responsavel)}</span>` : ''}</div>
-      </li>
-    `).join('');
+    lista.innerHTML = pedidos.map(item => {
+      const id = escaparHtml(item.id);
+      const pendente = item.status === 'Pendente';
+      const podeResponder = pendente && core.diaEditavelNaEscala(item.dia);
+      const substitutos = podeResponder ? core.obterParticipantesRede()
+        .filter(pessoa => !pessoa.ehUsuarioAtual && core.pessoaDisponivel(pessoa.nome, item.dia, item.inicio, item.fim)) : [];
+      return `
+        <li class="cuidar__pedido-folga">
+          <div class="cuidar__pedido-cabecalho">
+            <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
+            <div class="cuidar__pedido-resumo">
+              <strong>${escaparHtml(item.turno || 'Pedido de folga')}</strong>
+              <span class="selo selo--info">${escaparHtml(item.status || 'Pedido antigo sem turno')}</span>
+              <small>${escaparHtml(item.data ? `Registrado em ${item.data}` : 'Salvo nesta aba')}</small>
+              ${item.recado ? `<p>${escaparHtml(item.recado)}</p>` : ''}
+            </div>
+          </div>
+          ${podeResponder && substitutos.length ? `
+            <label class="cuidar__pedido-substituto">Substituto na simulação
+              <select data-substituto-folga="${id}">
+                ${substitutos.map(pessoa => `<option value="${escaparHtml(pessoa.nome)}">${escaparHtml(pessoa.nome)}</option>`).join('')}
+              </select>
+            </label>` : podeResponder ? '<p class="cuidar__pedido-detalhe">Sem substitutos disponíveis neste horário.</p>' : ''}
+          ${pendente ? `<div class="cuidar__pedido-acoes">
+            ${substitutos.length ? `<button type="button" class="botao botao--secundario" data-decidir-folga="Aceita" data-id="${id}">Simular aceite e transferir</button>` : ''}
+            ${podeResponder ? `<button type="button" class="botao botao--secundario" data-decidir-folga="Recusada" data-id="${id}">Simular recusa</button>` : ''}
+            <button type="button" class="botao botao--secundario" data-decidir-folga="Cancelada" data-id="${id}">Cancelar pedido</button>
+          </div>` : item.responsavel ? `<p class="cuidar__pedido-detalhe">Responsável: ${escaparHtml(item.responsavel)}</p>` : ''}
+        </li>`;
+    }).join('');
   };
 
   pagina.addEventListener('click', evento => {
@@ -389,12 +416,12 @@ window.MutiraoCuidadoPronto.then(core => {
   });
 
   document.querySelector('[data-dialogo="dialogo-pedir-folga"]')?.addEventListener('click', () => {
-    const turnos = SEMANA_ATUAL.filter(dia => dia >= HOJE).flatMap(dia => construirLinhaDoTempoDia(dia)
+    const turnos = SEMANA_ATUAL.filter(core.diaEditavelNaEscala).flatMap(dia => construirLinhaDoTempoDia(dia)
       .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
       .map(seg => ({ ...seg, dia })));
     const opcoes = pagina.querySelector('[data-opcoes-folga]');
     opcoes.innerHTML = '<legend>Qual turno você quer passar?</legend>' + (turnos.map((seg, i) =>
-      `<label><input type="radio" name="turno" required ${i === 0 ? 'checked' : ''} value="${seg.dia}|${seg.inicio}|${seg.fim}"> ${escaparHtml(formatarDataCurta(seg.dia))} · ${core.formatarIntervaloTurno(seg.inicio, seg.fim - seg.inicio)}</label>`).join('') || '<p>Você não possui turnos futuros nesta semana.</p>');
+      `<label><input type="radio" name="turno" required ${i === 0 ? 'checked' : ''} value="${seg.dia}|${seg.inicio}|${seg.fim}"> ${escaparHtml(formatarDataCurta(seg.dia))} · ${core.formatarIntervaloTurno(seg.inicio, seg.fim - seg.inicio)}</label>`).join('') || '<p>Você não possui turnos disponíveis nesta semana.</p>');
   });
 
   const renderizarSemanaCuidar = () => {

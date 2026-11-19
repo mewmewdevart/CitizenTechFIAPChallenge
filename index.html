@@ -341,72 +341,73 @@
 
         <!-- <details class="login__simulacao">
           <summary>Simular a tela de entrada</summary> -->
-          <p class="login__descricao">Experimente o protótipo navegável do Mutirão usando os dados de exemplo já preenchidos.</p>
-          <form class="login__form" data-login-form novalidate>
-            <fieldset class="login__campo">
-              <legend>E-mail</legend>
-              <i class="fa-regular fa-envelope" aria-hidden="true"></i>
-              <input type="email" name="email" value="ze@example.com" autocomplete="email" aria-label="E-mail"
-                required />
-            </fieldset>
+        <p class="login__descricao">Experimente o protótipo navegável do Mutirão usando os dados de exemplo já
+          preenchidos.</p>
+        <form class="login__form" data-login-form novalidate>
+          <fieldset class="login__campo">
+            <legend>E-mail</legend>
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+            <input type="email" name="email" value="ze.silva@example.com" autocomplete="email" aria-label="E-mail"
+              required />
+          </fieldset>
 
-            <fieldset class="login__campo">
-              <legend>Senha</legend>
-              <i class="fa-solid fa-lock" aria-hidden="true"></i>
-              <input type="password" name="senha" value="mutirao1234567890" autocomplete="current-password"
-                aria-label="Senha" minlength="4" required />
-              <button type="button" class="login__ver-senha" data-ver-senha aria-pressed="false"
-                aria-label="Mostrar senha">
-                <svg class="login__icone-olho" data-icone="mostrar" viewBox="0 0 24 24" width="20" height="20" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  aria-hidden="true">
-                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                <svg class="login__icone-olho" data-icone="esconder" viewBox="0 0 24 24" width="20" height="20"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  aria-hidden="true" hidden>
-                  <path
-                    d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-2.9 3.9M6.6 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6" />
-                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-                  <path d="m3 3 18 18" />
-                </svg>
-              </button>
-            </fieldset>
-
-            <div class="login__opcoes">
-              <label class="login__lembrar">
-                <input type="checkbox" name="manterConectado" />
-                <span>Manter-me conectado</span>
-              </label>
-              <a class="login__link" href="#esqueceu-senha" data-login-esqueci aria-disabled="true" tabindex="-1">Esqueceu
-                a senha?</a>
-            </div>
-
-            <button type="submit" class="botao botao--primario login__entrar">Entrar na demonstração</button>
-          </form>
-
-          <p class="login__cadastro">Ainda não tem uma conta? <a class="login__link" href="#cadastre-se"
-              data-login-cadastro aria-disabled="true" tabindex="-1">Cadastre-se</a></p>
-
-          <div class="login__divisor" aria-hidden="true"><span>Ou entre com</span></div>
-
-          <div class="login__social" role="group" aria-label="Entrar com outra conta">
-            <button type="button" class="login__social-botao" data-login-social="facebook"
-              aria-label="Entrar com Facebook (indisponível)" disabled>
-              <i class="fa-brands fa-facebook login__social-icone--facebook" aria-hidden="true"></i>
+          <fieldset class="login__campo">
+            <legend>Senha</legend>
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <input type="password" name="senha" value="mutirao1234567890" autocomplete="current-password"
+              aria-label="Senha" minlength="4" required />
+            <button type="button" class="login__ver-senha" data-ver-senha aria-pressed="false"
+              aria-label="Mostrar senha">
+              <svg class="login__icone-olho" data-icone="mostrar" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg class="login__icone-olho" data-icone="esconder" viewBox="0 0 24 24" width="20" height="20"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true" hidden>
+                <path
+                  d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-2.9 3.9M6.6 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6" />
+                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                <path d="m3 3 18 18" />
+              </svg>
             </button>
-            <button type="button" class="login__social-botao" data-login-social="google"
-              aria-label="Entrar com Google (indisponível)" disabled>
-              <i class="fa-brands fa-google login__social-icone--google" aria-hidden="true"></i>
-            </button>
-            <button type="button" class="login__social-botao" data-login-social="apple"
-              aria-label="Entrar com Apple (indisponível)" disabled>
-              <i class="fa-brands fa-apple" aria-hidden="true"></i>
-            </button>
+          </fieldset>
+
+          <div class="login__opcoes">
+            <label class="login__lembrar">
+              <input type="checkbox" name="manterConectado" />
+              <span>Manter-me conectado</span>
+            </label>
+            <a class="login__link" href="#esqueceu-senha" data-login-esqueci aria-disabled="true" tabindex="-1">Esqueceu
+              a senha?</a>
           </div>
 
-          <p class="login__status" role="status" data-login-status></p>
+          <button type="submit" class="botao botao--primario login__entrar">Entrar na demonstração</button>
+        </form>
+
+        <p class="login__cadastro">Ainda não tem uma conta? <a class="login__link" href="#cadastre-se"
+            data-login-cadastro aria-disabled="true" tabindex="-1">Cadastre-se</a></p>
+
+        <div class="login__divisor" aria-hidden="true"><span>Ou entre com</span></div>
+
+        <div class="login__social" role="group" aria-label="Entrar com outra conta">
+          <button type="button" class="login__social-botao" data-login-social="facebook"
+            aria-label="Entrar com Facebook (indisponível)" disabled>
+            <i class="fa-brands fa-facebook login__social-icone--facebook" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="login__social-botao" data-login-social="google"
+            aria-label="Entrar com Google (indisponível)" disabled>
+            <i class="fa-brands fa-google login__social-icone--google" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="login__social-botao" data-login-social="apple"
+            aria-label="Entrar com Apple (indisponível)" disabled>
+            <i class="fa-brands fa-apple" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <p class="login__status" role="status" data-login-status></p>
         <!-- </details> -->
       </div>
     </section>

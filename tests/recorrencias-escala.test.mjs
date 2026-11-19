@@ -84,6 +84,83 @@ function turnos(core, dia) {
     seg => [seg.inicio, seg.fim, seg.pessoa.nome]);
 }
 
+test('a ação de adicionar depende da data selecionada, do turno confirmado e da janela da ficha', async () => {
+  const core = await criarCore();
+  const { hoje, amanha } = diasDoCenario(core);
+  const botao = { dataset: {} };
+  const atualizar = dia => core.atualizarBotaoAdicionarTurno(botao, dia, core.construirLinhaDoTempoDia(dia));
+  atualizar(hoje);
+  assert.equal(botao.hidden, false);
+  assumir(core, hoje, 11, 12, core.ESCOPO_TURNO.pontual);
+  atualizar(hoje);
+  assert.equal(botao.hidden, true);
+  atualizar(amanha);
+  assert.equal(botao.hidden, false);
+  atualizar('2026-11-09');
+  assert.equal(botao.hidden, true);
+
+  core.atualizarEstado(estado => ({ ...estado, person: {
+    ...estado.person, cobertura: core.ACOMPANHAMENTO.parcial,
+    inicioAcompanhamentoParcial: '8', desdeAcompanhamentoParcial: hoje
+  } }));
+  atualizar(amanha);
+  assert.equal(botao.hidden, true);
+  assert.deepEqual(Array.from(core.obterLacunasDia(amanha), ({ inicio, fim }) => [inicio, fim]), [[8, 20]]);
+  assert.equal(core.obterRotuloLacuna(hoje), 'Parcial');
+});
+
+test('recusa datas e intervalos inválidos e ignora cobertura sem participante da rede', async () => {
+  const core = await criarCore();
+  const { hoje } = diasDoCenario(core);
+  const estado = core.obterEstado();
+  for (const [dia, inicio, fim, gapInicio, gapFim] of [
+    ['2026-02-31', 8, 9, 0, 24],
+    ['2026-11-09', 8, 9, 0, 24],
+    [hoje, 8, 8, 0, 24],
+    [hoje, 8.5, 9, 0, 24],
+    [hoje, 8, 9, -1, 24],
+    [hoje, 8, 9, 0, 25]
+  ]) {
+    assert.throws(() => core.assumirTurno(estado, dia, { inicio, fim, gapInicio, gapFim }, core.ESCOPO_TURNO.pontual));
+  }
+  core.atualizarEstado(atual => ({
+    ...atual,
+    coberturasRede: [null, { dia: hoje, inicio: 8, fim: 9, responsavel: 'Pessoa inventada' }]
+  }));
+  assert.equal(core.obterRotuloLacuna(hoje), 'Sem turnos');
+});
+
+test('a semana inicial vale para ambas as fichas e datas anteriores a hoje são só para consulta', async () => {
+  const core = await criarCore();
+  const anterior = '2026-11-08';
+  const segunda = '2026-11-09';
+  assert.equal(core.INICIO_ESCALA, segunda);
+  assert.equal(core.diaNaEscala(segunda), true);
+  assert.equal(core.diaEditavelNaEscala(segunda), false);
+  assert.equal(core.diaEditavelNaEscala(core.HOJE), true);
+
+  for (const id of ['flavio-barbosa', 'mari']) {
+    core.selecionarPerfilAcompanhado(id);
+    const estado = core.obterEstado();
+    const adulterado = { ...estado, covered: { ...estado.covered, [anterior]: [{ inicio: 8, fim: 12 }] } };
+    assert.equal(core.contarParticipacoesUsuario(adulterado), core.contarParticipacoesUsuario(estado));
+    assert.equal(core.obterEscalaDia(anterior, adulterado).length, 0);
+    assert.equal(core.obterLacunasDia(anterior, adulterado).length, 0);
+    assert.equal(core.obterHorariosLivres(anterior, adulterado).length, 0);
+    assert.throws(() => core.aplicarIntervaloZe(estado, segunda, 8, 12, 8, 12), /hoje em diante/);
+  }
+});
+
+test('o perfil 24h mantém lacunas onde o cenário não tem escala cadastrada', async () => {
+  const sessao = new Map();
+  const core = await criarCore(sessao);
+  assert.equal(core.selecionarPerfilAcompanhado('mari'), true);
+  const mari = await criarCore(sessao);
+  assert.equal(mari.obterEstado().perfilAtivoId, 'mari');
+  assert.equal(mari.obterRotuloLacuna('2026-12-01'), 'Descoberto');
+  assert.deepEqual(Array.from(mari.obterLacunasDia('2026-12-01'), ({ inicio, fim }) => [inicio, fim]), [[0, 24]]);
+});
+
 test('encerrar a série não ressuscita uma ocorrência cancelada, inclusive com cobertura antiga', async () => {
   for (const legado of [false, true]) {
     const sessao = new Map();

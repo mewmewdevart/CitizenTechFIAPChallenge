@@ -358,6 +358,27 @@ window.MutiraoCuidadoPronto = (async () => {
       month: mesLongo ? 'long' : 'short'
     }));
 
+  const diaEscalaValido = dia => {
+    if (typeof dia !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dia)) return false;
+    const data = new Date(`${dia}T00:00:00Z`);
+    return Number.isFinite(data.getTime()) && data.toISOString().slice(0, 10) === dia;
+  };
+
+  const INICIO_ESCALA = obterSemanaDe(HOJE)[0];
+  const diaNaEscala = dia => diaEscalaValido(dia) && dia >= INICIO_ESCALA;
+  const diaEditavelNaEscala = dia => diaEscalaValido(dia) && dia >= HOJE;
+
+  const intervaloTurnoValido = (inicio, fim) =>
+    Number.isInteger(inicio) && Number.isInteger(fim) && inicio >= 0 && inicio < fim && fim <= 24;
+
+  const lerFaixaTurno = horario => {
+    const faixa = typeof horario === 'string' && horario.match(/^(\d{1,2})h[–-](\d{1,2})h$/);
+    if (!faixa) return null;
+    const inicio = Number(faixa[1]);
+    const fim = Number(faixa[2]);
+    return intervaloTurnoValido(inicio, fim) ? { inicio, fim, duracao: fim - inicio } : null;
+  };
+
   const extrairHorasTurno = horario => {
     const match = String(horario || '').match(/(\d{1,2})h[–-](\d{1,2})h/);
     if (!match) return { inicio: 0, fim: 24, duracao: 24 };
@@ -377,7 +398,7 @@ window.MutiraoCuidadoPronto = (async () => {
     if (valor === true) return [{ inicio: slotInicio, fim: slotFim }];
     const lista = Array.isArray(valor) ? valor : [valor];
     const ordenados = lista
-      .filter(i => i && Number.isFinite(i.inicio) && Number.isFinite(i.fim) && i.fim > i.inicio)
+      .filter(i => i && intervaloTurnoValido(i.inicio, i.fim))
       .map(i => ({ inicio: Math.max(slotInicio, i.inicio), fim: Math.min(slotFim, i.fim) }))
       .filter(i => i.fim > i.inicio)
       .sort((a, b) => a.inicio - b.inicio);
@@ -414,7 +435,8 @@ window.MutiraoCuidadoPronto = (async () => {
   const descreverDiaSemana = diaSemana => `${diaSemana === 0 || diaSemana === 6 ? 'Todo' : 'Toda'} ${NOMES_DIA_SEMANA[diaSemana]}`;
 
   const obterRotinasSemanais = (estado = estadoAtual) => (Array.isArray(estado.rotinasSemanais) ? estado.rotinasSemanais : [])
-    .filter(rotina => Number.isInteger(rotina?.diaSemana) && rotina.fim > rotina.inicio);
+    .filter(rotina => diaEscalaValido(rotina?.desde) && rotina.diaSemana === obterDiaSemana(rotina.desde)
+      && intervaloTurnoValido(rotina.inicio, rotina.fim));
 
   const descreverRotinaSemanal = rotina =>
     `${descreverDiaSemana(rotina.diaSemana)}, ${formatarIntervaloTurno(rotina.inicio, rotina.fim - rotina.inicio)}`;
@@ -426,18 +448,35 @@ window.MutiraoCuidadoPronto = (async () => {
     if (necessidade === ACOMPANHAMENTO.diario && janela) {
       return [`Todos os dias, ${formatarIntervaloTurno(janela.inicio, janela.fim - janela.inicio)}`, ...semanais].join(' · ');
     }
+    if (necessidade === ACOMPANHAMENTO.parcial) {
+      const parcial = obterJanelaParcial(estado);
+      const descricao = parcial ? formatarIntervaloTurno(parcial.inicio, 12) : 'horário ainda não informado';
+      return [`${necessidade} (${descricao})`, ...semanais].join(' · ');
+    }
     if (necessidade) return [necessidade, ...semanais].join(' · ');
     return semanais.length ? semanais.join(' · ') : 'Não informada';
+  };
+
+  const obterJanelaParcial = estado => {
+    const { inicioAcompanhamentoParcial, desdeAcompanhamentoParcial } = estado.person;
+    if (typeof inicioAcompanhamentoParcial !== 'string' || !/^(?:[0-9]|1[0-2])$/.test(inicioAcompanhamentoParcial)
+      || !diaEscalaValido(desdeAcompanhamentoParcial)) return null;
+    const inicio = Number(inicioAcompanhamentoParcial);
+    return { inicio, fim: inicio + 12, desde: desdeAcompanhamentoParcial };
   };
 
   // Fonte única da expectativa de cuidado: quais faixas do dia precisam de alguém.
   // Sem faixa esperada, o dia só mostra turnos combinados e nunca vira alerta.
   const obterJanelasObrigatorias = (dia, estado = estadoAtual) => {
+    if (!diaNaEscala(dia)) return [];
     const necessidade = obterNecessidadeAcompanhamento(estado);
     if (necessidade === ACOMPANHAMENTO.integral) return [{ inicio: 0, fim: 24 }];
     const janelas = [];
+    const parcial = necessidade === ACOMPANHAMENTO.parcial ? obterJanelaParcial(estado) : null;
+    if (parcial && dia >= parcial.desde) janelas.push(parcial);
     const janela = estado.janelaAcompanhamento;
-    if (necessidade === ACOMPANHAMENTO.diario && janela && dia >= janela.desde) janelas.push(janela);
+    if (necessidade === ACOMPANHAMENTO.diario && diaEscalaValido(janela?.desde)
+      && dia >= janela.desde && intervaloTurnoValido(janela.inicio, janela.fim)) janelas.push(janela);
     const diaSemana = obterDiaSemana(dia);
     for (const rotina of obterRotinasSemanais(estado)) {
       if (rotina.diaSemana === diaSemana && dia >= rotina.desde) janelas.push(rotina);
@@ -463,7 +502,7 @@ window.MutiraoCuidadoPronto = (async () => {
 
   const definirRotinaTurno = (estado, dia, inicio, fim, escopoInformado, responsavel = null) => {
     const escopo = normalizarEscopoTurno(escopoInformado);
-    if (escopo === ESCOPO_TURNO.pontual || dia < HOJE || !(fim > inicio)) return estado;
+    if (escopo === ESCOPO_TURNO.pontual || !diaEditavelNaEscala(dia) || !(fim > inicio)) return estado;
     const semanal = escopo === ESCOPO_TURNO.semanal;
     const diaSemana = obterDiaSemana(dia);
     const janela = estado.janelaAcompanhamento;
@@ -600,13 +639,14 @@ window.MutiraoCuidadoPronto = (async () => {
       .split(',')
       .map(parte => parte.trim())
       .filter(Boolean)
-      .map(extrairHorasTurno)
-      .filter(faixa => faixa.fim > faixa.inicio);
-    return faixas.length ? faixas : [extrairHorasTurno(horario)];
+      .map(lerFaixaTurno)
+      .filter(Boolean);
+    return faixas;
   };
 
   const obterIntervaloFormularioTurno = (form, horario) => {
     const faixas = parsearFaixasTurno(horario);
+    if (!faixas.length) return {};
     if (form.elements.cobrirTudo.checked) {
       const faixa = faixas[0];
       return { ...faixa, gapInicio: faixa.inicio, gapFim: faixa.fim };
@@ -643,6 +683,7 @@ window.MutiraoCuidadoPronto = (async () => {
   const prepararFormularioTurno = (dialogo, dia, horario, pontual) => {
     const form = dialogo.querySelector('[data-formulario-mvp="cobertura"]');
     const faixas = parsearFaixasTurno(horario);
+    if (!diaEditavelNaEscala(dia) || !faixas.length) return false;
     const horasInicio = faixas.flatMap(faixa => Array.from({ length: faixa.fim - faixa.inicio }, (_, i) => faixa.inicio + i));
     const unicaFaixaCurta = faixas.length === 1 && faixas[0].fim - faixas[0].inicio === 1;
     const ocultarCobrirTudo = faixas.length > 1 || unicaFaixaCurta;
@@ -674,6 +715,7 @@ window.MutiraoCuidadoPronto = (async () => {
       new Option(`${String(hora).padStart(2, '0')}h00`, hora, false, hora === sugestao)));
     popularOpcoesHorario(form.elements.fim, sugestao + 1, faixaSugestao.fim, pontual ? sugestao + 1 : faixaSugestao.fim);
     atualizarPreviaTurno(dialogo, horario);
+    return true;
   };
 
   const obterLacunasDia = (dia, estado = estadoAtual) => construirLinhaDoTempoDia(dia, estado)
@@ -681,6 +723,7 @@ window.MutiraoCuidadoPronto = (async () => {
     .map(({ inicio, fim }) => ({ inicio, fim, horario: formatarIntervaloTurno(inicio, fim - inicio) }));
 
   const construirLinhaDoTempoDia = (dia, estado = estadoAtual, incluirHorariosLivres = false) => {
+    if (!diaNaEscala(dia)) return [];
     const escala = obterEscalaComHorariosLivres(dia, estado);
     const usuario = obterUsuarioAtual(estado);
     const pessoaUsuario = { nome: usuario.nomeComApelido, avatar: usuario.avatarArquivo, foto: usuario.foto, ehUsuarioAtual: true };
@@ -715,7 +758,8 @@ window.MutiraoCuidadoPronto = (async () => {
       } else if (edicao && (item.rotina || ehUsuario)) {
         if (edicao.cancelado) {
           segmentos.push({ tipo: 'lacuna', inicio: slot.inicio, fim: slot.fim, isLacunaOriginal: false });
-        } else if (edicao && typeof edicao.inicio === 'number' && typeof edicao.duracao === 'number') {
+        } else if (Number.isInteger(edicao.duracao) && intervaloTurnoValido(edicao.inicio, edicao.inicio + edicao.duracao)
+          && slot.inicio <= edicao.inicio && edicao.inicio + edicao.duracao <= slot.fim) {
           const fimEdicao = edicao.inicio + edicao.duracao;
           if (edicao.inicio > slot.inicio) {
             segmentos.push({ tipo: 'lacuna', inicio: slot.inicio, fim: edicao.inicio, isLacunaOriginal: false });
@@ -751,7 +795,9 @@ window.MutiraoCuidadoPronto = (async () => {
     }
 
     let linha = segmentos;
-    for (const cobertura of (estado.coberturasRede || []).filter(item => item.dia === dia)) {
+    for (const cobertura of (estado.coberturasRede || [])) {
+      if (cobertura?.dia !== dia || !intervaloTurnoValido(cobertura.inicio, cobertura.fim)
+        || !obterParticipantesRede(estado).some(pessoa => pessoa.nome === cobertura.responsavel)) continue;
       linha = linha.flatMap(seg => {
         const inicio = Math.max(seg.inicio, cobertura.inicio);
         const fim = Math.min(seg.fim, cobertura.fim);
@@ -808,7 +854,8 @@ window.MutiraoCuidadoPronto = (async () => {
     }
 
     const janelas = obterJanelasObrigatorias(dia, estado);
-    const manterLacunasDaEscala = obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.parcial;
+    const manterLacunasDaEscala = obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.parcial
+      && !obterJanelaParcial(estado);
     return mesclados.flatMap((seg, idx) => {
       const anterior = mesclados[idx - 1];
       const proximo = mesclados[idx + 1];
@@ -834,6 +881,7 @@ window.MutiraoCuidadoPronto = (async () => {
     construirLinhaDoTempoDia(dia, estado, true).filter(seg => seg.tipo === 'livre');
 
   const obterPedidosForaDaRotina = (dia, estado = estadoAtual) => {
+    if (!diaNaEscala(dia)) return [];
     const lacunas = obterLacunasDia(dia, estado);
     return Object.entries(estado.atribuicoesTurno || {}).filter(([, pedido]) => {
       if (pedido.dia !== dia) return false;
@@ -859,46 +907,16 @@ window.MutiraoCuidadoPronto = (async () => {
     return { dia: compromisso.dia, horario: formatarIntervaloTurno(inicio, fim - inicio) };
   };
 
-  const renderizarAdicionarTurnos = (dia, estado, linha) => {
-    const lacunas = linha.filter(seg => seg.tipo === 'lacuna');
-    const livres = obterHorariosLivres(dia, estado).flatMap(faixa => {
-      let cursor = faixa.inicio;
-      const partes = [];
-      for (const lacuna of lacunas.filter(item => item.inicio < faixa.fim && item.fim > faixa.inicio)) {
-        if (cursor < lacuna.inicio) partes.push({ inicio: cursor, fim: lacuna.inicio });
-        cursor = Math.max(cursor, lacuna.fim);
-      }
-      if (cursor < faixa.fim) partes.push({ inicio: cursor, fim: faixa.fim });
-      return partes;
-    });
-    if (!livres.length) return '';
-
-    const necessidade = obterNecessidadeAcompanhamento(estado);
-    const rotuloLivre = necessidade === ACOMPANHAMENTO.diario || necessidade === ACOMPANHAMENTO.parcial
-      ? 'Horário fora da rotina prevista'
-      : necessidade === ACOMPANHAMENTO.eventual
-        ? 'Horário livre'
-        : 'Horário sem turno';
-    const descricaoLivre = necessidade === ACOMPANHAMENTO.diario || necessidade === ACOMPANHAMENTO.parcial
-      ? 'Fora do horário habitual combinado. Adicione um turno extra se precisar.'
-      : necessidade === ACOMPANHAMENTO.eventual
-        ? 'Sem acompanhamento regular previsto. Adicione um turno pontual ou recorrente.'
-        : 'Nenhum acompanhamento obrigatório configurado. Adicione um turno se alguém for cuidar.';
-
-    return livres.map(({ inicio, fim }) => {
-      const horario = formatarIntervaloTurno(inicio, fim - inicio);
-      return `<div class="agenda__lacuna">
-      <span class="agenda__icone-descoberto" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-      <div>
-        <strong>${escaparHtml(horario)} · ${rotuloLivre}</strong>
-        <p>${descricaoLivre}</p>
-      </div>
-      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno data-dia="${dia}" data-horario="${escaparHtml(horario)}">Adicionar turno</button>
-    </div>`;
-    }).join('');
+  const atualizarBotaoAdicionarTurno = (botao, dia, linha) => {
+    if (!botao) return;
+    const disponivel = diaEditavelNaEscala(dia) && linha.length === 0;
+    botao.hidden = !disponivel;
+    botao.dataset.dia = disponivel ? dia : '';
+    botao.dataset.horario = disponivel ? formatarIntervaloTurno(0, 24) : '';
   };
 
   const aplicarIntervaloZe = (estado, dia, janelaMin, janelaMax, novoInicio, novoFim) => {
+    if (!diaEditavelNaEscala(dia)) throw new Error('Só é possível alterar turnos de hoje em diante.');
     const escala = obterEscalaComHorariosLivres(dia, estado);
     const covered = { ...estado.covered };
     const shiftEdits = { ...estado.shiftEdits };
@@ -981,7 +999,9 @@ window.MutiraoCuidadoPronto = (async () => {
 
   const assumirTurno = (estado, dia, intervalo, escopo) => {
     const { inicio, fim, gapInicio, gapFim } = intervalo;
-    if (!obterHorariosLivres(dia, estado).some(faixa => faixa.inicio <= inicio && faixa.fim >= fim)) {
+    if (!diaEditavelNaEscala(dia) || !intervaloTurnoValido(inicio, fim)
+      || !intervaloTurnoValido(gapInicio, gapFim) || inicio < gapInicio || fim > gapFim
+      || !obterHorariosLivres(dia, estado).some(faixa => faixa.inicio <= gapInicio && gapFim <= faixa.fim)) {
       throw new Error('O horário mudou. Confira a escala antes de assumir.');
     }
     const pontual = normalizarEscopoTurno(escopo) === ESCOPO_TURNO.pontual;
@@ -1000,7 +1020,12 @@ window.MutiraoCuidadoPronto = (async () => {
   const resolverAtribuicao = (chave, aceitar) => atualizarEstado(estado => {
     const item = estado.atribuicoesTurno?.[chave];
     if (!item) throw new Error('Este pedido já foi respondido.');
-    const { inicio, fim } = extrairHorasTurno(item.horario);
+    const faixa = lerFaixaTurno(item.horario);
+    const { inicio, fim } = faixa || {};
+    if (aceitar && (!faixa || !diaEditavelNaEscala(item.dia)
+      || !obterParticipantesRede(estado).some(pessoa => pessoa.nome === item.responsavel && !pessoa.ehUsuarioAtual))) {
+      throw new Error('O pedido tem horário inválido ou a pessoa não faz parte desta rede.');
+    }
     if (aceitar && (!obterHorariosLivres(item.dia, estado).some(l => l.inicio <= inicio && l.fim >= fim)
       || !pessoaDisponivel(item.responsavel, item.dia, inicio, fim, estado))) {
       throw new Error('O turno mudou ou a pessoa não está disponível. Atualize a escala.');
@@ -1030,6 +1055,7 @@ window.MutiraoCuidadoPronto = (async () => {
     const pedido = (estado.pedidosFolga || []).find(item => item.id === id);
     if (!pedido || pedido.status !== 'Pendente') throw new Error('Este pedido já foi respondido.');
     if (status === 'Aceita') {
+      if (!diaEditavelNaEscala(pedido.dia)) throw new Error('O turno deste pedido já passou.');
       const turnoAtual = construirLinhaDoTempoDia(pedido.dia, estado).find(seg => seg.tipo === 'turno'
         && seg.pessoa.ehUsuarioAtual && seg.inicio <= pedido.inicio && seg.fim >= pedido.fim);
       if (!turnoAtual || !obterParticipantesRede(estado).some(p => p.nome === responsavel)
@@ -1171,23 +1197,13 @@ window.MutiraoCuidadoPronto = (async () => {
   };
 
   function obterEscalaDia(dia, estado = estadoAtual) {
+    if (!diaNaEscala(dia)) return [];
     const fixas = estado?.escalasFixas;
     if (fixas?.[dia]) return fixas[dia];
-    const equipe = estado?.equipeCuidado || [];
-    if (estado.escalaDemonstracao && equipe.length >= 4 &&
-      obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.integral) {
-      const indiceBase = Number(dia.slice(-2)) || 1;
-      return [
-        { horario: '00h–07h', pessoa: equipe[indiceBase % 4] },
-        { horario: '07h–13h', pessoa: equipe[(indiceBase + 1) % 4] },
-        { horario: '13h–19h', pessoa: equipe[(indiceBase + 2) % 4] },
-        { horario: '19h–24h', pessoa: equipe[(indiceBase + 3) % 4] }
-      ];
-    }
-
     const recorrentes = [];
     const janela = estado.janelaAcompanhamento;
-    if (obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario && janela && dia >= janela.desde) {
+    if (obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario && diaEscalaValido(janela?.desde)
+      && dia >= janela.desde && intervaloTurnoValido(janela.inicio, janela.fim)) {
       recorrentes.push(janela);
     }
     const diaSemana = obterDiaSemana(dia);
@@ -1661,7 +1677,12 @@ window.MutiraoCuidadoPronto = (async () => {
     obterDescricaoAcompanhamento,
     obterPedidosForaDaRotina,
     obterHorariosLivres,
-    renderizarAdicionarTurnos,
+    atualizarBotaoAdicionarTurno,
+    diaEscalaValido,
+    INICIO_ESCALA,
+    diaNaEscala,
+    diaEditavelNaEscala,
+    lerFaixaTurno,
     prepararFormularioTurno,
     atualizarPreviaTurno,
     obterIntervaloFormularioTurno,

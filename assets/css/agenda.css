@@ -188,6 +188,8 @@ body.menu-fechado .conteudo-pagina.agenda {
   min-height: 68px;
 }
 
+[data-aba-inicio="escala"][hidden],
+[data-adicionar-turno-cabecalho][hidden],
 .agenda__lacuna[hidden] {
   display: none;
 }
@@ -196,6 +198,32 @@ body.menu-fechado .conteudo-pagina.agenda {
   margin: 0 calc(var(--espaco-lg) * -1) var(--espaco-md);
   padding: var(--espaco-md) var(--espaco-lg);
   border-radius: 0;
+}
+
+.agenda__escala-vazia {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-md);
+  padding: var(--espaco-md);
+  border-radius: var(--raio-md);
+  background: var(--cor-fundo-pagina);
+}
+
+.agenda__escala-vazia-icone {
+  display: grid;
+  flex: none;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  place-items: center;
+  border-radius: var(--raio-md);
+  background: var(--cor-neutra-clara-04);
+  color: var(--cor-texto-secundario);
+}
+
+.agenda__escala-vazia p {
+  margin: var(--espaco-xs) 0 0;
+  color: var(--cor-texto-secundario);
+  font-size: var(--texto-legenda);
 }
 
 .agenda__lacuna>div {
@@ -545,7 +573,7 @@ html.acessibilidade--alto-contraste.tema--acolhedor [data-turnos] {
   border-bottom: 0;
 }
 
-[data-turnos] > .painel__acoes {
+[data-turnos]>.painel__acoes {
   display: flex;
   flex-wrap: wrap;
   gap: var(--espaco-sm);
@@ -718,7 +746,8 @@ html.acessibilidade--alto-contraste.tema--acolhedor [data-turnos] {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-.agenda__painel .calendario-mensal__grade > span {
+
+.agenda__painel .calendario-mensal__grade>span {
   font-size: var(--texto-interface);
   font-weight: var(--peso-semibold);
 }

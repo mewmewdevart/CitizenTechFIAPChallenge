@@ -129,6 +129,7 @@ body.menu-fechado .conteudo-pagina.ficha {
   color: var(--cor-aviso-alerta-escuro);
 }
 
+[data-inicio-parcial-campo][hidden],
 .ficha__aviso-alergia[hidden] {
   display: none;
 }

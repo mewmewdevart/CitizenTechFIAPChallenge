@@ -33,12 +33,13 @@ window.MutiraoCuidadoPronto.then(core => {
   const diaParam = parametros.get('dia');
   const compromissoParam = parametros.get('compromisso');
   const eventoInicial = compromissoParam ? core.obterCompromissos().find(item => item.id === compromissoParam) : null;
-  const diaInicial = diaParam && /^\d{4}-\d{2}-\d{2}$/.test(diaParam)
+  const diaInicial = core.diaEscalaValido(diaParam)
     ? diaParam
-    : (eventoInicial?.dia && /^\d{4}-\d{2}-\d{2}$/.test(eventoInicial.dia) ? eventoInicial.dia : HOJE);
+    : (core.diaEscalaValido(eventoInicial?.dia) ? eventoInicial.dia : HOJE);
 
+  const diaParaEscala = dia => core.diaNaEscala(dia) ? dia : core.INICIO_ESCALA;
   let diaSelecionado = diaInicial;
-  let diaSemana = diaInicial;
+  let diaSemana = diaParaEscala(diaInicial);
   let anoAtual = Number(diaInicial.slice(0, 4));
   let mesAtual = Number(diaInicial.slice(5, 7)) - 1;
   let diaTurno = diaInicial;
@@ -156,15 +157,6 @@ window.MutiraoCuidadoPronto.then(core => {
     coberto: '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     consulta: ''
   };
-  const diaHoje = new Date(`${HOJE}T12:00:00`);
-  const somarDias = dias => {
-    const data = new Date(diaHoje);
-    data.setDate(data.getDate() + dias);
-    return data.toISOString().slice(0, 10);
-  };
-  const inicioSemana = somarDias(-diaHoje.getDay());
-  const fimSemana = somarDias(6 - diaHoje.getDay());
-
   const renderizarMes = () => {
     const estado = obterEstado();
     renderizarCalendarioMensal(containerMes, {
@@ -176,7 +168,7 @@ window.MutiraoCuidadoPronto.then(core => {
         const rotuloDia = obterRotuloLacuna(chave, estado);
         const temLacuna = rotuloDia === 'Parcial' || rotuloDia === 'Descoberto';
         const parcial = rotuloDia === 'Parcial';
-        const coberto = rotuloDia === 'Coberto' && ((chave >= inicioSemana && chave <= fimSemana) || !estado.escalaDemonstracao);
+        const coberto = rotuloDia === 'Coberto';
         const situacao = temLacuna ? (parcial ? 'parcial' : 'sem-ninguem') : coberto ? 'coberto' : '';
         const textos = {
           'sem-ninguem': ', sem ninguém em algum horário',
@@ -267,7 +259,7 @@ window.MutiraoCuidadoPronto.then(core => {
         ${sugestao ? `
           <div class="agenda__aviso-compromisso">
             <p><i class="fa-regular fa-clock" aria-hidden="true"></i> Ninguém na escala às ${escaparHtml(item.hora.replace(':00', 'h'))}. Sugestão de turno: ${escaparHtml(sugestao.horario)}.</p>
-            <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-adicionar-turno data-dia="${escaparHtml(sugestao.dia)}" data-horario="${escaparHtml(sugestao.horario)}">Adicionar turno</button>
+            <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${escaparHtml(sugestao.dia)}" data-horario="${escaparHtml(sugestao.horario)}">Ficar nesse horário</button>
           </div>
         ` : ''}
       </article>
@@ -304,13 +296,7 @@ window.MutiraoCuidadoPronto.then(core => {
     if (subtituloEscala) {
       subtituloEscala.textContent = `Quem cuida na semana · turnos de ${formatarDataCurta(diaSemana, true)}`;
     }
-    const btnAdicionarCabecalho = pagina.querySelector('[data-adicionar-turno-cabecalho]');
-    if (btnAdicionarCabecalho) {
-      const livresCabecalho = core.obterHorariosLivres(diaSemana, estado);
-      btnAdicionarCabecalho.hidden = !livresCabecalho.length;
-      btnAdicionarCabecalho.dataset.dia = diaSemana;
-      btnAdicionarCabecalho.dataset.horario = livresCabecalho.map(f => f.horario).join(', ');
-    }
+
 
     pagina.querySelector('[data-semana]').innerHTML = semana.map(dia => `
       <button type="button" data-dia-semana="${dia}" aria-pressed="${diaSemana === dia}">
@@ -322,8 +308,6 @@ window.MutiraoCuidadoPronto.then(core => {
     const renderizarPedido = ([chave, pedido]) => `
       <div class="painel__acoes">
         <p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · Aguardando aceite</p>
-        <button type="button" class="botao botao--secundario" data-decidir-atribuicao="aceitar" data-chave="${escaparHtml(chave)}">Simular aceite</button>
-        <button type="button" class="botao botao--secundario" data-decidir-atribuicao="recusar" data-chave="${escaparHtml(chave)}">Simular recusa</button>
         <button type="button" class="botao botao--secundario" data-decidir-atribuicao="cancelar" data-chave="${escaparHtml(chave)}">Cancelar pedido</button>
       </div>`;
 
@@ -341,7 +325,7 @@ window.MutiraoCuidadoPronto.then(core => {
         <p>Ainda não há uma pessoa escalada para esse horário.</p>
         ${pedidos.map(renderizarPedido).join('')}
       </div>
-      <button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Ficar nesse horário</button>
+      ${dia >= HOJE ? `<button type="button" class="botao botao--secundario" data-dialogo-dinamico="dialogo-cobrir-horario" data-dia="${dia}" data-horario="${escaparHtml(horario)}">Ficar nesse horário</button>` : ''}
     </div>`;
     };
 
@@ -362,12 +346,22 @@ window.MutiraoCuidadoPronto.then(core => {
     };
 
     const linhaDoDia = construirLinhaDoTempoDia(diaSemana, estado);
+    core.atualizarBotaoAdicionarTurno(pagina.querySelector('[data-adicionar-turno-cabecalho]'), diaSemana, linhaDoDia);
     const pedidos = core.obterPedidosForaDaRotina(diaSemana, estado);
     const acoes = pedidos.map(renderizarPedido).join('');
     pagina.querySelector('[data-turnos]').innerHTML = linhaDoDia.map(seg => seg.tipo === 'lacuna'
       ? linhaDescoberto(seg.horario, diaSemana)
       : renderizarTurno(seg, diaSemana)
-    ).join('') + acoes + core.renderizarAdicionarTurnos(diaSemana, estado, linhaDoDia);
+    ).join('') + acoes + (!linhaDoDia.length && !acoes ? `
+      <div class="agenda__escala-vazia">
+        <span class="agenda__escala-vazia-icone" aria-hidden="true"><i class="fa-regular fa-calendar"></i></span>
+        <div>
+          <strong>Nenhum turno marcado</strong>
+          <p>${core.diaEditavelNaEscala(diaSemana)
+            ? 'Use Adicionar turno para combinar um horário de cuidado.'
+            : 'Este dia já passou. Escolha hoje ou uma data futura para adicionar um turno.'}</p>
+        </div>
+      </div>` : '');
 
     const diasComLacuna = [...new Set([...semana, ...Object.keys(estado.lacunasTurno || {})])]
       .sort()
@@ -524,7 +518,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
   pagina.addEventListener('click', async evento => {
     if (evento.target.closest('[data-ver-turno]')) {
-      diaSemana = diaSelecionado;
+      diaSemana = diaParaEscala(diaSelecionado);
       renderizarAgenda();
       requestAnimationFrame(() => {
         pagina.querySelector('[data-titulo-escala]')?.focus();
@@ -644,14 +638,14 @@ window.MutiraoCuidadoPronto.then(core => {
       anoAtual = proximo.getFullYear();
       mesAtual = proximo.getMonth();
       diaSelecionado = gerarChaveData(anoAtual, mesAtual, 1);
-      diaSemana = diaSelecionado;
+      diaSemana = diaParaEscala(diaSelecionado);
       renderizar();
       return;
     }
 
     if (botao.dataset.selecionarDia) {
       diaSelecionado = botao.dataset.selecionarDia;
-      diaSemana = diaSelecionado;
+      diaSemana = diaParaEscala(diaSelecionado);
       renderizar();
       pagina.querySelector(`[data-selecionar-dia="${diaSelecionado}"]`)?.focus();
       return;
@@ -709,6 +703,11 @@ window.MutiraoCuidadoPronto.then(core => {
     if (botao.hasAttribute('data-abrir-atribuir-turno')) {
       const form = dialogoCobrirHorario.querySelector('[data-formulario-mvp="cobertura"]');
       const intervalo = core.obterIntervaloFormularioTurno(form, horarioTurno);
+      if (!intervalo.duracao || !core.obterHorariosLivres(diaTurno).some(faixa =>
+        faixa.inicio <= intervalo.inicio && intervalo.inicio < intervalo.fim && intervalo.fim <= faixa.fim)) {
+        registrarStatus('Escolha um horário disponível na escala.');
+        return;
+      }
       horarioPedido = formatarIntervaloTurno(intervalo.inicio, intervalo.duracao);
       criarRotinaComPedido = form.elements.escopoTurno.disabled ? core.ESCOPO_TURNO.pontual : form.elements.escopoTurno.value;
       dialogoCobrirHorario.close();
@@ -731,8 +730,7 @@ window.MutiraoCuidadoPronto.then(core => {
       diaTurno = botao.dataset.dia;
       horarioTurno = botao.dataset.horario || '';
       const dialogo = document.getElementById(botao.dataset.dialogoDinamico);
-      if (dialogo) {
-        core.prepararFormularioTurno(dialogo, diaTurno, horarioTurno, botao.hasAttribute('data-adicionar-turno'));
+      if (dialogo && core.prepararFormularioTurno(dialogo, diaTurno, horarioTurno, botao.hasAttribute('data-adicionar-turno'))) {
         dialogo.showModal();
       }
       return;
@@ -797,7 +795,7 @@ window.MutiraoCuidadoPronto.then(core => {
     const botao = evento.target.closest('[data-decidir-atribuicao]');
     if (!botao) return;
     try {
-      core.resolverAtribuicao(botao.dataset.chave, botao.dataset.decidirAtribuicao === 'aceitar');
+      core.resolverAtribuicao(botao.dataset.chave, false);
       renderizar();
       registrarStatus('Pronto. A escala foi atualizada.');
       pagina.querySelector(`[data-dia-semana="${diaSemana}"]`)?.focus();
@@ -855,7 +853,7 @@ window.MutiraoCuidadoPronto.then(core => {
       });
 
       diaSelecionado = campos.dia;
-      diaSemana = campos.dia;
+      diaSemana = diaParaEscala(campos.dia);
       anoAtual = Number(diaSelecionado.slice(0, 4));
       mesAtual = Number(diaSelecionado.slice(5, 7)) - 1;
       mensagem = idEdicao ? 'Compromisso alterado na Agenda.' : 'Compromisso salvo na Agenda.';
@@ -890,7 +888,13 @@ window.MutiraoCuidadoPronto.then(core => {
       if (!core.obterParticipantesRede().some(pessoa => pessoa.nome === responsavel)) return;
       const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
       const horarioAlvo = horarioPedido;
-      const intervaloPedido = extrairHorasTurno(horarioAlvo);
+      const intervaloPedido = core.lerFaixaTurno(horarioAlvo);
+      if (!intervaloPedido || !core.diaEditavelNaEscala(diaTurno)
+        || !core.obterHorariosLivres(diaTurno).some(faixa =>
+          faixa.inicio <= intervaloPedido.inicio && intervaloPedido.fim <= faixa.fim)) {
+        registrarStatus('O horário mudou. Confira a escala antes de fazer o pedido.');
+        return;
+      }
       const existePedidoNoHorario = Object.values(obterEstado().atribuicoesTurno || {}).some(pedido => {
         if (pedido.dia !== diaTurno) return false;
         const outro = extrairHorasTurno(pedido.horario);

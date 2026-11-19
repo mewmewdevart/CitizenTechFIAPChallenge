@@ -520,6 +520,18 @@ window.MutiraoCuidadoPronto.then(core => {
         );
         if (atual === diario) campos.cobertura.add(new Option(core.obterDescricaoAcompanhamento(estado), diario));
         campos.cobertura.value = atual;
+        const inicioParcial = campos.inicioAcompanhamentoParcial;
+        inicioParcial.replaceChildren(new Option('Selecione um horário', ''), ...Array.from({ length: 13 }, (_, hora) =>
+          new Option(core.formatarIntervaloTurno(hora, 12), String(hora))));
+        inicioParcial.value = person.inicioAcompanhamentoParcial || '';
+        const atualizarCampoParcial = () => {
+          const ativa = campos.cobertura.value === parcial;
+          inicioParcial.closest('[data-inicio-parcial-campo]').hidden = !ativa;
+          inicioParcial.disabled = !ativa;
+          inicioParcial.required = ativa;
+        };
+        campos.cobertura.onchange = atualizarCampoParcial;
+        atualizarCampoParcial();
         const blocoRotinas = formulario.querySelector('[data-rotinas-semanais]');
         if (blocoRotinas) {
           const rotinas = core.obterRotinasSemanais(estado);
@@ -835,11 +847,20 @@ window.MutiraoCuidadoPronto.then(core => {
       campos.avisoTexto = (campos.avisoTexto || '').trim().slice(0, 70);
       const rotinasEncerradas = new FormData(formulario).getAll('encerrarRotina');
       delete campos.encerrarRotina;
+      if (campos.cobertura === core.ACOMPANHAMENTO.parcial
+        && !/^(?:[0-9]|1[0-2])$/.test(campos.inicioAcompanhamentoParcial || '')) return;
 
-      atualizarEstado(estado => rotinasEncerradas.reduce(
-        (proximo, id) => core.removerRotinaSemanal(proximo, id),
-        { ...estado, person: { ...estado.person, ...campos } }
-      ));
+      atualizarEstado(estado => {
+        const person = { ...estado.person, ...campos };
+        if (person.cobertura !== core.ACOMPANHAMENTO.parcial) {
+          delete person.inicioAcompanhamentoParcial;
+          delete person.desdeAcompanhamentoParcial;
+        } else if (person.inicioAcompanhamentoParcial !== estado.person.inicioAcompanhamentoParcial
+          || !core.diaEscalaValido(person.desdeAcompanhamentoParcial)) {
+          person.desdeAcompanhamentoParcial = core.HOJE;
+        }
+        return rotinasEncerradas.reduce((proximo, id) => core.removerRotinaSemanal(proximo, id), { ...estado, person });
+      });
       mensagem = {
         titulo: 'Ficha atualizada',
         descricao: `Cadastro de ${core.nomePessoaAcompanhada()} atualizado.`
