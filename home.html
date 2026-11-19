@@ -29,12 +29,12 @@
   <meta name="twitter:description"
     content="Acompanhe o turno atual, o porta-remédios do dia, os próximos compromissos e os avisos da rede de cuidado no painel inicial do Mutirão." />
 
-  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/home.html" />
-  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/home.html" />
+  <link rel="canonical" href="https://mutirao-citizen-tech-2026.vercel.app/home.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech-2026.vercel.app/home.html" />
   <meta property="og:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
   <meta name="twitter:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
 
   <!-- Favicons e Web App Manifest -->
   <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
@@ -61,7 +61,8 @@
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
   <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
-  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous"
+    data-base-cuidado />
   <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
@@ -98,8 +99,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
-            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente
+            width="36" height="36" alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -151,8 +152,9 @@
         <p class="inicio__data"><time datetime="2026-11-10T11:58">Cenário de demonstração | Terça-feira, 10 de novembro
             de 2026 · 11h58</time></p>
       </div>
-      <button data-cuidado-acao inert type="button" class="botao botao--primario" data-dialogo="dialogo-registrar-cuidado"><i
-          class="fa-solid fa-plus" aria-hidden="true"></i> Anotar o turno</button>
+      <button data-cuidado-acao inert type="button" class="botao botao--primario"
+        data-dialogo="dialogo-registrar-cuidado"><i class="fa-solid fa-plus" aria-hidden="true"></i> Anotar o
+        turno</button>
     </header>
     <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
 
@@ -180,9 +182,11 @@
       </div>
     </section>
 
-    <section data-cuidado-conteudo inert aria-busy="true" class="apoio__painel inicio__resumo" aria-labelledby="titulo-pessoa">
+    <section data-cuidado-conteudo inert aria-busy="true" class="apoio__painel inicio__resumo"
+      aria-labelledby="titulo-pessoa">
       <div class="painel__item">
-        <img class="avatar avatar--medio" src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="64" height="64" alt="">
+        <img class="avatar avatar--medio" src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="64"
+          height="64" alt="">
         <div class="painel__texto">
           <strong id="titulo-pessoa">Pessoa acompanhada</strong>
           <span data-cobertura-acompanhada>Necessidade de acompanhamento: não informada</span>
@@ -221,7 +225,8 @@
 
     <div data-cuidado-conteudo inert aria-busy="true" class="painel__grade">
       <div class="painel__coluna">
-        <section id="porta-remedios-hoje" class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios" tabindex="-1">
+        <section id="porta-remedios-hoje" class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios"
+          tabindex="-1">
           <div class="painel__cartao-cabecalho">
             <h2 id="titulo-porta-remedios">Porta remédios de hoje</h2>
             <small data-porta-remedios-resumo>Nenhum remédio na rotina</small>
@@ -401,7 +406,8 @@
         <div class="dialogo-mvp__secao" data-bloco-cancelar-lote hidden>
           <p class="dialogo-mvp__secao-titulo">Cancelamento em lote</p>
           <p class="formulario-mvp__ajuda" data-texto-cancelar-lote></p>
-          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar meus turnos futuros</button>
+          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar meus turnos
+            futuros</button>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>

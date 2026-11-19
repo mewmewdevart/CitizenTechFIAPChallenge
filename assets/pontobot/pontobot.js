@@ -3,7 +3,7 @@ import { getFallback } from './knowledge.js';
 const stylesheet = new URL('./pontobot.css', import.meta.url).href;
 const avatar = new URL('./avatar.svg', import.meta.url).href;
 const defaultApi = 'https://mutirao-pontobot-frontend.vercel.app/api/chat';
-const defaultApp = 'https://mutirao-citizen-tech.vercel.app/';
+const defaultApp = 'https://mutirao-citizen-tech-2026.vercel.app/';
 const suggestions = [
   'Como assumo um turno?',
   'Como registro um medicamento ou estoque?',

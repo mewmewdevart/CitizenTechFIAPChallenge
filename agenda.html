@@ -29,12 +29,12 @@
   <meta name="twitter:description"
     content="Organize turnos de cuidado, compromissos e tarefas diárias em uma agenda compartilhada entre familiares e cuidadores no Mutirão." />
 
-  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/agenda.html" />
-  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/agenda.html" />
+  <link rel="canonical" href="https://mutirao-citizen-tech-2026.vercel.app/agenda.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech-2026.vercel.app/agenda.html" />
   <meta property="og:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
   <meta name="twitter:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
 
   <!-- Favicons e Web App Manifest -->
   <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
@@ -59,7 +59,8 @@
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/agenda.css" />
   <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
-  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous"
+    data-base-cuidado />
   <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
@@ -95,8 +96,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
-            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente
+            width="36" height="36" alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -149,12 +150,15 @@
         <p>Veja as consultas e quem cuida em cada horário</p>
       </div>
       <div class="agenda__acoes">
-        <button data-cuidado-acao inert type="button" class="botao botao--primario" data-dialogo="dialogo-novo-compromisso"><i
-            class="fa-solid fa-plus" aria-hidden="true"></i> Novo compromisso</button>
-        <button data-cuidado-acao inert type="button" class="botao botao--secundario" data-dialogo="dialogo-exportar-agenda"><i
-            class="fa-regular fa-calendar" aria-hidden="true"></i> Baixar</button>
-        <button data-cuidado-acao inert type="button" class="botao botao--secundario" data-dialogo="dialogo-compartilhar-agenda"><i
-            class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar</button>
+        <button data-cuidado-acao inert type="button" class="botao botao--primario"
+          data-dialogo="dialogo-novo-compromisso"><i class="fa-solid fa-plus" aria-hidden="true"></i> Novo
+          compromisso</button>
+        <button data-cuidado-acao inert type="button" class="botao botao--secundario"
+          data-dialogo="dialogo-exportar-agenda"><i class="fa-regular fa-calendar" aria-hidden="true"></i>
+          Baixar</button>
+        <button data-cuidado-acao inert type="button" class="botao botao--secundario"
+          data-dialogo="dialogo-compartilhar-agenda"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          Compartilhar</button>
       </div>
     </header>
     <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
@@ -390,7 +394,8 @@
         <div class="dialogo-mvp__secao" data-bloco-cancelar-lote hidden>
           <p class="dialogo-mvp__secao-titulo">Cancelamento em lote</p>
           <p class="formulario-mvp__ajuda" data-texto-cancelar-lote></p>
-          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar meus turnos futuros</button>
+          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar meus turnos
+            futuros</button>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>

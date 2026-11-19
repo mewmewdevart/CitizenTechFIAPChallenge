@@ -29,12 +29,12 @@
   <meta name="twitter:description"
     content="Consulte a ficha da pessoa acompanhada, as informações de cuidado e o diário de turno." />
 
-  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/ficha.html" />
-  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/ficha.html" />
+  <link rel="canonical" href="https://mutirao-citizen-tech-2026.vercel.app/ficha.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech-2026.vercel.app/ficha.html" />
   <meta property="og:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
   <meta name="twitter:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
 
   <!-- Favicons e Web App Manifest -->
   <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
@@ -59,7 +59,8 @@
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/ficha.css" />
   <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
-  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous"
+    data-base-cuidado />
   <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
@@ -94,8 +95,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
-            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente
+            width="36" height="36" alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -150,20 +151,23 @@
         <p>Veja e atualize os dados da ficha para mostrar à família, aos cuidadores e aos médicos.</p>
       </div>
       <div class="ficha__acoes">
-        <button data-cuidado-acao inert type="button" class="botao botao--primario" data-dialogo="dialogo-editar-ficha"><i
-            class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar ficha</button>
-        <button data-cuidado-acao inert type="button" class="botao botao--secundario" data-dialogo="dialogo-compartilhar-resumo"><i
-            class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+        <button data-cuidado-acao inert type="button" class="botao botao--primario"
+          data-dialogo="dialogo-editar-ficha"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar
+          ficha</button>
+        <button data-cuidado-acao inert type="button" class="botao botao--secundario"
+          data-dialogo="dialogo-compartilhar-resumo"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
           Compartilhar
           resumo</button>
-        <button data-cuidado-acao inert type="button" class="botao botao--secundario" data-dialogo="dialogo-impressao"><i
-            class="fa-solid fa-print" aria-hidden="true"></i> Ver antes de imprimir</button>
+        <button data-cuidado-acao inert type="button" class="botao botao--secundario"
+          data-dialogo="dialogo-impressao"><i class="fa-solid fa-print" aria-hidden="true"></i> Ver antes de
+          imprimir</button>
       </div>
     </header>
     <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
     <section data-cuidado-conteudo inert aria-busy="true" class="cartao ficha__identidade">
-      <div class="ficha__retrato"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="140" height="140" alt=""><img
-          src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="ficha__mascote"></div>
+      <div class="ficha__retrato"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="140"
+          height="140" alt=""><img src="assets/media/mascotes/icone-mascote-minhoca.svg" alt="" class="ficha__mascote">
+      </div>
       <div class="ficha__pessoa"><span>Quem recebe cuidado</span>
         <h2 data-pessoa-nome>Pessoa acompanhada</h2>
         <p data-pessoa-nascimento>Nascimento não informado</p>
@@ -175,8 +179,8 @@
         <p data-aviso-alergia-texto></p>
       </div>
     </section>
-    <section data-cuidado-conteudo inert aria-busy="true" class="cartao ficha__cartao ficha__ultimo-relato" aria-labelledby="titulo-resumo-ultimo-relato"
-      data-resumo-ultimo-relato>
+    <section data-cuidado-conteudo inert aria-busy="true" class="cartao ficha__cartao ficha__ultimo-relato"
+      aria-labelledby="titulo-resumo-ultimo-relato" data-resumo-ultimo-relato>
       <div class="ficha__secao-cabecalho">
         <h2 id="titulo-resumo-ultimo-relato">Último relato do diário</h2>
         <a class="botao botao--secundario" href="#diario">Ver histórico completo</a>

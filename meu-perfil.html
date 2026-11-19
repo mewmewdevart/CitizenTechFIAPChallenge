@@ -29,12 +29,12 @@
   <meta name="twitter:description"
     content="Gerencie seus dados pessoais, papel na rede de cuidado e preferências de notificações para acompanhar a rotina no Mutirão." />
 
-  <link rel="canonical" href="https://mutirao-citizen-tech.vercel.app/meu-perfil.html" />
-  <meta property="og:url" content="https://mutirao-citizen-tech.vercel.app/meu-perfil.html" />
+  <link rel="canonical" href="https://mutirao-citizen-tech-2026.vercel.app/meu-perfil.html" />
+  <meta property="og:url" content="https://mutirao-citizen-tech-2026.vercel.app/meu-perfil.html" />
   <meta property="og:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
   <meta name="twitter:image"
-    content="https://mutirao-citizen-tech.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
 
   <!-- Favicons e Web App Manifest -->
   <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
@@ -60,7 +60,8 @@
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
   <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
-  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous"
+    data-base-cuidado />
   <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
@@ -97,8 +98,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
-            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente
+            width="36" height="36" alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html" aria-current="page"><i class="fa-regular fa-user"
               aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -152,8 +153,9 @@
         <p>Veja seus dados, leia os recados da família e cuide de você também.</p>
       </div>
       <div class="painel__acoes">
-        <button data-cuidado-acao inert type="button" class="botao botao--primario" data-dialogo="dialogo-editar-perfil"><i
-            class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar perfil</button>
+        <button data-cuidado-acao inert type="button" class="botao botao--primario"
+          data-dialogo="dialogo-editar-perfil"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar
+          perfil</button>
       </div>
     </header>
     <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
@@ -164,11 +166,12 @@
       <button type="button" role="tab" id="aba-perfil-cuidar" data-area-perfil="cuidar" aria-selected="false"
         aria-controls="perfil-cuidar" tabindex="-1">Cuidar de quem cuida</button>
     </div>
-    <div data-cuidado-conteudo inert aria-busy="true" id="perfil-dados" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-dados">
+    <div data-cuidado-conteudo inert aria-busy="true" id="perfil-dados" class="perfil__painel" role="tabpanel"
+      aria-labelledby="aba-perfil-dados">
       <section class="apoio__painel perfil__identidade" aria-labelledby="titulo-perfil">
         <div class="perfil__retrato">
-          <img class="avatar avatar--grande" src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="120" height="120" alt=""
-            data-perfil-avatar>
+          <img class="avatar avatar--grande" src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente
+            width="120" height="120" alt="" data-perfil-avatar>
           <img class="perfil__mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" data-perfil-mascote
             hidden>
         </div>
@@ -228,7 +231,8 @@
       </section>
 
     </div>
-    <div data-cuidado-conteudo inert aria-busy="true" id="perfil-cuidar" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-cuidar" hidden>
+    <div data-cuidado-conteudo inert aria-busy="true" id="perfil-cuidar" class="perfil__painel" role="tabpanel"
+      aria-labelledby="aba-perfil-cuidar" hidden>
       <section class="cuidar__faixa" aria-labelledby="titulo-cuidar">
         <span class="cuidar__rotulo">Cuidar de quem cuida</span>
         <h2 id="titulo-cuidar">Quem cuida também precisa de cuidado. Este espaço é seu.</h2>
@@ -467,7 +471,8 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Escolha o turno em que você precisa de ajuda. Acompanhe o pedido aqui. Enquanto estiver pendente, você continua na escala.</p>
+      <p>Escolha o turno em que você precisa de ajuda. Acompanhe o pedido aqui. Enquanto estiver pendente, você continua
+        na escala.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga" novalidate>
         <fieldset class="dialogo-mvp__opcoes" data-opcoes-folga>
           <legend>Qual turno você quer passar?</legend>

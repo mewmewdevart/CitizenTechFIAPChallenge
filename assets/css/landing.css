@@ -141,14 +141,23 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
 }
 
 .landing-topo__nav a:hover,
-.landing-topo__nav a:focus-visible {
+.landing-topo__nav a:focus-visible,
+.landing-topo__nav a[aria-current="location"] {
   background: var(--cor-superficie-suave);
   color: var(--cor-primaria);
 }
 
 .landing-topo__cta,
-.landing-final .botao {
+.landing-final .botao,
+.landing-hero__acoes .botao {
   min-height: var(--tamanho-alvo-toque);
+}
+
+.landing-hero__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-sm);
 }
 
 .landing-final .botao--primario {
@@ -412,6 +421,71 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   height: auto;
 }
 
+/* Como funciona em 3 passos */
+.landing-passos {
+  display: grid;
+  gap: clamp(20px, 2.5vw, 32px);
+  padding-block-start: var(--espaco-md);
+}
+
+.landing-passos__cabecalho {
+  display: grid;
+  gap: var(--espaco-xs);
+  text-align: center;
+}
+
+.landing-passos__cabecalho h2 {
+  font-size: clamp(1.5rem, 2.22vw, 2rem);
+}
+
+.landing-passos__cabecalho p {
+  margin: 0 auto;
+  max-width: 58ch;
+  color: var(--cor-texto-secundario);
+}
+
+.landing-passos__lista {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espaco-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.landing-passo {
+  display: grid;
+  align-content: start;
+  gap: var(--espaco-sm);
+  padding: var(--espaco-xl);
+  border: var(--borda-padrao);
+  border-radius: var(--raio-xl);
+  background: var(--cor-fundo-pagina);
+}
+
+.landing-passo__numero {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--raio-pill);
+  background: var(--cor-superficie-suave);
+  color: var(--cor-primaria);
+  font-weight: var(--peso-negrito);
+  font-size: var(--texto-interface);
+}
+
+.landing-passo h3 {
+  font-size: 1.0625rem;
+}
+
+.landing-passo p {
+  margin: 0;
+  color: var(--cor-texto-secundario);
+  font-size: var(--texto-interface);
+  line-height: 1.6;
+}
+
 /* Blocos de recursos alternados */
 .landing-recursos {
   overflow-x: clip;
@@ -601,19 +675,43 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   font-size: 0.8125rem;
 }
 
-/* Seção final com onda, braços e celular */
+/* Seção final com onda, braços e mockup */
 .landing-final {
+  display: grid;
+  justify-items: center;
+  gap: clamp(20px, 2.5vw, 32px);
+  width: 100%;
+  padding-block-start: clamp(32px, 4vw, 56px);
+}
+
+.landing-final__cabecalho {
+  display: grid;
+  gap: var(--espaco-xs);
+  text-align: center;
+}
+
+.landing-final__cabecalho h2 {
+  font-size: clamp(1.5rem, 2.22vw, 2rem);
+}
+
+.landing-final__cabecalho p {
+  margin: 0 auto;
+  max-width: 58ch;
+  color: var(--cor-texto-secundario);
+}
+
+.landing-final__palco {
   position: relative;
   isolation: isolate;
   display: grid;
   justify-items: center;
   width: 100%;
-  padding-block-start: clamp(64px, 7vw, 104px);
+  padding-block-start: clamp(24px, 3vw, 44px);
   padding-block-end: clamp(48px, 6vw, 88px);
   overflow: clip;
 }
 
-.landing-final::before {
+.landing-final__palco::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -630,6 +728,18 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   width: 100%;
   height: clamp(110px, 22vw, 310px);
   fill: var(--cor-primaria);
+}
+
+.pagina-landing .rodape-site a {
+  color: var(--cor-primaria);
+  font-weight: var(--peso-semibold);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.pagina-landing .rodape-site a:hover,
+.pagina-landing .rodape-site a:focus-visible {
+  color: var(--cor-primaria-hover);
 }
 
 .landing-final__conteudo {
@@ -689,12 +799,17 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
 html.tema--acolhedor .landing-hero,
 html.tema--acolhedor .landing-vitrine__janela,
 html.tema--acolhedor .landing-mensagem__balao,
+html.tema--acolhedor .landing-passo,
 html.tema--acolhedor .landing-bloco__previa,
 html.tema--acolhedor .landing-faq__item,
 html.tema--acolhedor .landing-topo__alternar,
 html.tema--acolhedor .landing-rolar {
   border: var(--borda-padrao);
   box-shadow: var(--sombra-cartao);
+}
+
+html.tema--acolhedor .landing-passo {
+  background: var(--cor-superficie);
 }
 
 html.tema--acolhedor .landing-mensagem__balao::before {
@@ -713,6 +828,7 @@ html.acessibilidade--alto-contraste .landing-topo {
 html.acessibilidade--alto-contraste .landing-hero,
 html.acessibilidade--alto-contraste .landing-vitrine__janela,
 html.acessibilidade--alto-contraste .landing-mensagem__balao,
+html.acessibilidade--alto-contraste .landing-passo,
 html.acessibilidade--alto-contraste .landing-bloco__previa,
 html.acessibilidade--alto-contraste .landing-faq__item,
 html.acessibilidade--alto-contraste .landing-topo__menu,
@@ -881,6 +997,12 @@ html.acessibilidade--reduzir-animacoes .landing-final__tela--estatica {
     grid-column: 2;
     justify-self: end;
   }
+
+  .landing-passos__lista {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 680px;
+    margin-inline: auto;
+  }
 }
 
 @media (max-width: 760px) {
@@ -957,7 +1079,11 @@ html.acessibilidade--reduzir-animacoes .landing-final__tela--estatica {
   }
 
   .landing-final {
-    padding-block-start: 48px;
+    padding-block-start: 28px;
+  }
+
+  .landing-final__palco {
+    padding-block-start: 24px;
     padding-block-end: 40px;
   }
 
@@ -997,6 +1123,7 @@ html.acessibilidade--reduzir-animacoes .landing-final__tela--estatica {
   .landing-hero,
   .landing-vitrine__janela,
   .landing-mensagem__balao,
+  .landing-passo,
   .landing-bloco__previa,
   .landing-faq__item {
     border: 1px solid currentColor;
