@@ -153,6 +153,7 @@ Atualmente a suíte conta com **26 testes** distribuídos em **6 arquivos**:
 
 <div align="center">
   <img  alt="Icone da Mari" src="https://github.com/user-attachments/assets/227e3796-35ed-431a-a4f0-d03852637bc9" />
+  Projeto Autoral feito com muito amor <3 !
 </div>
 
 ## 🔗 Referências e Publicação
