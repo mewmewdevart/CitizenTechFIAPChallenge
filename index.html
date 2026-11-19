@@ -57,6 +57,16 @@
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/landing.css" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Mutirão",
+      "url": "https://mutirao-citizen-tech.vercel.app/",
+      "inLanguage": "pt-BR",
+      "description": "Plataforma web de cuidado compartilhado para organizar turnos, remédios, documentos, diário de passagem e direitos de quem recebe cuidado."
+    }
+  </script>
   <script src="assets/js/acessibilidade.js" defer></script>
 </head>
 
@@ -69,14 +79,23 @@
         <img src="assets/media/marca/logo-mutirao.svg" alt="" width="44" height="44" aria-hidden="true" />
         <span>Mutirão</span>
       </a>
-      <nav class="landing-topo__nav" aria-label="Seções da página">
-        <a href="#topo">Início</a>
-        <a href="#conversa">Para quem é</a>
-        <a href="#recursos">Funcionalidades</a>
-        <a href="#faq">FAQ</a>
-        <a href="#demonstracao">Demonstração</a>
-      </nav>
-      <a class="botao botao--primario landing-topo__cta" href="login.html">Acessar a demonstração</a>
+
+      <button class="botao-icone landing-topo__alternar" type="button" id="alternar-menu-landing"
+        aria-expanded="false" aria-controls="menu-landing" aria-label="Abrir menu de navegação">
+        <i class="fa-solid fa-bars landing-topo__icone-abrir" aria-hidden="true"></i>
+        <i class="fa-solid fa-xmark landing-topo__icone-fechar" aria-hidden="true"></i>
+      </button>
+
+      <div class="landing-topo__menu" id="menu-landing">
+        <nav class="landing-topo__nav" aria-label="Seções da página">
+          <a href="#topo">Início</a>
+          <a href="#conversa">Para quem é</a>
+          <a href="#recursos">Funcionalidades</a>
+          <a href="#faq">FAQ</a>
+          <a href="#demonstracao">Demonstração</a>
+        </nav>
+        <a class="botao botao--primario landing-topo__cta" href="login.html">Acessar a demonstração</a>
+      </div>
     </div>
   </header>
 
@@ -110,7 +129,8 @@
       </div>
     </section>
 
-    <section class="landing-grupo landing-container" id="conversa" aria-label="Conversa no grupo da família">
+    <section class="landing-grupo landing-container" id="conversa" aria-labelledby="titulo-conversa">
+      <h2 id="titulo-conversa" class="acessibilidade__leitor-tela">Exemplo de conversa no grupo da família</h2>
       <ol class="landing-grupo__mensagens">
         <li class="landing-mensagem landing-mensagem--mae">
           <img src="assets/media/mascotes/icone-mascote-espeto.svg" alt="" width="48" height="48" aria-hidden="true" />
@@ -143,31 +163,31 @@
         <article class="landing-bloco">
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/home.png"
-                alt="Tela de Início mostrando quem cuida no horário, alertas de cobertura e próximos compromissos"
-                width="1920" height="911" loading="lazy" />
+              <img src="assets/media/aplicacao/recurso-agenda.png"
+                alt="Tela de Agenda exibindo calendário mensal com indicadores de cobertura, tarefas do dia, consulta na UBS e botões para baixar ou compartilhar"
+                width="1366" height="780" />
             </figure>
             <img class="landing-braco landing-braco--azul" src="assets/media/ilustracoes/braco-esquerdo-1.svg" alt=""
               width="267" height="379" aria-hidden="true" />
           </div>
           <div class="landing-bloco__texto">
-            <h3>Escala clara e avisos do turno</h3>
-            <p>Veja quem está cuidando agora, identifique rapidamente qualquer horário sem ninguém e assuma turnos
-              pontuais ou recorrentes sem depender de mensagens soltas no grupo.</p>
+            <h3>Agenda do mês, tarefas e escala combinada</h3>
+            <p>Acompanhe o calendário mensal com o status de cada dia, veja os compromissos e tarefas de hoje em um só
+              lugar e assuma horários descobertos pontuais ou recorrentes sem depender de mensagens soltas no grupo.</p>
           </div>
         </article>
 
         <article class="landing-bloco landing-bloco--invertido">
           <div class="landing-bloco__texto">
-            <h3>Porta-remédios e controle de estoque</h3>
-            <p>Acompanhe as doses organizadas por horário, registre o que já foi dado com autoria e receba alertas
-              antecipados quando algum medicamento estiver acabando.</p>
+            <h3>Porta-remédios por horário e controle de estoque</h3>
+            <p>Confira rapidamente quais doses já foram dadas, quem registrou e o que ainda falta no dia, com opção de
+              desfazer sem medo, alerta de alergias em destaque e aviso antecipado quando algum item estiver acabando.</p>
           </div>
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/medicamentos.png"
-                alt="Tela de Medicamentos exibindo o porta-remédios por horário, doses dadas e alerta de estoque baixo"
-                width="1920" height="911" loading="lazy" />
+              <img src="assets/media/aplicacao/recurso-medicamentos.png"
+                alt="Tela de Medicamentos exibindo alerta de alergia, estoque baixo de Metformina e porta-remédios agrupado por horário"
+                width="1366" height="780" />
             </figure>
             <img class="landing-braco landing-braco--vermelho" src="assets/media/ilustracoes/braco-direito-1.svg" alt=""
               width="377" height="267" aria-hidden="true" />
@@ -177,29 +197,31 @@
         <article class="landing-bloco">
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/ficha.png"
-                alt="Ficha da pessoa acompanhada com alergia à dipirona, último relato do diário e dados de saúde"
-                width="1920" height="911" loading="lazy" />
+              <img src="assets/media/aplicacao/recurso-compartilhar.png"
+                alt="Janela Compartilhar resumo na Ficha permitindo escolher seções e enviar por cópia, WhatsApp ou e-mail"
+                width="1366" height="780" />
             </figure>
           </div>
           <div class="landing-bloco__texto">
-            <h3>Ficha única e diário da passagem de turno</h3>
-            <p>Reúna alergias, condições de saúde, contatos e o relato de quem cuidou antes para que a próxima pessoa
-              assuma o turno com todo o contexto em mãos.</p>
+            <h3>Compartilhe resumos e exporte compromissos</h3>
+            <p>Monte em segundos um resumo da ficha — escolhendo consultas, alergias, remédios de todo dia e relatos do
+              diário — para enviar por WhatsApp, e-mail ou cópia rápida, imprima a ficha completa e baixe a agenda em
+              arquivo <code>.ics</code> para o celular.</p>
           </div>
         </article>
 
         <article class="landing-bloco landing-bloco--invertido">
           <div class="landing-bloco__texto">
-            <h3>Direitos, serviços públicos e rede de apoio</h3>
-            <p>Consulte benefícios e serviços próximos pelo CEP ou cidade e organize os dados e preferências de quem
-              cuida para dividir responsabilidades com mais leveza.</p>
+            <h3>Acessibilidade, leitura confortável e dois temas</h3>
+            <p>Cada pessoa pode adaptar o Mutirão ao seu ritmo de leitura: aumente o tamanho da fonte, ative alto
+              contraste, destaque links, reduza animações, aumente o espaçamento entre linhas, use o tradutor em Libras
+              (VLibras) ou alterne entre os temas Neutro e Acolhedor.</p>
           </div>
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
-              <img src="assets/media/aplicacao/direitos.png"
-                alt="Tela de Direitos e serviços com questionário orientativo e busca de unidades por CEP" width="1920"
-                height="911" loading="lazy" />
+              <img src="assets/media/aplicacao/recurso-acessibilidade.png"
+                alt="Painel Ajustes de leitura aberto no tema Acolhedor exibindo tamanho de texto, alto contraste, destaque de links e troca de tema"
+                width="1366" height="780" />
             </figure>
           </div>
         </article>
@@ -279,7 +301,8 @@
       </div>
     </section>
 
-    <section class="landing-final" id="demonstracao" aria-label="Acesse a demonstração do Mutirão">
+    <section class="landing-final" id="demonstracao" aria-labelledby="titulo-demonstracao">
+      <h2 id="titulo-demonstracao" class="acessibilidade__leitor-tela">Acesse a demonstração do Mutirão</h2>
       <svg class="landing-final__onda" viewBox="0 0 1440 338" preserveAspectRatio="none" aria-hidden="true">
         <path
           d="M0 112C130 62 248 28 360 112C482 204 590 286 720 286C850 286 942 184 1072 118C1202 52 1320 12 1440 58V338H0V112Z" />
@@ -304,6 +327,7 @@
       <strong>Ctrl + People</strong> (Ingrid Silva de Lima, Larissa Cristina Benedito e Mayla Mayumi Motobe) · 2026.
     </p>
   </footer>
+  <script src="assets/js/landing.js" defer></script>
   <script src="assets/js/vlibras.js" defer></script>
 </body>
 
