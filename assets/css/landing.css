@@ -264,7 +264,7 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
 
 @media (min-width: 1025px) {
   .landing-dobra {
-    min-height: calc(100dvh - 85px);
+    min-height: calc(50dvh - 85px);
     padding-block-end: var(--espaco-md);
   }
 }
@@ -541,7 +541,7 @@ html.acessibilidade--reduzir-animacoes:has(.pagina-landing) {
   width: 36px;
   height: 36px;
   border-radius: var(--raio-lg);
-  background: var(--landing-destaque-superficie);
+  background: var(--cor-superficie-suave);
   color: var(--cor-primaria);
   font-weight: var(--peso-negrito);
   font-size: var(--texto-interface);
