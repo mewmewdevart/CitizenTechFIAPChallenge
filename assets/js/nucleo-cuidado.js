@@ -2,39 +2,38 @@ window.MutiraoCuidadoPronto = (async () => {
   const HOJE = '2026-11-10';
   const HORA_REFERENCIA = 11;
   const main = document.querySelector('main');
-  const seletor = document.querySelector('.seletor-pessoa');
-  const status = document.createElement('div');
-  status.className = 'cartao cuidado-status-inicial';
-  status.setAttribute('data-status-inicial-cuidado', '');
-  status.setAttribute('role', 'status');
-  status.textContent = 'Carregando a ficha de cuidado…';
-  main?.before(status);
-  if (main) {
-    main.hidden = true;
-    main.setAttribute('aria-busy', 'true');
-  }
-  if (seletor) seletor.inert = true;
-
+  const status = document.querySelector('[data-status-inicial-cuidado]');
+  const htmlPronto = new Promise(resolve => {
+    document.addEventListener('DOMContentLoaded', resolve, { once: true });
+  });
   let banco;
   try {
-    const { carregarBaseCuidado, criarBancoCuidado } = await import('./estado-cuidado.mjs');
-    banco = criarBancoCuidado(await carregarBaseCuidado(), {
+    const basePendente = fetch(document.querySelector('[data-base-cuidado]').href);
+    const [{ carregarBaseCuidado, criarBancoCuidado }, resposta] = await Promise.all([
+      import('./estado-cuidado.mjs'),
+      basePendente
+    ]);
+    banco = criarBancoCuidado(await carregarBaseCuidado(resposta), {
       getItem: chave => sessionStorage.getItem(chave),
       setItem: (chave, valor) => sessionStorage.setItem(chave, valor)
     });
   } catch {
+    document.documentElement.dataset.cuidado = 'erro';
+    document.querySelectorAll('[data-cuidado-conteudo][aria-busy]').forEach(elemento => {
+      elemento.removeAttribute('aria-busy');
+    });
     status.setAttribute('role', 'alert');
-    status.textContent = 'Não foi possível carregar as fichas de cuidado. Abra o Mutirão pelo endereço do site ou por um servidor local.';
+    status.textContent = 'Não foi possível carregar os dados do cuidado.';
     const tentar = document.createElement('button');
     tentar.type = 'button';
-    tentar.className = 'botao botao--secundario';
+    tentar.className = 'botao botao--secundario botao--pequeno';
     tentar.textContent = 'Tentar novamente';
     tentar.addEventListener('click', () => location.reload());
     status.append(tentar);
-    main?.removeAttribute('aria-busy');
     return null;
   }
 
+  await htmlPronto;
   let estadoAtual = banco.obterEstado();
 
   function alterarComAviso(operacao) {
@@ -102,6 +101,21 @@ window.MutiraoCuidadoPronto = (async () => {
     estadoAtual = banco.obterEstado();
     return true;
   };
+
+  const iniciarRoteiro = () => {
+    if (!document.querySelector('[data-roteiro-inicio]')) return;
+    const url = new URL(location.href);
+    if (url.searchParams.get('roteiro') !== 'mari') return;
+    try {
+      selecionarPerfilAcompanhado('mari');
+    } catch {
+      return;
+    }
+    url.searchParams.set('roteiro', '1');
+    history.replaceState(history.state, '', url);
+  };
+
+  iniciarRoteiro();
 
   const obterCompromissos = (estado = estadoAtual) =>
     [...estado.events].sort((a, b) => `${a.dia}T${a.hora}`.localeCompare(`${b.dia}T${b.hora}`));
@@ -1690,12 +1704,18 @@ window.MutiraoCuidadoPronto = (async () => {
   };
   atualizarSeletoresRede();
   mostrarSaidaRede();
-  if (seletor) seletor.inert = false;
-  if (main) {
-    main.hidden = false;
-    main.removeAttribute('aria-busy');
-  }
-  status.remove();
   window.dispatchEvent(new Event('mutirao:cuidado-pronto'));
   return window.MutiraoCuidado;
 })();
+
+window.MutiraoCuidadoPronto.then(core => {
+  if (!core) return;
+  queueMicrotask(() => {
+    document.documentElement.dataset.cuidado = 'pronto';
+    document.querySelectorAll('[data-cuidado-conteudo], [data-cuidado-acao]').forEach(elemento => {
+      elemento.inert = false;
+      elemento.removeAttribute('aria-busy');
+    });
+    document.querySelector('[data-status-inicial-cuidado]')?.remove();
+  });
+});

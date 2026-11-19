@@ -728,3 +728,22 @@ body.pagina-login .rodape-site {
     display: none;
   }
 }
+.icone-capsula {
+  display: inline-block;
+  inline-size: 1em;
+  block-size: 1em;
+  flex: none;
+  vertical-align: -0.125em;
+  background-color: currentColor;
+  mask: url("../media/icones/icone-capsula.svg") center / 1em 1em no-repeat;
+}
+
+.foto-upload-status {
+  color: var(--cor-neutra-media);
+  font-size: var(--texto-legenda);
+  margin-block: 0;
+}
+
+.foto-upload-status:empty {
+  display: none;
+}

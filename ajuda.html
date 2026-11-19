@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-cuidado="carregando">
 
 <head>
   <meta charset="UTF-8" />
@@ -52,7 +52,6 @@
   </noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
@@ -60,6 +59,9 @@
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/ajuda.css" />
+  <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/nucleo-cuidado.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
@@ -72,7 +74,7 @@
     <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
-    <details class="seletor-pessoa">
+    <details class="seletor-pessoa" data-cuidado-acao inert>
       <summary>Pessoa acompanhada</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
@@ -94,9 +96,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil de Zé da Silva"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
-            alt=""><span><strong>Zé da
-              Silva</strong><small>Administrador</small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
+            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -111,27 +112,27 @@
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
-      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-      <span><strong>Zé da Silva</strong><small>Administrador · Meu perfil</small></span>
+      <img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36" alt="">
+      <span><strong>Meu perfil</strong><small></small></span>
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
       <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+      <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
       <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
-    <section class="cartao-status" aria-labelledby="titulo-status">
+    <section class="cartao-status" data-cuidado-conteudo inert aria-busy="true" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
           alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+      <div class="cartao-status__linha" data-status-medicamento><i class="icone-capsula"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
@@ -149,6 +150,7 @@
         <p>Tire suas dúvidas sobre como usar o Mutirão.</p>
       </div>
     </header>
+    <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
     <section class="ajuda__duvidas" aria-labelledby="titulo-duvidas">
       <h2 id="titulo-duvidas">Perguntas mais comuns</h2>
 
@@ -271,7 +273,7 @@
         <h2 id="titulo-contato">Não achou o que procurava?</h2>
         <p>Conte para a gente como podemos ajudar.</p>
       </div>
-      <form class="formulario-mvp ajuda__formulario" id="formulario-ajuda" novalidate>
+      <form data-cuidado-conteudo inert aria-busy="true" class="formulario-mvp ajuda__formulario" id="formulario-ajuda" novalidate>
         <div class="ajuda__campo">
           <label for="ajuda-email">Seu e-mail (para a gente responder)<input id="ajuda-email" name="email" type="email"
               autocomplete="email" maxlength="254" placeholder="Ex.: nome@email.com" aria-describedby="ajuda-email-erro"
@@ -317,20 +319,11 @@
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <!-- VLibras Widget -->
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    if (window.VLibras?.Widget) new window.VLibras.Widget({
-      rootPath: 'https://vlibras.gov.br/app',
-      personalization: 'https://vlibras.gov.br/config/default_logo.json',
-      avatar: 'random',
-      position: 'R',
-    });
-  </script>
+  <script src="assets/js/vlibras.js" defer></script>
 </body>
 
 </html>

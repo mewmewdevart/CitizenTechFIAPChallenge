@@ -52,7 +52,6 @@
   </noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
@@ -332,73 +331,51 @@
     <section class="login__formulario-painel" id="conteudo" tabindex="-1" aria-labelledby="titulo-login">
       <div class="login__caixa">
         <img class="login__marca" src="assets/media/marca/logo-mutirao.svg" alt="Mutirão" />
-        <h2 class="login__titulo" id="titulo-login">Entrar no Mutirão</h2>
+        <h2 class="login__titulo" id="titulo-login">Experimente o Mutirão</h2>
+        <p class="login__descricao">Assuma um turno, registre uma dose e deixe uma anotação para quem cuida depois.
+          O cenário guiado usa dados fictícios.</p>
+        <a class="botao botao--primario login__entrar" href="home.html?roteiro=mari">Começar cenário guiado</a>
+        <a class="botao botao--secundario login__entrar" href="home.html">Explorar a demonstração</a>
 
-        <form class="login__form" data-login-form novalidate>
-          <fieldset class="login__campo">
-            <legend>E-mail</legend>
-            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
-            <input type="email" name="email" value="zedasilva@gmail.com" autocomplete="email" aria-label="E-mail"
-              required />
-          </fieldset>
+        <details class="login__simulacao">
+          <summary>Simular a tela de entrada</summary>
+          <p class="login__descricao">Use os dados de exemplo já preenchidos.</p>
+          <form class="login__form" data-login-form novalidate>
+            <fieldset class="login__campo">
+              <legend>E-mail</legend>
+              <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+              <input type="email" name="email" value="ze@example.com" autocomplete="email" aria-label="E-mail"
+                required />
+            </fieldset>
 
-          <fieldset class="login__campo">
-            <legend>Senha</legend>
-            <i class="fa-solid fa-lock" aria-hidden="true"></i>
-            <input type="password" name="senha" value="mutirao1234567890" autocomplete="current-password"
-              aria-label="Senha" minlength="4" required />
-            <button type="button" class="login__ver-senha" data-ver-senha aria-pressed="false"
-              aria-label="Mostrar senha">
-              <svg class="login__icone-olho" data-icone="mostrar" viewBox="0 0 24 24" width="20" height="20" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true">
-                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <svg class="login__icone-olho" data-icone="esconder" viewBox="0 0 24 24" width="20" height="20"
-                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true" hidden>
-                <path
-                  d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-2.9 3.9M6.6 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6" />
-                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
-                <path d="m3 3 18 18" />
-              </svg>
-            </button>
-          </fieldset>
+            <fieldset class="login__campo">
+              <legend>Senha</legend>
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <input type="password" name="senha" value="mutirao1234567890" autocomplete="current-password"
+                aria-label="Senha" minlength="4" required />
+              <button type="button" class="login__ver-senha" data-ver-senha aria-pressed="false"
+                aria-label="Mostrar senha">
+                <svg class="login__icone-olho" data-icone="mostrar" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg class="login__icone-olho" data-icone="esconder" viewBox="0 0 24 24" width="20" height="20"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" hidden>
+                  <path
+                    d="M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-2.9 3.9M6.6 6.6C3.6 8.4 2 12 2 12s3.6 7 10 7a10 10 0 0 0 5.4-1.6" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                  <path d="m3 3 18 18" />
+                </svg>
+              </button>
+            </fieldset>
 
-          <div class="login__opcoes">
-            <label class="login__lembrar">
-              <input type="checkbox" name="manterConectado" />
-              <span>Manter-me conectado</span>
-            </label>
-            <a class="login__link" href="#esqueceu-senha" data-login-esqueci aria-disabled="true" tabindex="-1">Esqueceu
-              a senha?</a>
-          </div>
-
-          <button type="submit" class="botao botao--primario login__entrar">Entrar na demonstração</button>
-        </form>
-
-        <p class="login__cadastro">Ainda não tem uma conta? <a class="login__link" href="#cadastre-se"
-            data-login-cadastro aria-disabled="true" tabindex="-1">Cadastre-se</a></p>
-
-        <div class="login__divisor" aria-hidden="true"><span>Ou entre com</span></div>
-
-        <div class="login__social" role="group" aria-label="Entrar com outra conta">
-          <button type="button" class="login__social-botao" data-login-social="facebook"
-            aria-label="Entrar com Facebook (indisponível)" disabled>
-            <i class="fa-brands fa-facebook login__social-icone--facebook" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="login__social-botao" data-login-social="google"
-            aria-label="Entrar com Google (indisponível)" disabled>
-            <i class="fa-brands fa-google login__social-icone--google" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="login__social-botao" data-login-social="apple"
-            aria-label="Entrar com Apple (indisponível)" disabled>
-            <i class="fa-brands fa-apple" aria-hidden="true"></i>
-          </button>
-        </div>
-
-        <p class="login__status" role="status" data-login-status></p>
+            <button type="submit" class="botao botao--secundario login__entrar">Simular entrada</button>
+          </form>
+          <p class="login__status" role="status" data-login-status></p>
+        </details>
       </div>
     </section>
   </main>
@@ -408,16 +385,7 @@
       <strong>Ctrl + People</strong> (Ingrid Silva de Lima, Larissa Cristina Benedito e Mayla Mayumi Motobe) · 2026.
     </p>
   </footer>
-  <!-- VLibras Widget -->
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    if (window.VLibras?.Widget) new window.VLibras.Widget({
-      rootPath: 'https://vlibras.gov.br/app',
-      personalization: 'https://vlibras.gov.br/config/default_logo.json',
-      avatar: 'random',
-      position: 'R',
-    });
-  </script>
+  <script src="assets/js/vlibras.js" defer></script>
 </body>
 
 </html>

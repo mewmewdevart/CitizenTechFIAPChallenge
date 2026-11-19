@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-cuidado="carregando">
 
 <head>
   <meta charset="UTF-8" />
@@ -52,7 +52,6 @@
   </noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
@@ -61,6 +60,9 @@
   <link rel="stylesheet" href="assets/css/agenda.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
+  <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/nucleo-cuidado.js" defer></script>
@@ -74,7 +76,7 @@
     <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
-    <details class="seletor-pessoa">
+    <details class="seletor-pessoa" data-cuidado-acao inert>
       <summary>Pessoa acompanhada</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
@@ -96,9 +98,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil de Zé da Silva"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
-            alt=""><span><strong>Zé da
-              Silva</strong><small>Administrador</small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
+            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -113,27 +114,27 @@
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
-      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-      <span><strong>Zé da Silva</strong><small>Administrador · Meu perfil</small></span>
+      <img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36" alt="">
+      <span><strong>Meu perfil</strong><small></small></span>
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
       <p>Cuidado do dia a dia</p>
       <a href="home.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+      <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
       <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
-    <section class="cartao-status" aria-labelledby="titulo-status">
+    <section class="cartao-status" data-cuidado-conteudo inert aria-busy="true" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
           alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+      <div class="cartao-status__linha" data-status-medicamento><i class="icone-capsula"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
@@ -150,9 +151,21 @@
         <p class="inicio__data"><time datetime="2026-11-10T11:58">Cenário de demonstração | Terça-feira, 10 de novembro
             de 2026 · 11h58</time></p>
       </div>
-      <button type="button" class="botao botao--primario" data-dialogo="dialogo-registrar-cuidado"><i
+      <button data-cuidado-acao inert type="button" class="botao botao--primario" data-dialogo="dialogo-registrar-cuidado"><i
           class="fa-solid fa-plus" aria-hidden="true"></i> Anotar o turno</button>
     </header>
+    <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
+
+    <details class="apoio__painel inicio__roteiro" data-roteiro-inicio hidden open>
+      <summary>Seu roteiro no Mutirão</summary>
+      <p>Você está na ficha de <strong data-roteiro-pessoa></strong>. Experimente a passagem de cuidado no cenário de exemplo.</p>
+      <ol>
+        <li data-roteiro-cobertura>Assuma o horário indicado em <strong>Horário sem ninguém</strong>.</li>
+        <li>Abra um compartimento no <a href="#porta-remedios-hoje">porta-remédios</a> e registre a dose de exemplo.</li>
+        <li><button type="button" class="botao botao--secundario botao--pequeno" data-dialogo="dialogo-registrar-cuidado">Anotar o turno</button>
+          e conferir a anotação no <a href="ficha.html#diario">Diário de turno</a>.</li>
+      </ol>
+    </details>
 
     <section class="faixa-alerta" aria-labelledby="titulo-lacuna" data-inicio-lacuna hidden>
       <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
@@ -178,9 +191,9 @@
       </div>
     </section>
 
-    <section class="apoio__painel inicio__resumo" aria-labelledby="titulo-pessoa">
+    <section data-cuidado-conteudo inert aria-busy="true" class="apoio__painel inicio__resumo" aria-labelledby="titulo-pessoa">
       <div class="painel__item">
-        <img class="avatar avatar--medio" src="assets/media/mascotes/icone-mascote-forma.svg" alt="">
+        <img class="avatar avatar--medio" src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="64" height="64" alt="">
         <div class="painel__texto">
           <strong id="titulo-pessoa">Pessoa acompanhada</strong>
           <span data-cobertura-acompanhada>Necessidade de acompanhamento: não informada</span>
@@ -207,7 +220,7 @@
         <a class="botao botao--secundario" href="agenda.html">Ver na Agenda</a>
       </div>
       <div class="painel__bloco">
-        <span class="painel__icone" aria-hidden="true"><i class="bi bi-capsule"></i></span>
+        <span class="painel__icone" aria-hidden="true"><i class="icone-capsula"></i></span>
         <div class="painel__texto">
           <span class="inicio__rotulo">Próximo remédio</span>
           <strong data-proxima-medicacao>Nenhum remédio na rotina</strong>
@@ -217,9 +230,9 @@
       </div>
     </section>
 
-    <div class="painel__grade">
+    <div data-cuidado-conteudo inert aria-busy="true" class="painel__grade">
       <div class="painel__coluna">
-        <section class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios">
+        <section id="porta-remedios-hoje" class="apoio__painel porta-remedios" aria-labelledby="titulo-porta-remedios" tabindex="-1">
           <div class="painel__cartao-cabecalho">
             <h2 id="titulo-porta-remedios">Porta remédios de hoje</h2>
             <small data-porta-remedios-resumo>Nenhum remédio na rotina</small>
@@ -253,7 +266,7 @@
       </div>
     </div>
 
-    <div class="painel__grade">
+    <div data-cuidado-conteudo inert aria-busy="true" class="painel__grade">
       <div class="painel__coluna">
         <section class="apoio__painel" aria-labelledby="titulo-escala" data-aba-inicio="escala">
           <div class="painel__cartao-cabecalho">
@@ -597,20 +610,11 @@
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="home.html" aria-current="page"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <!-- VLibras Widget -->
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    if (window.VLibras?.Widget) new window.VLibras.Widget({
-      rootPath: 'https://vlibras.gov.br/app',
-      personalization: 'https://vlibras.gov.br/config/default_logo.json',
-      avatar: 'random',
-      position: 'R',
-    });
-  </script>
+  <script src="assets/js/vlibras.js" defer></script>
 </body>
 
 </html>

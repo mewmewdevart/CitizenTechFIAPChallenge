@@ -34,6 +34,7 @@ function comporPerfil(base, salvo = {}) {
   }
   person.nome = typeof person.nome === 'string' && person.nome.trim() ? person.nome.trim() : base.person.nome;
   person.apelido = typeof person.apelido === 'string' ? person.apelido.trim() : '';
+  if (person.foto !== base.person.foto) person.fotoMiniatura = '';
   if (person.cobertura === 'Sem turnos definidos') person.cobertura = '';
   if (person.carteira === 'Não informado') person.carteira = '';
   const perfil = { ...base, ...dados, id: base.id, person };
@@ -61,8 +62,7 @@ function comporPerfil(base, salvo = {}) {
   return perfil;
 }
 
-export async function carregarBaseCuidado() {
-  const resposta = await fetch(new URL('../data/perfis-acompanhados.json', import.meta.url));
+export async function carregarBaseCuidado(resposta) {
   if (!resposta.ok) throw new Error('A base de fichas está indisponível.');
   return resposta.json();
 }

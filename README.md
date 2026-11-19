@@ -25,7 +25,8 @@ O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 
 
 A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
-- **Cenário de demonstração:** Ao clicar em **Entrar na demonstração** (`index.html`), a aplicação abre na ficha inicial do **Flavio Barbosa (Flavinho)** para mostrar estados iniciais com poucos registros. Para percorrer o cenário completo de revezamento (data de referência `10/11/2026`), selecione **Mari** no seletor **Quem recebe cuidado** no topo da tela: Zé identifica a lacuna das `12h` às `13h`, assume o horário, registra uma dose no porta-remédios e deixa um recado no Diário da Ficha para a próxima pessoa.
+- **Cenário de demonstração:** Na entrada, escolha **Começar cenário guiado** para abrir a ficha de **Mari** no dia de referência (10/11/2026). Assuma o horário sem cobertura, registre uma dose fictícia no porta-remédios e consulte no Diário de turno a anotação que você fez em **Anotar o turno**. **Explorar a demonstração** abre a ficha ativa da sessão, inicialmente a de **Flavinho**.
+- **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
 
 
 <img width="2858" height="1604" alt="mutirao-citizen-tech vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
@@ -128,7 +129,7 @@ Execute a suíte completa na raiz do projeto com o executor nativo do Node.js:
 node --test tests/*.test.mjs
 ```
 
-Atualmente a suíte conta com **17 testes** distribuídos em **5 arquivos**:
+Atualmente a suíte conta com **19 testes** distribuídos em **5 arquivos**:
 
 | Arquivo | Casos | Cobertura |
 | :--- | :---: | :--- |
@@ -136,7 +137,7 @@ Atualmente a suíte conta com **17 testes** distribuídos em **5 arquivos**:
 | `tests/compromissos-agenda.test.mjs` | 2 | Compromissos com horário opcional, isolamento entre perfis e exportação ICS |
 | `tests/medicamentos-doses.test.mjs` | 2 | Preservação de finalidades da base, registro de dose e ação de desfazer |
 | `tests/turnos-escala.test.mjs` | 2 | Normalização de rotinas semanais, janela diária e cobertura pontual |
-| `tests/recorrencias-escala.test.mjs` | 6 | Exceções por data, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
+| `tests/recorrencias-escala.test.mjs` | 8 | Inicialização com atraso ou falha, exceções por data, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
 
 
 ## 👥 Integrantes — Grupo Ctrl + People

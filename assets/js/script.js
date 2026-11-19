@@ -849,22 +849,16 @@ if (barraTopo && 'ResizeObserver' in window) {
   sincronizarAlturaBarraTopo();
 }
 
-function inicializarPontoBot() {
-  const pontoBotSrc = 'https://mutirao-pontobot-frontend.vercel.app/pontobot.js';
-  if (!document.querySelector(`script[src="${pontoBotSrc}"]`)) {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = pontoBotSrc;
-    document.head.append(script);
-  }
-  if (!document.querySelector('ponto-bot') && document.body) {
-    const bot = document.createElement('ponto-bot');
-    bot.dataset.app = 'https://mutirao-citizen-tech.vercel.app/';
-    document.body.append(bot);
-  }
+if (!document.querySelector('ponto-bot')) {
+  const app = new URL('./', document.baseURI);
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.src = new URL('assets/pontobot/pontobot.js', app).href;
+  const bot = document.createElement('ponto-bot');
+  bot.dataset.app = app.href;
+  document.head.append(script);
+  document.body.append(bot);
 }
-
-inicializarPontoBot();
 
 function renderizarSeletorPessoas() {
   const core = window.MutiraoCuidado;
@@ -910,7 +904,7 @@ document.addEventListener('click', evento => {
 
   // O contexto de um compromisso, documento ou dose pertence à ficha anterior.
   const destino = new URL(location.href);
-  for (const chave of ['compromisso', 'documento', 'dose']) destino.searchParams.delete(chave);
+  for (const chave of ['compromisso', 'documento', 'dose', 'roteiro']) destino.searchParams.delete(chave);
   if (destino.href === location.href) location.reload();
   else location.replace(destino.href);
 });
@@ -970,7 +964,8 @@ function sincronizarPerfilGlobal() {
     item.textContent = nome;
   });
   document.querySelectorAll('[data-avatar-acompanhada]').forEach(img => {
-    img.src = pessoa.foto || pessoa.mascote || 'assets/media/mascotes/icone-mascote-forma.svg';
+    window.MutiraoFotos.aplicarAvatar(img, pessoa.fotoMiniatura || pessoa.foto,
+      pessoa.mascote || 'assets/media/mascotes/icone-mascote-forma.svg');
   });
   document.querySelectorAll('[data-cobertura-acompanhada]').forEach(item => {
     item.textContent = 'Necessidade de acompanhamento: ' + core.obterDescricaoAcompanhamento().toLocaleLowerCase('pt-BR');
@@ -983,7 +978,7 @@ function sincronizarPerfilGlobal() {
     item.textContent = [usuario.nome, usuario.vinculo].filter(Boolean).join(' · ');
   });
   document.querySelectorAll('.menu-perfil summary img, .barra-lateral__perfil-mobile img').forEach(img => {
-    img.src = usuario.avatar;
+    window.MutiraoFotos.aplicarAvatar(img, usuario.foto, usuario.mascote);
   });
   const topo = document.querySelector('.menu-perfil summary');
   if (topo) {
@@ -1011,7 +1006,8 @@ function sincronizarStatusCuidado() {
     const img = linhaTurno.querySelector('img');
     const detalheTurno = linhaTurno.querySelector('small');
     img.hidden = !turno;
-    if (turno) img.src = turno.pessoa.foto || `assets/media/mascotes/${turno.pessoa.avatar}`;
+    if (turno) window.MutiraoFotos.aplicarAvatar(img, turno.pessoa.foto,
+      `assets/media/mascotes/${turno.pessoa.avatar || "icone-mascote-forma.svg"}`);
     linhaTurno.querySelector('strong').textContent = turno?.pessoa.nome || (lacunaAtual ? 'Horário sem ninguém' : 'Sem turno agora');
     detalheTurno.textContent = turno?.horario || (lacunaAtual ? 'Veja na Agenda' : '');
     detalheTurno.hidden = !detalheTurno.textContent;

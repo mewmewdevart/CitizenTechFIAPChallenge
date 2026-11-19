@@ -16,8 +16,9 @@ window.MutiraoCuidadoPronto.then(core => {
   const obterConvites = () => obterEstado().convites || [];
 
   const montarItemPessoa = pessoa => {
+    const mascote = pessoa.avatar || 'icone-mascote-cubado.svg';
     const imagem = pessoa.foto
-      ? `<img class="avatar" src="${escaparHtml(pessoa.foto)}" alt="">`
+      ? `<img class="avatar" src="${escaparHtml(pessoa.foto)}" width="36" height="36" alt="" data-avatar-alternativo="assets/media/mascotes/${escaparHtml(mascote)}">`
       : pessoa.avatar
         ? `<img class="avatar" src="assets/media/mascotes/${escaparHtml(pessoa.avatar)}" alt="">`
         : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';

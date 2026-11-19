@@ -183,7 +183,7 @@ window.MutiraoCuidadoPronto.then(core => {
       const atrasado = grupo.momento === 'passado';
       const detalhe = [atrasado && 'Atrasado', `Às ${dose.hora}`, grupo.responsavel || 'Horário sem ninguém'].filter(Boolean).join(' · ');
       return `<li class="painel__item">
-        <span class="painel__icone${atrasado ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
+        <span class="painel__icone${atrasado ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="icone-capsula"></i></span>
         <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}</strong><span>${escaparHtml(detalhe)}</span></span>
         <button type="button" class="botao botao--primario" data-registrar-dose="${escaparHtml(dose.chave)}">Marcar como dado</button>
       </li>`;
@@ -227,7 +227,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
     listaRegistros.innerHTML = visiveis.length
       ? visiveis.map(dose => `<li class="painel__item${dose.estado === 'administrado' ? ' meds__registro--concluido' : ''}">
-        <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="bi bi-capsule"></i></span>
+        <span class="painel__icone${dose.estado === 'nao-administrado' ? ' painel__icone--atencao' : ''}" aria-hidden="true"><i class="icone-capsula"></i></span>
         <span class="painel__texto"><strong>${escaparHtml(dose.hora)} · ${escaparHtml(dose.nome)}${escaparHtml(descreverDesvioHorario(dose))}</strong><span>${escaparHtml(descreverRegistro(dose))}</span></span>
         ${dose.estado === 'nao-administrado'
           ? `<button type="button" class="botao botao--secundario botao--pequeno" data-registrar-dose="${escaparHtml(dose.chave)}">Corrigir</button>`
@@ -306,7 +306,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
     listaItens.innerHTML = visiveis.length
       ? visiveis.map(item => `<li class="painel__item">
-        <span class="painel__icone" aria-hidden="true"><i class="${item.tipo === 'Insumo' ? 'fa-solid fa-box-open' : 'bi bi-capsule'}"></i></span>
+        <span class="painel__icone" aria-hidden="true"><i class="${item.tipo === 'Insumo' ? 'fa-solid fa-box-open' : 'icone-capsula'}"></i></span>
         <span class="painel__texto"><strong>${escaparHtml(item.nome)}</strong><span>${escaparHtml(descreverItem(item))}</span></span>
         <button type="button" class="botao botao--secundario" data-ver-item="${escaparHtml(item.chave)}">Ver item</button>
       </li>`).join('')
@@ -451,7 +451,7 @@ window.MutiraoCuidadoPronto.then(core => {
     if (iconeEl) {
       iconeEl.innerHTML = item.tipo === 'Insumo'
         ? '<i class="fa-solid fa-box-open" aria-hidden="true"></i>'
-        : '<i class="bi bi-capsule" aria-hidden="true"></i>';
+        : '<i class="icone-capsula" aria-hidden="true"></i>';
     }
     dialogos.detalhe.querySelector('[data-detalhe-titulo]').textContent = item.nome;
     const pessoaEl = dialogos.detalhe.querySelector('[data-detalhe-pessoa]');

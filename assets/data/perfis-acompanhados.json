@@ -36,7 +36,8 @@
         "alternativo": "",
         "cobertura": "Nenhum turno",
         "preferencias": "",
-        "foto": "assets/media/fotos/foto-perfil-flavinho.png",
+        "foto": "assets/media/fotos/foto-perfil-flavinho.webp",
+        "fotoMiniatura": "assets/media/fotos/foto-perfil-flavinho-mini.webp",
         "mascote": "assets/media/mascotes/icone-mascote-forma.svg"
       },
       "equipeCuidado": [],
@@ -76,7 +77,8 @@
         "alternativo": "Paulo da Silva (Paul) · Neto · +55 (11) 9XXXX-0193",
         "cobertura": "24 horas por dia",
         "preferencias": "Prefere consultas à tarde e gosta de conferir a agenda com a família.",
-        "foto": "assets/media/fotos/foto-perfil-maria.png",
+        "foto": "assets/media/fotos/foto-perfil-maria.webp",
+        "fotoMiniatura": "assets/media/fotos/foto-perfil-maria-mini.webp",
         "mascote": "assets/media/mascotes/icone-mascote-minhoca.svg"
       },
       "escalaDemonstracao": true,

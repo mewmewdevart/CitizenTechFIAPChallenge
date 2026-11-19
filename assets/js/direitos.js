@@ -380,7 +380,10 @@ window.MutiraoCuidadoPronto.then(core => {
   window.addEventListener('mutirao:cuidado-atualizado', restaurarSimuladorPerfil);
 
   // --- Serviços na sua cidade (IBGE + ViaCEP) ---
-  const painelLocalidade = pagina.querySelector('[data-localidade-painel]');
+});
+
+(() => {
+  const painelLocalidade = document.querySelector('[data-localidade-painel]');
   if (painelLocalidade) {
     const formLocalidade = painelLocalidade.querySelector('[data-localidade-form]');
     const campoCep = painelLocalidade.querySelector('[data-localidade-cep]');
@@ -436,7 +439,7 @@ window.MutiraoCuidadoPronto.then(core => {
       }
 
       blocoResultado.hidden = false;
-      anunciarStatus(elementoStatus, `Serviços públicos de ${tituloLocal}.`);
+      painelLocalidade.querySelector('[data-localidade-status]').textContent = `Serviços públicos de ${tituloLocal}.`;
     };
 
     let requisicaoMunicipiosId = 0;
@@ -466,8 +469,11 @@ window.MutiraoCuidadoPronto.then(core => {
         const municipios = await resposta.json();
         if (idAtual !== requisicaoMunicipiosId) return;
 
-        selectMunicipio.innerHTML = '<option value="">Escolha a cidade...</option>' +
-          municipios.map(m => `<option value="${escaparHtml(String(m.id))}" data-nome="${escaparHtml(m.nome)}">${escaparHtml(m.nome)}</option>`).join('');
+        selectMunicipio.replaceChildren(new Option('Escolha a cidade...', ''), ...municipios.map(municipio => {
+          const opcao = new Option(municipio.nome, String(municipio.id));
+          opcao.dataset.nome = municipio.nome;
+          return opcao;
+        }));
         selectMunicipio.disabled = false;
 
         if (ibgeSelecionado) {
@@ -486,8 +492,8 @@ window.MutiraoCuidadoPronto.then(core => {
         const resposta = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome');
         if (!resposta.ok) throw new Error('Não deu para carregar os estados');
         const estados = await resposta.json();
-        selectUf.innerHTML = '<option value="">Escolha o estado...</option>' +
-          estados.map(e => `<option value="${escaparHtml(e.sigla)}">${escaparHtml(e.nome)} (${escaparHtml(e.sigla)})</option>`).join('');
+        selectUf.replaceChildren(new Option('Escolha o estado...', ''), ...estados.map(estado =>
+          new Option(`${estado.nome} (${estado.sigla})`, estado.sigla)));
       } catch {
         selectUf.innerHTML = '<option value="">Fora do ar agora</option>';
       }
@@ -574,4 +580,4 @@ window.MutiraoCuidadoPronto.then(core => {
 
     carregarEstados();
   }
-});
+})();

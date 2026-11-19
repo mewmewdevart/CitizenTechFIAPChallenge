@@ -208,7 +208,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
     const renderizarIconeTarefa = icone => {
       if (icone === 'icone-medicamento.svg') {
-        return '<i class="bi bi-capsule" aria-hidden="true"></i>';
+        return '<i class="icone-capsula" aria-hidden="true"></i>';
       }
       if (icone.startsWith('bi ') || icone.startsWith('fa-')) {
         return `<i class="${escaparHtml(icone)}" aria-hidden="true"></i>`;

@@ -83,7 +83,7 @@ window.MutiraoCuidadoPronto.then(core => {
     atualizarBotaoOculto(botaoFicha, info.visivelFicha, info.rotulo);
     if (botaoFicha) botaoFicha.hidden = !valorReal;
 
-    const formulario = pagina.querySelector('[data-formulario-mvp="ficha"]');
+    const formulario = pagina.querySelector('#dialogo-editar-ficha[open] [data-formulario-mvp="ficha"]');
     const inputForm = formulario?.elements?.[chave];
     if (inputForm) {
       inputForm.value = info.visivelForm ? (rascunhoSensivel[chave] ?? valorReal) : (valorReal ? obterValorMascarado(chave) : '');
@@ -431,6 +431,7 @@ window.MutiraoCuidadoPronto.then(core => {
     `;
   };
 
+  pagina.querySelector('[data-dialogo="dialogo-impressao"]')?.addEventListener('click', renderizarImpressao);
   pagina.querySelectorAll('[data-impressao-opcao]').forEach(checkbox => {
     checkbox.addEventListener('change', renderizarImpressao);
   });
@@ -466,6 +467,12 @@ window.MutiraoCuidadoPronto.then(core => {
     pagina.querySelectorAll('.ficha__mascote, .ficha__alerta-mascote').forEach(img => {
       img.src = mascoteAtual;
     });
+    const temFoto = Boolean(person.foto);
+    const imgRetrato = pagina.querySelector('.ficha__retrato > img:first-child');
+    const imgMascoteRetrato = pagina.querySelector('.ficha__mascote');
+    window.MutiraoFotos.aplicarAvatar(imgRetrato, person.foto, mascoteAtual);
+    if (imgMascoteRetrato) imgMascoteRetrato.hidden = !temFoto;
+
     if (formulario) {
       const inputMascote = formulario.querySelector('[data-input-mascote]');
       if (inputMascote) inputMascote.value = mascoteAtual;
@@ -476,17 +483,12 @@ window.MutiraoCuidadoPronto.then(core => {
         if (rotulo) rotulo.textContent = ativo ? 'Selecionado' : 'Selecionar';
       });
 
-      const temFoto = Boolean(person.foto);
-      const imgRetrato = pagina.querySelector('.ficha__retrato > img:first-child');
-      const imgMascoteRetrato = pagina.querySelector('.ficha__mascote');
       const imgPrevia = formulario.querySelector('[data-foto-previa]');
       const botaoRemoverFoto = formulario.querySelector('[data-remover-foto]');
       const botaoFoto = formulario.querySelector('[data-botao-foto]');
 
-      if (imgRetrato) imgRetrato.src = temFoto ? person.foto : mascoteAtual;
-      if (imgMascoteRetrato) imgMascoteRetrato.hidden = !temFoto;
       if (imgPrevia) {
-        imgPrevia.src = temFoto ? person.foto : mascoteAtual;
+        window.MutiraoFotos.aplicarAvatar(imgPrevia, person.foto, mascoteAtual);
         delete imgPrevia.dataset.fotoAtualizada;
         if (temFoto) delete imgPrevia.dataset.fotoRemovida;
         else imgPrevia.dataset.fotoRemovida = 'true';
@@ -594,7 +596,7 @@ window.MutiraoCuidadoPronto.then(core => {
       cartaoRede.hidden = !algumVisivel;
     }
 
-    renderizarImpressao();
+    if (pagina.querySelector('#dialogo-impressao[open]')) renderizarImpressao();
     if (formulario) {
       snapshotFicha = serializarFormularioFicha();
       atualizarBotaoSalvarFicha();
@@ -708,13 +710,14 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     if (botao.hasAttribute('data-remover-foto')) {
+      cancelarEnvioFoto();
       const formulario = botao.closest('form');
       const previa = formulario?.querySelector('[data-foto-previa]');
       const inputMascote = formulario?.querySelector('[data-input-mascote]');
       const inputFoto = formulario?.querySelector('[data-input-foto]');
       const botaoFoto = formulario?.querySelector('[data-botao-foto]');
       if (previa) {
-        previa.src = inputMascote?.value || 'assets/media/mascotes/icone-mascote-minhoca.svg';
+        window.MutiraoFotos.aplicarAvatar(previa, '', inputMascote?.value || 'assets/media/mascotes/icone-mascote-minhoca.svg');
         previa.dataset.fotoRemovida = 'true';
         delete previa.dataset.fotoAtualizada;
       }
@@ -729,7 +732,7 @@ window.MutiraoCuidadoPronto.then(core => {
       if (inputMascote) inputMascote.value = botao.dataset.mascote;
       const previa = formulario?.querySelector('[data-foto-previa]');
       if (previa?.dataset.fotoRemovida === 'true') {
-        previa.src = botao.dataset.mascote;
+        window.MutiraoFotos.aplicarAvatar(previa, '', botao.dataset.mascote);
       }
       formulario?.querySelectorAll('.editar-ficha__mascote-cartao').forEach(cartao => {
         const ativo = cartao === botao;
@@ -773,36 +776,20 @@ window.MutiraoCuidadoPronto.then(core => {
     inputEtiqueta.value = '';
   });
 
-  pagina.querySelector('[data-input-foto]')?.addEventListener('change', evento => {
-    const arquivo = evento.target.files?.[0];
-    if (!arquivo) return;
-    if (!['image/jpeg', 'image/png'].includes(arquivo.type)) {
-      registrarStatus('Escolha uma foto JPG ou PNG.');
-      evento.target.value = '';
-      return;
-    }
-    if (arquivo.size > 2 * 1024 * 1024) {
-      registrarStatus('A foto é grande demais. Use uma de até 2 MB.');
-      evento.target.value = '';
-      return;
-    }
-    const leitor = new FileReader();
-    leitor.onerror = () => registrarStatus('Não deu para abrir essa foto.');
-    leitor.onload = () => {
+  const cancelarEnvioFoto = window.MutiraoFotos.controlarEnvio(
+    pagina.querySelector('[data-input-foto]'),
+    foto => {
       const previa = pagina.querySelector('[data-foto-previa]');
-      const formulario = previa?.closest('form');
-      const botaoRemoverFoto = formulario?.querySelector('[data-remover-foto]');
-      const botaoFoto = formulario?.querySelector('[data-botao-foto]');
-      if (previa && typeof leitor.result === 'string') {
-        previa.src = leitor.result;
-        previa.dataset.fotoAtualizada = leitor.result;
-        delete previa.dataset.fotoRemovida;
-      }
-      if (botaoRemoverFoto) botaoRemoverFoto.hidden = false;
-      if (botaoFoto) botaoFoto.textContent = 'Trocar foto';
-    };
-    leitor.readAsDataURL(arquivo);
-  });
+      const formulario = previa.closest('form');
+      const mascote = formulario.querySelector('[data-input-mascote]').value;
+      window.MutiraoFotos.aplicarAvatar(previa, foto, mascote);
+      previa.dataset.fotoAtualizada = foto;
+      delete previa.dataset.fotoRemovida;
+      formulario.querySelector('[data-remover-foto]').hidden = false;
+      formulario.querySelector('[data-botao-foto]').textContent = 'Trocar foto';
+      atualizarBotaoSalvarFicha();
+    }
+  );
 
   pagina.addEventListener('submit', evento => {
     const formulario = evento.target;

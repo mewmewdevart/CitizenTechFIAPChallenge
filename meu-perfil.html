@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-cuidado="carregando">
 
 <head>
   <meta charset="UTF-8" />
@@ -52,7 +52,6 @@
   </noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
@@ -60,6 +59,9 @@
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
   <link rel="stylesheet" href="assets/css/painel-cuidado.css" />
+  <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/nucleo-cuidado.js" defer></script>
@@ -73,7 +75,7 @@
     <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
-    <details class="seletor-pessoa">
+    <details class="seletor-pessoa" data-cuidado-acao inert>
       <summary>Pessoa acompanhada</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
@@ -95,9 +97,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil de Zé da Silva"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
-            alt=""><span><strong>Zé da
-              Silva</strong><small>Administrador</small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
+            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html" aria-current="page"><i class="fa-regular fa-user"
               aria-hidden="true"></i>Meu perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -112,27 +113,27 @@
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html" aria-current="page">
-      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-      <span><strong>Zé da Silva</strong><small>Administrador · Meu perfil</small></span>
+      <img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36" alt="">
+      <span><strong>Meu perfil</strong><small></small></span>
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
       <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+      <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
       <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e serviços</a>
     </nav>
-    <section class="cartao-status" aria-labelledby="titulo-status">
+    <section class="cartao-status" data-cuidado-conteudo inert aria-busy="true" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
           alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+      <div class="cartao-status__linha" data-status-medicamento><i class="icone-capsula"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
@@ -151,21 +152,22 @@
         <p>Veja seus dados, leia os recados da família e cuide de você também.</p>
       </div>
       <div class="painel__acoes">
-        <button type="button" class="botao botao--primario" data-dialogo="dialogo-editar-perfil"><i
+        <button data-cuidado-acao inert type="button" class="botao botao--primario" data-dialogo="dialogo-editar-perfil"><i
             class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Editar perfil</button>
       </div>
     </header>
+    <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
 
-    <div class="perfil__abas" role="tablist" aria-label="Áreas do perfil">
+    <div data-cuidado-conteudo inert aria-busy="true" class="perfil__abas" role="tablist" aria-label="Áreas do perfil">
       <button type="button" role="tab" id="aba-perfil-dados" data-area-perfil="dados" aria-selected="true"
         aria-controls="perfil-dados">Meu perfil</button>
       <button type="button" role="tab" id="aba-perfil-cuidar" data-area-perfil="cuidar" aria-selected="false"
         aria-controls="perfil-cuidar" tabindex="-1">Cuidar de quem cuida</button>
     </div>
-    <div id="perfil-dados" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-dados">
+    <div data-cuidado-conteudo inert aria-busy="true" id="perfil-dados" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-dados">
       <section class="apoio__painel perfil__identidade" aria-labelledby="titulo-perfil">
         <div class="perfil__retrato">
-          <img class="avatar avatar--grande" src="assets/media/mascotes/icone-mascote-cubado.svg" alt=""
+          <img class="avatar avatar--grande" src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="120" height="120" alt=""
             data-perfil-avatar>
           <img class="perfil__mascote" src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" data-perfil-mascote
             hidden>
@@ -226,7 +228,7 @@
       </section>
 
     </div>
-    <div id="perfil-cuidar" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-cuidar" hidden>
+    <div data-cuidado-conteudo inert aria-busy="true" id="perfil-cuidar" class="perfil__painel" role="tabpanel" aria-labelledby="aba-perfil-cuidar" hidden>
       <section class="cuidar__faixa" aria-labelledby="titulo-cuidar">
         <span class="cuidar__rotulo">Cuidar de quem cuida</span>
         <h2 id="titulo-cuidar">Quem cuida também precisa de cuidado. Este espaço é seu.</h2>
@@ -527,20 +529,11 @@
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <!-- VLibras Widget -->
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    if (window.VLibras?.Widget) new window.VLibras.Widget({
-      rootPath: 'https://vlibras.gov.br/app',
-      personalization: 'https://vlibras.gov.br/config/default_logo.json',
-      avatar: 'random',
-      position: 'R',
-    });
-  </script>
+  <script src="assets/js/vlibras.js" defer></script>
 </body>
 
 </html>

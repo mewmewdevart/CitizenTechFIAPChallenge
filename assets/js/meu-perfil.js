@@ -96,8 +96,7 @@ window.MutiraoCuidadoPronto.then(core => {
     if (!formPerfil) return;
     const previa = formPerfil.querySelector('[data-foto-previa]');
     const botaoRemover = formPerfil.querySelector('[data-remover-foto]');
-    const imagem = foto || mascote || MASCOTE_PADRAO;
-    if (previa) previa.src = imagem;
+    window.MutiraoFotos.aplicarAvatar(previa, foto, mascote || MASCOTE_PADRAO);
     if (botaoRemover) botaoRemover.hidden = !foto;
   };
 
@@ -117,13 +116,13 @@ window.MutiraoCuidadoPronto.then(core => {
       return;
     }
     const mascote = perfil.mascote || MASCOTE_PADRAO;
-    const avatarExibido = perfil.foto || mascote;
 
     const nomeCabecalho = pagina.querySelector('[data-perfil-nome]');
     if (nomeCabecalho) nomeCabecalho.textContent = `${perfil.nome}${perfil.apelido ? ` (${perfil.apelido})` : ''}`;
 
     const avatarPrincipal = pagina.querySelector('[data-perfil-avatar]');
-    if (avatarPrincipal) { avatarPrincipal.src = avatarExibido; avatarPrincipal.alt = perfil.nome; }
+    window.MutiraoFotos.aplicarAvatar(avatarPrincipal, perfil.foto, mascote);
+    if (avatarPrincipal) avatarPrincipal.alt = perfil.nome;
 
     const mascoteMiniatura = pagina.querySelector('[data-perfil-mascote]');
     if (mascoteMiniatura) {
@@ -263,7 +262,7 @@ window.MutiraoCuidadoPronto.then(core => {
       renderizarMascotesForm(novoMascote);
       const previa = formPerfil?.querySelector('[data-foto-previa]');
       const botaoRemover = formPerfil?.querySelector('[data-remover-foto]');
-      if (previa && (!botaoRemover || botaoRemover.hidden)) previa.src = novoMascote;
+      if (!botaoRemover || botaoRemover.hidden) window.MutiraoFotos.aplicarAvatar(previa, '', novoMascote);
       return;
     }
     if (botao.hasAttribute('data-botao-foto')) {
@@ -272,6 +271,7 @@ window.MutiraoCuidadoPronto.then(core => {
     }
     if (botao.hasAttribute('data-remover-foto')) {
       if (formPerfil) {
+        cancelarEnvioFoto();
         formPerfil.dataset.fotoTemp = '';
         renderizarFotoForm('', formPerfil.elements.mascote?.value || MASCOTE_PADRAO);
       }
@@ -291,24 +291,16 @@ window.MutiraoCuidadoPronto.then(core => {
     }
   });
 
-  formPerfil?.querySelector('[data-input-foto]')?.addEventListener('change', evento => {
-    const arquivo = evento.target.files?.[0];
-    if (!arquivo) return;
-    const tipoValido = arquivo.type === 'image/jpeg' || arquivo.type === 'image/png';
-    const nomeValido = /\.(jpe?g|png)$/i.test(arquivo.name);
-    if (!tipoValido && !nomeValido) {
-      evento.target.value = '';
-      anunciarStatus(elementoStatus, 'Envie uma foto em PNG ou JPG.');
-      return;
+  const cancelarEnvioFoto = window.MutiraoFotos.controlarEnvio(
+    formPerfil?.querySelector('[data-input-foto]'),
+    foto => {
+      formPerfil.dataset.fotoTemp = foto;
+      renderizarFotoForm(foto, formPerfil.elements.mascote?.value || MASCOTE_PADRAO);
     }
-    const leitor = new FileReader();
-    leitor.onload = () => {
-      const resultado = typeof leitor.result === 'string' ? leitor.result : '';
-      if (!resultado) return;
-      formPerfil.dataset.fotoTemp = resultado;
-      renderizarFotoForm(resultado, formPerfil.elements.mascote?.value || MASCOTE_PADRAO);
-    };
-    leitor.readAsDataURL(arquivo);
+  );
+  formPerfil?.closest('dialog')?.addEventListener('close', () => {
+    delete formPerfil.dataset.fotoTemp;
+    renderizarPerfil();
   });
 
   formRecado?.addEventListener('submit', evento => {

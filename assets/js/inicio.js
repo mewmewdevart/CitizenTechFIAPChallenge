@@ -193,7 +193,8 @@ window.MutiraoCuidadoPronto.then(core => {
     if (!resumo) return;
     const avatar = resumo.querySelector('.avatar');
     if (avatar) {
-      avatar.src = person.foto || person.mascote || 'assets/media/mascotes/icone-mascote-forma.svg';
+      window.MutiraoFotos.aplicarAvatar(avatar, person.fotoMiniatura || person.foto,
+        person.mascote || 'assets/media/mascotes/icone-mascote-forma.svg');
     }
     const titulo = resumo.querySelector('#titulo-pessoa');
     if (titulo) titulo.textContent = core.nomePessoaAcompanhada(estado);
@@ -296,6 +297,14 @@ window.MutiraoCuidadoPronto.then(core => {
     if (link) link.href = `agenda.html?dia=${encodeURIComponent(HOJE)}`;
   };
 
+  const roteiro = pagina.querySelector('[data-roteiro-inicio]');
+  const mostrarRoteiro = new URLSearchParams(location.search).get('roteiro') === '1' &&
+    obterEstado().perfilAtivoId === 'mari';
+  if (roteiro && mostrarRoteiro) {
+    roteiro.querySelector('[data-roteiro-pessoa]').textContent = core.nomePessoaAcompanhada();
+    roteiro.hidden = false;
+  }
+
   const renderizarEscala = () => {
     const estado = obterEstado();
     const inicioSemana = formatarData(DIAS_SEMANA[0], { day: 'numeric', month: 'short' });
@@ -357,6 +366,11 @@ window.MutiraoCuidadoPronto.then(core => {
 
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     faixaLacuna.hidden = !lacunasHoje.length;
+    if (roteiro && mostrarRoteiro) {
+      roteiro.querySelector('[data-roteiro-cobertura]').textContent = lacunasHoje.length
+        ? 'Assuma o horário indicado no aviso de cobertura.'
+        : 'A escala de hoje está coberta. Confira os turnos na Agenda.';
+    }
     if (lacunasHoje.length) {
       tituloLacuna.textContent = `${lacunasHoje[0].horario} · Horário sem ninguém`;
       const textoLacuna = faixaLacuna.querySelector('.faixa-alerta__texto > span');

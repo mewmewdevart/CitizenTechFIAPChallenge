@@ -2,27 +2,68 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import test from 'node:test';
-import { criarBancoCuidado } from '../assets/js/estado-cuidado.mjs';
+import { carregarBaseCuidado, criarBancoCuidado } from '../assets/js/estado-cuidado.mjs';
 
 const base = JSON.parse(readFileSync(new URL('../assets/data/perfis-acompanhados.json', import.meta.url)));
 const fonte = readFileSync(new URL('../assets/js/nucleo-cuidado.js', import.meta.url), 'utf8')
-  .replace("await import('./estado-cuidado.mjs')", 'moduloEstado');
+  .replace("import('./estado-cuidado.mjs')", 'moduloEstado');
 
-async function criarCore(sessao = new Map()) {
-  const window = { addEventListener() {}, dispatchEvent() {} };
+function montarCore(sessao, buscarBase) {
+  const eventos = [];
+  const window = { addEventListener() {}, dispatchEvent(evento) { eventos.push(evento.type); } };
+  const status = { setAttribute() {}, append() {}, remove() { this.removido = true; } };
+  const secao = { inert: true, removeAttribute() {} };
+  const main = { hidden: false, prepend() {} };
   const document = {
-    querySelector: () => null,
-    querySelectorAll: () => [],
+    documentElement: { dataset: { cuidado: 'carregando' } },
+    addEventListener: (_evento, callback) => queueMicrotask(callback),
+    querySelector: seletor => ({
+      main,
+      '[data-status-inicial-cuidado]': status,
+      '[data-base-cuidado]': { href: 'https://mutirao.test/assets/data/perfis-acompanhados.json' }
+    })[seletor] || null,
+    querySelectorAll: seletor => seletor.includes('[data-cuidado-conteudo]') ? [secao] : [],
     getElementById: () => null,
-    createElement: () => ({ setAttribute() {}, remove() {} })
+    createElement: () => ({ addEventListener() {}, setAttribute() {} })
   };
   runInNewContext(fonte, {
-    window, document, Event,
+    window, document, Event, queueMicrotask, fetch: buscarBase,
     sessionStorage: { getItem: chave => sessao.get(chave) ?? null, setItem: (chave, valor) => sessao.set(chave, valor) },
-    moduloEstado: { criarBancoCuidado, carregarBaseCuidado: async () => structuredClone(base) }
+    moduloEstado: { criarBancoCuidado, carregarBaseCuidado }
   }, { filename: 'nucleo-cuidado.js' });
-  return window.MutiraoCuidadoPronto;
+  return { pronto: window.MutiraoCuidadoPronto, document, main, secao, status, eventos };
 }
+
+const respostaComBase = () => ({ ok: true, json: async () => structuredClone(base) });
+
+function criarCore(sessao = new Map()) {
+  return montarCore(sessao, respostaComBase).pronto;
+}
+
+test('mantém a estrutura visível enquanto a base atrasa e então libera os dados', async () => {
+  const rede = Promise.withResolvers();
+  const { pronto, document, main, secao, status, eventos } = montarCore(new Map(), () => rede.promise);
+  assert.equal(main.hidden, false);
+  assert.equal(secao.inert, true);
+  assert.equal(document.documentElement.dataset.cuidado, 'carregando');
+  rede.resolve(respostaComBase());
+  await pronto;
+  await Promise.resolve();
+  assert.deepEqual(eventos, ['mutirao:cuidado-pronto']);
+  assert.equal(document.documentElement.dataset.cuidado, 'pronto');
+  assert.equal(secao.inert, false);
+  assert.equal(status.removido, true);
+});
+
+test('mantém a estrutura visível e as ações protegidas quando a base falha', async () => {
+  const { pronto, document, main, secao, status, eventos } = montarCore(new Map(), () => ({ ok: false }));
+  assert.equal(await pronto, null);
+  assert.equal(main.hidden, false);
+  assert.equal(document.documentElement.dataset.cuidado, 'erro');
+  assert.equal(secao.inert, true);
+  assert.match(status.textContent, /Não foi possível/);
+  assert.deepEqual(eventos, []);
+});
 
 function diasDoCenario(core) {
   const base = new Date(core.HOJE + 'T12:00:00');

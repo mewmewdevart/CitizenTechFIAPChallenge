@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-cuidado="carregando">
 
 <head>
   <meta charset="UTF-8" />
@@ -52,13 +52,15 @@
   </noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="assets/css/variaveis.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <link rel="stylesheet" href="assets/css/mvp-telas.css" />
   <link rel="stylesheet" href="assets/css/componentes.css" />
   <link rel="stylesheet" href="assets/css/recursos-apoio.css" />
+  <link rel="modulepreload" href="assets/js/estado-cuidado.mjs" />
+  <link rel="preload" href="assets/data/perfis-acompanhados.json" as="fetch" crossorigin="anonymous" data-base-cuidado />
+  <script src="assets/js/fotos.js" defer></script>
   <script src="assets/js/script.js" defer></script>
   <script src="assets/js/acessibilidade.js" defer></script>
   <script src="assets/js/nucleo-cuidado.js" defer></script>
@@ -71,7 +73,7 @@
     <button id="alternar-menu" class="botao-icone" aria-label="Abrir ou fechar o menu" aria-controls="barra-lateral"
       aria-expanded="true"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
     <span class="barra-topo__rotulo-pessoa">Quem recebe cuidado:</span>
-    <details class="seletor-pessoa">
+    <details class="seletor-pessoa" data-cuidado-acao inert>
       <summary>Pessoa acompanhada</summary>
       <div class="painel-flutuante"><span data-identidade-acompanhada>Pessoa acompanhada</span></div>
     </details>
@@ -93,9 +95,8 @@
         </section>
       </details>
       <details class="menu-perfil">
-        <summary aria-label="Menu do perfil de Zé da Silva"><img src="assets/media/mascotes/icone-mascote-cubado.svg"
-            alt=""><span><strong>Zé da
-              Silva</strong><small>Administrador</small></span></summary>
+        <summary aria-label="Menu do perfil"><img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36"
+            alt=""><span><strong>Meu perfil</strong><small></small></span></summary>
         <div class="painel-flutuante"><a href="meu-perfil.html"><i class="fa-regular fa-user" aria-hidden="true"></i>Meu
             perfil</a><a href="configuracoes.html"><i class="fa-solid fa-gear"
               aria-hidden="true"></i>Configurações</a><button type="button" class="painel-flutuante__acao--sair"
@@ -110,28 +111,28 @@
       <span>Mutirão</span>
     </a>
     <a class="barra-lateral__perfil-mobile" href="meu-perfil.html">
-      <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="">
-      <span><strong>Zé da Silva</strong><small>Administrador · Meu perfil</small></span>
+      <img src="assets/media/icones/avatar-neutro.svg" data-avatar-pendente width="36" height="36" alt="">
+      <span><strong>Meu perfil</strong><small></small></span>
       <span aria-hidden="true">›</span>
     </a>
     <nav aria-label="Menu principal">
       <p>Cuidado do dia a dia</p>
       <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
       <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-      <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+      <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
       <p>Apoio e documentos</p>
       <a href="documentos.html"><i class="fa-regular fa-folder" aria-hidden="true"></i>Documentos</a>
       <a href="pessoas.html"><i class="fa-solid fa-users" aria-hidden="true"></i>Pessoas da rede</a>
       <a href="direitos.html" aria-current="page"><i class="fa-solid fa-circle-info" aria-hidden="true"></i>Direitos e
         serviços</a>
     </nav>
-    <section class="cartao-status" aria-labelledby="titulo-status">
+    <section class="cartao-status" data-cuidado-conteudo inert aria-busy="true" aria-labelledby="titulo-status">
       <h2 id="titulo-status">Como está o cuidado</h2>
       <h3>Quem cuida agora</h3>
       <div class="cartao-status__linha" data-status-turno><img src="assets/media/mascotes/icone-mascote-forma.svg"
           alt="" hidden><span><strong>Sem turno cadastrado</strong><small></small></span></div>
       <h3>Medicamentos</h3>
-      <div class="cartao-status__linha" data-status-medicamento><i class="bi bi-capsule"
+      <div class="cartao-status__linha" data-status-medicamento><i class="icone-capsula"
           aria-hidden="true"></i><span><strong>Nenhum remédio na rotina</strong><small></small></span></div>
     </section>
     <nav class="barra-lateral__suporte" aria-label="Ajuda e ajustes"><a class="barra-lateral__link--apenas-mobile"
@@ -150,6 +151,7 @@
         <p>Veja ajudas do governo, serviços do SUS e onde pedir orientação.</p>
       </div>
     </header>
+    <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
 
     <div class="apoio__aviso" role="status">
       <i class="fa-solid fa-triangle-exclamation apoio__aviso-icone" aria-hidden="true"></i>
@@ -166,7 +168,7 @@
           <div class="direitos-simulador__inicial-etiquetas">
             <span class="selo selo--atencao">Ainda não feito</span>
             <span class="selo selo--info" data-identidade-acompanhada>Pessoa acompanhada</span>
-            <span class="selo selo--info" data-simulador-idade-selo>Idade não informada</span>
+            <span class="selo selo--info" data-simulador-idade-selo>Idade da ficha</span>
           </div>
           <h2 id="titulo-simulador">Veja quais serviços e benefícios podem apoiar a pessoa acompanhada</h2>
           <p class="direitos-banner__descricao">Responda 7 perguntas rápidas sobre o dia a dia, o dinheiro, a saúde e o
@@ -174,15 +176,14 @@
           <div class="direitos-simulador__acoes">
             <a class="botao direitos-banner__cta" href="#localidade-servicos"><i class="fa-solid fa-location-dot"
                 aria-hidden="true"></i> Encontrar serviços perto de mim</a>
-            <button type="button" class="botao direitos-banner__secundario" data-simulador-iniciar>Consultar possíveis
+            <button data-cuidado-acao inert type="button" class="botao direitos-banner__secundario" data-simulador-iniciar>Consultar possíveis
               benefícios <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </div>
         <div class="direitos-banner__arte" aria-hidden="true">
           <picture>
             <source srcset="assets/media/ilustracoes/idosa-cuidadores-mascotes.webp" type="image/webp" />
-            <img src="assets/media/ilustracoes/idosa-cuidadores-mascotes.png" alt="" width="840" height="672"
-              loading="lazy" />
+            <img src="assets/media/ilustracoes/idosa-cuidadores-mascotes.png" alt="" width="840" height="672" decoding="async" />
           </picture>
         </div>
       </div>
@@ -191,7 +192,7 @@
         <div class="direitos-simulador__progresso-cabecalho">
           <div class="direitos-simulador__progresso-meta">
             <span class="selo selo--info" data-simulador-progresso>Pergunta 1 de 7</span>
-            <span class="selo selo--neutro" data-simulador-idade-selo data-idade-da-ficha>Idade não informada</span>
+            <span class="selo selo--neutro" data-simulador-idade-selo data-idade-da-ficha>Idade da ficha</span>
           </div>
           <div class="direitos-simulador__barra" aria-hidden="true">
             <span class="direitos-simulador__barra-preenchida" data-simulador-barra style="width: 14%"></span>
@@ -416,6 +417,7 @@
           </article>
         </div>
       </div>
+      <p role="status" data-localidade-status></p>
     </section>
 
     <p class="apoio__rodape">Fontes oficiais vistas em novembro de 2026. O que existe e como pedir pode mudar de cidade
@@ -431,20 +433,11 @@
   <nav class="barra-inferior" aria-label="Atalhos principais">
     <a href="home.html"><i class="fa-solid fa-house" aria-hidden="true"></i>Início</a>
     <a href="agenda.html"><i class="fa-regular fa-calendar" aria-hidden="true"></i>Agenda</a>
-    <a href="medicamentos.html"><i class="bi bi-capsule" aria-hidden="true"></i>Medicamentos</a>
+    <a href="medicamentos.html"><i class="icone-capsula" aria-hidden="true"></i>Medicamentos</a>
     <button type="button" id="botao-mais" aria-controls="barra-lateral" aria-expanded="false"><i
         class="fa-solid fa-bars" aria-hidden="true"></i>Mais</button>
   </nav>
-  <!-- VLibras Widget -->
-  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
-  <script>
-    if (window.VLibras?.Widget) new window.VLibras.Widget({
-      rootPath: 'https://vlibras.gov.br/app',
-      personalization: 'https://vlibras.gov.br/config/default_logo.json',
-      avatar: 'random',
-      position: 'R',
-    });
-  </script>
+  <script src="assets/js/vlibras.js" defer></script>
 </body>
 
 </html>
