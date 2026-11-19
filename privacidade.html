@@ -29,12 +29,12 @@
   <meta name="twitter:description"
     content="Saiba como o Mutirão protege a privacidade dos dados, utiliza armazenamento local para acessibilidade e trata informações de cuidado." />
 
-  <link rel="canonical" href="https://mutirao-citizen-tech-2026.vercel.app/privacidade.html" />
-  <meta property="og:url" content="https://mutirao-citizen-tech-2026.vercel.app/privacidade.html" />
+  <link rel="canonical" href="https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/privacidade.html" />
+  <meta property="og:url" content="https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/privacidade.html" />
   <meta property="og:image"
-    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
   <meta name="twitter:image"
-    content="https://mutirao-citizen-tech-2026.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
+    content="https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/assets/media/favicon_io/android-chrome-512x512.png" />
 
   <!-- Favicons e Web App Manifest -->
   <link rel="icon" href="assets/media/favicon_io/favicon.ico" sizes="any" />
@@ -208,13 +208,15 @@
           autenticação ou criação de conta em servidor. Os botões de acesso social (Facebook, Google e Apple) são apenas
           ilustrativos e permanecem desabilitados.</li>
         <li><strong>Papéis simulados localmente:</strong> os papéis exibidos na rede (Administrador e Participante)
-          demonstram a divisão de permissões para editar turnos, convidar pessoas e transferir a administração, mas todas
+          demonstram a divisão de permissões para editar turnos, convidar pessoas e transferir a administração, mas
+          todas
           as ações ocorrem apenas na sua sessão local.</li>
         <li><strong>Fotos e referências de documentos:</strong> fotos enviadas na edição da <a
             href="ficha.html">Ficha</a> ou de <a href="meu-perfil.html">Meu perfil</a> são redimensionadas localmente no
           próprio navegador (sem envio a servidor). O catálogo de <a href="documentos.html">Documentos</a> guarda apenas
           título, observações, vínculo e nome do arquivo como referência, sem upload real de arquivos.</li>
-        <li><strong>Formulário de Ajuda:</strong> as mensagens enviadas em <a href="ajuda.html#formulario-ajuda">Ajuda</a>
+        <li><strong>Formulário de Ajuda:</strong> as mensagens enviadas em <a
+            href="ajuda.html#formulario-ajuda">Ajuda</a>
           ficam registradas apenas na sessão atual; não inclua diagnósticos, exames ou números de documentos pessoais.
         </li>
       </ul>
@@ -231,11 +233,13 @@
         <li><strong>Preferências persistentes (<code>localStorage</code>):</strong> salva suas escolhas assistivas
           (tamanho do texto, alto contraste, destaque de links, redução de animações e espaçamento de leitura) na chave
           <code>mutirao-acessibilidade-preferencias</code> e o tema visual (Neutro ou Acolhedor) na chave
-          <code>mutirao-tema</code>, aplicados tanto na área pública quanto nas telas internas.</li>
+          <code>mutirao-tema</code>, aplicados tanto na área pública quanto nas telas internas.
+        </li>
         <li><strong>Questionário de Direitos e serviços (<code>localStorage</code>):</strong> as respostas concluídas em
           <a href="direitos.html">Direitos e serviços</a> ficam salvas por ficha na chave
           <code>mutirao-direitos-simulador-v1</code>, mesmo após fechar a aba. Ao iniciar uma nova simulação na mesma
-          ficha, o resultado anterior é removido.</li>
+          ficha, o resultado anterior é removido.
+        </li>
         <li><strong>Estado da rotina na sessão (<code>sessionStorage</code>):</strong> alterações na ficha, escala,
           compromissos, doses, estoque, diário, documentos, perfil, recados, pedidos de folga, convites e chamados de
           Ajuda ficam na chave <code>mutirao-mvp-estado-v2</code> (com leitura compatível da chave legada
@@ -258,7 +262,8 @@
         por você:</p>
       <ul class="privacidade__lista">
         <li><strong>Localização de serviços públicos (ViaCEP, IBGE e atalhos externos):</strong> na página <a
-            href="direitos.html">Direitos e serviços</a>, ao buscar por CEP ou cidade/UF, o navegador consulta diretamente
+            href="direitos.html">Direitos e serviços</a>, ao buscar por CEP ou cidade/UF, o navegador consulta
+          diretamente
           as APIs públicas do <strong>ViaCEP</strong> e do <strong>IBGE</strong> para identificar o município e montar
           atalhos externos de busca de UBS e CRAS no <strong>Google Maps</strong> e páginas oficiais (SUS, Farmácia
           Popular, INSS, BPC/LOAS e programas públicos).</li>
@@ -269,13 +274,15 @@
           Não informe dados pessoais ou de saúde no chat.</li>
         <li><strong>Acessibilidade e recursos visuais (VLibras, fontes e ícones):</strong> todas as páginas carregam o
           widget oficial de tradução em Libras (<strong>VLibras</strong>), além de folhas de estilo de tipografia
-          (<strong>Google Fonts</strong>, inclusive ao ativar o tema Acolhedor) e ícones (<strong>Font Awesome</strong>).
+          (<strong>Google Fonts</strong>, inclusive ao ativar o tema Acolhedor) e ícones (<strong>Font
+            Awesome</strong>).
         </li>
         <li><strong>Exportações e compartilhamentos sob demanda:</strong> a exportação da agenda em arquivo
           <code>.ics</code>, a impressão da ficha, a cópia de resumos em <a href="configuracoes.html">Configurações</a>
           ou <a href="direitos.html">Direitos e serviços</a> e o compartilhamento via WhatsApp (<code>wa.me</code>),
           e-mail (<code>mailto:</code>) ou compartilhamento nativo do navegador só ocorrem quando você clica nessas
-          opções.</li>
+          opções.
+        </li>
       </ul>
     </section>
 
@@ -287,7 +294,8 @@
       <ul class="privacidade__lista">
         <li><strong>Caráter orientativo sobre benefícios e saúde:</strong> o resultado do questionário de <a
             href="direitos.html">Direitos e serviços</a>, os lembretes e saldos de <a
-            href="medicamentos.html">Medicamentos</a> e as respostas do PontoBOT têm finalidade exclusivamente educativa e
+            href="medicamentos.html">Medicamentos</a> e as respostas do PontoBOT têm finalidade exclusivamente educativa
+          e
           de apoio à organização; eles não substituem orientação médica, prescrição profissional nem atendimento oficial
           do SUS, INSS, CRAS ou demais órgãos públicos.</li>
         <li><strong>Responsabilidade no cuidado em família:</strong> em um uso real de apoio compartilhado, quem

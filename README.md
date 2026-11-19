@@ -5,7 +5,7 @@
   <p><b>Global Solution 2026 · Citizen Tech · Web Design FIAP</b></p>
   <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir responsabilidades e passar adiante o que aconteceu no cuidado compartilhado.</p>
   <p>
-    <a href="https://mutirao-citizen-tech-2026.vercel.app/">Acessar o Mutirão</a> ·
+    <a href="https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/">Acessar o Mutirão</a> ·
     <a href="https://mutirao-pontobot-frontend.vercel.app/">PontoBOT (Assistente)</a> ·
     <a href="https://github.com/mewmewdevart/PontoBOT">Repositório PontoBOT</a>
   </p>
@@ -158,7 +158,7 @@ Atualmente a suíte conta com **26 testes** distribuídos em **6 arquivos**:
 
 ## 🔗 Referências e Publicação
 
-- **Website publicado:** [mutirao-citizen-tech.vercel.app](https://mutirao-citizen-tech-2026.vercel.app/)
+- **Website publicado:** [mutirao-ctrlpeople-citizen-tech-26.vercel.app](https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/)
 - **PontoBOT publicado:** [mutirao-pontobot-frontend.vercel.app](https://mutirao-pontobot-frontend.vercel.app/) · [Repositório](https://github.com/mewmewdevart/PontoBOT)
 - **Protótipo no Figma:** [GS Citizen Tech · Idosos (Mutirão)](https://www.figma.com/design/mzWEL8c6qp2yhZBmiQ4hut/-Projeto--GS-Citizen-Tech---GS-Citizen-Tech---Mutir%C3%A3o?node-id=2013-960&t=FJw3krrMZXicKrdg-1)
 - **Fundamentação social:** IBGE (PNAD Contínua 2022), ELSI-Brasil (Giacomin et al., 2018), *Managing the Binder* (Soni et al., 2026), Plano Brasil que Cuida (MDS) e ODS 5 (meta 5.4), ODS 3 e ODS 10 (ONU Brasil).
