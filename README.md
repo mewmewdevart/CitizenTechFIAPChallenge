@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="160" height="160" alt="Logotipo do Mutirão — Plataforma de organização do cuidado compartilhado" src="https://github.com/user-attachments/assets/d8184c61-a040-4771-9bc1-860f6ddcb88a" />
+  <img width="160" height="160" alt="Logotipo do Mutirão — Plataforma de organização do cuidado compartilhado" src="https://github.com/user-attachments/assets/7f5afb00-bfa5-4806-bf06-e0ecd62067a9" />
   <h1>Mutirão</h1>
   <h3>O cuidar fica mais leve quando formamos um mutirão.</h3>
   <p><b>Global Solution 2026 · Citizen Tech · Web Design FIAP</b></p>
@@ -16,6 +16,7 @@
   </p>
 </div>
 
+
 <br>
 
 ## 📌 Resumo do Projeto
@@ -25,6 +26,10 @@ O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 
 A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
 - **Cenário de demonstração:** Ao clicar em **Entrar na demonstração** (`index.html`), a aplicação abre na ficha inicial do **Flavio Barbosa (Flavinho)** para mostrar estados iniciais com poucos registros. Para percorrer o cenário completo de revezamento (data de referência `10/11/2026`), selecione **Mari** no seletor **Quem recebe cuidado** no topo da tela: Zé identifica a lacuna das `12h` às `13h`, assume o horário, registra uma dose no porta-remédios e deixa um recado no Diário da Ficha para a próxima pessoa.
+
+
+<img width="2858" height="1604" alt="mutirao-citizen-tech vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
+
 
 ---
 
