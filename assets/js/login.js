@@ -5,6 +5,8 @@
   const statusEl = document.querySelector('[data-login-status]');
   const emailInput = form.elements.email;
   const senhaInput = form.elements.senha;
+  const btnEsqueci = document.querySelector('[data-login-esqueci]');
+  const btnCadastro = document.querySelector('[data-login-cadastro]');
 
   const limparErros = () => {
     emailInput?.removeAttribute('aria-invalid');
@@ -213,4 +215,7 @@
     };
     setTimeout(piscar, 2500);
   }
+
+  btnEsqueci?.addEventListener('click', evento => evento.preventDefault());
+  btnCadastro?.addEventListener('click', evento => evento.preventDefault());
 })();

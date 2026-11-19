@@ -374,8 +374,38 @@
               </button>
             </fieldset>
 
-            <button type="submit" class="botao botao--primario login__entrar">Entrar</button>
+            <div class="login__opcoes">
+              <label class="login__lembrar">
+                <input type="checkbox" name="manterConectado" />
+                <span>Manter-me conectado</span>
+              </label>
+              <a class="login__link" href="#esqueceu-senha" data-login-esqueci aria-disabled="true" tabindex="-1">Esqueceu
+                a senha?</a>
+            </div>
+
+            <button type="submit" class="botao botao--primario login__entrar">Entrar na demonstração</button>
           </form>
+
+          <p class="login__cadastro">Ainda não tem uma conta? <a class="login__link" href="#cadastre-se"
+              data-login-cadastro aria-disabled="true" tabindex="-1">Cadastre-se</a></p>
+
+          <div class="login__divisor" aria-hidden="true"><span>Ou entre com</span></div>
+
+          <div class="login__social" role="group" aria-label="Entrar com outra conta">
+            <button type="button" class="login__social-botao" data-login-social="facebook"
+              aria-label="Entrar com Facebook (indisponível)" disabled>
+              <i class="fa-brands fa-facebook login__social-icone--facebook" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="login__social-botao" data-login-social="google"
+              aria-label="Entrar com Google (indisponível)" disabled>
+              <i class="fa-brands fa-google login__social-icone--google" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="login__social-botao" data-login-social="apple"
+              aria-label="Entrar com Apple (indisponível)" disabled>
+              <i class="fa-brands fa-apple" aria-hidden="true"></i>
+            </button>
+          </div>
+
           <p class="login__status" role="status" data-login-status></p>
         <!-- </details> -->
       </div>
