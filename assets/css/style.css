@@ -1231,6 +1231,10 @@ html.acessibilidade--alto-contraste #resultados-busca a:hover {
     padding: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-lg)) var(--espaco-lg) calc(var(--espaco-xl) + 84px);
   }
 
+  body:has(.barra-inferior) ponto-bot:not([inline]) {
+    --chatbot-bottom: calc(var(--altura-barra-inferior-mobile) + var(--espaco-lg) + env(safe-area-inset-bottom));
+  }
+
   .grade-painel__col-8,
   .grade-painel__col-6,
   .grade-painel__col-4 {

@@ -223,7 +223,7 @@
         </div>
         <ul class="mural__quadro" data-mural></ul>
         <button type="button" class="botao botao--secundario mural__mandar" data-abrir-recado=""><i
-            class="fa-regular fa-message" aria-hidden="true"></i> Mandar um recado para alguém</button>
+            class="fa-regular fa-message" aria-hidden="true"></i> Preparar um recado</button>
         <div class="painel__bloco" data-recados-enviados hidden></div>
       </section>
 
@@ -253,15 +253,12 @@
             </div>
             <button type="button" class="botao botao--primario painel__acao-larga" data-dialogo="dialogo-pedir-folga"><i
                 class="fa-regular fa-message" aria-hidden="true"></i> Pedir uma folga</button>
+            <p class="cuidar__pedido-detalhe" id="folga-sem-rede" data-folga-sem-rede hidden>Não há outra pessoa
+              cadastrada na rede para cobrir um turno.</p>
             <div class="cuidar__pedidos-folga" data-pedidos-folga hidden>
               <h3 class="cuidar__rotulo">Pedidos de folga</h3>
               <ul class="painel__lista" data-pedidos-folga-lista></ul>
             </div>
-            <label class="interruptor">
-              <input type="checkbox" role="switch" data-cuidar-preferencia="avisarFamilia">
-              <span class="painel__texto"><strong>Simular aviso à família ao marcar “sobrecarregado”</strong><span
-                  data-cuidar-aviso-familia>Desligado. Você decide se e quando contar.</span></span>
-            </label>
           </section>
 
           <section class="apoio__painel" aria-labelledby="titulo-sua-semana">
@@ -277,7 +274,7 @@
               <p data-cuidar-alerta-texto>Um recado ou uma noite a menos pode fazer diferença para ela.</p>
               <div class="cuidar__acoes">
                 <button type="button" class="botao botao--secundario" data-abrir-recado data-cuidar-alerta-recado><i
-                    class="fa-regular fa-message" aria-hidden="true"></i> Mandar um
+                    class="fa-regular fa-message" aria-hidden="true"></i> Preparar um
                   recado</button>
                 <a class="botao botao--secundario" href="agenda.html?dia=2026-11-11#escala" data-link-madrugada><i
                     class="fa-regular fa-calendar" aria-hidden="true"></i> Ficar numa madrugada</a>
@@ -292,20 +289,8 @@
               <h2 id="titulo-pausas">Pausas para você</h2>
               <small>você escolhe</small>
             </div>
-            <div>
-              <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="pausa"
-                  checked><span class="painel__texto"><strong>Lembrar de fazer uma pausa</strong><span>Depois de turnos
-                    com mais de 5 horas</span></span></label>
-              <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="apoio"
-                  checked><span class="painel__texto"><strong>Uma mensagem de apoio por semana</strong><span>Aos
-                    domingos,
-                    no fim do dia</span></span></label>
-              <label class="interruptor"><input type="checkbox" role="switch" data-cuidar-preferencia="agradecer"><span
-                  class="painel__texto"><strong>Me lembrar de agradecer alguém</strong><span>Uma vez por
-                    semana</span></span></label>
-            </div>
             <div class="cuidar__mensagem">
-              <span class="cuidar__rotulo">Mensagem desta semana</span>
+              <span class="cuidar__rotulo">Uma mensagem para você</span>
               <p>Cuidar cansa. Pedir ajuda também é cuidar.</p>
             </div>
           </section>
@@ -453,12 +438,12 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Nesta demonstração, o recado fica salvo aqui e não é enviado.</p>
+      <p>O recado fica em Meu perfil, nesta aba. Nenhuma mensagem é enviada à pessoa escolhida.</p>
       <form class="formulario-mvp" data-formulario-mvp="recado" novalidate>
         <label>Para quem
           <select name="para" required></select>
         </label>
-        <p data-recado-sem-destinatario hidden>Convide alguém na página Pessoas para ter a quem escrever.</p>
+        <p data-recado-sem-destinatario hidden>Ainda não há outra pessoa ativa nesta rede para selecionar.</p>
         <label>Seu recado<textarea name="recado" rows="4" required></textarea></label>
         <div class="ideias" role="group" aria-label="Ideias para começar">
           <button type="button" class="botao botao--secundario botao--pequeno" data-ideia-recado>Obrigado por
@@ -471,7 +456,7 @@
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario"><i class="fa-regular fa-paper-plane"
-              aria-hidden="true"></i> Mandar recado</button>
+              aria-hidden="true"></i> Salvar recado</button>
         </div>
       </form>
     </dialog>
@@ -482,7 +467,7 @@
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
-      <p>Escolha o turno em que você precisa de ajuda. Nesta demonstração, o pedido fica salvo aqui.</p>
+      <p>Escolha o turno em que você precisa de ajuda. Acompanhe o pedido aqui. Enquanto estiver pendente, você continua na escala.</p>
       <form class="formulario-mvp" data-formulario-mvp="folga" novalidate>
         <fieldset class="dialogo-mvp__opcoes" data-opcoes-folga>
           <legend>Qual turno você quer passar?</legend>
@@ -497,7 +482,7 @@
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
           <button type="submit" class="botao botao--primario"><i class="fa-regular fa-paper-plane"
-              aria-hidden="true"></i> Enviar pedido</button>
+              aria-hidden="true"></i> Registrar pedido</button>
         </div>
       </form>
     </dialog>

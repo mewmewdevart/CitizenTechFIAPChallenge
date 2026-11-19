@@ -174,8 +174,8 @@
       <ul class="painel__lista" data-participantes></ul>
     </section>
 
-    <section class="apoio__painel" aria-labelledby="titulo-convites-demo" data-secao-convites hidden>
-      <h2 id="titulo-convites-demo" class="painel__subtitulo">Convites da demonstração</h2>
+    <section class="apoio__painel" aria-labelledby="titulo-convites" data-secao-convites hidden>
+      <h2 id="titulo-convites" class="painel__subtitulo">Convites da rede</h2>
       <ul class="painel__lista" data-convites-lista></ul>
     </section>
 
@@ -186,7 +186,7 @@
               aria-hidden="true"></i></button></form>
       </div>
       <p>Rede de cuidado</p>
-      <p class="contexto-demonstracao">Este cadastro simula um convite. Nenhum e-mail será enviado.</p>
+      <p class="contexto-demonstracao">O convite fica registrado nesta aba como pendente. A pessoa convidada não recebe e-mail.</p>
       <form class="formulario-mvp" data-formulario-mvp="convite" novalidate>
         <label>E-mail da pessoa<input type="email" name="email" placeholder="Ex.: nome@exemplo.com" autocomplete="email"
             required></label>
@@ -200,31 +200,26 @@
           <option value="Cuidadora"></option>
           <option value="Vizinha"></option>
         </datalist>
-        <label>O que vai poder fazer
-          <select name="papel">
-            <option value="Participante">Participante</option>
-            <option value="Administrador">Administrador</option>
-          </select>
-        </label>
+        <p>A pessoa entra na rede como participante quando aceita o convite.</p>
         <p class="formulario-mvp__erro" data-erro-convite role="alert"></p>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-          <button type="submit" class="botao botao--primario">Enviar convite</button>
+          <button type="submit" class="botao botao--primario">Registrar convite</button>
         </div>
       </form>
     </dialog>
 
-    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-convite-enviado"
-      aria-labelledby="titulo-convite-enviado">
+    <dialog class="dialogo-mvp dialogo-mvp--compacto" id="dialogo-convite-registrado"
+      aria-labelledby="titulo-convite-registrado">
       <div class="dialogo-mvp__cabecalho">
-        <h2 id="titulo-convite-enviado">Convite enviado</h2>
+        <h2 id="titulo-convite-registrado">Convite registrado</h2>
         <form method="dialog"><button class="botao-icone" aria-label="Fechar"><i class="fa-solid fa-xmark"
               aria-hidden="true"></i></button></form>
       </div>
       <p>Rede de cuidado</p>
       <div class="dialogo-mvp__secao">
-        <p class="dialogo-mvp__secao-titulo">Convite simulado</p>
-        <p data-convite-resumo>Nesta demonstração, o convite fica salvo só nesta aba.</p>
+        <p class="dialogo-mvp__secao-titulo">Pendente</p>
+        <p data-convite-resumo>O convite foi salvo nesta aba.</p>
       </div>
       <div class="dialogo-mvp__acoes">
         <button type="button" class="botao botao--primario" data-fechar-dialogo>Voltar à rede</button>

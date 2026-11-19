@@ -359,17 +359,17 @@
       <p data-atribuir-contexto>Pessoa acompanhada</p>
       <form class="formulario-mvp" data-formulario-mvp="atribuir-turno">
         <label>Responsável
-          <select name="responsavel" data-opcoes-rede required>
+          <select name="responsavel" data-opcoes-rede data-excluir-usuario required>
             <option value="">Selecione uma pessoa</option>
           </select>
         </label>
         <div class="dialogo-mvp__aviso-caixa">
-          <strong>Antes de enviar</strong>
-          <span>O horário só fica com alguém depois que a pessoa aceitar.</span>
+          <strong>O que acontece com o pedido</strong>
+          <span>Ele fica pendente nesta aba. O horário continua aberto e nenhuma mensagem é enviada.</span>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--secundario" data-voltar-cobrir>Voltar</button>
-          <button type="submit" class="botao botao--primario">Enviar pedido</button>
+          <button type="submit" class="botao botao--primario">Registrar pedido</button>
         </div>
       </form>
     </dialog>

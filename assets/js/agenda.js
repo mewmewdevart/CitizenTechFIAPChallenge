@@ -199,10 +199,10 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     const renderizarIconeTarefa = icone => {
-      if (icone === 'icone-medicamento.svg') {
+      if (icone === 'icone-medicamento.svg' || icone === 'bi bi-capsule') {
         return '<i class="icone-capsula" aria-hidden="true"></i>';
       }
-      if (icone.startsWith('bi ') || icone.startsWith('fa-')) {
+      if (icone.startsWith('fa-')) {
         return `<i class="${escaparHtml(icone)}" aria-hidden="true"></i>`;
       }
       return `<img src="assets/media/icones/${escaparHtml(icone)}" alt="" width="20" height="20">`;
@@ -307,7 +307,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
     const renderizarPedido = ([chave, pedido]) => `
       <div class="painel__acoes">
-        <p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · Aguardando aceite</p>
+        <p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · Aguardando confirmação</p>
         <button type="button" class="botao botao--secundario" data-decidir-atribuicao="cancelar" data-chave="${escaparHtml(chave)}">Cancelar pedido</button>
       </div>`;
 
@@ -797,7 +797,7 @@ window.MutiraoCuidadoPronto.then(core => {
     try {
       core.resolverAtribuicao(botao.dataset.chave, false);
       renderizar();
-      registrarStatus('Pronto. A escala foi atualizada.');
+      registrarStatus('Pedido cancelado. A cobertura do horário continua como estava.');
       pagina.querySelector(`[data-dia-semana="${diaSemana}"]`)?.focus();
     } catch (erro) { registrarStatus(erro.message); }
   });
@@ -885,7 +885,7 @@ window.MutiraoCuidadoPronto.then(core => {
 
     if (tipoFormulario === 'atribuir-turno') {
       const responsavel = campos.responsavel;
-      if (!core.obterParticipantesRede().some(pessoa => pessoa.nome === responsavel)) return;
+      if (!core.obterParticipantesRede().some(pessoa => pessoa.nome === responsavel && !pessoa.ehUsuarioAtual)) return;
       const nomeCurto = responsavel.match(/\(([^)]+)\)/)?.[1] || responsavel;
       const horarioAlvo = horarioPedido;
       const intervaloPedido = core.lerFaixaTurno(horarioAlvo);
@@ -918,14 +918,14 @@ window.MutiraoCuidadoPronto.then(core => {
               dia: diaTurno,
               horario: horarioAlvo,
               escopo: criarRotinaComPedido,
-              status: 'Pedido de teste · Esperando aceitar'
+              status: 'Aguardando confirmação'
             }
           }
         }));
       }
       mensagem = {
-        titulo: 'Pedido de teste enviado',
-        descricao: `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)}, ${horarioAlvo}. Convite simulado para ${nomeCurto} (nenhum aviso foi enviado de verdade; o horário continua sem ninguém).`,
+        titulo: 'Pedido de cobertura registrado',
+        descricao: `${core.nomePessoaAcompanhada()} · ${formatarDataCurta(diaTurno)}, ${horarioAlvo}. Aguardando confirmação de ${nomeCurto}. O horário continua sem responsável e nenhuma mensagem foi enviada.`,
         avatar
       };
     }

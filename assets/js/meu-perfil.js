@@ -19,10 +19,28 @@ window.MutiraoCuidadoPronto.then(core => {
   const retorno = pagina.querySelector('[data-cuidar-retorno]');
   const retornoTitulo = pagina.querySelector('[data-cuidar-retorno-titulo]');
   const retornoTexto = pagina.querySelector('[data-cuidar-retorno-texto]');
-  const avisoFamilia = pagina.querySelector('[data-cuidar-aviso-familia]');
   const dialogoRecado = document.getElementById('dialogo-recado');
   const formRecado = pagina.querySelector('[data-formulario-mvp="recado"]');
   const formPerfil = pagina.querySelector('[data-formulario-mvp="perfil"]');
+  const botaoPedirFolga = pagina.querySelector('[data-dialogo="dialogo-pedir-folga"]');
+  const avisoFolgaSemRede = pagina.querySelector('[data-folga-sem-rede]');
+  const temOutroParticipanteNaRede = () => core.obterParticipantesRede().some(pessoa => !pessoa.ehUsuarioAtual);
+
+  const atualizarBotaoPedirFolga = () => {
+    const semOutros = !temOutroParticipanteNaRede();
+    if (botaoPedirFolga) {
+      botaoPedirFolga.disabled = semOutros;
+      botaoPedirFolga.setAttribute('aria-disabled', String(semOutros));
+      if (semOutros) {
+        botaoPedirFolga.title = 'Não há outra pessoa cadastrada na rede para cobrir um turno.';
+        botaoPedirFolga.setAttribute('aria-describedby', 'folga-sem-rede');
+      } else {
+        botaoPedirFolga.removeAttribute('title');
+        botaoPedirFolga.removeAttribute('aria-describedby');
+      }
+    }
+    if (avisoFolgaSemRede) avisoFolgaSemRede.hidden = !semOutros;
+  };
 
   const RETORNOS_HUMOR = {
     bem: ['Que bom saber', 'Se a semana pesar, é só marcar de novo.'],
@@ -30,34 +48,13 @@ window.MutiraoCuidadoPronto.then(core => {
     sobrecarregado: ['Obrigado por contar', 'Você não precisa dar conta de tudo sozinho. Peça uma folga ou converse com alguém da família.']
   };
 
-  const CUIDAR_INICIAL = {
-    humor: '',
-    preferencias: { avisarFamilia: false, pausa: true, apoio: true, agradecer: false }
-  };
-
-  const obterCuidar = () => {
-    const salvo = obterEstado().cuidar || {};
-    return { ...CUIDAR_INICIAL, ...salvo, preferencias: { ...CUIDAR_INICIAL.preferencias, ...(salvo.preferencias || {}) } };
-  };
-
-  const salvarCuidar = alteracao => {
-    atualizarEstado(estado => {
-      const atual = estado.cuidar || CUIDAR_INICIAL;
-      return { ...estado, cuidar: { ...atual, ...alteracao(atual) } };
-    });
-  };
+  const obterHumor = () => obterEstado().cuidar?.humor || '';
 
   const renderizarHumor = humor => {
     const mensagem = RETORNOS_HUMOR[humor];
     retorno.hidden = !mensagem;
     if (!mensagem) return;
     [retornoTitulo.textContent, retornoTexto.textContent] = mensagem;
-  };
-
-  const renderizarAvisoFamilia = ligado => {
-    avisoFamilia.textContent = ligado
-      ? 'Ligado. Um aviso será simulado nesta aba.'
-      : 'Desligado. Você decide se e quando contar.';
   };
 
   const MASCOTE_PADRAO = 'assets/media/mascotes/icone-mascote-cubado.svg';
@@ -190,14 +187,10 @@ window.MutiraoCuidadoPronto.then(core => {
   };
 
   const iniciar = () => {
-    const cuidar = obterCuidar();
-    const opcao = grupoHumor.querySelector(`input[value="${cuidar.humor}"]`);
+    const humor = obterHumor();
+    const opcao = grupoHumor.querySelector(`input[value="${humor}"]`);
     if (opcao) opcao.checked = true;
-    renderizarHumor(cuidar.humor);
-    for (const chave of pagina.querySelectorAll('[data-cuidar-preferencia]')) {
-      chave.checked = Boolean(cuidar.preferencias[chave.dataset.cuidarPreferencia]);
-    }
-    renderizarAvisoFamilia(cuidar.preferencias.avisarFamilia);
+    renderizarHumor(humor);
     renderizarPerfil();
     renderizarRecadosEnviados();
   };
@@ -205,19 +198,8 @@ window.MutiraoCuidadoPronto.then(core => {
   grupoHumor.addEventListener('change', evento => {
     const humor = evento.target.value;
     renderizarHumor(humor);
-    salvarCuidar(() => ({ humor }));
-    if (humor === 'sobrecarregado' && obterCuidar().preferencias.avisarFamilia) {
-      anunciarStatus(elementoStatus, 'Aviso de sobrecarga simulado. A família não recebeu uma mensagem.');
-    }
+    atualizarEstado(estado => ({ ...estado, cuidar: { ...estado.cuidar, humor } }));
   });
-
-  for (const chave of pagina.querySelectorAll('[data-cuidar-preferencia]')) {
-    chave.addEventListener('change', () => {
-      const nome = chave.dataset.cuidarPreferencia;
-      salvarCuidar(atual => ({ preferencias: { ...CUIDAR_INICIAL.preferencias, ...(atual.preferencias || {}), [nome]: chave.checked } }));
-      if (nome === 'avisarFamilia') renderizarAvisoFamilia(chave.checked);
-    });
-  }
 
   const abrirRecado = para => {
     if (!dialogoRecado || !formRecado) return;
@@ -329,6 +311,12 @@ window.MutiraoCuidadoPronto.then(core => {
     evento.preventDefault();
     const form = evento.target;
     core.limparErrosFormulario?.(form);
+    if (!temOutroParticipanteNaRede()) {
+      const mensagem = 'Não há outra pessoa cadastrada na rede para cobrir um turno.';
+      core.marcarErroFormulario?.(form, form.querySelector('[name="turno"]'), mensagem);
+      anunciarStatus(elementoStatus, mensagem);
+      return;
+    }
     const valor = form.querySelector('[name="turno"]:checked')?.value;
     if (!valor) {
       core.marcarErroFormulario?.(form, form.querySelector('[name="turno"]'), 'Não há turno seu disponível para este pedido.');
@@ -360,7 +348,7 @@ window.MutiraoCuidadoPronto.then(core => {
     form.reset();
     form.closest('dialog')?.close();
     renderizarPedidosFolga();
-    anunciarStatus(elementoStatus, `Pedido de folga salvo nesta demonstração: ${turno}.`);
+    anunciarStatus(elementoStatus, `Pedido de folga registrado: ${turno}. Você continua na escala enquanto aguarda.`);
   });
 
   const SEMANA_ATUAL = core.obterSemanaDe(HOJE);
@@ -374,48 +362,42 @@ window.MutiraoCuidadoPronto.then(core => {
     lista.innerHTML = pedidos.map(item => {
       const id = escaparHtml(item.id);
       const pendente = item.status === 'Pendente';
-      const podeResponder = pendente && core.diaEditavelNaEscala(item.dia);
-      const substitutos = podeResponder ? core.obterParticipantesRede()
-        .filter(pessoa => !pessoa.ehUsuarioAtual && core.pessoaDisponivel(pessoa.nome, item.dia, item.inicio, item.fim)) : [];
       return `
         <li class="cuidar__pedido-folga">
           <div class="cuidar__pedido-cabecalho">
             <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-calendar-check"></i></span>
             <div class="cuidar__pedido-resumo">
               <strong>${escaparHtml(item.turno || 'Pedido de folga')}</strong>
-              <span class="selo selo--info">${escaparHtml(item.status || 'Pedido antigo sem turno')}</span>
+              <span class="selo selo--info">${escaparHtml(pendente ? 'Aguardando confirmação' : item.status || 'Pedido antigo sem turno')}</span>
               <small>${escaparHtml(item.data ? `Registrado em ${item.data}` : 'Salvo nesta aba')}</small>
               ${item.recado ? `<p>${escaparHtml(item.recado)}</p>` : ''}
             </div>
           </div>
-          ${podeResponder && substitutos.length ? `
-            <label class="cuidar__pedido-substituto">Substituto na simulação
-              <select data-substituto-folga="${id}">
-                ${substitutos.map(pessoa => `<option value="${escaparHtml(pessoa.nome)}">${escaparHtml(pessoa.nome)}</option>`).join('')}
-              </select>
-            </label>` : podeResponder ? '<p class="cuidar__pedido-detalhe">Sem substitutos disponíveis neste horário.</p>' : ''}
           ${pendente ? `<div class="cuidar__pedido-acoes">
-            ${substitutos.length ? `<button type="button" class="botao botao--secundario" data-decidir-folga="Aceita" data-id="${id}">Simular aceite e transferir</button>` : ''}
-            ${podeResponder ? `<button type="button" class="botao botao--secundario" data-decidir-folga="Recusada" data-id="${id}">Simular recusa</button>` : ''}
-            <button type="button" class="botao botao--secundario" data-decidir-folga="Cancelada" data-id="${id}">Cancelar pedido</button>
-          </div>` : item.responsavel ? `<p class="cuidar__pedido-detalhe">Responsável: ${escaparHtml(item.responsavel)}</p>` : ''}
+            <button type="button" class="botao botao--secundario" data-cancelar-folga="${id}">Cancelar pedido</button>
+          </div>` : item.responsavel ? `<p class="cuidar__pedido-detalhe">Responsável na escala: ${escaparHtml(item.responsavel)}</p>` : ''}
         </li>`;
     }).join('');
   };
 
-  pagina.addEventListener('click', evento => {
-    const botao = evento.target.closest('[data-decidir-folga]');
+  pagina.addEventListener('click', async evento => {
+    const botao = evento.target.closest('[data-cancelar-folga]');
     if (!botao) return;
-    const id = botao.dataset.id;
-    const select = [...pagina.querySelectorAll('[data-substituto-folga]')].find(el => el.dataset.substitutoFolga === id);
+    if (!await core.confirmarAcao({
+      titulo: 'Cancelar pedido de folga?',
+      descricao: 'O pedido será encerrado e a escala continuará como está.',
+      confirmarTexto: 'Cancelar pedido'
+    })) return;
     try {
-      core.resolverFolga(id, botao.dataset.decidirFolga, select?.value || '');
-      renderizarPedidosFolga(); renderizarSemanaCuidar();
-      anunciarStatus(elementoStatus, 'Pedido atualizado. Confira a responsabilidade na Agenda.');
+      core.cancelarFolga(botao.dataset.cancelarFolga);
+      renderizarPedidosFolga();
+      pagina.querySelector('[data-dialogo="dialogo-pedir-folga"]')?.focus();
+      anunciarStatus(elementoStatus, 'Pedido de folga cancelado. A escala continua como estava.');
     } catch (erro) { anunciarStatus(elementoStatus, erro.message); }
   });
 
-  document.querySelector('[data-dialogo="dialogo-pedir-folga"]')?.addEventListener('click', () => {
+  botaoPedirFolga?.addEventListener('click', () => {
+    if (!temOutroParticipanteNaRede()) return;
     const turnos = SEMANA_ATUAL.filter(core.diaEditavelNaEscala).flatMap(dia => construirLinhaDoTempoDia(dia)
       .filter(seg => seg.tipo === 'turno' && seg.pessoa.ehUsuarioAtual)
       .map(seg => ({ ...seg, dia })));
@@ -610,6 +592,9 @@ window.MutiraoCuidadoPronto.then(core => {
     });
   });
 
+  window.addEventListener('mutirao:cuidado-atualizado', atualizarBotaoPedirFolga);
+
+  atualizarBotaoPedirFolga();
   renderizarPedidosFolga();
   renderizarSemanaCuidar();
   iniciar();

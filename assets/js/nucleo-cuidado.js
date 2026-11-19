@@ -160,28 +160,36 @@ window.MutiraoCuidadoPronto = (async () => {
     }))];
   };
 
-  const resolverConvite = (email, aceitar) => atualizarEstado(estado => {
-    const convite = (estado.convites || []).find(item => item.email === email);
-    if (!convite) throw new Error('Este convite já foi respondido.');
-    const participantesExtras = [...(estado.participantesExtras || [])];
-    if (aceitar && !participantesExtras.some(item => item.email === email)) {
-      participantesExtras.push({
-        ...convite, nome: email, nomeBase: email,
-        avatar: 'icone-mascote-cubado.svg', foto: ''
-      });
+  const registrarConvite = (emailInformado, vinculoInformado) => atualizarEstado(estado => {
+    if (obterUsuarioAtual(estado).papel !== 'Administrador') throw new Error('Apenas o administrador pode registrar convites.');
+    const email = emailInformado.trim().toLowerCase();
+    const vinculo = vinculoInformado.trim();
+    if (!email || !vinculo) throw new Error('Informe o e-mail e o vínculo da pessoa.');
+    if (estado.convites.some(item => item.email === email)
+      || estado.participantesExtras.some(item => item.email === email)
+      || estado.historicoConvites.some(item => item.status === 'Aceito' && item.email === email)
+      || estado.perfilUsuario.email?.trim().toLowerCase() === email) {
+      throw new Error('Já existe um convite pendente ou participante com este e-mail.');
     }
+    return { ...estado, convites: [...estado.convites, { email, vinculo, papel: 'Participante' }] };
+  });
+
+  const cancelarConvite = email => atualizarEstado(estado => {
+    if (obterUsuarioAtual(estado).papel !== 'Administrador') throw new Error('Apenas o administrador pode cancelar convites.');
+    const convite = estado.convites.find(item => item.email === email);
+    if (!convite) throw new Error('Este convite já foi encerrado.');
     return {
-      ...estado, participantesExtras,
+      ...estado,
       convites: estado.convites.filter(item => item.email !== email),
-      historicoConvites: [...(estado.historicoConvites || []), { ...convite, status: aceitar ? 'Aceito' : 'Recusado' }]
+      historicoConvites: [...estado.historicoConvites, { ...convite, status: 'Cancelado' }]
     };
   });
 
   const atualizarSeletoresRede = () => {
     const participantes = obterParticipantesRede();
-    const admin = obterUsuarioAtual();
-    const nomes = [...new Set([admin.nomeComApelido, ...participantes.map(pessoa => pessoa.nome)])];
     document.querySelectorAll('select[data-opcoes-rede]').forEach(select => {
+      const nomes = [...new Set(participantes.filter(pessoa => !select.hasAttribute('data-excluir-usuario') || !pessoa.ehUsuarioAtual)
+        .map(pessoa => pessoa.nome))];
       const anterior = select.value;
       select.querySelectorAll('option[data-opcao-rede]').forEach(opcao => opcao.remove());
       for (const nome of nomes) {
@@ -1047,26 +1055,16 @@ window.MutiraoCuidadoPronto = (async () => {
     return {
       ...proximo, atribuicoesTurno,
       coberturasRede: [...(estado.coberturasRede || []), ...(salvarOcorrencia ? [{ dia: item.dia, inicio, fim, responsavel: item.responsavel }] : [])],
-      historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Recusada ou cancelada' }]
+      historicoAtribuicoes: [...(estado.historicoAtribuicoes || []), { ...item, status: aceitar ? 'Aceita' : 'Cancelada' }]
     };
   });
 
-  const resolverFolga = (id, status, responsavel = '') => atualizarEstado(estado => {
-    const pedido = (estado.pedidosFolga || []).find(item => item.id === id);
-    if (!pedido || pedido.status !== 'Pendente') throw new Error('Este pedido já foi respondido.');
-    if (status === 'Aceita') {
-      if (!diaEditavelNaEscala(pedido.dia)) throw new Error('O turno deste pedido já passou.');
-      const turnoAtual = construirLinhaDoTempoDia(pedido.dia, estado).find(seg => seg.tipo === 'turno'
-        && seg.pessoa.ehUsuarioAtual && seg.inicio <= pedido.inicio && seg.fim >= pedido.fim);
-      if (!turnoAtual || !obterParticipantesRede(estado).some(p => p.nome === responsavel)
-        || !pessoaDisponivel(responsavel, pedido.dia, pedido.inicio, pedido.fim, estado)) {
-        throw new Error('Escala alterada ou substituto indisponível. Revise o pedido.');
-      }
-    }
+  const cancelarFolga = id => atualizarEstado(estado => {
+    const pedido = estado.pedidosFolga.find(item => item.id === id);
+    if (!pedido || pedido.status !== 'Pendente') throw new Error('Apenas pedidos pendentes podem ser cancelados.');
     return {
       ...estado,
-      pedidosFolga: estado.pedidosFolga.map(item => item.id === id ? { ...item, status, responsavel } : item),
-      coberturasRede: [...(estado.coberturasRede || []), ...(status === 'Aceita' ? [{ dia: pedido.dia, inicio: pedido.inicio, fim: pedido.fim, responsavel }] : [])]
+      pedidosFolga: estado.pedidosFolga.map(item => item.id === id ? { ...item, status: 'Cancelada' } : item)
     };
   });
 
@@ -1101,7 +1099,7 @@ window.MutiraoCuidadoPronto = (async () => {
     if (!dialogo) {
       dialogo = document.createElement('dialog'); dialogo.id = 'dialogo-rede-encerrada';
       dialogo.className = 'dialogo-mvp'; dialogo.setAttribute('aria-labelledby', 'titulo-rede-encerrada');
-      dialogo.innerHTML = '<h2 id="titulo-rede-encerrada">Você saiu da rede nesta simulação</h2><p>A administração e seus turnos futuros foram transferidos. A rotina permanece preservada nesta sessão.</p><button type="button" class="botao botao--primario">Voltar à demonstração como participante</button>';
+      dialogo.innerHTML = '<h2 id="titulo-rede-encerrada">Administração transferida</h2><p>A pessoa escolhida assumiu a administração e seus turnos futuros. Você continua nesta rede como participante.</p><button type="button" class="botao botao--primario">Voltar ao início como participante</button>';
       dialogo.addEventListener('cancel', evento => evento.preventDefault());
       dialogo.querySelector('button').addEventListener('click', () => {
         atualizarEstado(estado => ({ ...estado, redeSaiu: false })); location.href = 'home.html';
@@ -1109,45 +1107,6 @@ window.MutiraoCuidadoPronto = (async () => {
       document.body.append(dialogo);
     }
     if (!dialogo.open) dialogo.showModal();
-  };
-
-  const executarLembretes = (ate, preferencias = {}) => {
-    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(ate) || !Number.isFinite(Date.parse(ate))) throw new Error('Informe uma data e hora válidas.');
-    const estado = estadoAtual;
-    const desde = estado.relogioLembretes || `${HOJE}T00:00`;
-    if (ate < desde) throw new Error('O relógio deve avançar.');
-    const novos = [];
-    const existentes = new Set((estado.lembretesExecutados || []).map(item => item.id));
-    const incluir = (id, quando, texto) => {
-      if (quando > desde && quando <= ate && !existentes.has(id)) novos.push({ id, quando, texto, canal: preferencias.canalNotificacao || 'app-email' });
-    };
-    if (preferencias.notificacoesMedicacao !== false) {
-      for (const dose of obterDoses(estado).filter(item => item.estado === 'prevista')) {
-        const minutos = Number(preferencias.antecedenciaMedicacao || 30);
-        const data = new Date(`${HOJE}T${String(parseInt(dose.hora, 10)).padStart(2, '0')}:00:00Z`);
-        data.setUTCMinutes(data.getUTCMinutes() - minutos);
-        incluir(`dose-${HOJE}-${dose.chave}`, data.toISOString().slice(0, 16), `Horário do remédio: ${dose.nome} · ${dose.hora}`);
-      }
-    }
-    const cuidar = { pausa: true, apoio: true, agradecer: false, ...estado.cuidar?.preferencias };
-    const usuario = obterUsuarioAtual(estado);
-    const primeiro = new Date(`${desde.slice(0, 10)}T00:00:00Z`);
-    const ultimo = new Date(`${ate.slice(0, 10)}T00:00:00Z`);
-    if ((ultimo - primeiro) / 86400000 > 366) throw new Error('Avance no máximo um ano por vez.');
-    for (let data = primeiro; data <= ultimo; data.setUTCDate(data.getUTCDate() + 1)) {
-      const dia = data.toISOString().slice(0, 10);
-      if (cuidar.pausa) for (const turno of construirLinhaDoTempoDia(dia, estado)) {
-        if (turno.tipo === 'turno' && turno.pessoa.nome === usuario.nomeComApelido && turno.fim - turno.inicio > 5) {
-          incluir(`pausa-${dia}-${turno.inicio}`, `${dia}T${String(turno.inicio + 5).padStart(2, '0')}:00`, 'Seu turno passou de cinco horas. Combine uma pausa com a rede.');
-        }
-      }
-      if (data.getUTCDay() === 0) {
-        if (cuidar.apoio) incluir(`apoio-${dia}`, `${dia}T18:00`, 'Cuidar cansa. Pedir ajuda também é cuidar.');
-        if (cuidar.agradecer) incluir(`agradecer-${dia}`, `${dia}T18:00`, 'Que tal agradecer alguém da rede nesta semana?');
-      }
-    }
-    atualizarEstado(atual => ({ ...atual, relogioLembretes: ate, lembretesExecutados: [...(atual.lembretesExecutados || []), ...novos] }));
-    return novos;
   };
 
   const obterTurnoAtual = (estado = estadoAtual) =>
@@ -1651,10 +1610,10 @@ window.MutiraoCuidadoPronto = (async () => {
     obterCompromissosFuturos,
     obterProximoCompromisso,
     obterParticipantesRede,
-    resolverConvite,
+    registrarConvite,
+    cancelarConvite,
     resolverAtribuicao,
-    resolverFolga,
-    executarLembretes,
+    cancelarFolga,
     sairDaRede,
     mostrarSaidaRede,
     pessoaDisponivel,

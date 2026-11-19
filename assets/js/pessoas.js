@@ -3,17 +3,18 @@ window.MutiraoCuidadoPronto.then(core => {
   const pagina = document.querySelector('[data-pagina-mvp="pessoas"]');
   if (!pagina) return;
 
-  const { obterEstado, atualizarEstado, escaparHtml, anunciarStatus } = core;
+  const { obterEstado, escaparHtml, anunciarStatus } = core;
 
   const lista = pagina.querySelector('[data-participantes]');
   const secaoConvites = pagina.querySelector('[data-secao-convites]');
   const listaConvites = pagina.querySelector('[data-convites-lista]');
   const elementoStatus = pagina.querySelector('[data-mvp-status]');
-  const dialogoEnviado = document.getElementById('dialogo-convite-enviado');
+  const dialogoRegistrado = document.getElementById('dialogo-convite-registrado');
+  const botaoConvidar = pagina.querySelector('[data-dialogo="dialogo-convidar"]');
   const formConvite = pagina.querySelector('[data-formulario-mvp="convite"]');
   const erroConvite = pagina.querySelector('[data-erro-convite]');
 
-  const obterConvites = () => obterEstado().convites || [];
+  const podeConvidar = () => core.obterUsuarioAtual().papel === 'Administrador';
 
   const montarItemPessoa = pessoa => {
     const mascote = pessoa.avatar || 'icone-mascote-cubado.svg';
@@ -24,14 +25,8 @@ window.MutiraoCuidadoPronto.then(core => {
         : '<span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>';
     const acao = pessoa.perfil
       ? `<a class="botao botao--secundario" href="${escaparHtml(pessoa.perfil)}">Ver perfil</a>`
-      : pessoa.pendente
-        ? `<div class="painel__acoes"><button type="button" class="botao botao--secundario" data-aceitar-convite="${escaparHtml(pessoa.nome)}">Simular aceite</button><button type="button" class="botao botao--secundario" data-recusar-convite="${escaparHtml(pessoa.nome)}">Simular recusa</button><button type="button" class="botao botao--perigo botao--pequeno" data-cancelar-convite="${escaparHtml(pessoa.nome)}">Cancelar convite</button></div>`
-        : `<button type="button" class="botao botao--secundario" disabled>Ver perfil</button>`;
-    const situacao = pessoa.pendente
-      ? `<span class="selo selo--atencao">${escaparHtml(pessoa.situacao)}</span>`
-      : pessoa.perfil
-        ? `<span>${escaparHtml(pessoa.situacao)}</span>`
-        : '';
+      : '';
+    const situacao = pessoa.situacao ? `<span>${escaparHtml(pessoa.situacao)}</span>` : '';
     return `<li class="painel__item">
       ${imagem}
       <span class="painel__texto"><strong>${escaparHtml(pessoa.nome)}</strong><span>Vínculo: ${escaparHtml(pessoa.vinculo || 'Não informado')} · Papel: ${escaparHtml(pessoa.papel)}</span>${situacao}</span>
@@ -44,21 +39,28 @@ window.MutiraoCuidadoPronto.then(core => {
       ...pessoa,
       situacao: pessoa.ehUsuarioAtual ? 'Você' : 'Ativo na rede'
     }));
-    const convites = obterConvites().map(convite => ({
-      nome: convite.email,
-      vinculo: convite.vinculo,
-      papel: convite.papel,
-      situacao: 'Convite simulado',
-      pendente: true
-    }));
+    const { convites, historicoConvites } = obterEstado();
+    const podeGerenciar = podeConvidar();
+    botaoConvidar.hidden = !podeGerenciar;
+    const registros = [...convites.map(item => ({ ...item, status: 'Pendente' })), ...[...historicoConvites].reverse()];
 
     lista.innerHTML = participantes.map(montarItemPessoa).join('');
     if (!participantes.some(pessoa => !pessoa.ehUsuarioAtual)) {
-      lista.insertAdjacentHTML('beforeend', '<li class="estado-vazio">A rede ainda não tem outros participantes. Use “Convidar alguém” para incluir uma pessoa.</li>');
+      lista.insertAdjacentHTML('beforeend', '<li class="estado-vazio">A rede ainda não tem outros participantes. Convites pendentes aparecem na seção Convites da rede.</li>');
     }
     if (secaoConvites && listaConvites) {
-      secaoConvites.hidden = convites.length === 0;
-      listaConvites.innerHTML = convites.map(montarItemPessoa).join('');
+      secaoConvites.hidden = !registros.length;
+      listaConvites.innerHTML = registros.map(item => `
+        <li class="painel__item">
+          <span class="painel__icone" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>
+          <span class="painel__texto">
+            <strong>${escaparHtml(item.nome || item.email)}</strong>
+            <span>${escaparHtml(item.vinculo || 'Vínculo não informado')} · ${escaparHtml(item.papel || 'Participante')}</span>
+            <span class="selo ${item.status === 'Pendente' ? 'selo--atencao' : 'selo--neutro'}">${escaparHtml(item.status)}</span>
+          </span>
+          ${item.status === 'Pendente' && podeGerenciar ? `
+            <button type="button" class="botao botao--secundario" data-cancelar-convite="${escaparHtml(item.email)}">Cancelar convite</button>` : ''}
+        </li>`).join('');
     }
   };
 
@@ -69,31 +71,23 @@ window.MutiraoCuidadoPronto.then(core => {
       return;
     }
 
-    const decisao = evento.target.closest('[data-aceitar-convite], [data-recusar-convite]');
-    if (decisao) {
-      const aceitar = decisao.hasAttribute('data-aceitar-convite');
-      core.resolverConvite(decisao.dataset.aceitarConvite || decisao.dataset.recusarConvite, aceitar);
-      renderizar();
-      anunciarStatus(elementoStatus, aceitar ? 'Aceite simulado: participante adicionado à rede e aos seletores.' : 'Recusa simulada: convite encerrado.');
-      secaoConvites?.querySelector('button')?.focus();
-      return;
-    }
-
     const cancelar = evento.target.closest('[data-cancelar-convite]');
     if (cancelar) {
       const emailAlvo = cancelar.dataset.cancelarConvite;
       const confirmado = await core.confirmarAcao({
         titulo: 'Cancelar convite',
-        descricao: `Deseja cancelar o convite de demonstração para ${emailAlvo}?`,
+        descricao: `Deseja cancelar o convite para ${emailAlvo}?`,
         confirmarTexto: 'Cancelar convite'
       });
       if (!confirmado) return;
-      atualizarEstado(estado => ({
-        ...estado,
-        convites: (estado.convites || []).filter(c => c.email !== emailAlvo)
-      }));
-      anunciarStatus(elementoStatus, `Convite para ${emailAlvo} cancelado.`);
-      renderizar();
+      try {
+        core.cancelarConvite(emailAlvo);
+        anunciarStatus(elementoStatus, `Convite para ${emailAlvo} cancelado.`);
+        renderizar();
+        (listaConvites.querySelector('[data-cancelar-convite]') || botaoConvidar).focus();
+      } catch (erro) {
+        anunciarStatus(elementoStatus, erro.message);
+      }
     }
   });
 
@@ -115,20 +109,17 @@ window.MutiraoCuidadoPronto.then(core => {
       return;
     }
 
-    if (obterConvites().some(convite => convite.email === email) || (obterEstado().participantesExtras || []).some(pessoa => pessoa.email === email)) {
-      core.marcarErroFormulario?.(formConvite, emailCampo, 'Já existe um convite de demonstração para este e-mail.');
+    try {
+      core.registrarConvite(email, vinculo);
+    } catch (erro) {
+      core.marcarErroFormulario?.(formConvite, emailCampo, erro.message);
       return;
     }
 
-    atualizarEstado(estado => ({
-      ...estado,
-      convites: [...(estado.convites || []), { email, vinculo, papel: campos.papel }]
-    }));
-
     formConvite.reset();
     formConvite.closest('dialog')?.close();
-    dialogoEnviado.querySelector('[data-convite-resumo]').textContent = `${email} foi registrado nesta demonstração. Nenhum convite foi enviado.`;
-    dialogoEnviado.showModal();
+    dialogoRegistrado.querySelector('[data-convite-resumo]').textContent = `O convite para ${email} ficou pendente nesta aba. Nenhum e-mail foi enviado.`;
+    dialogoRegistrado.showModal();
     renderizar();
   });
 

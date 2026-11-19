@@ -81,6 +81,42 @@
         "fotoMiniatura": "assets/media/fotos/foto-perfil-maria-mini.webp",
         "mascote": "assets/media/mascotes/icone-mascote-minhoca.svg"
       },
+      "historicoConvites": [
+        {
+          "email": "ana.silva@example.com",
+          "nome": "Ana da Silva (Aninha)",
+          "vinculo": "Filha",
+          "papel": "Participante",
+          "status": "Aceito"
+        },
+        {
+          "email": "helena@example.com",
+          "nome": "Helena Duarte",
+          "vinculo": "Vizinha",
+          "papel": "Participante",
+          "status": "Recusado"
+        }
+      ],
+      "pedidosFolga": [
+        {
+          "id": "folga-base-mari-2026-11-15",
+          "dia": "2026-11-15",
+          "inicio": 19,
+          "fim": 24,
+          "turno": "Domingo, 15 de novembro · 19h–24h",
+          "data": "Segunda-feira, 9 de novembro",
+          "status": "Aceita",
+          "responsavel": "Ana da Silva (Aninha)"
+        }
+      ],
+      "coberturasRede": [
+        {
+          "dia": "2026-11-15",
+          "inicio": 19,
+          "fim": 24,
+          "responsavel": "Ana da Silva (Aninha)"
+        }
+      ],
       "finalidadesMedicacao": {
         "Levotiroxina": "para controle da tireoide (em jejum)",
         "Carbamazepina": "para controle neurológico",
@@ -537,7 +573,7 @@
           "dia": "2026-11-09",
           "titulo": "06h e 08h · Remédios da manhã dados",
           "descricao": "Café da manhã completo, pressão 12x8 · Beatriz da Silva (Bea) · Turno 07h–13h",
-          "icone": "bi bi-capsule",
+          "icone": "icone-medicamento.svg",
           "concluida": true,
           "href": "ficha.html#diario",
           "rotuloAcao": "Ver no Diário"
@@ -567,7 +603,7 @@
           "dia": "2026-11-09",
           "titulo": "20h · Metformina e separação de documentos",
           "descricao": "Zé da Silva (Zé) deu · RG e carteirinha separados para o posto (UBS) · Turno 19h–24h",
-          "icone": "bi bi-capsule",
+          "icone": "icone-medicamento.svg",
           "concluida": true,
           "href": "documentos.html",
           "rotuloAcao": "Ver Documentos"
@@ -594,7 +630,7 @@
           "dia": "2026-11-10",
           "titulo": "08h · Metformina",
           "descricao": "Não foi dado · Bea anotou",
-          "icone": "bi bi-capsule",
+          "icone": "icone-medicamento.svg",
           "concluida": false,
           "href": "medicamentos.html",
           "rotuloAcao": "Marcar como dado"
@@ -608,7 +644,7 @@
           "dia": "2026-11-10",
           "titulo": "20h · Metformina",
           "descricao": "Às 20h · Turno de Zé da Silva (Zé)",
-          "icone": "bi bi-capsule",
+          "icone": "icone-medicamento.svg",
           "concluida": false,
           "href": "medicamentos.html",
           "rotuloAcao": "Marcar como dado"
@@ -621,7 +657,7 @@
           "dia": "2026-11-10",
           "titulo": "06h · Remédios em jejum dados",
           "descricao": "Aninha deu 3 remédios (06h10 e 06h12) · Turno de Ana da Silva (Aninha)",
-          "icone": "bi bi-capsule",
+          "icone": "icone-medicamento.svg",
           "concluida": true,
           "href": "medicamentos.html#registros-de-hoje",
           "rotuloAcao": "Ver anotações"

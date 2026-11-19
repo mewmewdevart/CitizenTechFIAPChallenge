@@ -353,7 +353,7 @@ window.MutiraoCuidadoPronto.then(core => {
     const linhaDoDia = construirLinhaDoTempoDia(diaSelecionado, estado);
     core.atualizarBotaoAdicionarTurno(pagina.querySelector('[data-adicionar-turno-cabecalho]'), diaSelecionado, linhaDoDia);
     const pedidos = core.obterPedidosForaDaRotina(diaSelecionado, estado);
-    const acoes = pedidos.map(([, pedido]) => `<p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · <a href="${linkAgenda.href}">Ver pedido na Agenda</a></p>`).join('');
+    const acoes = pedidos.map(([, pedido]) => `<p>${escaparHtml(pedido.horario)} · Pedido para ${escaparHtml(pedido.responsavel)} · Aguardando confirmação · <a href="${linkAgenda.href}">Ver pedido na Agenda</a></p>`).join('');
     listaTurnos.innerHTML = linhaDoDia.map(seg => seg.tipo === 'lacuna'
       ? linhaDescoberto(seg.horario, diaSelecionado)
       : renderizarTurno(seg, diaSelecionado)

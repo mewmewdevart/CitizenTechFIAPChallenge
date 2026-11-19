@@ -1148,25 +1148,6 @@ html.tema--acolhedor .dose {
   font-size: var(--texto-legenda);
 }
 
-.cuidar__pedido-substituto {
-  display: grid;
-  gap: var(--espaco-xs);
-  justify-items: start;
-  font-size: var(--texto-legenda);
-  font-weight: var(--peso-semibold);
-}
-
-.cuidar__pedido-substituto select {
-  min-width: 0;
-  max-width: 100%;
-  padding: var(--espaco-sm);
-  border: var(--borda-padrao);
-  border-radius: var(--raio-md);
-  background: var(--cor-superficie);
-  color: var(--cor-texto-principal);
-  font: inherit;
-}
-
 .cuidar__pedido-acoes {
   display: flex;
   flex-wrap: wrap;

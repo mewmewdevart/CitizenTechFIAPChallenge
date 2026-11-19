@@ -175,7 +175,7 @@
             aria-hidden="true"></i>Privacidade</button>
         <button type="button" class="configuracoes__aba configuracoes__aba--perigo" role="tab" id="aba-sair-rede"
           aria-selected="false" aria-controls="painel-sair-rede" tabindex="-1"><i class="fa-solid fa-right-from-bracket"
-            aria-hidden="true"></i>Sair da rede</button>
+            aria-hidden="true"></i>Transferir administração</button>
       </div>
 
       <div class="configuracoes__conteudo">
@@ -195,19 +195,8 @@
             <div class="configuracoes__lista">
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-lacuna">Horário sem ninguém na escala</strong>
-                  <span>Mostra primeiro os horários sem ninguém, para a família agir rápido.</span>
-                </div>
-                <label class="config-switch" aria-labelledby="rotulo-config-lacuna">
-                  <input type="checkbox" id="config-notificacoes-lacuna" name="notificacoesLacuna" checked />
-                  <span class="config-switch__trilha" aria-hidden="true"></span>
-                </label>
-              </div>
-
-              <div class="configuracoes__item">
-                <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-medicacao">Lembrete dos remédios</strong>
-                  <span>Avisa antes da hora do remédio e mostra o que ainda não foi dado.</span>
+                  <strong id="rotulo-config-medicacao">Alterações de medicamentos no sino</strong>
+                  <span>Mostra avisos quando o registro de doses, os itens ou o estoque mudam nesta aba.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-medicacao">
                   <input type="checkbox" id="config-notificacoes-medicacao" name="notificacoesMedicacao" checked />
@@ -217,8 +206,8 @@
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-relatos">Recados entre turnos</strong>
-                  <span>Avisa quando alguém deixar uma anotação ou pedir para marcar consulta.</span>
+                  <strong id="rotulo-config-relatos">Turnos, compromissos e relatos no sino</strong>
+                  <span>Mostra avisos quando a escala, um compromisso ou o Diário de turno mudam nesta aba.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-relatos">
                   <input type="checkbox" id="config-notificacoes-relatos" name="notificacoesRelatos" checked />
@@ -239,31 +228,6 @@
             </div>
           </div>
 
-          <div class="configuracoes__bloco">
-            <div class="configuracoes__bloco-cabecalho">
-              <h3>Quando e onde avisar</h3>
-            </div>
-            <div class="configuracoes__campos">
-              <label for="config-antecedencia-medicacao">
-                Avisar quanto tempo antes
-                <select id="config-antecedencia-medicacao" name="antecedenciaMedicacao">
-                  <option value="15">15 minutos antes</option>
-                  <option value="30" selected>30 minutos antes</option>
-                  <option value="60">1 hora antes</option>
-                </select>
-              </label>
-              <label for="config-canal-notificacao">
-                Canal preferido na demonstração
-                <select id="config-canal-notificacao" name="canalNotificacao">
-                  <option value="app-email" selected>Aplicativo e e-mail</option>
-                  <option value="app">Só no aplicativo</option>
-                  <option value="email">Só por e-mail</option>
-                </select>
-                <small>Preferência salva localmente para esta demonstração; nenhum e-mail ou notificação real é
-                  enviado.</small>
-              </label>
-            </div>
-          </div>
         </section>
 
         <section class="configuracoes__painel-aba" id="painel-rede" role="tabpanel" aria-labelledby="aba-rede" hidden>
@@ -272,7 +236,7 @@
               <h2>Rede de cuidado</h2>
               <p>Regras para a família e os cuidadores que fazem parte da rede.</p>
             </div>
-            <span class="selo selo--neutro">Organiza a rede: Zé</span>
+            <span class="selo selo--neutro" data-administrador-rede>Organiza a rede</span>
           </div>
 
           <div class="configuracoes__bloco">
@@ -282,19 +246,19 @@
             <div class="configuracoes__lista">
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-assumir">Ficar em horário livre sem pedir</strong>
-                  <span>Deixa qualquer pessoa da rede pegar um horário livre direto na agenda.</span>
+                  <strong id="rotulo-config-assumir">Confirmar antes de assumir um horário</strong>
+                  <span>Abre uma confirmação para você antes de registrar seu turno no Início ou na Agenda.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-assumir">
-                  <input type="checkbox" id="config-assumir-turno" name="assumirTurnoDireto" checked />
+                  <input type="checkbox" id="config-assumir-turno" name="assumirTurnoDireto" />
                   <span class="config-switch__trilha" aria-hidden="true"></span>
                 </label>
               </div>
 
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
-                  <strong id="rotulo-config-dupla-checagem">Pedir a hora ao marcar remédio</strong>
-                  <span>Ao marcar um remédio como dado, pede a hora e quem deu.</span>
+                  <strong id="rotulo-config-dupla-checagem">Confirmar registro de dose em Medicamentos</strong>
+                  <span>Permite conferir o horário antes de salvar. O registro usa o perfil ativo de quem cuida.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-dupla-checagem">
                   <input type="checkbox" id="config-confirmar-dose" name="confirmarDose" checked />
@@ -305,7 +269,7 @@
               <div class="configuracoes__item">
                 <div class="configuracoes__item-texto">
                   <strong id="rotulo-config-sigilo">Ocultar dados sensíveis ao abrir a ficha</strong>
-                  <span>Ajusta a visibilidade inicial de CPF, RG e carteirinha. Use apenas dados fictícios.</span>
+                  <span>Mascara CPF, RG e carteirinha ao abrir a Ficha. Os valores continuam nesta aba.</span>
                 </div>
                 <label class="config-switch" aria-labelledby="rotulo-config-sigilo">
                   <input type="checkbox" id="config-sigilo-dados" name="sigiloDados" checked />
@@ -433,25 +397,24 @@
           hidden>
           <div class="configuracoes__painel-topo">
             <div>
-              <h2>Sair da rede de cuidado</h2>
-              <p>Saia da rede de cuidado atual.</p>
+              <h2>Transferir administração</h2>
+              <p>Passe a administração desta rede para outra pessoa ativa.</p>
             </div>
             <span class="selo selo--alerta">Atenção</span>
           </div>
 
           <div class="configuracoes__bloco configuracoes__bloco--perigo">
             <div class="configuracoes__bloco-cabecalho">
-              <h3>Sair da rede</h3>
+              <h3>Quem vai organizar a rede</h3>
             </div>
-            <p class="configuracoes__texto-apoio">Você organiza a rede. Antes de sair, passe essa função para outra
-              pessoa da família.</p>
+            <p class="configuracoes__texto-apoio">Transfira a função de administrador desta rede e continue como participante.</p>
             <div class="dialogo-mvp__aviso-caixa" role="note">
-              <strong>Transferência e saída simuladas</strong>
-              <span>Escolha quem vai organizar a rede. Essa pessoa fica com os seus próximos turnos.</span>
+              <strong>O que muda com a transferência</strong>
+              <span>A pessoa escolhida assume seus turnos futuros. Pedidos de folga que ainda estão pendentes serão encerrados.</span>
             </div>
             <div class="configuracoes__acoes-linha">
               <button type="button" class="botao botao--perigo" data-abrir-sair-rede>
-                <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sair da rede de cuidado
+                <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Transferir administração
               </button>
             </div>
           </div>
@@ -479,20 +442,23 @@
 
   <dialog id="dialogo-sair-rede" class="dialogo-mvp" aria-labelledby="titulo-sair-rede">
     <div class="dialogo-mvp__cabecalho">
-      <h2 id="titulo-sair-rede">Sair da rede de cuidado?</h2>
+      <h2 id="titulo-sair-rede">Transferir administração?</h2>
       <button type="button" class="botao-icone" data-fechar-dialogo aria-label="Fechar">
-        <i class="ti ti-x" aria-hidden="true"></i>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" aria-hidden="true" focusable="false">
+          <path d="m6 6 12 12M18 6 6 18" />
+        </svg>
       </button>
     </div>
-    <p>Você está conectado como administrador da rede de cuidado atual. Antes de sair, certifique-se de que
-      outro familiar assuma a administração e seus turnos futuros nesta simulação.</p>
+    <p data-rede-transferencia></p>
+    <p>Seus turnos futuros passam para a pessoa escolhida. Seus pedidos de folga pendentes serão cancelados e você continuará como participante.</p>
     <label>Quem vai organizar a rede e ficar com seus turnos<select data-sucessor-rede></select></label>
-    <p data-rede-sem-sucessor hidden>Convide outro participante na página Pessoas antes de transferir a administração.
+    <p data-erro-transferencia role="alert"></p>
+    <p data-rede-sem-sucessor hidden>A transferência exige outra pessoa ativa nesta rede.
     </p>
     <div class="dialogo-mvp__acoes">
       <button type="button" class="botao botao--secundario" data-fechar-dialogo>Cancelar</button>
-      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede disabled aria-disabled="true">Sim,
-        quero sair</button>
+      <button type="button" class="botao botao--perigo" data-confirmar-sair-rede disabled aria-disabled="true">Confirmar transferência</button>
     </div>
   </dialog>
   <nav class="barra-inferior" aria-label="Atalhos principais">
