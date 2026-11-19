@@ -557,13 +557,15 @@ window.MutiraoCuidadoPronto.then(core => {
       if (!item) return;
       const confirmado = await core.confirmarAcao({
         titulo: 'Excluir compromisso',
-        descricao: `Deseja excluir o compromisso “${item.titulo}” da Agenda?`,
+        descricao: `Deseja excluir o compromisso “${item.titulo}” da Agenda? Os documentos vinculados continuam no acervo.`,
         confirmarTexto: 'Excluir compromisso'
       });
       if (!confirmado) return;
       atualizarEstado(estado => ({
         ...estado,
-        events: estado.events.filter(e => e.id !== item.id)
+        events: estado.events.filter(e => e.id !== item.id),
+        documents: (estado.documents || []).map(doc =>
+          doc.compromissoId === item.id ? { ...doc, compromissoId: '' } : doc)
       }));
       botao.closest('dialog')?.close();
       registrarStatus(`Compromisso "${item.titulo}" removido da Agenda.`);
@@ -594,7 +596,7 @@ window.MutiraoCuidadoPronto.then(core => {
           blocoLote.hidden = totalTurnos <= 5;
           const textoLote = blocoLote.querySelector('[data-texto-cancelar-lote]');
           if (textoLote && totalTurnos > 5) {
-            textoLote.textContent = `Você está em ${totalTurnos} turnos. Se não puder participar, pode liberar todos de uma vez.`;
+            textoLote.textContent = 'Cancele suas participações de hoje em diante, inclusive as recorrentes.';
           }
         }
         snapshotsEdicao.set(form, serializarFormularioAgenda(form));
@@ -605,16 +607,15 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     if (botao.hasAttribute('data-cancelar-todas-coberturas')) {
-      const totalTurnos = core.contarParticipacoesUsuario();
       const confirmado = await core.confirmarAcao({
-        titulo: 'Cancelar todas as participações?',
-        descricao: `Você vai sair de todos os seus ${totalTurnos} turnos cadastrados e deixá-los livres para a rede.`,
+        titulo: 'Cancelar seus turnos futuros?',
+        descricao: 'A ação cancela suas participações de hoje em diante, inclusive as recorrentes. O histórico é preservado.',
         confirmarTexto: 'Cancelar todos'
       });
       if (!confirmado) return;
       atualizarEstado(estado => core.cancelarTodasParticipacoesUsuario(estado));
       botao.closest('dialog')?.close();
-      registrarStatus('Todas as suas participações em turnos foram canceladas e ficaram livres para a rede.');
+      registrarStatus('Seus turnos futuros foram cancelados.');
       renderizar();
       return;
     }

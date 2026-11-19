@@ -32,29 +32,6 @@
   font-size: var(--texto-legenda);
 }
 
-.inicio__roteiro summary {
-  cursor: pointer;
-  font-family: var(--fonte-titulo);
-  font-weight: var(--peso-negrito);
-}
-
-.inicio__roteiro p {
-  margin-block: var(--espaco-sm);
-}
-
-.inicio__roteiro ol {
-  margin: 0;
-  padding-inline-start: var(--espaco-lg);
-}
-
-.inicio__roteiro li + li {
-  margin-block-start: var(--espaco-xs);
-}
-
-.inicio__roteiro a {
-  text-decoration: underline;
-}
-
 #porta-remedios-hoje {
   scroll-margin-top: calc(var(--topbar-altura-atual, var(--altura-barra-superior)) + var(--espaco-md));
 }

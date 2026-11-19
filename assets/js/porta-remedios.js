@@ -277,7 +277,7 @@ window.MutiraoCuidadoPronto.then(core => {
       if (!abrir && (dose?.estado === 'nao-administrado' || grupo?.situacao === 'falta')) {
         pote.classList.add('pote--falta');
       }
-      if (abrir) mostrarAviso(`Remédio das ${hora} dado por você às ${horario}. A família vê na hora.`, chave);
+      if (abrir) mostrarAviso(`Remédio das ${hora} dado por você às ${horario}. O registro foi salvo na rotina desta ficha.`, chave);
       else mostrarAviso(`${nome} das ${hora} voltou para a lista do que falta dar.`, null);
 
       if (abrir && grupo?.completo) {

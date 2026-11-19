@@ -915,8 +915,9 @@ window.MutiraoCuidadoPronto.then(core => {
         const estado = obterEstado();
         const person = estado.person;
         return {
-          'Consultas e exames': () => estado.events
-            .map(item => `${formatarData(item.dia, { day: 'numeric', month: 'short' })} · ${item.hora} · ${item.titulo}`)
+          'Consultas e exames': () => core.obterCompromissos(estado)
+            .map(item => [formatarData(item.dia, { day: 'numeric', month: 'short' }), item.hora, item.titulo]
+              .filter(Boolean).join(' · '))
             .join('\n') || 'Nenhum compromisso agendado.',
           'Informações de saúde': () => [
             `Alergias: ${person.alergias || 'Não informado'}`,

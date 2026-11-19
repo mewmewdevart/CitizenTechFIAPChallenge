@@ -8,6 +8,10 @@
   color: var(--cor-texto-principal);
 }
 
+body.pagina-login .rodape-site {
+  padding: var(--espaco-md) var(--espaco-lg);
+}
+
 .login {
   flex: 1 1 auto;
   display: grid;
@@ -18,7 +22,7 @@
 .login__apresentacao {
   display: grid;
   place-items: center;
-  padding: clamp(32px, 5vw, 64px);
+  padding: clamp(20px, 3dvh, 40px) clamp(24px, 4vw, 56px);
   background: var(--cor-secundaria-clara);
 }
 
@@ -59,21 +63,21 @@
 .login__formulario-painel {
   display: grid;
   place-items: center;
-  padding: clamp(32px, 5vw, 64px) var(--espaco-lg);
+  padding: clamp(16px, 2.5dvh, 32px) var(--espaco-lg);
   background: var(--cor-superficie);
 }
 
 .login__caixa {
   width: min(380px, 100%);
   display: grid;
-  gap: var(--espaco-lg);
+  gap: clamp(10px, 1.5dvh, 14px);
 }
 
 .login__marca {
-  width: 76px;
-  height: 76px;
+  width: clamp(56px, 7dvh, 68px);
+  height: clamp(56px, 7dvh, 68px);
   justify-self: center;
-  border-radius: 18px;
+  border-radius: 16px;
   object-fit: cover;
 }
 
@@ -91,24 +95,9 @@
   color: var(--cor-texto-secundario);
 }
 
-.login__simulacao {
-  border-top: var(--borda-padrao);
-  padding-top: var(--espaco-md);
-}
-
-.login__simulacao summary {
-  cursor: pointer;
-  font-weight: var(--peso-semibold);
-}
-
-.login__simulacao .login__descricao,
-.login__simulacao .login__form {
-  margin-top: var(--espaco-md);
-}
-
 .login__form {
   display: grid;
-  gap: var(--espaco-md);
+  gap: 10px;
 }
 
 .login__campo {
@@ -116,7 +105,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 46px;
+  min-height: 44px;
   margin: 0;
   padding: 0 14px;
   border: 1px solid var(--cor-borda-controle);

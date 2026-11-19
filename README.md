@@ -25,7 +25,7 @@ O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 
 
 A plataforma reúne **12 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
-- **Cenário de demonstração:** Na entrada, escolha **Começar cenário guiado** para abrir a ficha de **Mari** no dia de referência (10/11/2026). Assuma o horário sem cobertura, registre uma dose fictícia no porta-remédios e consulte no Diário de turno a anotação que você fez em **Anotar o turno**. **Explorar a demonstração** abre a ficha ativa da sessão, inicialmente a de **Flavinho**.
+- **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
 - **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
 
 

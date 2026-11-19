@@ -904,7 +904,7 @@ document.addEventListener('click', evento => {
 
   // O contexto de um compromisso, documento ou dose pertence à ficha anterior.
   const destino = new URL(location.href);
-  for (const chave of ['compromisso', 'documento', 'dose', 'roteiro']) destino.searchParams.delete(chave);
+  for (const chave of ['compromisso', 'documento', 'dose']) destino.searchParams.delete(chave);
   if (destino.href === location.href) location.reload();
   else location.replace(destino.href);
 });

@@ -102,21 +102,6 @@ window.MutiraoCuidadoPronto = (async () => {
     return true;
   };
 
-  const iniciarRoteiro = () => {
-    if (!document.querySelector('[data-roteiro-inicio]')) return;
-    const url = new URL(location.href);
-    if (url.searchParams.get('roteiro') !== 'mari') return;
-    try {
-      selecionarPerfilAcompanhado('mari');
-    } catch {
-      return;
-    }
-    url.searchParams.set('roteiro', '1');
-    history.replaceState(history.state, '', url);
-  };
-
-  iniciarRoteiro();
-
   const obterCompromissos = (estado = estadoAtual) =>
     [...estado.events].sort((a, b) => `${a.dia}T${a.hora}`.localeCompare(`${b.dia}T${b.hora}`));
 
@@ -572,66 +557,63 @@ window.MutiraoCuidadoPronto = (async () => {
     return { ...estado, covered, rotinasSemanais: rotinas.filter(rotina => rotina.id !== id) };
   };
 
+  const datasComParticipacoes = estado => new Set([
+    ...Object.keys(estado.escalasFixas || {}),
+    ...Object.keys(estado.covered || {}),
+    ...(estado.coberturasRede || []).map(item => item?.dia)
+  ].filter(diaEditavelNaEscala));
+
+  const pertenceAoUsuario = (responsavel, estado) =>
+    Boolean(responsavel && resolverPessoaRede(responsavel, estado).ehUsuarioAtual);
+
   const contarParticipacoesUsuario = (estado = estadoAtual) => {
-    const datas = new Set([
-      ...obterSemanaDe(HOJE),
-      ...Object.keys(estado.escalasFixas || {}),
-      ...Object.keys(estado.covered || {})
-    ]);
-    const temRecorrencia = Boolean(
-      estado.janelaAcompanhamento?.responsavel
-      || obterRotinasSemanais(estado).some(rotina => rotina.responsavel)
-    );
-    if (temRecorrencia) {
-      const base = new Date(`${HOJE}T12:00:00`);
-      for (let i = 0; i < 28; i++) {
-        const d = new Date(base);
-        d.setDate(base.getDate() + i);
-        datas.add(gerarChaveData(d.getFullYear(), d.getMonth(), d.getDate()));
+    const datas = datasComParticipacoes(estado);
+    const janela = estado.janelaAcompanhamento;
+    const recorrencias = [
+      ...obterRotinasSemanais(estado),
+      ...(obterNecessidadeAcompanhamento(estado) === ACOMPANHAMENTO.diario && janela ? [janela] : [])
+    ];
+    for (const rotina of recorrencias) {
+      if (!pertenceAoUsuario(rotina.responsavel, estado) || !diaEscalaValido(rotina.desde)) continue;
+      const inicio = new Date(`${rotina.desde > HOJE ? rotina.desde : HOJE}T12:00:00`);
+      for (let semana = 0; semana < 4; semana++) {
+        for (const dia of obterSemanaDe(gerarChaveData(inicio.getFullYear(), inicio.getMonth(), inicio.getDate()))) {
+          if (diaEditavelNaEscala(dia)) datas.add(dia);
+        }
+        inicio.setDate(inicio.getDate() + 7);
       }
     }
-    let total = 0;
-    for (const dia of datas) {
-      total += construirLinhaDoTempoDia(dia, estado)
-        .filter(seg => seg.tipo === 'turno' && seg.pessoa?.ehUsuarioAtual)
-        .length;
-    }
-    return total;
+    return [...datas].reduce((total, dia) => total + construirLinhaDoTempoDia(dia, estado)
+      .filter(seg => seg.tipo === 'turno' && seg.pessoa?.ehUsuarioAtual).length, 0);
   };
 
   const cancelarTodasParticipacoesUsuario = (estado = estadoAtual) => {
-    const rotinasSemanais = obterRotinasSemanais(estado).map(rotina => {
-      if (!rotina.responsavel || !resolverPessoaRede(rotina.responsavel, estado).ehUsuarioAtual) return rotina;
+    const encerrarParticipacao = rotina => {
+      if (!pertenceAoUsuario(rotina?.responsavel, estado)) return rotina;
       const { responsavel, ...resto } = rotina;
-      return resto;
-    });
-    const janela = estado.janelaAcompanhamento;
-    const janelaAcompanhamento = janela?.responsavel && resolverPessoaRede(janela.responsavel, estado).ehUsuarioAtual
-      ? (({ responsavel, ...resto }) => resto)(janela)
-      : janela;
-    const estadoSemRecorrencia = {
-      ...estado,
-      rotinasSemanais,
-      ...(janelaAcompanhamento !== undefined ? { janelaAcompanhamento } : {})
+      if (rotina.desde >= HOJE) return resto;
+      return {
+        ...resto,
+        responsavelAnterior: responsavelDaRotina(rotina, INICIO_ESCALA),
+        transferidoDesde: HOJE
+      };
     };
-    const shiftEdits = { ...(estado.shiftEdits || {}) };
-    const datas = new Set([
-      ...obterSemanaDe(HOJE),
-      ...Object.keys(estado.escalasFixas || {}),
-      ...Object.keys(estado.covered || {})
-    ]);
-    for (const dia of datas) {
-      for (const item of obterEscalaDia(dia, estadoSemRecorrencia)) {
-        if (resolverPessoaRede(item.pessoa?.nome, estado).ehUsuarioAtual) {
+    const shiftEdits = { ...estado.shiftEdits };
+    for (const dia of datasComParticipacoes(estado)) {
+      for (const item of estado.escalasFixas?.[dia] || []) {
+        if (pertenceAoUsuario(item.pessoa?.nome, estado)) {
           shiftEdits[`${dia}|${item.horario}`] = { cancelado: true };
         }
       }
     }
     return {
-      ...estadoSemRecorrencia,
-      covered: {},
+      ...estado,
+      rotinasSemanais: obterRotinasSemanais(estado).map(encerrarParticipacao),
+      ...(estado.janelaAcompanhamento ? { janelaAcompanhamento: encerrarParticipacao(estado.janelaAcompanhamento) } : {}),
+      covered: Object.fromEntries(Object.entries(estado.covered || {}).filter(([dia]) => !diaEditavelNaEscala(dia))),
       shiftEdits,
-      coberturasRede: (estado.coberturasRede || []).filter(c => !resolverPessoaRede(c.responsavel, estado).ehUsuarioAtual)
+      coberturasRede: (estado.coberturasRede || []).filter(item =>
+        !diaEditavelNaEscala(item?.dia) || !pertenceAoUsuario(item?.responsavel, estado))
     };
   };
 

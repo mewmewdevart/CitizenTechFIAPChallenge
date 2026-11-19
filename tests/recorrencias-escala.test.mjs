@@ -151,6 +151,56 @@ test('a semana inicial vale para ambas as fichas e datas anteriores a hoje são 
   }
 });
 
+test('cancelar os turnos futuros preserva o passado, as janelas e a cobertura de outras pessoas', async () => {
+  const sessao = new Map();
+  const core = await criarCore(sessao);
+  core.selecionarPerfilAcompanhado('mari');
+  const { hoje } = diasDoCenario(core);
+  const passado = core.INICIO_ESCALA;
+  const futuro = '2026-12-03';
+  const usuario = core.obterUsuarioAtual().nomeComApelido;
+  const outraPessoa = core.obterParticipantesRede().find(pessoa => !pessoa.ehUsuarioAtual).nome;
+  core.atualizarEstado(estado => ({
+    ...estado,
+    covered: { ...estado.covered, [passado]: [{ inicio: 8, fim: 9 }] },
+    coberturasRede: [
+      ...estado.coberturasRede,
+      { dia: passado, inicio: 7, fim: 8, responsavel: usuario },
+      { dia: futuro, inicio: 8, fim: 9, responsavel: usuario },
+      { dia: futuro, inicio: 9, fim: 10, responsavel: outraPessoa }
+    ]
+  }));
+  const antes = turnos(core, passado);
+  assert.ok(antes.some(turno => turno[2] === usuario));
+  const total = core.contarParticipacoesUsuario();
+  assert.ok(total > 0);
+  core.atualizarEstado(estado => core.cancelarTodasParticipacoesUsuario(estado));
+  assert.deepEqual(turnos(core, passado), antes);
+  assert.deepEqual(turnos(core, futuro), [[9, 10, outraPessoa]]);
+  assert.ok(!turnos(core, hoje).some(turno => turno[2] === usuario));
+  assert.equal(core.contarParticipacoesUsuario(), 0);
+  const reaberto = await criarCore(sessao);
+  assert.deepEqual(turnos(reaberto, passado), antes);
+});
+
+test('cancelar uma série diária conserva o responsável histórico e deixa a janela futura descoberta', async () => {
+  const core = await criarCore();
+  const { hoje, amanha } = diasDoCenario(core);
+  const passado = core.INICIO_ESCALA;
+  const usuario = core.obterUsuarioAtual().nomeComApelido;
+  core.atualizarEstado(estado => ({
+    ...estado,
+    person: { ...estado.person, cobertura: core.ACOMPANHAMENTO.diario },
+    janelaAcompanhamento: { desde: passado, inicio: 8, fim: 12, responsavel: usuario }
+  }));
+  core.atualizarEstado(estado => core.cancelarTodasParticipacoesUsuario(estado));
+  assert.deepEqual(turnos(core, passado), [[8, 12, usuario]]);
+  for (const dia of [hoje, amanha]) {
+    assert.deepEqual(turnos(core, dia), []);
+    assert.equal(core.obterRotuloLacuna(dia), 'Descoberto');
+  }
+});
+
 test('o perfil 24h mantém lacunas onde o cenário não tem escala cadastrada', async () => {
   const sessao = new Map();
   const core = await criarCore(sessao);

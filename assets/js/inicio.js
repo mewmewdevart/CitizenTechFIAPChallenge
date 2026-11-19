@@ -297,14 +297,6 @@ window.MutiraoCuidadoPronto.then(core => {
     if (link) link.href = `agenda.html?dia=${encodeURIComponent(HOJE)}`;
   };
 
-  const roteiro = pagina.querySelector('[data-roteiro-inicio]');
-  const mostrarRoteiro = new URLSearchParams(location.search).get('roteiro') === '1' &&
-    obterEstado().perfilAtivoId === 'mari';
-  if (roteiro && mostrarRoteiro) {
-    roteiro.querySelector('[data-roteiro-pessoa]').textContent = core.nomePessoaAcompanhada();
-    roteiro.hidden = false;
-  }
-
   const renderizarEscala = () => {
     const estado = obterEstado();
     const inicioSemana = formatarData(DIAS_SEMANA[0], { day: 'numeric', month: 'short' });
@@ -365,11 +357,6 @@ window.MutiraoCuidadoPronto.then(core => {
 
     const lacunasHoje = obterLacunasDia(HOJE, estado);
     faixaLacuna.hidden = !lacunasHoje.length;
-    if (roteiro && mostrarRoteiro) {
-      roteiro.querySelector('[data-roteiro-cobertura]').textContent = lacunasHoje.length
-        ? 'Assuma o horário indicado no aviso de cobertura.'
-        : 'A escala de hoje está coberta. Confira os turnos na Agenda.';
-    }
     if (lacunasHoje.length) {
       tituloLacuna.textContent = `${lacunasHoje[0].horario} · Horário sem ninguém`;
       const textoLacuna = faixaLacuna.querySelector('.faixa-alerta__texto > span');
@@ -454,7 +441,7 @@ window.MutiraoCuidadoPronto.then(core => {
           blocoLote.hidden = totalTurnos <= 5;
           const textoLote = blocoLote.querySelector('[data-texto-cancelar-lote]');
           if (textoLote && totalTurnos > 5) {
-            textoLote.textContent = `Você está em ${totalTurnos} turnos. Se não puder participar, pode liberar todos de uma vez.`;
+            textoLote.textContent = 'Cancele suas participações de hoje em diante, inclusive as recorrentes.';
           }
         }
         dialogoEditarCobertura.showModal();
@@ -463,10 +450,9 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     if (botao.hasAttribute('data-cancelar-todas-coberturas')) {
-      const totalTurnos = core.contarParticipacoesUsuario();
       const confirmado = await core.confirmarAcao({
-        titulo: 'Cancelar todas as participações?',
-        descricao: `Você vai sair de todos os seus ${totalTurnos} turnos cadastrados e deixá-los livres para a rede.`,
+        titulo: 'Cancelar seus turnos futuros?',
+        descricao: 'A ação cancela suas participações de hoje em diante, inclusive as recorrentes. O histórico é preservado.',
         confirmarTexto: 'Cancelar todos'
       });
       if (!confirmado) return;
@@ -474,7 +460,7 @@ window.MutiraoCuidadoPronto.then(core => {
       botao.closest('dialog')?.close();
       anunciarStatus(elementoStatus, {
         titulo: 'Participações canceladas',
-        descricao: 'Todos os seus turnos ficaram livres para a rede.'
+        descricao: 'Seus turnos futuros foram cancelados.'
       });
       renderizarEscala();
       atualizarProximaMedicacao(obterCompartimentos());

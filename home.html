@@ -156,17 +156,6 @@
     </header>
     <p class="cuidado-status-inicial" role="status" data-status-inicial-cuidado>Carregando dados do cuidado…</p>
 
-    <details class="apoio__painel inicio__roteiro" data-roteiro-inicio hidden open>
-      <summary>Seu roteiro no Mutirão</summary>
-      <p>Você está na ficha de <strong data-roteiro-pessoa></strong>. Experimente a passagem de cuidado no cenário de exemplo.</p>
-      <ol>
-        <li data-roteiro-cobertura>Assuma o horário indicado em <strong>Horário sem ninguém</strong>.</li>
-        <li>Abra um compartimento no <a href="#porta-remedios-hoje">porta-remédios</a> e registre a dose de exemplo.</li>
-        <li><button type="button" class="botao botao--secundario botao--pequeno" data-dialogo="dialogo-registrar-cuidado">Anotar o turno</button>
-          e conferir a anotação no <a href="ficha.html#diario">Diário de turno</a>.</li>
-      </ol>
-    </details>
-
     <section class="faixa-alerta" aria-labelledby="titulo-lacuna" data-inicio-lacuna hidden>
       <span class="faixa-alerta__icone" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
       <div class="faixa-alerta__texto">
@@ -412,8 +401,7 @@
         <div class="dialogo-mvp__secao" data-bloco-cancelar-lote hidden>
           <p class="dialogo-mvp__secao-titulo">Cancelamento em lote</p>
           <p class="formulario-mvp__ajuda" data-texto-cancelar-lote></p>
-          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar todas as minhas
-            participações</button>
+          <button type="button" class="botao botao--perigo" data-cancelar-todas-coberturas>Cancelar meus turnos futuros</button>
         </div>
         <div class="dialogo-mvp__acoes">
           <button type="button" class="botao botao--perigo" data-cancelar-cobertura>Não vou mais poder ficar</button>

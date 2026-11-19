@@ -173,10 +173,10 @@
       </div>
       <ul class="privacidade__lista">
         <li><strong>Fica nesta aba (sessão e memória):</strong> alterações simuladas na ficha, agenda, medicamentos,
-          referências de documentos, perfil, convites e respostas do questionário permanecem apenas no navegador e somem
-          ao encerrar a sessão.</li>
-        <li><strong>Permanece no navegador entre visitas:</strong> apenas preferências de acessibilidade (fonte,
-          contraste, espaçamento) e o tema visual escolhido (neutro ou acolhedor).</li>
+          referências de documentos, perfil, convites e registros do formulário de Ajuda ficam disponíveis nesta sessão.
+          </li>
+        <li><strong>Permanece no navegador entre visitas:</strong> preferências de acessibilidade, tema visual e respostas
+          concluídas do questionário de Direitos e serviços, guardadas por ficha acompanhada.</li>
         <li><strong>Consulta serviços externos:</strong> a busca por CEP ou cidade em <a href="direitos.html">Direitos
             e serviços</a> usa ViaCEP e IBGE. Ao enviar uma pergunta ao PontoBOT, o serviço do assistente recebe o texto
           da conversa.</li>
@@ -217,8 +217,10 @@
           configurações da sessão (<code>mutirao-configuracoes-sessao-v1</code>) e as alterações simuladas na ficha,
           agenda, medicamentos, documentos, perfil e convites (<code>mutirao-mvp-estado-v2</code>). Os registros ficam
           vinculados à ficha selecionada e permanecem no navegador até o encerramento da sessão.</li>
-        <li><strong>Dados em memória:</strong> as respostas do questionário ficam em memória. O formulário de Ajuda
-          simula o envio e mantém o registro apenas na aba atual.</li>
+        <li><strong>Questionário de Direitos e serviços (<code>localStorage</code>):</strong> as respostas concluídas
+          ficam na chave <code>mutirao-direitos-simulador-v1</code> por ficha, mesmo após fechar a aba. Ao começar
+          a refazer o questionário, o resultado anterior da ficha é removido.</li>
+        <li><strong>Formulário de Ajuda:</strong> as mensagens registradas ficam na sessão da aba.</li>
       </ul>
     </section>
 
