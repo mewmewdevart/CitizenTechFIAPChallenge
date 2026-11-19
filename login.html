@@ -56,13 +56,41 @@
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="stylesheet" href="assets/css/acessibilidade.css" />
   <link rel="stylesheet" href="assets/css/componentes.css" />
+  <link rel="stylesheet" href="assets/css/landing.css" />
   <link rel="stylesheet" href="assets/css/login.css" />
   <script src="assets/js/acessibilidade.js" defer></script>
+  <script src="assets/js/landing.js" defer></script>
   <script src="assets/js/login.js" defer></script>
 </head>
 
 <body class="pagina-login">
   <a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="landing-topo">
+    <div class="landing-topo__conteudo landing-container">
+      <a class="landing-topo__marca" href="index.html#topo" aria-label="Mutirão — Voltar para a página inicial">
+        <img src="assets/media/marca/logo-mutirao.svg" alt="" width="44" height="44" aria-hidden="true" />
+        <span>Mutirão</span>
+      </a>
+
+      <button class="botao-icone landing-topo__alternar" type="button" id="alternar-menu-landing"
+        aria-expanded="false" aria-controls="menu-landing" aria-label="Abrir menu de navegação">
+        <i class="fa-solid fa-bars landing-topo__icone-abrir" aria-hidden="true"></i>
+        <i class="fa-solid fa-xmark landing-topo__icone-fechar" aria-hidden="true"></i>
+      </button>
+
+      <div class="landing-topo__menu" id="menu-landing">
+        <nav class="landing-topo__nav" aria-label="Seções da página inicial">
+          <a href="index.html#topo">Início</a>
+          <a href="index.html#conversa">Para quem é</a>
+          <a href="index.html#recursos">Funcionalidades</a>
+          <a href="index.html#faq">FAQ</a>
+          <a href="index.html#demonstracao">Demonstração</a>
+        </nav>
+        <a class="botao botao--primario landing-topo__cta" href="#conteudo" aria-current="page">Acessar a demonstração</a>
+      </div>
+    </div>
+  </header>
 
   <main class="login">
     <section class="login__apresentacao" aria-labelledby="titulo-boas-vindas">

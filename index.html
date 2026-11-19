@@ -80,8 +80,8 @@
         <span>Mutirão</span>
       </a>
 
-      <button class="botao-icone landing-topo__alternar" type="button" id="alternar-menu-landing"
-        aria-expanded="false" aria-controls="menu-landing" aria-label="Abrir menu de navegação">
+      <button class="botao-icone landing-topo__alternar" type="button" id="alternar-menu-landing" aria-expanded="false"
+        aria-controls="menu-landing" aria-label="Abrir menu de navegação">
         <i class="fa-solid fa-bars landing-topo__icone-abrir" aria-hidden="true"></i>
         <i class="fa-solid fa-xmark landing-topo__icone-fechar" aria-hidden="true"></i>
       </button>
@@ -100,61 +100,68 @@
   </header>
 
   <main class="landing-conteudo" id="conteudo" tabindex="-1">
-    <section class="landing-hero landing-container" aria-labelledby="titulo-principal">
-      <div class="landing-hero__texto">
-        <h1 id="titulo-principal">O cuidar fica mais leve quando formamos um mutirão</h1>
-        <p>O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos de
-          quem recebe cuidado.</p>
-      </div>
-      <div class="landing-hero__vitrine" aria-label="Prévia das telas do Mutirão no celular e no computador">
-        <figure class="landing-vitrine__janela landing-vitrine__janela--inicio">
-          <img src="assets/media/aplicacao/home.png"
-            alt="Tela de Início do Mutirão com os cuidados de hoje, alertas de horário e porta-remédios" width="1920"
-            height="911" />
-        </figure>
-        <figure class="landing-vitrine__janela landing-vitrine__janela--ficha">
-          <img src="assets/media/aplicacao/ficha.png"
-            alt="Ficha da pessoa acompanhada com alerta de alergia, último relato do diário e informações de saúde"
-            width="1920" height="911" loading="lazy" />
-        </figure>
-        <figure class="landing-vitrine__janela landing-vitrine__janela--direitos">
-          <img src="assets/media/aplicacao/direitos.png"
-            alt="Tela de Direitos e serviços com questionário orientativo e busca por CEP" width="1920" height="911"
-            loading="lazy" />
-        </figure>
-        <figure class="landing-vitrine__celular">
-          <img src="assets/media/aplicacao/mobile-home.png"
-            alt="Versão mobile do Mutirão exibindo a tela de Início no celular" width="389" height="705" />
-        </figure>
-      </div>
-    </section>
+    <div class="landing-dobra landing-container">
+      <section class="landing-hero" aria-labelledby="titulo-principal">
+        <div class="landing-hero__texto">
+          <h1 id="titulo-principal">O cuidar fica mais leve quando formamos um mutirão</h1>
+          <p>O Mutirão junta, num lugar só, quem cuida em cada horário, os remédios, os recados da família e os direitos
+            de quem recebe cuidado.</p>
+        </div>
+        <div class="landing-hero__vitrine" aria-label="Prévia das telas do Mutirão no celular e no computador">
+          <figure class="landing-vitrine__janela landing-vitrine__janela--inicio">
+            <img src="assets/media/aplicacao/home.png"
+              alt="Tela de Início do Mutirão com os cuidados de hoje, alertas de horário e porta-remédios" width="1920"
+              height="911" />
+          </figure>
+          <figure class="landing-vitrine__janela landing-vitrine__janela--ficha">
+            <img src="assets/media/aplicacao/ficha.png"
+              alt="Ficha da pessoa acompanhada com alerta de alergia, último relato do diário e informações de saúde"
+              width="1920" height="911" loading="lazy" />
+          </figure>
+          <figure class="landing-vitrine__janela landing-vitrine__janela--direitos">
+            <img src="assets/media/aplicacao/direitos.png"
+              alt="Tela de Direitos e serviços com questionário orientativo e busca por CEP" width="1920" height="911"
+              loading="lazy" />
+          </figure>
+          <figure class="landing-vitrine__celular">
+            <img src="assets/media/aplicacao/mobile-home.png"
+              alt="Versão mobile do Mutirão exibindo a tela de Início no celular" width="389" height="705" />
+          </figure>
+        </div>
+      </section>
 
-    <section class="landing-grupo landing-container" id="conversa" aria-labelledby="titulo-conversa">
-      <h2 id="titulo-conversa" class="acessibilidade__leitor-tela">Exemplo de conversa no grupo da família</h2>
-      <ol class="landing-grupo__mensagens">
-        <li class="landing-mensagem landing-mensagem--mae">
-          <img src="assets/media/mascotes/icone-mascote-espeto.svg" alt="" width="48" height="48" aria-hidden="true" />
-          <p class="landing-mensagem__balao"><strong>~ Mãe</strong> Alguém ficou de buscar o remédio?</p>
-        </li>
-        <li class="landing-mensagem landing-mensagem--cuidadora">
-          <img src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" width="48" height="48" aria-hidden="true" />
-          <p class="landing-mensagem__balao"><strong>~ Cuidadora</strong> Quem fica com a vó depois do almoço?</p>
-        </li>
-        <li class="landing-mensagem landing-mensagem--primo">
-          <img src="assets/media/mascotes/icone-mascote-pingo.svg" alt="" width="48" height="48" aria-hidden="true" />
-          <p class="landing-mensagem__balao"><strong>~ Primo</strong> Cadê a receita do cardiologista?</p>
-        </li>
-        <li class="landing-mensagem landing-mensagem--vizinho">
-          <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" width="48" height="48" aria-hidden="true" />
-          <p class="landing-mensagem__balao"><strong>~ Vizinho</strong> Ela já tomou o remédio das 8h?</p>
-        </li>
-        <li class="landing-mensagem landing-mensagem--resposta">
-          <p class="landing-mensagem__balao">Deixei tudo no Mutirão!</p>
-          <img class="landing-mensagem__figurinha" src="assets/media/figurinhas/mari-cafe.webp" alt="" width="103"
-            height="98" aria-hidden="true" />
-        </li>
-      </ol>
-    </section>
+      <section class="landing-grupo" id="conversa" aria-labelledby="titulo-conversa">
+        <h2 id="titulo-conversa" class="acessibilidade__leitor-tela">Exemplo de conversa no grupo da família</h2>
+        <ol class="landing-grupo__mensagens">
+          <li class="landing-mensagem landing-mensagem--mae">
+            <img src="assets/media/mascotes/icone-mascote-espeto.svg" alt="" width="48" height="48"
+              aria-hidden="true" />
+            <p class="landing-mensagem__balao"><strong>~ Mãe</strong> Alguém ficou de buscar o remédio?</p>
+          </li>
+          <li class="landing-mensagem landing-mensagem--cuidadora">
+            <img src="assets/media/mascotes/icone-mascote-trevo.svg" alt="" width="48" height="48" aria-hidden="true" />
+            <p class="landing-mensagem__balao"><strong>~ Cuidadora</strong> Quem fica com a vó depois do almoço?</p>
+          </li>
+          <li class="landing-mensagem landing-mensagem--primo">
+            <img src="assets/media/mascotes/icone-mascote-pingo.svg" alt="" width="48" height="48" aria-hidden="true" />
+            <p class="landing-mensagem__balao"><strong>~ Primo</strong> Cadê a receita do cardiologista?</p>
+          </li>
+          <li class="landing-mensagem landing-mensagem--vizinho">
+            <img src="assets/media/mascotes/icone-mascote-cubado.svg" alt="" width="48" height="48"
+              aria-hidden="true" />
+            <p class="landing-mensagem__balao"><strong>~ Vizinho</strong> Ela já tomou o remédio das 8h?</p>
+          </li>
+          <li class="landing-mensagem landing-mensagem--resposta">
+            <p class="landing-mensagem__balao">Deixei tudo no Mutirão!</p>
+            <img class="landing-mensagem__figurinha" src="assets/media/figurinhas/mari-cafe.webp" alt="" width="103"
+              height="98" aria-hidden="true" />
+          </li>
+        </ol>
+        <a class="landing-rolar" href="#recursos" aria-label="Rolar para ver as funcionalidades do Mutirão">
+          <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+        </a>
+      </section>
+    </div>
 
     <section class="landing-recursos" id="recursos" aria-labelledby="titulo-recursos">
       <div class="landing-container">
@@ -181,7 +188,8 @@
           <div class="landing-bloco__texto">
             <h3>Porta-remédios por horário e controle de estoque</h3>
             <p>Confira rapidamente quais doses já foram dadas, quem registrou e o que ainda falta no dia, com opção de
-              desfazer sem medo, alerta de alergias em destaque e aviso antecipado quando algum item estiver acabando.</p>
+              desfazer sem medo, alerta de alergias em destaque e aviso antecipado quando algum item estiver acabando.
+            </p>
           </div>
           <div class="landing-bloco__visual">
             <figure class="landing-bloco__previa">
@@ -240,7 +248,8 @@
               aria-hidden="true"></i></summary>
           <div class="landing-faq__resposta">
             <p>O <strong>Mutirão</strong> é um protótipo web criado pela equipe <strong>Ctrl + People</strong> para a
-              Global Solution 2026 da FIAP (desafio Citizen Tech). Ele ajuda familiares e cuidadores que dividem a rotina
+              Global Solution 2026 da FIAP (desafio Citizen Tech). Ele ajuda familiares e cuidadores que dividem a
+              rotina
               de alguém a reunir escala de turnos, porta-remédios, documentos, diário de passagem e orientação sobre
               direitos e serviços públicos em um só lugar.</p>
           </div>
@@ -253,7 +262,8 @@
             <p>Não. A entrada é uma demonstração navegável com dados fictícios (Zé, Mari e Flavinho). As alterações
               feitas na rotina ficam salvas apenas na sessão do navegador (<code>sessionStorage</code>), enquanto o tema
               visual, os ajustes de leitura e o resultado concluído do questionário de direitos permanecem em
-              <code>localStorage</code>.</p>
+              <code>localStorage</code>.
+            </p>
           </div>
         </details>
 
@@ -261,7 +271,8 @@
           <summary>Como experimentar o cenário de revezamento na demonstração?<i class="fa-solid fa-chevron-down"
               aria-hidden="true"></i></summary>
           <div class="landing-faq__resposta">
-            <p>Clique em <strong>Acessar a demonstração</strong> e entre com os dados preenchidos de exemplo. A aplicação
+            <p>Clique em <strong>Acessar a demonstração</strong> e entre com os dados preenchidos de exemplo. A
+              aplicação
               abre na ficha inicial do <strong>Flavinho</strong>; pelo seletor <strong>Quem recebe cuidado</strong> no
               topo, você pode alternar para a ficha da <strong>Mari</strong> (acompanhamento 24h) para assumir horários
               sem ninguém, registrar doses no porta-remédios e anotar o turno no Diário.</p>
@@ -269,8 +280,8 @@
         </details>
 
         <details class="landing-faq__item">
-          <summary>Posso assumir turnos recorrentes ou cancelar meus horários futuros?<i class="fa-solid fa-chevron-down"
-              aria-hidden="true"></i></summary>
+          <summary>Posso assumir turnos recorrentes ou cancelar meus horários futuros?<i
+              class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
           <div class="landing-faq__resposta">
             <p>Sim. Na <strong>Agenda</strong> e no <strong>Início</strong>, você pode cobrir uma janela só naquela
               data, toda semana ou todos os dias, além de cancelar suas participações futuras em lote mantendo todo o
