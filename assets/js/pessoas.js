@@ -100,20 +100,28 @@ window.MutiraoCuidadoPronto.then(core => {
     evento.preventDefault();
     const campos = Object.fromEntries(new FormData(formConvite));
     const email = (campos.email || '').trim().toLowerCase();
+    const vinculo = (campos.vinculo || '').trim();
     const emailCampo = formConvite.elements.email;
+    const vinculoCampo = formConvite.elements.vinculo;
 
-    if (obterConvites().some(convite => convite.email === email) || (obterEstado().participantesExtras || []).some(pessoa => pessoa.email === email)) {
-      erroConvite.textContent = 'Já existe um convite de demonstração para este e-mail.';
-      emailCampo.setAttribute('aria-invalid', 'true');
-      emailCampo.focus();
+    core.limparErrosFormulario?.(formConvite);
+    if (!email || !emailCampo.checkValidity()) {
+      core.marcarErroFormulario?.(formConvite, emailCampo, 'Informe um e-mail válido para o convite.');
+      return;
+    }
+    if (!vinculo) {
+      core.marcarErroFormulario?.(formConvite, vinculoCampo, 'Informe o parentesco ou vínculo com a pessoa.');
       return;
     }
 
-    erroConvite.textContent = '';
-    emailCampo.removeAttribute('aria-invalid');
+    if (obterConvites().some(convite => convite.email === email) || (obterEstado().participantesExtras || []).some(pessoa => pessoa.email === email)) {
+      core.marcarErroFormulario?.(formConvite, emailCampo, 'Já existe um convite de demonstração para este e-mail.');
+      return;
+    }
+
     atualizarEstado(estado => ({
       ...estado,
-      convites: [...(estado.convites || []), { email, vinculo: campos.vinculo.trim(), papel: campos.papel }]
+      convites: [...(estado.convites || []), { email, vinculo, papel: campos.papel }]
     }));
 
     formConvite.reset();

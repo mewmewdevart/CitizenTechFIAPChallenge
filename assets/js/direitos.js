@@ -29,11 +29,18 @@ window.MutiraoCuidadoPronto.then(core => {
     return Number.isFinite(idade) && idade >= 0 ? idade : null;
   };
 
-  const idadePessoa = calcularIdade(obterEstado().person?.nascimento);
-  selosIdade.forEach(selo => {
-    const comOrigem = selo.hasAttribute('data-idade-da-ficha');
-    selo.textContent = idadePessoa === null ? 'Idade não informada' : comOrigem ? `${idadePessoa} anos (da ficha)` : `${idadePessoa} anos`;
-  });
+  let idadePessoa = calcularIdade(obterEstado().person?.nascimento);
+  const atualizarSelosIdade = () => {
+    idadePessoa = calcularIdade(obterEstado().person?.nascimento);
+    selosIdade.forEach(selo => {
+      const comOrigem = selo.hasAttribute('data-idade-da-ficha');
+      selo.textContent = idadePessoa === null ? 'Idade não informada' : comOrigem ? `${idadePessoa} anos (da ficha)` : `${idadePessoa} anos`;
+    });
+  };
+  atualizarSelosIdade();
+
+  const CHAVE_SIMULADOR = 'mutirao-direitos-simulador-v1';
+  const obterPerfilId = () => core.obterPerfilAtivoId?.() || 'padrao';
 
   const respostas = {
     moradia: null,
@@ -43,6 +50,41 @@ window.MutiraoCuidadoPronto.then(core => {
     cadunico: null,
     saudeEspecializada: null,
     tratamentoFora: null
+  };
+
+  const lerSimuladoresSalvos = () => {
+    try {
+      const bruto = localStorage.getItem(CHAVE_SIMULADOR);
+      const dados = bruto ? JSON.parse(bruto) : {};
+      return dados && typeof dados === 'object' ? dados : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const salvarSimuladorPerfil = concluido => {
+    try {
+      const todos = lerSimuladoresSalvos();
+      const perfilId = obterPerfilId();
+      if (concluido) {
+        todos[perfilId] = { concluido: true, respostas: { ...respostas } };
+      } else {
+        delete todos[perfilId];
+      }
+      localStorage.setItem(CHAVE_SIMULADOR, JSON.stringify(todos));
+    } catch {
+      // Ignora erro caso o navegador bloqueie storage local
+    }
+  };
+
+  const sincronizarBotoesRespostas = () => {
+    pagina.querySelectorAll('[data-simulador-grupo]').forEach(grupoEl => {
+      const chave = grupoEl.dataset.simuladorGrupo;
+      const valorSalvo = respostas[chave];
+      grupoEl.querySelectorAll('[data-simulador-valor]').forEach(btn => {
+        btn.setAttribute('aria-pressed', String(Boolean(valorSalvo && btn.dataset.simuladorValor === valorSalvo)));
+      });
+    });
   };
 
   const passoTemResposta = indice => {
@@ -258,6 +300,7 @@ window.MutiraoCuidadoPronto.then(core => {
   pagina.addEventListener('click', async evento => {
     if (evento.target.closest('[data-simulador-iniciar]') || evento.target.closest('[data-simulador-refazer]')) {
       reiniciarRespostas();
+      salvarSimuladorPerfil(false);
       mostrarEtapa('perguntas');
       atualizarPasso(0, true);
       return;
@@ -306,15 +349,35 @@ window.MutiraoCuidadoPronto.then(core => {
     }
   });
 
+  const restaurarSimuladorPerfil = () => {
+    atualizarSelosIdade();
+    const salvo = lerSimuladoresSalvos()[obterPerfilId()];
+    const chaves = Object.keys(respostas);
+    const completo = Boolean(salvo?.concluido && salvo.respostas && chaves.every(c => Boolean(salvo.respostas[c])));
+    if (completo) {
+      chaves.forEach(c => {
+        respostas[c] = salvo.respostas[c];
+      });
+      sincronizarBotoesRespostas();
+      renderizarResultado();
+      mostrarEtapa('resultado');
+      return;
+    }
+    reiniciarRespostas();
+    mostrarEtapa('inicial');
+  };
+
   formPerguntas?.addEventListener('submit', evento => {
     evento.preventDefault();
     if (!passoTemResposta(passoAtual)) return;
+    salvarSimuladorPerfil(true);
     renderizarResultado();
     mostrarEtapa('resultado');
     tituloResultado?.focus();
   });
 
-  mostrarEtapa('inicial');
+  restaurarSimuladorPerfil();
+  window.addEventListener('mutirao:cuidado-atualizado', restaurarSimuladorPerfil);
 
   // --- Serviços na sua cidade (IBGE + ViaCEP) ---
   const painelLocalidade = pagina.querySelector('[data-localidade-painel]');

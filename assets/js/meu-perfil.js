@@ -313,9 +313,17 @@ window.MutiraoCuidadoPronto.then(core => {
 
   formRecado?.addEventListener('submit', evento => {
     evento.preventDefault();
+    core.limparErrosFormulario?.(formRecado);
     const para = formRecado.elements.para.value;
     const texto = formRecado.elements.recado.value.trim();
-    if (!para || !texto) return;
+    if (!para) {
+      core.marcarErroFormulario?.(formRecado, formRecado.elements.para, 'Selecione para quem é o recado.');
+      return;
+    }
+    if (!texto) {
+      core.marcarErroFormulario?.(formRecado, formRecado.elements.recado, 'Escreva o recado antes de enviar.');
+      return;
+    }
     atualizarEstado(estado => ({
       ...estado,
       recadosEnviados: [...(estado.recadosEnviados || []), { para, texto, em: new Date().toISOString() }]
@@ -328,12 +336,19 @@ window.MutiraoCuidadoPronto.then(core => {
   pagina.querySelector('[data-formulario-mvp="folga"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
     const form = evento.target;
+    core.limparErrosFormulario?.(form);
     const valor = form.querySelector('[name="turno"]:checked')?.value;
-    if (!valor) { anunciarStatus(elementoStatus, 'Não há turno seu disponível para este pedido.'); return; }
+    if (!valor) {
+      core.marcarErroFormulario?.(form, form.querySelector('[name="turno"]'), 'Não há turno seu disponível para este pedido.');
+      anunciarStatus(elementoStatus, 'Não há turno seu disponível para este pedido.');
+      return;
+    }
     const [dia, inicioTexto, fimTexto] = valor.split('|');
     const inicio = Number(inicioTexto), fim = Number(fimTexto);
     if ((obterEstado().pedidosFolga || []).some(item => item.status === 'Pendente' && item.dia === dia && item.inicio === inicio && item.fim === fim)) {
-      anunciarStatus(elementoStatus, 'Você já pediu folga para este turno.'); return;
+      core.marcarErroFormulario?.(form, form.querySelector('[name="turno"]:checked'), 'Você já pediu folga para este turno.');
+      anunciarStatus(elementoStatus, 'Você já pediu folga para este turno.');
+      return;
     }
     const turno = `${formatarDataCurta(dia)} · ${core.formatarIntervaloTurno(inicio, fim - inicio)}`;
     const recado = form.elements.recado.value.trim();
@@ -490,9 +505,13 @@ window.MutiraoCuidadoPronto.then(core => {
 
   formPerfil?.addEventListener('submit', evento => {
     evento.preventDefault();
+    core.limparErrosFormulario?.(formPerfil);
     const campos = Object.fromEntries(new FormData(formPerfil));
     const nome = (campos.nome || '').trim();
-    if (!nome) return;
+    if (!nome) {
+      core.marcarErroFormulario?.(formPerfil, formPerfil.elements.nome, 'Informe seu nome antes de salvar.');
+      return;
+    }
     const fotoAtual = 'fotoTemp' in formPerfil.dataset
       ? formPerfil.dataset.fotoTemp
       : (obterEstado().perfilUsuario?.foto || '');
@@ -500,6 +519,7 @@ window.MutiraoCuidadoPronto.then(core => {
     const cpfAnterior = obterEstado().perfilUsuario;
     const cpfInformado = (cpf.readOnly ? cpf.dataset.cpfRascunho ?? cpfAnterior.cpfReal ?? '' : campos.cpf).trim();
     if (cpfInformado && cpfInformado.replace(/\D/g, '').length !== 11) {
+      core.marcarErroFormulario?.(formPerfil, cpf, 'Informe um CPF com 11 números ou deixe o campo vazio.');
       anunciarStatus(elementoStatus, 'Informe um CPF com 11 números ou deixe o campo vazio.');
       return;
     }

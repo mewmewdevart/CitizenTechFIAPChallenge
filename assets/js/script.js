@@ -310,6 +310,58 @@ for (const dialogo of document.querySelectorAll('dialog')) {
   });
 }
 
+if (typeof HTMLDialogElement !== 'undefined' && !HTMLDialogElement.prototype._mutiraoFocusAjustado) {
+  const showModalOriginal = HTMLDialogElement.prototype.showModal;
+  HTMLDialogElement.prototype._mutiraoFocusAjustado = true;
+
+  const focarPrimeiroCampoDialogo = dialogo => {
+    const form = dialogo.querySelector('form:not([method="dialog"])');
+    if (!form) return;
+    const candidatos = form.querySelectorAll(
+      'input:not([type="hidden"]):not(:disabled), select:not(:disabled), textarea:not(:disabled), [contenteditable="true"]'
+    );
+    const primeiroCampo = [...candidatos].find(el => el.offsetParent !== null && !el.closest('[hidden]'));
+    if (primeiroCampo) primeiroCampo.focus({ preventScroll: true });
+  };
+
+  const restaurarFocoDialogo = dialogo => {
+    const { _disparadorFoco: disparador, _containerRetorno: container } = dialogo;
+    dialogo.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+    dialogo.querySelectorAll('.formulario-mvp__erro').forEach(el => {
+      el.textContent = '';
+    });
+
+    requestAnimationFrame(() => {
+      if (dialogo.open) return;
+      if (disparador && document.contains(disparador) && !disparador.disabled && disparador.offsetParent !== null) {
+        if (!document.activeElement || document.activeElement === document.body) {
+          disparador.focus({ preventScroll: true });
+        }
+        return;
+      }
+      if (!document.activeElement || document.activeElement === document.body) {
+        const destino = (container && document.contains(container) ? container : null)
+          || document.querySelector('main#conteudo, #conteudo');
+        if (!destino) return;
+        if (!destino.hasAttribute('tabindex')) destino.setAttribute('tabindex', '-1');
+        destino.focus({ preventScroll: true });
+      }
+    });
+  };
+
+  HTMLDialogElement.prototype.showModal = function showModalComFoco() {
+    const disparador = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    this._disparadorFoco = disparador && !this.contains(disparador) ? disparador : (this._disparadorFoco || null);
+    this._containerRetorno = this._disparadorFoco?.closest('section, article, main, [data-pagina-mvp]') || this._containerRetorno || null;
+    if (!this._mutiraoCloseVinculado) {
+      this._mutiraoCloseVinculado = true;
+      this.addEventListener('close', () => restaurarFocoDialogo(this));
+    }
+    showModalOriginal.call(this);
+    focarPrimeiroCampoDialogo(this);
+  };
+}
+
 const criarDialogoSair = () => {
   let dialogo = document.querySelector('#dialogo-sair-conta');
   if (dialogo) return dialogo;

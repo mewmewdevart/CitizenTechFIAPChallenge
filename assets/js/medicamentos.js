@@ -663,10 +663,16 @@ window.MutiraoCuidadoPronto.then(core => {
 
   pagina.querySelector('[data-formulario-mvp="estoque"]')?.addEventListener('submit', evento => {
     evento.preventDefault();
-    const quantidade = Number(evento.target.elements.quantidade.value);
-    if (!Number.isInteger(quantidade) || quantidade < 1) return;
-    reporEstoque(itemEmEstoque, quantidade, evento.target.elements.observacao.value);
-    evento.target.closest('dialog')?.close();
+    const form = evento.target;
+    const campoQuantidade = form.elements.quantidade;
+    const quantidade = Number(campoQuantidade.value);
+    core.limparErrosFormulario?.(form);
+    if (!Number.isInteger(quantidade) || quantidade < 1) {
+      core.marcarErroFormulario?.(form, campoQuantidade, 'Informe uma quantidade inteira de pelo menos 1 unidade.');
+      return;
+    }
+    reporEstoque(itemEmEstoque, quantidade, form.elements.observacao.value);
+    form.closest('dialog')?.close();
     anunciarStatus(elementoStatus, `Estoque de ${nomeEstoque} atualizado com ${plural(quantidade, 'unidade', 'unidades')}.`);
     renderizar();
   });
@@ -677,10 +683,17 @@ window.MutiraoCuidadoPronto.then(core => {
     const campos = Object.fromEntries(new FormData(form));
     const nomeOriginal = (campos.nomeOriginal || '').trim();
     const nome = (campos.nome || '').trim();
-    if (!nome) return;
+    core.limparErrosFormulario?.(form);
+    if (!nome) {
+      core.marcarErroFormulario?.(form, form.elements.nome, 'Informe o nome do remédio ou material.');
+      return;
+    }
     if (obterItens().some(item => item.chave !== nomeOriginal && core.normalizarBusca(item.nome) === core.normalizarBusca(nome))) {
-      form.elements.nome.setCustomValidity('Já existe um item com esse nome.');
-      form.elements.nome.reportValidity();
+      core.marcarErroFormulario?.(form, form.elements.nome, 'Já existe um item com esse nome.');
+      return;
+    }
+    if (campos.estoque !== '' && (!Number.isFinite(Number(campos.estoque)) || Number(campos.estoque) < 0)) {
+      core.marcarErroFormulario?.(form, form.elements.estoque, 'O estoque não pode ser negativo.');
       return;
     }
     const horarios = campos.horario ? `${campos.horario}h` : '';

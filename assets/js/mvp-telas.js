@@ -860,8 +860,14 @@ window.MutiraoCuidadoPronto.then(core => {
     }
 
     if (tipoFormulario === 'relato') {
+      core.limparErrosFormulario?.(formulario);
+      if (!(campos.dia || '').trim()) {
+        core.marcarErroFormulario?.(formulario, formulario.elements.dia, 'Informe a data do relato.');
+        return;
+      }
       const textoRelato = (campos.relato || '').trim();
       if (!textoRelato) {
+        core.marcarErroFormulario?.(formulario, formulario.elements.relato, 'Escreva como foi o turno antes de salvar.');
         registrarStatus('Escreva como foi o turno antes de salvar.');
         return;
       }

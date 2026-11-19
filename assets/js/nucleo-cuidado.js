@@ -1563,6 +1563,47 @@ window.MutiraoCuidadoPronto = (async () => {
     if (banco.mudouNoHistorico()) location.reload();
   });
 
+  const obterErroFormulario = form => {
+    let erroEl = form?.querySelector('.formulario-mvp__erro');
+    if (!erroEl && form) {
+      erroEl = document.createElement('p');
+      erroEl.className = 'formulario-mvp__erro';
+      erroEl.setAttribute('role', 'alert');
+      const acoes = form.querySelector('.dialogo-mvp__acoes');
+      if (acoes) acoes.before(erroEl);
+      else form.append(erroEl);
+    }
+    return erroEl;
+  };
+
+  const limparErrosFormulario = form => {
+    if (!form) return;
+    form.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+    const erroEl = form.querySelector('.formulario-mvp__erro');
+    if (erroEl) erroEl.textContent = '';
+  };
+
+  const marcarErroFormulario = (form, campo, mensagem) => {
+    if (!form) return;
+    limparErrosFormulario(form);
+    const erroEl = obterErroFormulario(form);
+    if (erroEl) erroEl.textContent = mensagem;
+    if (campo) {
+      campo.setAttribute('aria-invalid', 'true');
+      campo.focus();
+    }
+    if (!form.dataset.erroVinculado) {
+      form.dataset.erroVinculado = 'true';
+      const limparAoEditar = evento => {
+        if (evento.target?.hasAttribute?.('aria-invalid')) {
+          limparErrosFormulario(form);
+        }
+      };
+      form.addEventListener('input', limparAoEditar);
+      form.addEventListener('change', limparAoEditar);
+    }
+  };
+
   window.MutiraoCuidado = {
     HOJE,
     obterEstado: () => estadoAtual,
@@ -1590,6 +1631,8 @@ window.MutiraoCuidadoPronto = (async () => {
     resolverPessoaRede,
     normalizarBusca,
     vincularFiltro,
+    marcarErroFormulario,
+    limparErrosFormulario,
     escaparHtml,
     sanitizarHtmlEditor,
     inicializarEditoresRicos,
