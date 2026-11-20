@@ -16,12 +16,14 @@
   </p>
 </div>
 
-
 <br>
+
+> [!TIP]
+> **Protótipo navegável com dados fictícios:** clique em **Acessar a demonstração** na página inicial, entre com o acesso já preenchido e use o seletor **Quem recebe cuidado** no topo para alternar do **Flavinho** para a **Mari** e testar a escala 24h, o porta-remédios e o Diário de turno.
 
 ## 📌 Resumo do Projeto
 
-O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
+O **Mutirão** é um protótipo desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
 
 A plataforma reúne **14 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
@@ -30,15 +32,19 @@ A plataforma reúne **14 páginas HTML semânticas** conectadas por JavaScript n
 - **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
 - **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
 
+#### Printscreen de apresentação do produto na Landing Page:
 
 <img width="1902" height="907" alt="Página inicial (landing page) de apresentação do Mutirão" src="assets/media/aplicacao/landing.png" />
+
+
+#### Printscreen de apresentação da Home:
 
 <br>
 
 <img width="2858" height="1604" alt="mutirao-ctrlpeople-citizen-tech-26 vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
 
 
-## ✨ Principais Soluções e Diferenciais
+## ✨ Principais Soluções e Diferenciais:
 
 - **Introdução leve antes do painel (`index.html` e `politica-de-privacidade.html`):** Landing page pensada para explicar o projeto gradualmente antes da entrada, com prévias ampliáveis, conversa do grupo da família, FAQ e página pública explicando onde cada dado fica salvo.
 - **Passagem de cuidado integrada entre telas:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e no **Diário de turno da Ficha**, com fichas isoladas (**Mari** e **Flavinho**) na sessão.
@@ -104,6 +110,43 @@ CitizenTechFIAPChallenge/
 | Política de privacidade | `politica-de-privacidade.html` | Versão pública de privacidade e termos acessível da página inicial e do login (`landing.js`, `acessibilidade.js`, `vlibras.js`) |
 
 
+## ♿ Temas e Acessibilidade
+
+| Modo | Identidade visual |
+| :--- | :--- |
+| **Neutro** (padrão) | Superfícies claras, azul `#4B5DA9` e fonte `Inter` |
+| **Acolhedor** | Neobrutalismo suave, verde `#146A3A`, `Onest`, `Gloock` e `Gochi Hand` |
+| **Alto Contraste** | Fundo preto, texto branco e foco/destaques em amarelo `#FFE600` (sobrepõe os dois temas) |
+
+- **Ajustes de leitura em todas as 14 telas:** tamanho de fonte (`80%` a `140%`), espaço entre linhas, destaque de links e redução de animações (também respeita `prefers-reduced-motion`).
+- **Teclado, ARIA e tradução:** HTML semântico, atalho *Pular para o conteúdo*, foco visível (`:focus-visible`), fechamento por `Esc` devolvendo o foco, regiões `aria-live`, widget **VLibras** e linguagem simples.
+
+#### Printscreen do recurso de Ajustes de leitura:
+
+<div align="center">
+<img width="467" height="796" alt="image" src="https://github.com/user-attachments/assets/5c8ad99b-a676-4561-bf20-082ed571bcf8" />
+</div>
+
+#### Printscreen da ficha da Mari com o Tema Acolhedor:
+
+<img width="1902" height="907" alt="Página inicial (landing page) de apresentação do Mutirão -  Tema Acolhedor" src="https://github.com/user-attachments/assets/15486a76-fde1-43bd-ac2c-760157238141" />
+
+
+## 💾 Persistência e Escopo do Protótipo
+
+As telas se mantêm sincronizadas pelo evento `mutirao:cuidado-atualizado`.
+
+| Onde fica | Chaves principais | O que guarda |
+| :--- | :--- | :--- |
+| `sessionStorage` | `mutirao-mvp-estado-v2` (e migração de `v1`), `mutirao-configuracoes-sessao-v1`, `mutirao-notificacoes-sessao-v1`, `mutirao-buscas-recentes-v2` | Alterações da rotina por ficha (escala, doses, estoque, diário, documentos, mural), avisos e buscas recentes na aba |
+| `localStorage` | `mutirao-tema`, `mutirao-acessibilidade-preferencias`, `mutirao-direitos-simulador-v1` | Tema visual, ajustes de leitura e respostas concluídas do questionário de direitos por ficha |
+
+- **Simulado na sessão:** login demonstrativo, perfis fictícios (Mari e Flavinho), convites, pedidos de folga, referências de documentos (sem upload real) e formulário de Ajuda.
+- **Integrado de verdade:** busca por CEP e cidade via **ViaCEP** e **IBGE**, exportação de calendário em `.ics`, **VLibras** e o assistente **PontoBOT** (API Express + Gemini com fallback local).
+
+> [!TIP]
+> Duvidas de como os seus dados estão sendo usados? Acesse a nossa [Política de privacidade e dados](https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/politica-de-privacidade.html)
+
 ## 🛠️ Tecnologias Utilizadas
 
 - **HTML5 semântico** — regiões (`main`, `nav`, `aside`, `header`, `footer`), diálogos nativos e atributos ARIA.
@@ -131,6 +174,9 @@ CitizenTechFIAPChallenge/
    ```
 
    Acesse `http://127.0.0.1:8000/` no navegador.
+
+- **Acesso de demonstração:** em `login.html`, o e-mail (`ze.silva@example.com`) e a senha fictícia já vêm preenchidos. Após entrar, alterne entre **Flavinho** e **Mari** no seletor **Quem recebe cuidado** no topo.
+- **Como reiniciar:** feche a aba para zerar os dados da rotina (`sessionStorage`) ou clique em **Voltar ao padrão** nos Ajustes de leitura / limpe o `localStorage` do site no navegador.
 
 
 ## 🧪 Qualidade e Testes Automatizados
