@@ -701,7 +701,15 @@ body.menu-fechado .barra-topo {
   left: 0;
 }
 
+body:has(> .conteudo-pagina) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 .conteudo-pagina {
+  flex: 1 0 auto;
   margin-left: var(--largura-menu-lateral);
   max-width: none;
   min-width: 0;

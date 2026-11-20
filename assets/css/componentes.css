@@ -690,6 +690,7 @@ html.tema--acolhedor .filtros__opcao:active {
 }
 
 .rodape-site {
+  flex-shrink: 0;
   margin-left: var(--largura-menu-lateral);
   padding: var(--espaco-lg) 28px;
   border-top: var(--borda-padrao);
