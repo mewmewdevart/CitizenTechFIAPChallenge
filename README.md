@@ -6,50 +6,46 @@
   <p>Mutirão conecta familiares e cuidadores para organizar a rotina, dividir responsabilidades e passar adiante o que aconteceu no cuidado compartilhado.</p>
   <p>
     <a href="https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/">Acessar o Mutirão</a> ·
-    <a href="https://mutirao-pontobot-frontend.vercel.app/">PontoBOT (Assistente)</a> ·
-    <a href="https://github.com/mewmewdevart/PontoBOT">Repositório PontoBOT</a>
+    <a href="https://youtu.be/7w-m8GREtlQ">Vídeo-pitch (YouTube)</a> ·
+    <a href="./Mutirao%20-%20Global%20Solution%202026%20-%20Citizen%20Tech.pdf">Documentação (PDF)</a> ·
+    <a href="https://mutirao-pontobot-frontend.vercel.app/">PontoBOT (Assistente)</a>
   </p>
   <p>
     <img src="https://img.shields.io/badge/Desafio-Citizen%20Tech-4B5DA9?style=for-the-badge" alt="Desafio Citizen Tech" />
     <img src="https://img.shields.io/badge/HTML%20%7C%20CSS%20%7C%20JS-Nativo-4B5DA9?style=for-the-badge" alt="HTML, CSS e JS Nativos" />
-    <img src="https://img.shields.io/badge/Testes-26%20passando-4B5DA9?style=for-the-badge" alt="26 testes passando" />
+    <img src="https://img.shields.io/badge/Testes-33%20passando-4B5DA9?style=for-the-badge" alt="33 testes passando: 26 no Mutirão e 7 no PontoBOT" />
   </p>
 </div>
 
 <br>
 
 > [!TIP]
-> **Protótipo navegável com dados fictícios:** clique em **Acessar a demonstração** na página inicial, entre com o acesso já preenchido e use o seletor **Quem recebe cuidado** no topo para alternar do **Flavinho** para a **Mari** e testar a escala 24h, o porta-remédios e o Diário de turno.
+> **Roteiro rápido da demonstração (dados fictícios de 10/11/2026):** clique em **Acessar a demonstração**, entre com o acesso já preenchido e siga a passagem de cuidado na prática: **1)** selecione a **Mari** no seletor **Quem recebe cuidado** no topo, **2)** encontre o horário sem ninguém (`12h–13h`), **3)** assuma o turno, **4)** registre uma dose no porta-remédios e **5)** deixe um relato no **Diário de turno**.
 
 ## 📌 Resumo do Projeto
 
 O **Mutirão** é um protótipo desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
 
-A plataforma reúne **14 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
+A plataforma reúne **14 páginas HTML semânticas** em JavaScript nativo, começando por uma landing page introdutória (`index.html`) e política de privacidade pública (`politica-de-privacidade.html`) pensadas para explicar a rotina antes do acesso ao painel. Na demonstração, cada alteração fica salva na sessão desta aba (`sessionStorage`), enquanto tema visual (**Neutro** ou **Acolhedor**), ajustes de leitura e questionário de direitos permanecem em `localStorage`.
 
-- **Conexão com os ODS (ONU):** O projeto conversa principalmente com a **meta 5.4 do ODS 5 (Igualdade de Gênero)** ao expor os horários descobertos e facilitar a divisão justa do cuidado entre familiares, evitando que a rotina fique pesada para uma só pessoa. Também se relaciona com o **ODS 3 (Saúde e Bem-Estar)** pela continuidade de horários, remédios, receitas e recados de turno, e com o **ODS 10 (Redução das Desigualdades)** ao diminuir barreiras de leitura, navegação e busca por direitos e serviços públicos perto de casa.
-- **Página inicial de apresentação (`index.html`):** Como o painel interno reúne muitas informações de rotina (escala, remédios, estoque, documentos, diário e direitos), criamos a landing page para introduzir o projeto aos poucos e mostrar o que está por vir antes mesmo de entrar na demonstração. Ela traz prévias clicáveis das telas no computador e no celular, um exemplo de conversa de grupo da família, resumo em 3 passos, dúvidas frequentes (FAQ) e acesso direto à política de privacidade pública (`politica-de-privacidade.html`).
-- **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
-- **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
+- **Conexão com os ODS (ONU):** O projeto conversa principalmente com a **meta 5.4 do ODS 5 (Igualdade de Gênero)** ao expor horários descobertos e facilitar a divisão justa do cuidado entre familiares. Também se relaciona com o **ODS 3 (Saúde e Bem-Estar)** pela continuidade de horários, doses, receitas e recados de turno, e com o **ODS 10 (Redução das Desigualdades)** ao diminuir barreiras de leitura, navegação e busca por direitos e serviços públicos perto de casa.
+- **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) com cópia local da interface e da ajuda de contingência. As perguntas são enviadas à API do PontoBOT e, se a requisição falhar, a base local responde automaticamente.
+- **Documentação completa:** Para ver a pesquisa com famílias, a jornada completa, as decisões de UX, a tabela WCAG 2.2 / ABNT NBR 17225:2025 e os bastidores do desenvolvimento, acesse o memorial [Mutirao - Global Solution 2026 - Citizen Tech.pdf](./Mutirao%20-%20Global%20Solution%202026%20-%20Citizen%20Tech.pdf).
 
-#### Printscreen de apresentação do produto na Landing Page:
+#### Painel de Início com o cenário da Mari
 
-<img width="1902" height="907" alt="Página inicial (landing page) de apresentação do Mutirão" src="assets/media/aplicacao/landing.png" />
+<img width="2858" height="1604" alt="Tela de Início do Mutirão com o perfil da Mari selecionado, exibindo alerta de horário sem ninguém das 12h às 13h, aviso de estoque baixo da Metformina, próximo compromisso e porta-remédios do dia" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
 
+#### Página inicial de apresentação (Landing Page)
 
-#### Printscreen de apresentação da Home:
-
-<br>
-
-<img width="2858" height="1604" alt="mutirao-ctrlpeople-citizen-tech-26 vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
+<img width="1902" height="907" alt="Página inicial do Mutirão com título principal, prévia das telas no celular e computador e exemplo de conversa em grupo da família" src="assets/media/aplicacao/landing.png" />
 
 
-## ✨ Principais Soluções e Diferenciais:
+## ✨ Principais Soluções e Diferenciais
 
-- **Introdução leve antes do painel (`index.html` e `politica-de-privacidade.html`):** Landing page pensada para explicar o projeto gradualmente antes da entrada, com prévias ampliáveis, conversa do grupo da família, FAQ e página pública explicando onde cada dado fica salvo.
-- **Passagem de cuidado integrada entre telas:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e no **Diário de turno da Ficha**, com fichas isoladas (**Mari** e **Flavinho**) na sessão.
+- **Passagem de cuidado integrada entre telas:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e no **Diário de turno da Ficha**, com fichas isoladas (**Mari** e **Flavinho**) na sessão da aba (`sessionStorage`).
 - **Escala com distinção entre vazio e lacuna:** Diferencia acompanhamento integral (24h), rotinas recorrentes (diárias e semanais), exceções por data, turnos pontuais, pedidos de cobertura com proteção contra conflito e cancelamento futuro preservando todo o histórico passado.
-- **Porta-remédios compartilhado, estoque e agenda `.ics`:** Agrupamento por horário com registro de dose dada, pendência com motivo, botão de desfazer, saldo derivado por ficha e exportação da agenda em `.ics` para o calendário do celular.
+- **Porta-remédios por horário, controle de estoque e agenda `.ics`:** Agrupamento por horário com registro de dose dada, pendência com motivo, botão de desfazer, saldo derivado por ficha na sessão da aba e exportação da agenda em `.ics` para o calendário do celular.
 - **Ficha prática com sigilo e compartilhamento:** Mascaramento opcional de CPF, RG e carteirinha, impressão organizada para consultas e montagem rápida de resumo para copiar ou enviar por WhatsApp e e-mail.
 - **Apoio à rede e serviços públicos:** Guia e questionário de 7 perguntas em **Direitos e serviços** (salvo por ficha em `localStorage`) com busca territorial via **IBGE** e **ViaCEP**, mural de recados com figurinhas, pedidos de folga e catálogo pesquisável em **Documentos** ligado aos compromissos.
 - **Acessibilidade e dois temas visuais:** Temas **Neutro** (`Inter`, `#4B5DA9`) e **Acolhedor** (`Onest`, `Gloock`, `Gochi Hand` e `#146A3A`), painel de **Ajustes de leitura** nas 14 páginas (fonte de 80% a 140%, alto contraste, espaço entre linhas, destaque de links e redução de animações), atalho *Pular para o conteúdo*, foco visível, **VLibras** e linguagem simples.
@@ -85,9 +81,10 @@ CitizenTechFIAPChallenge/
 │   │   └── *.js                 # Controladores específicos de cada página
 │   ├── media/                   # Mascotes SVG, ícones, stickers, avatares e sons
 │   └── pontobot/                # Cópia local do Web Component PontoBOT e base de contingência
-├── tests/                       # Suíte automatizada com node:test (26 testes)
+├── tests/                       # Suíte automatizada com node:test (26 testes no Mutirão; +7 no PontoBOT)
 ├── *.html                       # 14 páginas HTML semânticas na raiz
-└── README.md                    # Documentação do projeto
+├── Mutirao - Global Solution 2026 - Citizen Tech.pdf  # Documentação completa do projeto
+└── README.md                    # Visão geral do repositório
 ```
 
 ### Páginas do Protótipo (14 telas)
@@ -121,15 +118,15 @@ CitizenTechFIAPChallenge/
 - **Ajustes de leitura em todas as 14 telas:** tamanho de fonte (`80%` a `140%`), espaço entre linhas, destaque de links e redução de animações (também respeita `prefers-reduced-motion`).
 - **Teclado, ARIA e tradução:** HTML semântico, atalho *Pular para o conteúdo*, foco visível (`:focus-visible`), fechamento por `Esc` devolvendo o foco, regiões `aria-live`, widget **VLibras** e linguagem simples.
 
-#### Printscreen do recurso de Ajustes de leitura:
+#### Printscreen do recurso de Ajustes de leitura
 
 <div align="center">
-<img width="467" height="796" alt="image" src="https://github.com/user-attachments/assets/5c8ad99b-a676-4561-bf20-082ed571bcf8" />
+<img width="467" height="796" alt="Painel lateral de Ajustes de leitura aberto, exibindo tamanho do texto, alto contraste, destaque de links, redução de animações, espaço entre linhas e escolha de tema" src="https://github.com/user-attachments/assets/5c8ad99b-a676-4561-bf20-082ed571bcf8" />
 </div>
 
-#### Printscreen da ficha da Mari com o Tema Acolhedor:
+#### Printscreen da ficha da Mari com o Tema Acolhedor
 
-<img width="1902" height="907" alt="Página inicial (landing page) de apresentação do Mutirão -  Tema Acolhedor" src="https://github.com/user-attachments/assets/15486a76-fde1-43bd-ac2c-760157238141" />
+<img width="1902" height="907" alt="Tela de Início do Mutirão com o perfil da Mari selecionado no Tema Acolhedor" src="https://github.com/user-attachments/assets/15486a76-fde1-43bd-ac2c-760157238141" />
 
 
 ## 💾 Persistência e Escopo do Protótipo
@@ -145,7 +142,7 @@ As telas se mantêm sincronizadas pelo evento `mutirao:cuidado-atualizado`.
 - **Integrado de verdade:** busca por CEP e cidade via **ViaCEP** e **IBGE**, exportação de calendário em `.ics`, **VLibras** e o assistente **PontoBOT** (API Express + Gemini com fallback local).
 
 > [!TIP]
-> Duvidas de como os seus dados estão sendo usados? Acesse a nossa [Política de privacidade e dados](https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/politica-de-privacidade.html)
+> Dúvidas de como os seus dados estão sendo usados? Acesse a nossa [Política de privacidade e dados](https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/politica-de-privacidade.html).
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -187,7 +184,7 @@ Execute a suíte completa na raiz do projeto com o executor nativo do Node.js:
 node --test tests/*.test.mjs
 ```
 
-Atualmente a suíte conta com **26 testes** distribuídos em **6 arquivos**:
+Atualmente o projeto conta com **33 testes automatizados passando** no executor nativo do Node.js: **26 testes em 6 arquivos no Mutirão** (comando acima) e **7 testes em 2 arquivos no repositório [PontoBOT](https://github.com/mewmewdevart/PontoBOT)** (`knowledge.test.mjs` e `app-security-links.test.mjs`).
 
 | Arquivo | Casos | Cobertura |
 | :--- | :---: | :--- |
@@ -197,6 +194,8 @@ Atualmente a suíte conta com **26 testes** distribuídos em **6 arquivos**:
 | `tests/turnos-escala.test.mjs` | 2 | Normalização de rotinas semanais, janela diária e cobertura pontual |
 | `tests/recorrencias-escala.test.mjs` | 14 | Inicialização com atraso ou falha, exceções por data, cancelamento em lote preservando histórico, sobreposição de horas, aceite por escopo, conflitos futuros, transferência de rede e vínculo com medicamentos |
 | `tests/integracao-telas.test.mjs` | 1 | Percurso integrado entre Agenda, Medicamentos, Início e Diário com recarga da sessão |
+| `PontoBOT/tests/knowledge.test.mjs` | 4 | Paridade de tópicos (13 tópicos), atalhos de navegação, limites clínicos e fallback |
+| `PontoBOT/tests/app-security-links.test.mjs` | 3 | URLs absolutas com `https://`, bloqueio sem `Origin` autorizado (`403`) e rate limit (`429`) |
 
 
 ## 👥 Integrantes — Grupo Ctrl + People
@@ -215,6 +214,8 @@ Atualmente a suíte conta com **26 testes** distribuídos em **6 arquivos**:
 
 - **Website publicado:** [mutirao-ctrlpeople-citizen-tech-26.vercel.app](https://mutirao-ctrlpeople-citizen-tech-26.vercel.app/)
 - **PontoBOT publicado:** [mutirao-pontobot-frontend.vercel.app](https://mutirao-pontobot-frontend.vercel.app/) · [Repositório](https://github.com/mewmewdevart/PontoBOT)
+- **Vídeo-pitch:** [Assista no YouTube](https://youtu.be/7w-m8GREtlQ)
+- **Documentação completa:** [Mutirao - Global Solution 2026 - Citizen Tech.pdf](./Mutirao%20-%20Global%20Solution%202026%20-%20Citizen%20Tech.pdf)
 - **Protótipo no Figma:** [GS Citizen Tech · Idosos (Mutirão)](https://www.figma.com/design/mzWEL8c6qp2yhZBmiQ4hut/-Projeto--GS-Citizen-Tech---GS-Citizen-Tech---Mutir%C3%A3o?node-id=2013-960&t=FJw3krrMZXicKrdg-1)
 - **Fundamentação social:** IBGE (PNAD Contínua 2022), ELSI-Brasil (Giacomin et al., 2018), *Managing the Binder* (Soni et al., 2026), Plano Brasil que Cuida (MDS) e ODS 5 (meta 5.4), ODS 3 e ODS 10 (ONU Brasil).
 - **Normas de acessibilidade:** [W3C WCAG 2.2](https://www.w3.org/TR/WCAG22/) e ABNT NBR 17225:2025.
