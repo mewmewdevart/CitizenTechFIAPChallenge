@@ -54,17 +54,6 @@ for (const botao of document.querySelectorAll('[data-tema]')) {
 
 window.addEventListener('storage', evento => {
   if (evento.key === CHAVE_TEMA) aplicarTema(obterTemaSalvo());
-
-  window.MutiraoTema = {
-    restaurar() {
-      try {
-        localStorage.removeItem(CHAVE_TEMA);
-      } catch {
-        // Ignora erro caso localStorage esteja indisponível.
-      }
-      return aplicarTema('neutro');
-    }
-  };
 });
 
 const alternarMenu = document.querySelector('#alternar-menu');

@@ -23,13 +23,13 @@
 
 O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 2026 da FIAP**, no desafio **Citizen Tech** (equipe **Ctrl + People**). O projeto nasce de uma dor cotidiana no cuidado compartilhado: quando horários, doses de remédios, receitas e recados ficam espalhados em conversas e anotações soltas, quem assume o próximo turno precisa reconstruir o combinado do zero.
 
-A plataforma reúne **13 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
+A plataforma reúne **14 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
 - **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
 - **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
 
 
-<img width="2858" height="1604" alt="mutirao-citizen-tech vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
+<img width="2858" height="1604" alt="mutirao-ctrlpeople-citizen-tech-26 vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
 
 
 ## ✨ Principais Soluções e Diferenciais
@@ -72,11 +72,11 @@ CitizenTechFIAPChallenge/
 │   ├── media/                   # Mascotes SVG, ícones, stickers, avatares e sons
 │   └── pontobot/                # Cópia local do Web Component PontoBOT e base de contingência
 ├── tests/                       # Suíte automatizada com node:test (26 testes)
-├── *.html                       # 13 páginas HTML semânticas na raiz
+├── *.html                       # 14 páginas HTML semânticas na raiz
 └── README.md                    # Documentação do projeto
 ```
 
-### Páginas do Protótipo (13 telas)
+### Páginas do Protótipo (14 telas)
 
 | Página | Arquivo | Responsabilidade |
 | :--- | :--- | :--- |
@@ -93,6 +93,7 @@ CitizenTechFIAPChallenge/
 | Configurações | `configuracoes.html` | Preferências de avisos na sessão e seleção de tema (`configuracoes.js`) |
 | Ajuda | `ajuda.html` | Perguntas frequentes e atendimento demonstrativo (`ajuda.js`) |
 | Privacidade | `privacidade.html` | Transparência sobre dados simulados, armazenamento local e integrações (`script.js`) |
+| Política de privacidade | `politica-de-privacidade.html` | Versão pública de privacidade e termos acessível da página inicial e do login (`landing.js`, `acessibilidade.js`, `vlibras.js`) |
 
 
 ## 🛠️ Tecnologias Utilizadas
