@@ -25,21 +25,29 @@ O **Mutirão** é um protótipo funcional desenvolvido para a **Global Solution 
 
 A plataforma reúne **14 páginas HTML semânticas** conectadas por JavaScript nativo, com persistência por ficha na sessão do navegador (`sessionStorage`), preferências assistivas, tema visual e respostas concluídas do questionário de direitos em `localStorage`, dois temas visuais (**Neutro** e **Acolhedor**), recursos assistivos de leitura e integração com o assistente de navegação **PontoBOT**.
 
+- **Conexão com os ODS (ONU):** O projeto conversa principalmente com a **meta 5.4 do ODS 5 (Igualdade de Gênero)** ao expor os horários descobertos e facilitar a divisão justa do cuidado entre familiares, evitando que a rotina fique pesada para uma só pessoa. Também se relaciona com o **ODS 3 (Saúde e Bem-Estar)** pela continuidade de horários, remédios, receitas e recados de turno, e com o **ODS 10 (Redução das Desigualdades)** ao diminuir barreiras de leitura, navegação e busca por direitos e serviços públicos perto de casa.
+- **Página inicial de apresentação (`index.html`):** Como o painel interno reúne muitas informações de rotina (escala, remédios, estoque, documentos, diário e direitos), criamos a landing page para introduzir o projeto aos poucos e mostrar o que está por vir antes mesmo de entrar na demonstração. Ela traz prévias clicáveis das telas no computador e no celular, um exemplo de conversa de grupo da família, resumo em 3 passos, dúvidas frequentes (FAQ) e acesso direto à política de privacidade pública (`politica-de-privacidade.html`).
 - **Acesso ao protótipo:** Entre e use o seletor de pessoa acompanhada para alternar entre **Flavinho** e **Mari**. A rotina de cada pessoa tem dados fictícios e usa 10/11/2026 como data de referência.
 - **PontoBOT:** O componente em `assets/pontobot/` vem do [repositório PontoBOT](https://github.com/mewmewdevart/PontoBOT) e contém cópia local da interface e da ajuda de contingência. Atualize essa cópia ao incorporar mudanças do componente. As perguntas continuam sendo enviadas ao serviço PontoBOT e, se a requisição falhar, o assistente responde com a base local.
 
+
+<img width="1902" height="907" alt="Página inicial (landing page) de apresentação do Mutirão" src="assets/media/aplicacao/landing.png" />
+
+<br>
 
 <img width="2858" height="1604" alt="mutirao-ctrlpeople-citizen-tech-26 vercel app_home html" src="https://github.com/user-attachments/assets/e1f6f84b-a0ec-4bd6-9926-ed36d89438d3" />
 
 
 ## ✨ Principais Soluções e Diferenciais
 
-- **Passagem de cuidado integrada:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e na **Ficha**.
-- **Escala com distinção entre vazio e lacuna:** Diferencia acompanhamento integral (24h), rotinas recorrentes (diárias e semanais), exceções por data e turnos pontuais.
-- **Porta-remédios compartilhado e estoque:** Agrupamento por horário com registro de dose dada, pendência com motivo, desfazer e saldo derivado por ficha.
-- **Apoio à rede e serviços públicos:** Guia e questionário em **Direitos e serviços** com busca territorial (IBGE e ViaCEP), mural de recados, pedidos de folga e catálogo de referências em **Documentos**.
-- **Acessibilidade e dois temas visuais:** Temas **Neutro** (`Inter`, `#4B5DA9`) e **Acolhedor** (neobrutalismo suave com `Onest`, `Gloock`, `Gochi Hand` e `#146A3A`), além de painel de recursos assistivos (alto contraste, escala de fonte, espaçamento de texto, destaque de links, redução de animações e VLibras).
-- **Assistente PontoBOT:** Web Component integrado para orientação de navegação em linguagem natural, com contingência local e backend dedicado.
+- **Introdução leve antes do painel (`index.html` e `politica-de-privacidade.html`):** Landing page pensada para explicar o projeto gradualmente antes da entrada, com prévias ampliáveis, conversa do grupo da família, FAQ e página pública explicando onde cada dado fica salvo.
+- **Passagem de cuidado integrada entre telas:** Assumir um turno, registrar uma dose e anotar o turno refletem simultaneamente no **Início**, na **Agenda**, em **Medicamentos** e no **Diário de turno da Ficha**, com fichas isoladas (**Mari** e **Flavinho**) na sessão.
+- **Escala com distinção entre vazio e lacuna:** Diferencia acompanhamento integral (24h), rotinas recorrentes (diárias e semanais), exceções por data, turnos pontuais, pedidos de cobertura com proteção contra conflito e cancelamento futuro preservando todo o histórico passado.
+- **Porta-remédios compartilhado, estoque e agenda `.ics`:** Agrupamento por horário com registro de dose dada, pendência com motivo, botão de desfazer, saldo derivado por ficha e exportação da agenda em `.ics` para o calendário do celular.
+- **Ficha prática com sigilo e compartilhamento:** Mascaramento opcional de CPF, RG e carteirinha, impressão organizada para consultas e montagem rápida de resumo para copiar ou enviar por WhatsApp e e-mail.
+- **Apoio à rede e serviços públicos:** Guia e questionário de 7 perguntas em **Direitos e serviços** (salvo por ficha em `localStorage`) com busca territorial via **IBGE** e **ViaCEP**, mural de recados com figurinhas, pedidos de folga e catálogo pesquisável em **Documentos** ligado aos compromissos.
+- **Acessibilidade e dois temas visuais:** Temas **Neutro** (`Inter`, `#4B5DA9`) e **Acolhedor** (`Onest`, `Gloock`, `Gochi Hand` e `#146A3A`), painel de **Ajustes de leitura** nas 14 páginas (fonte de 80% a 140%, alto contraste, espaço entre linhas, destaque de links e redução de animações), atalho *Pular para o conteúdo*, foco visível, **VLibras** e linguagem simples.
+- **Assistente PontoBOT com contingência:** Web Component em Shadow DOM com 13 tópicos mapeados e backend Express + Gemini (`gemini-3.5-flash-lite`) protegido por `Origin` obrigatório e rate limit por cliente, usando a base FAQ local automaticamente se a API falhar.
 
 
 ## 📁 Estrutura do Projeto
